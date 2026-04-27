@@ -20,4 +20,13 @@
 
 ## Leçons spécifiques au projet
 
-(à remplir au fur et à mesure)
+### PHASE 0
+
+- **TypeScript composite + `tsc -b`** : si projet A référence projet B via `references`, B ne doit PAS avoir `noEmit`. Solution simple : ne pas utiliser `references` côté frontend, juste un alias `paths` qui pointe vers la source du shared.
+- **Prisma `seed.ts`** : si placé sous `prisma/` (hors `rootDir = src`), exclure du `tsconfig.include` du backend, sinon `tsc` échoue avec TS6059. Le seed est exécuté via `tsx`.
+- **Vitest backend + Prisma** : le client Prisma DOIT être généré (`npx prisma generate`) avant de lancer les tests qui importent le service auth — même si le test ne touche pas la DB.
+- **PixiJS v8 + React** : utiliser `Application.init()` (async). Toujours `antialias: false`, `roundPixels: true`, `image-rendering: pixelated` côté CSS du canvas. L'init est asynchrone, gérer le cas du démontage avant init avec un flag `cancelled`.
+- **JWT signOptions** : avec TS strict, expiresIn doit être passé via un objet `SignOptions` typé séparément, sinon TS rejette le surcharge (string | number ambigu).
+- **Cookie httpOnly refresh** : path à `/api/auth` pour limiter l'envoi automatique aux seules routes auth — réduit la surface CSRF.
+- **Anti-cheat HMAC** : utiliser `crypto.timingSafeEqual` après comparaison de longueur, jamais `===` direct.
+- **Offline progress** : à 72h pile, le multiplier est 0.5 (fin de la pente linéaire 12-72h). Le palier 0.25 ne s'applique qu'au-delà ; mais comme on cap le temps à 72h, en pratique c'est 0.5 maximum. À reconsidérer en PHASE 1 si on veut un cap de 7 jours pleins (cf. GDD section 4.11).

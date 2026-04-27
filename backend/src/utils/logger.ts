@@ -1,0 +1,21 @@
+// Logger structure base sur pino.
+// En dev : pretty-print humain. En prod : JSON pour ingestion par Loki/Coolify.
+
+import pino from 'pino';
+import { env, isProd } from '../config/env.js';
+
+export const logger = pino({
+  level: env.LOG_LEVEL,
+  ...(isProd
+    ? {}
+    : {
+        transport: {
+          target: 'pino-pretty',
+          options: {
+            colorize: true,
+            translateTime: 'HH:MM:ss',
+            ignore: 'pid,hostname',
+          },
+        },
+      }),
+});

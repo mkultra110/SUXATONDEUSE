@@ -1,0 +1,18 @@
+# Dockerfile dev pour le backend : tsx watch + prisma migrate dev.
+FROM node:22-alpine
+RUN apk add --no-cache openssl curl
+WORKDIR /app
+
+COPY package*.json ./
+COPY backend/package.json ./backend/
+COPY shared/package.json ./shared/
+RUN npm ci --workspaces --include-workspace-root
+
+COPY tsconfig.base.json ./
+COPY shared ./shared
+COPY backend ./backend
+
+RUN npx prisma generate --schema=backend/prisma/schema.prisma
+
+EXPOSE 3000
+CMD ["sh", "-c", "npx prisma migrate deploy --schema=backend/prisma/schema.prisma && npm run dev --workspace=@robomow/backend"]

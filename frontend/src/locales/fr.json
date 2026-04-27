@@ -1,0 +1,46 @@
+{
+  "app": {
+    "title": "ROBOMOW TYCOON",
+    "tagline": "Bâtissez votre empire de robots tondeuses"
+  },
+  "auth": {
+    "login": {
+      "title": "Connexion",
+      "username": "Pseudo",
+      "password": "Mot de passe",
+      "submit": "Se connecter",
+      "switchToRegister": "Pas encore de compte ? Inscrivez-vous",
+      "errors": {
+        "invalid": "Pseudo ou mot de passe incorrect.",
+        "banned": "Ce compte a été suspendu.",
+        "generic": "Impossible de se connecter pour le moment."
+      }
+    },
+    "register": {
+      "title": "Créer un compte",
+      "username": "Pseudo (3 à 20 caractères)",
+      "password": "Mot de passe (8 caractères min.)",
+      "confirmPassword": "Confirmer le mot de passe",
+      "submit": "Créer mon jardin",
+      "switchToLogin": "Déjà un compte ? Connectez-vous",
+      "errors": {
+        "passwordMismatch": "Les mots de passe ne correspondent pas.",
+        "usernameTaken": "Ce pseudo est déjà pris.",
+        "generic": "Impossible de créer le compte pour le moment."
+      }
+    },
+    "logout": "Déconnexion"
+  },
+  "game": {
+    "loading": "Chargement de votre jardin...",
+    "welcome": "Bienvenue, {{username}} !",
+    "phase0Notice": "Le jeu est en bootstrap (PHASE 0). Le canvas est prêt, le gameplay arrive en PHASE 1."
+  },
+  "common": {
+    "yes": "Oui",
+    "no": "Non",
+    "save": "Sauvegarder",
+    "cancel": "Annuler",
+    "loading": "Chargement..."
+  }
+}

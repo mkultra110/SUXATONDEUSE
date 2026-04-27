@@ -1,0 +1,36 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Pixel art : interpolation desactivee partout */
+@layer base {
+  canvas,
+  img.pixel {
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+  }
+  body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+@layer components {
+  .panel {
+    @apply rounded-lg bg-panel-base text-ink-base shadow-lg;
+  }
+  .btn {
+    @apply rounded-md bg-grass-base px-4 py-2 font-bold text-ink-base transition-transform;
+    @apply hover:scale-105 active:scale-95;
+  }
+  .btn-primary {
+    @apply bg-accent-gold text-ink-base hover:brightness-110;
+  }
+  .btn-danger {
+    @apply bg-accent-danger text-panel-base hover:brightness-110;
+  }
+  .input {
+    @apply w-full rounded border-2 border-robot-shadow bg-panel-paper px-3 py-2 text-ink-base;
+    @apply focus:border-grass-base focus:outline-none;
+  }
+}

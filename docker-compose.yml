@@ -1,0 +1,69 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: game
+      POSTGRES_PASSWORD: gamepass
+      POSTGRES_DB: robomow
+    ports:
+      - '5432:5432'
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U game -d robomow']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  adminer:
+    image: adminer:latest
+    restart: unless-stopped
+    ports:
+      - '8080:8080'
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile.dev
+    environment:
+      NODE_ENV: development
+      DATABASE_URL: postgresql://game:gamepass@postgres:5432/robomow
+      JWT_SECRET: dev_jwt_secret_change_me_minimum_32_chars_padding
+      JWT_REFRESH_SECRET: dev_refresh_secret_change_me_minimum_32_chars_pad
+      SAVE_HMAC_SECRET: dev_hmac_secret_change_me_minimum_64_chars_for_anti_cheat_signature_xx
+      FRONTEND_URL: http://localhost:5173
+      PORT: '3000'
+      LOG_LEVEL: debug
+    ports:
+      - '3000:3000'
+    volumes:
+      - ./backend/src:/app/backend/src
+      - ./backend/prisma:/app/backend/prisma
+      - ./shared/src:/app/shared/src
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile.dev
+    environment:
+      VITE_API_URL: http://localhost:3000/api
+      VITE_API_PROXY_TARGET: http://backend:3000
+    ports:
+      - '5173:5173'
+    volumes:
+      - ./frontend/src:/app/frontend/src
+      - ./frontend/index.html:/app/frontend/index.html
+      - ./frontend/public:/app/frontend/public
+      - ./shared/src:/app/shared/src
+    depends_on:
+      - backend
+
+volumes:
+  pgdata:

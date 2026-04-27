@@ -1,0 +1,318 @@
+// Schema Prisma — ROBOMOW TYCOON
+// Source de verite : GDD section 8.3.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ───────────────────────── USER & AUTH ─────────────────────────
+model User {
+  id             String    @id @default(cuid())
+  username       String    @unique
+  email          String?   @unique
+  hashedPassword String
+  emailVerified  Boolean   @default(false)
+  role           Role      @default(PLAYER)
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  lastLogin      DateTime?
+  isBanned       Boolean   @default(false)
+  banReason      String?
+
+  gameSave           GameSave?
+  robots             Robot[]
+  plots              Plot[]
+  upgrades           UserUpgrade[]
+  achievements       UserAchievement[]
+  dailyRewards       DailyRewardClaim[]
+  quests             UserQuest[]
+  prestige           Prestige?
+  statistics         Statistics?
+  leaderboardEntries LeaderboardEntry[]
+  refreshTokens      RefreshToken[]
+  saveAuditLogs      SaveAuditLog[]
+
+  @@index([username])
+  @@index([createdAt])
+}
+
+enum Role {
+  PLAYER
+  MODERATOR
+  ADMIN
+}
+
+model RefreshToken {
+  id        String    @id @default(cuid())
+  token     String    @unique
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  revokedAt DateTime?
+  createdAt DateTime  @default(now())
+  userAgent String?
+  ipAddress String?
+
+  @@index([userId])
+  @@index([expiresAt])
+}
+
+// ───────────────────────── GAME SAVE ─────────────────────────
+model GameSave {
+  id     String @id @default(cuid())
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Currencies denormalisees en BigInt pour leaderboard rapide
+  cash           BigInt @default(0)
+  gems           Int    @default(0)
+  prestigePoints BigInt @default(0)
+
+  // Snapshot complet du state (compresse LZ-string cote client)
+  payload        Json
+  payloadVersion Int    @default(1)
+  payloadHmac    String
+  compressed     Boolean @default(false)
+
+  // Anti-cheat & timing
+  lastSavedAt    DateTime @default(now())
+  lastTickAt     DateTime @default(now())
+  saveCount      Int      @default(0)
+  suspicionScore Int      @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([lastSavedAt])
+  @@index([suspicionScore])
+}
+
+model SaveAuditLog {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  reason    String
+  delta     Json
+  rejected  Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([userId, createdAt])
+  @@index([reason])
+}
+
+// ───────────────────────── ROBOTS ─────────────────────────
+model Robot {
+  id             String    @id @default(cuid())
+  userId         String
+  user           User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type           RobotType
+  level          Int       @default(1)
+  speed          Float     @default(1.0)
+  efficiency     Float     @default(1.0)
+  battery        Float     @default(100.0)
+  assignedPlotId String?
+  assignedPlot   Plot?     @relation(fields: [assignedPlotId], references: [id])
+  acquiredAt     DateTime  @default(now())
+
+  @@index([userId])
+  @@index([userId, type])
+}
+
+enum RobotType {
+  HAND_SHEARS
+  PUSH_MOWER
+  GAS_MOWER
+  ELECTRIC_MOWER
+  ROBOMOW_V1
+  NAVIBOT
+  HELIOCUT
+  MEGAMOWER
+  AEROMOW
+  NANOSWARM
+}
+
+// ───────────────────────── PLOTS ─────────────────────────
+model Plot {
+  id           String   @id @default(cuid())
+  userId       String
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type         PlotType
+  level        Int      @default(1)
+  isUnlocked   Boolean  @default(false)
+  grassDensity Float    @default(1.0)
+  multiplier   Float    @default(1.0)
+  robots       Robot[]
+
+  @@unique([userId, type])
+  @@index([userId])
+}
+
+enum PlotType {
+  RESIDENTIAL_GARDEN
+  PAVILION_GARDEN
+  SUBDIVISION
+  MUNICIPAL_PARK
+  CEMETERY
+  GOLF_COURSE
+  STADIUM
+  HIPPODROME
+  CITY
+  MEGALOPOLIS
+}
+
+// ───────────────────────── UPGRADES ─────────────────────────
+model Upgrade {
+  id          String        @id @default(cuid())
+  key         String        @unique
+  name        String
+  description String
+  category    String
+  baseCost    BigInt
+  costScaling Float         @default(1.15)
+  maxLevel    Int           @default(50)
+  users       UserUpgrade[]
+}
+
+model UserUpgrade {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  upgradeId   String
+  upgrade     Upgrade  @relation(fields: [upgradeId], references: [id], onDelete: Cascade)
+  level       Int      @default(1)
+  purchasedAt DateTime @default(now())
+
+  @@unique([userId, upgradeId])
+  @@index([userId])
+}
+
+// ───────────────────────── ACHIEVEMENTS ─────────────────────────
+model Achievement {
+  id          String            @id @default(cuid())
+  key         String            @unique
+  name        String
+  description String
+  icon        String
+  rewardGems  Int               @default(0)
+  rewardCash  BigInt            @default(0)
+  hidden      Boolean           @default(false)
+  users       UserAchievement[]
+}
+
+model UserAchievement {
+  id            String      @id @default(cuid())
+  userId        String
+  user          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  achievementId String
+  achievement   Achievement @relation(fields: [achievementId], references: [id], onDelete: Cascade)
+  unlockedAt    DateTime    @default(now())
+  claimed       Boolean     @default(false)
+  claimedAt     DateTime?
+
+  @@unique([userId, achievementId])
+  @@index([userId])
+}
+
+// ───────────────────────── DAILY REWARDS ─────────────────────────
+model DailyRewardClaim {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  day       Int
+  claimedAt DateTime @default(now())
+  streak    Int
+
+  @@index([userId, claimedAt])
+}
+
+// ───────────────────────── QUESTS ─────────────────────────
+model Quest {
+  id          String      @id @default(cuid())
+  key         String      @unique
+  name        String
+  description String
+  type        QuestType
+  target      BigInt
+  rewardCash  BigInt      @default(0)
+  rewardGems  Int         @default(0)
+  duration    Int
+  users       UserQuest[]
+}
+
+enum QuestType {
+  DAILY
+  WEEKLY
+  EVENT
+  STORY
+}
+
+model UserQuest {
+  id          String    @id @default(cuid())
+  userId      String
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  questId     String
+  quest       Quest     @relation(fields: [questId], references: [id], onDelete: Cascade)
+  progress    BigInt    @default(0)
+  completed   Boolean   @default(false)
+  completedAt DateTime?
+  claimed     Boolean   @default(false)
+  expiresAt   DateTime
+  createdAt   DateTime  @default(now())
+
+  @@index([userId, completed])
+  @@index([expiresAt])
+}
+
+// ───────────────────────── PRESTIGE ─────────────────────────
+model Prestige {
+  id             String    @id @default(cuid())
+  userId         String    @unique
+  user           User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  prestigeLevel  Int       @default(0)
+  totalPrestiges Int       @default(0)
+  prestigePoints BigInt    @default(0)
+  multiplier     Float     @default(1.0)
+  unlockedPerks  Json      @default("[]")
+  lastPrestigeAt DateTime?
+}
+
+// ───────────────────────── STATISTICS ─────────────────────────
+model Statistics {
+  id                String   @id @default(cuid())
+  userId            String   @unique
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  totalEarned       BigInt   @default(0)
+  totalGrassMowed   BigInt   @default(0)
+  totalRobotsBought Int      @default(0)
+  totalUpgrades     Int      @default(0)
+  totalPrestiges    Int      @default(0)
+  playTimeSeconds   Int      @default(0)
+  longestSession    Int      @default(0)
+  updatedAt         DateTime @updatedAt
+}
+
+// ───────────────────────── LEADERBOARD ─────────────────────────
+model LeaderboardEntry {
+  id        String              @id @default(cuid())
+  userId    String
+  user      User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  category  LeaderboardCategory
+  score     BigInt
+  season    String
+  updatedAt DateTime            @updatedAt
+
+  @@unique([userId, category, season])
+  @@index([category, season, score(sort: Desc)])
+}
+
+enum LeaderboardCategory {
+  TOTAL_CASH
+  TOTAL_GRASS
+  PRESTIGE_LEVEL
+  ACHIEVEMENTS
+}

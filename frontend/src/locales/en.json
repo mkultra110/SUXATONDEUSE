@@ -1,0 +1,46 @@
+{
+  "app": {
+    "title": "ROBOMOW TYCOON",
+    "tagline": "Build your robot mower empire"
+  },
+  "auth": {
+    "login": {
+      "title": "Sign in",
+      "username": "Username",
+      "password": "Password",
+      "submit": "Sign in",
+      "switchToRegister": "No account yet? Register",
+      "errors": {
+        "invalid": "Invalid username or password.",
+        "banned": "This account has been suspended.",
+        "generic": "Unable to sign in right now."
+      }
+    },
+    "register": {
+      "title": "Create an account",
+      "username": "Username (3 to 20 chars)",
+      "password": "Password (8 chars min.)",
+      "confirmPassword": "Confirm password",
+      "submit": "Create my garden",
+      "switchToLogin": "Already have an account? Sign in",
+      "errors": {
+        "passwordMismatch": "Passwords do not match.",
+        "usernameTaken": "This username is already taken.",
+        "generic": "Unable to create the account right now."
+      }
+    },
+    "logout": "Sign out"
+  },
+  "game": {
+    "loading": "Loading your garden...",
+    "welcome": "Welcome, {{username}}!",
+    "phase0Notice": "The game is in bootstrap (PHASE 0). Canvas is ready, gameplay coming in PHASE 1."
+  },
+  "common": {
+    "yes": "Yes",
+    "no": "No",
+    "save": "Save",
+    "cancel": "Cancel",
+    "loading": "Loading..."
+  }
+}

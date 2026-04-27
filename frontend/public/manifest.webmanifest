@@ -1,0 +1,18 @@
+{
+  "name": "ROBOMOW TYCOON",
+  "short_name": "RoboMow",
+  "description": "Bâtissez votre empire de robots tondeuses",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#181425",
+  "theme_color": "#63c74d",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
