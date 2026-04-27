@@ -73,7 +73,46 @@
     "plots": "Parcelles",
     "prestige": "Prestige",
     "achievements": "Succès",
-    "daily": "Journalier"
+    "daily": "Journalier",
+    "collection": "Collection",
+    "stats": "Stats"
+  },
+  "weather": {
+    "sun": "Ensoleillé",
+    "cloud": "Nuageux",
+    "rain": "Pluie",
+    "storm": "Orage",
+    "wind": "Vent fort",
+    "snow": "Neige"
+  },
+  "season": {
+    "spring": "Printemps",
+    "summer": "Été",
+    "autumn": "Automne",
+    "winter": "Hiver"
+  },
+  "collection": {
+    "title": "Collection",
+    "pets": "Compagnons",
+    "skins": "Skins",
+    "equipped": "équipés",
+    "noPets": "Aucun compagnon. Continuez à jouer pour en débloquer."
+  },
+  "stats": {
+    "title": "Statistiques",
+    "totalCash": "Cash gagné",
+    "totalGrass": "Herbe coupée",
+    "cashPerSecond": "Production",
+    "robotsCount": "Robots",
+    "robotsBought": "Achats",
+    "upgrades": "Améliorations",
+    "prestiges": "Prestiges",
+    "streak": "Série",
+    "playTime": "Temps de jeu",
+    "achievements": "Succès",
+    "pets": "Pets",
+    "skins": "Skins",
+    "byTier": "Par tier"
   },
   "daily": {
     "title": "Quêtes journalières",

@@ -27,6 +27,18 @@ export interface SavePayload {
   lastTickAt: number;
   /** Source d'autorisation pour gain de gems (achievement id, quest id, IAP receipt). */
   gemSourceProof?: string | undefined;
+  /** Pets possedes (PHASE 3, optionnel pour rester retrocompatible). */
+  petsOwned?: string[] | undefined;
+  /** Pets equipes. */
+  petsEquipped?: string[] | undefined;
+  /** Skins possedees. */
+  skinsOwned?: string[] | undefined;
+  /** Skin actif. */
+  activeSkin?: string | undefined;
+  /** Login streak (pour permettre le replay-protection cote serveur). */
+  loginStreak?: number | undefined;
+  lastLoginISODate?: string | null | undefined;
+  lastLoginRewardDate?: string | null | undefined;
 }
 
 /** Reponse de l'endpoint GET /api/save. */

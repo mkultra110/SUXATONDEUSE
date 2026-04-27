@@ -13,6 +13,7 @@ enableMapSet();
 import {
   ACHIEVEMENTS,
   calculatePrestigeSeeds,
+  combinedMultiplier,
   type DailyQuestDefinition,
   generatorCost,
   getPlot,
@@ -23,11 +24,13 @@ import {
   PLOT_DEFINITIONS,
   prestigeMultiplier,
   type PlotType,
+  rollRandomPet,
   type RobotType,
   ROBOT_TIERS,
   SAVE_PAYLOAD_VERSION,
   type SavePayload,
   selectDailyQuests,
+  totalPetBonus,
   totalProductionMultiplier,
   type UpgradeKey,
   unlockedAchievements,
@@ -48,6 +51,12 @@ interface GameState {
   prestigePoints: Decimal;
   // Cache de la production passive.
   cashPerSecond: Decimal;
+  // Pets possedes et equipes (max 3 equipes pour le bonus)
+  petsOwned: Set<string>;
+  petsEquipped: Set<string>;
+  // Skins possedees et equipée
+  skinsOwned: Set<string>;
+  activeSkin: string;
   // Holdings par tier.
   holdings: Record<RobotType, RobotHolding>;
   // Niveau de chaque categorie d'upgrade.
@@ -104,6 +113,12 @@ interface GameActions {
   claimDailyQuest: (key: string) => boolean;
   /** Recupere les definitions des 3 quetes du jour. */
   getDailyQuests: () => DailyQuestDefinition[];
+  /** Tirage aleatoire d'un pet (recompense d'event ou login J6). */
+  rollPet: () => string | null;
+  /** Equipe / desequipe un pet (max 3). */
+  togglePetEquip: (key: string) => boolean;
+  /** Equipe un skin. */
+  setActiveSkin: (key: string) => boolean;
 }
 
 type GameStore = GameState & GameActions;
@@ -134,11 +149,19 @@ function emptyPlots(): Record<PlotType, boolean> {
   return result;
 }
 
+/** En test, on neutralise les multiplicateurs aleatoires meteo/saison. */
+const IS_TEST =
+  typeof process !== 'undefined' && process.env?.NODE_ENV === 'test';
+
 /** Calcule la production totale (cash/sec) en fonction du state. */
 function computeProduction(state: GameState): Decimal {
   let total = new Decimal(0);
   const upgradeMult = totalProductionMultiplier(state.upgrades);
   const prestigeMult = state.prestigeMultiplierCache;
+  const petsMult = 1 + totalPetBonus(state.petsEquipped).productionBonus;
+  // Meteo + saison (deterministe, change a chaque heure).
+  // En test, on force a 1 pour avoir des valeurs predictibles.
+  const weatherMult = IS_TEST ? 1 : combinedMultiplier(new Date());
 
   // Multiplicateur global de toutes les parcelles debloquees (somme).
   let plotsMult = 0;
@@ -159,7 +182,9 @@ function computeProduction(state: GameState): Decimal {
       milestone *
       upgradeMult *
       prestigeMult *
-      plotsMult;
+      plotsMult *
+      petsMult *
+      weatherMult;
     total = total.add(new Decimal(tierProd));
   }
   return total;
@@ -229,6 +254,10 @@ export const useGameStore = create<GameStore>()(
     gems: 0,
     prestigePoints: new Decimal(0),
     cashPerSecond: new Decimal(0),
+    petsOwned: new Set<string>(),
+    petsEquipped: new Set<string>(),
+    skinsOwned: new Set<string>(['classic']),
+    activeSkin: 'classic',
     holdings: emptyHoldings(),
     upgrades: emptyUpgrades(),
     plotsUnlocked: emptyPlots(),
@@ -275,10 +304,15 @@ export const useGameStore = create<GameStore>()(
           draft.plotsUnlocked[plot.type] = plot.isUnlocked;
         }
         draft.totalPrestiges = payload.statistics.totalPrestiges;
+        // Pets et skins (optionnels, retro-compatible)
+        draft.petsOwned = new Set(payload.petsOwned ?? []);
+        draft.petsEquipped = new Set(payload.petsEquipped ?? []);
+        draft.skinsOwned = new Set(payload.skinsOwned ?? ['classic']);
+        draft.activeSkin = payload.activeSkin ?? 'classic';
         draft.prestigeMultiplierCache = prestigeMultiplier({
           seedsInMultiplierTree: 0, // PHASE 2 simple : pas d'arbre encore
           achievementsUnlocked: payload.achievements.length,
-          petsCount: 0,
+          petsCount: draft.petsEquipped.size,
         });
         draft.achievementsUnlocked = new Set(payload.achievements);
         draft.totalCashEarned = big(payload.statistics.totalEarned);
@@ -286,6 +320,9 @@ export const useGameStore = create<GameStore>()(
         draft.totalRobotsBought = payload.statistics.totalRobotsBought;
         draft.totalUpgrades = payload.statistics.totalUpgrades;
         draft.playTimeSeconds = payload.statistics.playTimeSeconds;
+        draft.loginStreak = payload.loginStreak ?? 0;
+        draft.lastLoginISODate = payload.lastLoginISODate ?? null;
+        draft.lastLoginRewardDate = payload.lastLoginRewardDate ?? null;
         draft.lastTickAt = payload.lastTickAt || Date.now();
         draft.cashPerSecond = computeProduction(draft);
         draft.isReady = true;
@@ -489,6 +526,42 @@ export const useGameStore = create<GameStore>()(
       return selectDailyQuests(state.dailyQuestSeed ?? '');
     },
 
+    rollPet: () => {
+      const pet = rollRandomPet();
+      set((draft) => {
+        draft.petsOwned.add(pet.key);
+      });
+      return pet.key;
+    },
+
+    togglePetEquip: (key) => {
+      const state = get();
+      if (!state.petsOwned.has(key)) return false;
+      set((draft) => {
+        if (draft.petsEquipped.has(key)) {
+          draft.petsEquipped.delete(key);
+        } else if (draft.petsEquipped.size < 3) {
+          draft.petsEquipped.add(key);
+        } else {
+          // Max 3 equipes : on swap avec le 1er
+          const first = draft.petsEquipped.values().next().value;
+          if (first) draft.petsEquipped.delete(first);
+          draft.petsEquipped.add(key);
+        }
+        draft.cashPerSecond = computeProduction(draft);
+      });
+      return true;
+    },
+
+    setActiveSkin: (key) => {
+      const state = get();
+      if (!state.skinsOwned.has(key)) return false;
+      set((draft) => {
+        draft.activeSkin = key;
+      });
+      return true;
+    },
+
     serialize: () => {
       const state = get();
       const robots = Object.values(state.holdings).flatMap((holding) =>
@@ -533,6 +606,13 @@ export const useGameStore = create<GameStore>()(
           playTimeSeconds: state.playTimeSeconds,
         },
         lastTickAt: state.lastTickAt,
+        petsOwned: Array.from(state.petsOwned),
+        petsEquipped: Array.from(state.petsEquipped),
+        skinsOwned: Array.from(state.skinsOwned),
+        activeSkin: state.activeSkin,
+        loginStreak: state.loginStreak,
+        lastLoginISODate: state.lastLoginISODate,
+        lastLoginRewardDate: state.lastLoginRewardDate,
       };
     },
   })),

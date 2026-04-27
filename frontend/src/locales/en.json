@@ -73,7 +73,46 @@
     "plots": "Plots",
     "prestige": "Prestige",
     "achievements": "Achievements",
-    "daily": "Daily"
+    "daily": "Daily",
+    "collection": "Collection",
+    "stats": "Stats"
+  },
+  "weather": {
+    "sun": "Sunny",
+    "cloud": "Cloudy",
+    "rain": "Rain",
+    "storm": "Storm",
+    "wind": "Windy",
+    "snow": "Snow"
+  },
+  "season": {
+    "spring": "Spring",
+    "summer": "Summer",
+    "autumn": "Autumn",
+    "winter": "Winter"
+  },
+  "collection": {
+    "title": "Collection",
+    "pets": "Companions",
+    "skins": "Skins",
+    "equipped": "equipped",
+    "noPets": "No companions yet. Keep playing to unlock some."
+  },
+  "stats": {
+    "title": "Statistics",
+    "totalCash": "Total cash",
+    "totalGrass": "Grass mowed",
+    "cashPerSecond": "Production",
+    "robotsCount": "Robots",
+    "robotsBought": "Bought",
+    "upgrades": "Upgrades",
+    "prestiges": "Prestiges",
+    "streak": "Streak",
+    "playTime": "Play time",
+    "achievements": "Achievements",
+    "pets": "Pets",
+    "skins": "Skins",
+    "byTier": "By tier"
   },
   "daily": {
     "title": "Daily quests",

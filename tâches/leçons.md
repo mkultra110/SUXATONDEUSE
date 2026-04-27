@@ -48,3 +48,11 @@
 - **Prestige + recompute production** : après un reset prestige, il faut recalculer `cashPerSecond` car les multiplicateurs de parcelles et upgrades changent. Centraliser dans une fonction `computeProduction(state)` appelée à chaque mutation pertinente.
 - **Leaderboard sur save** : `Promise.all` les upserts par catégorie, mais wrapper dans un `try/catch` qui swallow les erreurs pour ne pas faire échouer la save principale.
 - **Onglets dans GamePage** : pour ne pas démonter/remonter les panels lourds, on peut utiliser CSS `display: none` au lieu d'un rendu conditionnel. PHASE 2 est OK avec rendu conditionnel mais à reconsidérer si lag.
+
+### PHASE 3
+
+- **Météo aléatoire dans `computeProduction`** : le multiplier change avec l'heure → tests deviennent flaky (un orage = production 0). Solution : `IS_TEST = process.env.NODE_ENV === 'test'` dans le store, neutralise weather/season en test.
+- **`exactOptionalPropertyTypes`** + champs optionnels stringifiés via JSON : Zod produit `field?: T | undefined`, le type partagé doit être explicite avec `| undefined` pour ne pas avoir TS2379. Pattern récurrent : tout nouveau champ optionnel dans le SavePayload doit avoir `field?: X | undefined` côté shared.
+- **PWA Service Worker** : enregistrer uniquement en `import.meta.env.PROD` pour éviter de polluer le HMR Vite en dev. Le SW vit dans `public/` (servi tel quel par Vite, pas processé).
+- **Pets par rareté** : pondération cumulative simple (60/25/10/4/1) suffit en PHASE 3. PHASE 4 : ajouter pity timer pour les drops legendaires (anti-frustration).
+- **Skins par couleur hex (number)** : plus facile à manipuler en JS qu'une string `#xxx`, et compatible direct avec PixiJS (`fill(0xff0000)`).

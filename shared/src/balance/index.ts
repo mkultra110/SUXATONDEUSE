@@ -11,3 +11,6 @@ export * from './plots.js';
 export * from './upgrades.js';
 export * from './achievements.js';
 export * from './quests.js';
+export * from './weather.js';
+export * from './pets.js';
+export * from './skins.js';

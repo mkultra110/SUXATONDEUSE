@@ -34,3 +34,12 @@ ReactDOM.createRoot(rootEl).render(
     </I18nextProvider>
   </React.StrictMode>,
 );
+
+// Enregistrement du service worker pour la PWA (uniquement en prod)
+if ('serviceWorker' in navigator && import.meta.env.PROD) {
+  window.addEventListener('load', () => {
+    void navigator.serviceWorker.register('/service-worker.js').catch(() => {
+      // Pas critique : le jeu fonctionne sans SW.
+    });
+  });
+}

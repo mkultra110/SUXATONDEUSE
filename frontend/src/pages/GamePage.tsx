@@ -9,18 +9,29 @@ import { PlotsPanel } from '../components/hud/PlotsPanel.js';
 import { PrestigePanel } from '../components/hud/PrestigePanel.js';
 import { AchievementsPanel } from '../components/hud/AchievementsPanel.js';
 import { DailyPanel } from '../components/hud/DailyPanel.js';
+import { CollectionPanel } from '../components/hud/CollectionPanel.js';
+import { StatsPanel } from '../components/hud/StatsPanel.js';
 import { OfflineRewardModal } from '../components/modals/OfflineRewardModal.js';
 import { PixiCanvas } from '../game/engine/PixiCanvas.js';
 import { useGameSession } from '../hooks/useGameSession.js';
 
-type TabKey = 'shop' | 'plots' | 'prestige' | 'achievements' | 'daily';
+type TabKey =
+  | 'shop'
+  | 'plots'
+  | 'prestige'
+  | 'achievements'
+  | 'daily'
+  | 'collection'
+  | 'stats';
 
 const TABS: Array<{ key: TabKey; emoji: string }> = [
   { key: 'shop', emoji: '🛒' },
   { key: 'plots', emoji: '🌳' },
   { key: 'daily', emoji: '📅' },
+  { key: 'collection', emoji: '🐾' },
   { key: 'prestige', emoji: '🌱' },
   { key: 'achievements', emoji: '🏆' },
+  { key: 'stats', emoji: '📊' },
 ];
 
 export function GamePage() {
@@ -47,7 +58,7 @@ export function GamePage() {
           </p>
         </div>
         <div className="flex flex-col gap-2 w-full max-w-sm">
-          <nav className="grid grid-cols-4 gap-1">
+          <nav className="grid grid-cols-4 gap-1 lg:grid-cols-7">
             {TABS.map((tab) => (
               <button
                 key={tab.key}
@@ -68,8 +79,10 @@ export function GamePage() {
           {activeTab === 'shop' && <ShopPanel />}
           {activeTab === 'plots' && <PlotsPanel />}
           {activeTab === 'daily' && <DailyPanel />}
+          {activeTab === 'collection' && <CollectionPanel />}
           {activeTab === 'prestige' && <PrestigePanel />}
           {activeTab === 'achievements' && <AchievementsPanel />}
+          {activeTab === 'stats' && <StatsPanel />}
         </div>
       </main>
 

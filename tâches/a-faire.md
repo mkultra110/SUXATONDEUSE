@@ -79,10 +79,24 @@ But : core loop addictive (tondre → gagner → upgrader) sans méta-systèmes.
 - 154 tests passent (+37 vs PHASE 1)
 - Bundle frontend gzipped : ~280 KB (sous les 600 KB GDD)
 
-### PHASE 3 — v2 features avancées
+### PHASE 3 — v2 features avancées (LIVRÉE ✅)
 
-10 parcelles, 50 achievements, météo, saisons, weekly events, pets, skins,
-méta-prestige, PWA, push notifications.
+- [x] Système météo dynamique : 6 types (soleil, nuages, pluie, orage, vent, neige) avec multipliers de production
+- [x] 4 saisons sur calendrier réel (printemps, été, automne, hiver) avec probabilités météo et boost de production
+- [x] Météo + saison déterministes par heure (seedés sur la date) — synchronise client/serveur
+- [x] Badge météo dans la TopBar (auto-refresh toutes les minutes)
+- [x] 30 pets répartis en 5 raretés (commun, peu commun, rare, épique, légendaire) avec bonus de production cumulés
+- [x] Action `rollPet` (drop aléatoire pondéré par rareté) + `togglePetEquip` (max 3 équipés)
+- [x] 30 skins cosmétiques avec couleurs primaire/accent
+- [x] CollectionPanel UI : équiper pets + activer skins
+- [x] StatsPanel UI : 12 stats clés + breakdown par tier
+- [x] PWA installable : `manifest.webmanifest` étoffé + service worker (cache-first assets, network-first API)
+- [x] SavePayload étendu (rétro-compatible) : pets/skins/login state
+
+**Métriques PHASE 3** :
+- 172 tests passent (+18 vs PHASE 2 avec tests weather/pets)
+- Bundle frontend gzipped : ~285 KB (toujours < 600 KB)
+- Service worker actif uniquement en prod (`import.meta.env.PROD`)
 
 ## Principes de travail (issus du workflow)
 

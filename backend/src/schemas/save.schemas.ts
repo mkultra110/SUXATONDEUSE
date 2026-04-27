@@ -66,6 +66,14 @@ export const savePayloadSchema = z.object({
   }),
   lastTickAt: z.number(),
   gemSourceProof: z.string().optional(),
+  // PHASE 3 : pets, skins, login streak (optionnels pour retro-compat)
+  petsOwned: z.array(z.string()).max(100).optional(),
+  petsEquipped: z.array(z.string()).max(10).optional(),
+  skinsOwned: z.array(z.string()).max(100).optional(),
+  activeSkin: z.string().optional(),
+  loginStreak: z.number().int().nonnegative().optional(),
+  lastLoginISODate: z.string().nullable().optional(),
+  lastLoginRewardDate: z.string().nullable().optional(),
 });
 
 export const saveRequestSchema = z.object({
