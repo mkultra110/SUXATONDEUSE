@@ -79,6 +79,27 @@ But : core loop addictive (tondre → gagner → upgrader) sans méta-systèmes.
 - 154 tests passent (+37 vs PHASE 1)
 - Bundle frontend gzipped : ~280 KB (sous les 600 KB GDD)
 
+### PHASE 4 — Invites Discord + auto-update VPS (LIVRÉE ✅)
+
+But : portail d'accès via Discord avec liens 1h + déploiement continu sur VPS.
+
+- [x] Backend `invite.service` : JWT signé scope=`game-invite`, TTL 1h
+- [x] Routes `/api/auth/invite/issue` (X-Bot-Key), `/redeem` (cookie httpOnly), `/status`
+- [x] Middlewares `requireBotKey` et `requireInvite` (gate sur register/login)
+- [x] Frontend hook `useInviteBootstrap` : lit `?invite=xxx`, redeem, nettoie URL
+- [x] Page `InviteGatePage` qui dirige vers Discord si pas d'accès
+- [x] Snippet `suxa_tondeuse_command.py` qui appelle l'API et renvoie le lien éphémère
+- [x] Vars env `DISCORD_BOT_API_KEY` + `PUBLIC_GAME_URL` dans .env.example et docker-compose
+- [x] Script `scripts/auto-update.sh` : git fetch + reset + docker compose build si nouveau commit
+- [x] Script `scripts/install-auto-update.sh` : configure le crontab (2 min par défaut)
+- [x] Documentation `scripts/README.md` et `suxabot/README.md` à jour
+
+**Décisions** :
+- Pas de création auto de compte Discord : le lien donne juste l'accès, l'utilisateur s'inscrit/login normalement avec son propre pseudo+password.
+- Le cookie `gameInvite` est httpOnly + sameSite lax pour autoriser le redirect Cloudflare.
+- L'auto-update est en pull (cron) plutôt que push (webhook GitHub) : pas de port à ouvrir, pas de webhook secret à gérer.
+- Refresh tokens existants restent valides après expiration de l'invite (sinon les sessions actives expireraient à 1h).
+
 ### PHASE 3 — v2 features avancées (LIVRÉE ✅)
 
 - [x] Système météo dynamique : 6 types (soleil, nuages, pluie, orage, vent, neige) avec multipliers de production
