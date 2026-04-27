@@ -72,7 +72,19 @@
     "shop": "Boutique",
     "plots": "Parcelles",
     "prestige": "Prestige",
-    "achievements": "Succès"
+    "achievements": "Succès",
+    "daily": "Journalier"
+  },
+  "daily": {
+    "title": "Quêtes journalières",
+    "streak": "Série de connexion",
+    "todayReward": "Récompense du jour",
+    "claimReward": "Récolter la récompense",
+    "alreadyClaimed": "Déjà récolté",
+    "quests": "Quêtes du jour",
+    "claim": "Récolter",
+    "claimed": "Récolté",
+    "noQuests": "Pas de quêtes pour aujourd'hui."
   },
   "common": {
     "yes": "Oui",

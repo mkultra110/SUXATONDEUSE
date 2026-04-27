@@ -10,3 +10,4 @@ export * from './tiers.js';
 export * from './plots.js';
 export * from './upgrades.js';
 export * from './achievements.js';
+export * from './quests.js';

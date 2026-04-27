@@ -72,11 +72,12 @@ But : core loop addictive (tondre → gagner → upgrader) sans méta-systèmes.
 - [x] UI : ShopPanel étendu, PlotsPanel, PrestigePanel, AchievementsPanel
 - [x] Système d'onglets dans GamePage
 - [x] i18n FR/EN pour tous les nouveaux textes
-- [ ] Daily quests + daily login rewards (PHASE 2.6 — en cours)
+- [x] Daily quests (3 par jour, deterministe sur la date) + daily login rewards (cycle 7 jours avec jackpot)
+- [x] DailyPanel UI avec progress bars, claim button, streak display
 
-**Métriques PHASE 2 base** :
-- 143 tests passent (+26 vs PHASE 1)
-- Bundle frontend gzipped : ~278 KB (sous les 600 KB GDD)
+**Métriques PHASE 2 finale** :
+- 154 tests passent (+37 vs PHASE 1)
+- Bundle frontend gzipped : ~280 KB (sous les 600 KB GDD)
 
 ### PHASE 3 — v2 features avancées
 

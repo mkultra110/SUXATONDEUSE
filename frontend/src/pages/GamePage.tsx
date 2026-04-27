@@ -8,15 +8,17 @@ import { ShopPanel } from '../components/hud/ShopPanel.js';
 import { PlotsPanel } from '../components/hud/PlotsPanel.js';
 import { PrestigePanel } from '../components/hud/PrestigePanel.js';
 import { AchievementsPanel } from '../components/hud/AchievementsPanel.js';
+import { DailyPanel } from '../components/hud/DailyPanel.js';
 import { OfflineRewardModal } from '../components/modals/OfflineRewardModal.js';
 import { PixiCanvas } from '../game/engine/PixiCanvas.js';
 import { useGameSession } from '../hooks/useGameSession.js';
 
-type TabKey = 'shop' | 'plots' | 'prestige' | 'achievements';
+type TabKey = 'shop' | 'plots' | 'prestige' | 'achievements' | 'daily';
 
 const TABS: Array<{ key: TabKey; emoji: string }> = [
   { key: 'shop', emoji: '🛒' },
   { key: 'plots', emoji: '🌳' },
+  { key: 'daily', emoji: '📅' },
   { key: 'prestige', emoji: '🌱' },
   { key: 'achievements', emoji: '🏆' },
 ];
@@ -65,6 +67,7 @@ export function GamePage() {
           </nav>
           {activeTab === 'shop' && <ShopPanel />}
           {activeTab === 'plots' && <PlotsPanel />}
+          {activeTab === 'daily' && <DailyPanel />}
           {activeTab === 'prestige' && <PrestigePanel />}
           {activeTab === 'achievements' && <AchievementsPanel />}
         </div>

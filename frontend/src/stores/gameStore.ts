@@ -13,10 +13,12 @@ enableMapSet();
 import {
   ACHIEVEMENTS,
   calculatePrestigeSeeds,
+  type DailyQuestDefinition,
   generatorCost,
   getPlot,
   getTier,
   getUpgrade,
+  loginRewardForDay,
   milestoneMultiplier,
   PLOT_DEFINITIONS,
   prestigeMultiplier,
@@ -25,6 +27,7 @@ import {
   ROBOT_TIERS,
   SAVE_PAYLOAD_VERSION,
   type SavePayload,
+  selectDailyQuests,
   totalProductionMultiplier,
   type UpgradeKey,
   unlockedAchievements,
@@ -66,6 +69,19 @@ interface GameState {
   // Login streak (PHASE 2 : simple, ne distingue pas multi-jours en local)
   loginStreak: number;
   lastLoginISODate: string | null;
+  // Daily login rewards : derniere date claim et claim disponible aujourd'hui
+  lastLoginRewardDate: string | null;
+  // Daily quests : seed du jour + progres + claim
+  dailyQuestSeed: string | null;
+  dailyQuestProgress: Record<string, string>; // bigint serialise
+  dailyQuestsClaimed: Set<string>;
+  // Compteurs intra-journee (resets a la registration de login)
+  dailyTaps: number;
+  dailyRobotsBought: number;
+  dailyUpgradesBought: number;
+  dailyCashEarned: Decimal;
+  dailyGrassMowed: Decimal;
+  dailyPlotsUnlocked: number;
   // Timestamp epoch ms du dernier tick.
   lastTickAt: number;
   isReady: boolean;
@@ -82,6 +98,12 @@ interface GameActions {
   claimAchievement: (key: string) => boolean;
   serialize: () => SavePayload;
   registerLogin: () => void;
+  /** Reclame la recompense de login du jour si non deja claim. */
+  claimLoginReward: () => boolean;
+  /** Reclame une quete dailyterminee. */
+  claimDailyQuest: (key: string) => boolean;
+  /** Recupere les definitions des 3 quetes du jour. */
+  getDailyQuests: () => DailyQuestDefinition[];
 }
 
 type GameStore = GameState & GameActions;
@@ -160,6 +182,24 @@ export function plotUnlockCost(type: PlotType): Decimal {
   return new Decimal(getPlot(type).unlockCost.toString());
 }
 
+/** Lit la progression actuelle d'une quete a partir des compteurs daily. */
+function readQuestProgress(state: GameState, def: DailyQuestDefinition): bigint {
+  switch (def.progressKey) {
+    case 'cashEarned':
+      return BigInt(state.dailyCashEarned.floor().toString());
+    case 'grassMowed':
+      return BigInt(state.dailyGrassMowed.floor().toString());
+    case 'robotsBought':
+      return BigInt(state.dailyRobotsBought);
+    case 'upgradesBought':
+      return BigInt(state.dailyUpgradesBought);
+    case 'manualTaps':
+      return BigInt(state.dailyTaps);
+    case 'plotsUnlocked':
+      return BigInt(state.dailyPlotsUnlocked);
+  }
+}
+
 function recomputeAndAutoUnlockAchievements(draft: GameState): string[] {
   const tierCounts = ROBOT_TIERS.map((tier) => draft.holdings[tier.type].owned);
   const robotsOwned = tierCounts.reduce((acc, n) => acc + n, 0);
@@ -203,6 +243,16 @@ export const useGameStore = create<GameStore>()(
     playTimeSeconds: 0,
     loginStreak: 0,
     lastLoginISODate: null,
+    lastLoginRewardDate: null,
+    dailyQuestSeed: null,
+    dailyQuestProgress: {},
+    dailyQuestsClaimed: new Set<string>(),
+    dailyTaps: 0,
+    dailyRobotsBought: 0,
+    dailyUpgradesBought: 0,
+    dailyCashEarned: new Decimal(0),
+    dailyGrassMowed: new Decimal(0),
+    dailyPlotsUnlocked: 0,
     lastTickAt: Date.now(),
     isReady: false,
 
@@ -248,8 +298,10 @@ export const useGameStore = create<GameStore>()(
         const earned = draft.cashPerSecond.mul(dtSeconds);
         draft.cash = draft.cash.add(earned);
         draft.totalCashEarned = draft.totalCashEarned.add(earned);
+        draft.dailyCashEarned = draft.dailyCashEarned.add(earned);
         draft.grass = draft.grass.add(earned);
         draft.totalGrassMowed = draft.totalGrassMowed.add(earned);
+        draft.dailyGrassMowed = draft.dailyGrassMowed.add(earned);
         draft.playTimeSeconds += dtSeconds;
         draft.lastTickAt = Date.now();
         recomputeAndAutoUnlockAchievements(draft);
@@ -263,8 +315,11 @@ export const useGameStore = create<GameStore>()(
         const earned = new Decimal(tier.baseGrassPerSecond * upgradeMult);
         draft.cash = draft.cash.add(earned);
         draft.totalCashEarned = draft.totalCashEarned.add(earned);
+        draft.dailyCashEarned = draft.dailyCashEarned.add(earned);
         draft.grass = draft.grass.add(earned);
         draft.totalGrassMowed = draft.totalGrassMowed.add(earned);
+        draft.dailyGrassMowed = draft.dailyGrassMowed.add(earned);
+        draft.dailyTaps += 1;
         recomputeAndAutoUnlockAchievements(draft);
       });
     },
@@ -277,6 +332,7 @@ export const useGameStore = create<GameStore>()(
         draft.cash = draft.cash.sub(cost);
         draft.holdings[type].owned += 1;
         draft.totalRobotsBought += 1;
+        draft.dailyRobotsBought += 1;
         draft.cashPerSecond = computeProduction(draft);
         recomputeAndAutoUnlockAchievements(draft);
       });
@@ -295,6 +351,7 @@ export const useGameStore = create<GameStore>()(
         draft.cash = draft.cash.sub(cost);
         draft.upgrades[key] += 1;
         draft.totalUpgrades += 1;
+        draft.dailyUpgradesBought += 1;
         draft.cashPerSecond = computeProduction(draft);
       });
       return true;
@@ -308,6 +365,7 @@ export const useGameStore = create<GameStore>()(
       set((draft) => {
         draft.cash = draft.cash.sub(cost);
         draft.plotsUnlocked[type] = true;
+        draft.dailyPlotsUnlocked += 1;
         draft.cashPerSecond = computeProduction(draft);
         recomputeAndAutoUnlockAchievements(draft);
       });
@@ -381,8 +439,54 @@ export const useGameStore = create<GameStore>()(
           draft.loginStreak = 1;
         }
         draft.lastLoginISODate = today;
+        // Reset des compteurs daily et regeneration des quetes du jour
+        draft.dailyTaps = 0;
+        draft.dailyRobotsBought = 0;
+        draft.dailyUpgradesBought = 0;
+        draft.dailyCashEarned = new Decimal(0);
+        draft.dailyGrassMowed = new Decimal(0);
+        draft.dailyPlotsUnlocked = 0;
+        draft.dailyQuestSeed = today;
+        draft.dailyQuestProgress = {};
+        draft.dailyQuestsClaimed = new Set<string>();
         recomputeAndAutoUnlockAchievements(draft);
       });
+    },
+
+    claimLoginReward: () => {
+      const state = get();
+      const today = new Date().toISOString().slice(0, 10);
+      if (state.lastLoginRewardDate === today) return false;
+      if (state.lastLoginISODate !== today) return false;
+      const reward = loginRewardForDay(state.loginStreak);
+      set((draft) => {
+        draft.cash = draft.cash.add(new Decimal(reward.rewardCash.toString()));
+        draft.gems += reward.rewardGems;
+        draft.lastLoginRewardDate = today;
+      });
+      return true;
+    },
+
+    claimDailyQuest: (key) => {
+      const state = get();
+      if (state.dailyQuestsClaimed.has(key)) return false;
+      const todayQuests = selectDailyQuests(state.dailyQuestSeed ?? '');
+      const def = todayQuests.find((q) => q.key === key);
+      if (!def) return false;
+      // Verifie que la progression atteint la cible
+      const progress = readQuestProgress(state, def);
+      if (progress < def.target) return false;
+      set((draft) => {
+        draft.cash = draft.cash.add(new Decimal(def.rewardCash.toString()));
+        draft.gems += def.rewardGems;
+        draft.dailyQuestsClaimed.add(key);
+      });
+      return true;
+    },
+
+    getDailyQuests: () => {
+      const state = get();
+      return selectDailyQuests(state.dailyQuestSeed ?? '');
     },
 
     serialize: () => {

@@ -72,7 +72,19 @@
     "shop": "Shop",
     "plots": "Plots",
     "prestige": "Prestige",
-    "achievements": "Achievements"
+    "achievements": "Achievements",
+    "daily": "Daily"
+  },
+  "daily": {
+    "title": "Daily quests",
+    "streak": "Login streak",
+    "todayReward": "Today's reward",
+    "claimReward": "Claim reward",
+    "alreadyClaimed": "Already claimed",
+    "quests": "Today's quests",
+    "claim": "Claim",
+    "claimed": "Claimed",
+    "noQuests": "No quests today."
   },
   "common": {
     "yes": "Yes",
