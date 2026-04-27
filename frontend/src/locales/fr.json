@@ -34,7 +34,19 @@
   "game": {
     "loading": "Chargement de votre jardin...",
     "welcome": "Bienvenue, {{username}} !",
-    "phase0Notice": "Le jeu est en bootstrap (PHASE 0). Le canvas est prêt, le gameplay arrive en PHASE 1."
+    "tapHint": "Cliquez sur l'herbe pour tondre manuellement.",
+    "phase0Notice": "Le jeu est en bootstrap (PHASE 0). Le canvas est prêt, le gameplay arrive en PHASE 1.",
+    "offlineRewards": {
+      "title": "Bon retour !",
+      "duration": "Vous étiez absent pendant {{duration}}.",
+      "earned": "Vos robots ont gagné :",
+      "claim": "Récolter"
+    }
+  },
+  "shop": {
+    "title": "Boutique",
+    "upgrades": "Améliorations",
+    "bladesName": "Lames"
   },
   "common": {
     "yes": "Oui",

@@ -34,7 +34,19 @@
   "game": {
     "loading": "Loading your garden...",
     "welcome": "Welcome, {{username}}!",
-    "phase0Notice": "The game is in bootstrap (PHASE 0). Canvas is ready, gameplay coming in PHASE 1."
+    "tapHint": "Click the grass to mow manually.",
+    "phase0Notice": "The game is in bootstrap (PHASE 0). Canvas is ready, gameplay coming in PHASE 1.",
+    "offlineRewards": {
+      "title": "Welcome back!",
+      "duration": "You were away for {{duration}}.",
+      "earned": "Your robots earned:",
+      "claim": "Collect"
+    }
+  },
+  "shop": {
+    "title": "Shop",
+    "upgrades": "Upgrades",
+    "bladesName": "Blades"
   },
   "common": {
     "yes": "Yes",

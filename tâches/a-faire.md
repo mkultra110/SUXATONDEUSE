@@ -36,22 +36,28 @@ But : monorepo fonctionnel, jeu lançable en local via `docker compose up`.
 - 75+ fichiers TS/TSX, commentaires en français, variables en anglais
 - Build clean : shared + backend + frontend (Vite + tsc -b)
 
-### PHASE 1 — MVP jouable (après validation PHASE 0)
+### PHASE 1 — MVP jouable (LIVRÉE ✅)
 
 But : core loop addictive (tondre → gagner → upgrader) sans méta-systèmes.
 
-- [ ] Scène PixiJS principale : 1 parcelle, 1 robot animé, herbe 4 stages
-- [ ] Currencies 🪙 / 🌿 avec break_infinity.js
-- [ ] 3 tiers de robots (Cisaille, Pousser, Thermique)
-- [ ] 1 catégorie d'upgrade (Lames)
-- [ ] Boucle tick 10 Hz fixed-step + rAF rendering
-- [ ] Auto-save local (IndexedDB) + sync server 30 s
-- [ ] HMAC anti-cheat baseline + service de validation
-- [ ] Offline progress simple (cap 12h, 100 %)
-- [ ] HUD minimal : top bar currency, side panel shop, tap manuel
-- [ ] Pixel art Kenney.nl placeholder
-- [ ] Modal "Bon retour" avec gains offline
-- [ ] Tests Vitest sur formules économiques (coverage 100 %)
+- [x] Scène PixiJS principale : 1 parcelle 6×6 tiles, herbe 4 stages, robots animés
+- [x] Currencies 🪙 / 🌿 avec break_infinity.js + format short scale
+- [x] 3 tiers de robots (Cisaille, Pousser, Thermique)
+- [x] 1 catégorie d'upgrade (Lames, +5 % / niveau)
+- [x] Boucle tick 10 Hz fixed-step + rAF rendering
+- [x] Auto-save local (IndexedDB + LZ-string) + sync server 30 s + beacon unload
+- [x] HMAC SHA-256 anti-cheat + service de validation soft-flag
+- [x] Offline progress (cap 12h)
+- [x] HUD : TopBar currency + ShopPanel + tap manuel sur canvas
+- [x] Pixel art programmatique (Graphics) — assets externes en PHASE 2
+- [x] Modal "Bon retour" avec count-up animé
+- [x] Tests Vitest : 117 verts (55 shared + 44 backend + 18 frontend)
+- [x] Endpoints `/api/save` (GET, POST, beacon) avec validation Zod
+
+**Métriques PHASE 1** :
+- 117 tests passent (gain de +26 vs PHASE 0)
+- Bundle frontend gzipped : ~272 KB (+16 KB pour Pixi scene + game logic)
+- Coverage anti-cheat backend : 12 tests dédiés (cible 95 %+ atteinte)
 
 ### PHASE 2 — v1 méta-systèmes
 

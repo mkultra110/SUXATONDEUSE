@@ -26,7 +26,7 @@ export interface SavePayload {
   /** Timestamp serveur du dernier tick valide (ms epoch). */
   lastTickAt: number;
   /** Source d'autorisation pour gain de gems (achievement id, quest id, IAP receipt). */
-  gemSourceProof?: string;
+  gemSourceProof?: string | undefined;
 }
 
 /** Reponse de l'endpoint GET /api/save. */

@@ -30,3 +30,13 @@
 - **Cookie httpOnly refresh** : path à `/api/auth` pour limiter l'envoi automatique aux seules routes auth — réduit la surface CSRF.
 - **Anti-cheat HMAC** : utiliser `crypto.timingSafeEqual` après comparaison de longueur, jamais `===` direct.
 - **Offline progress** : à 72h pile, le multiplier est 0.5 (fin de la pente linéaire 12-72h). Le palier 0.25 ne s'applique qu'au-delà ; mais comme on cap le temps à 72h, en pratique c'est 0.5 maximum. À reconsidérer en PHASE 1 si on veut un cap de 7 jours pleins (cf. GDD section 4.11).
+
+### PHASE 1
+
+- **`exactOptionalPropertyTypes: true`** + Zod : Zod produit `field?: string | undefined` (avec union explicite), donc le type partagé doit aussi être `field?: string | undefined`. Sans ça, on a TS2379 sur les passages de schemas vers SavePayload.
+- **`noUncheckedIndexedAccess: true`** : trop strict pour le frontend qui manipule beaucoup de matrices (tiles 6×6, palettes par index). Désactivé spécifiquement dans `frontend/tsconfig.app.json`. Reste actif côté shared et backend.
+- **TypeScript composite + `tsc.tsbuildinfo`** : si on supprime manuellement `dist/`, il faut aussi supprimer `tsconfig.tsbuildinfo` sinon `tsc` ne réémet pas (croit à un cache valide).
+- **Zustand + immer** : pour les types Decimal (break_infinity), immer fait des problèmes avec `Object.freeze` sur les classes. Solution : ne pas freezer manuellement, laisser le draft muter normalement.
+- **PixiJS `Application.init()`** est asynchrone : toujours gérer le démontage avant init avec un flag `cancelled` pour éviter les leaks de canvas.
+- **`navigator.sendBeacon`** : ne supporte pas les headers custom, donc l'authentification par `Bearer` ne marche pas. On envoie le payload + un HMAC en clair, le serveur authentifie via le cookie httpOnly s'il est présent.
+- **Auto-save** : éviter `setInterval` côté composant React (re-démarrage au remount). Centraliser dans un orchestrator qui s'enregistre à `beforeunload` + `visibilitychange` + intervalles.

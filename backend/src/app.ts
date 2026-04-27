@@ -12,6 +12,7 @@ import { globalRateLimit } from './middleware/rateLimit.middleware.js';
 import { requestId } from './middleware/requestId.middleware.js';
 import { authRouter } from './routes/auth.routes.js';
 import { healthRouter } from './routes/health.routes.js';
+import { saveRouter } from './routes/save.routes.js';
 import { installBigIntJsonPatch } from './utils/bigint.js';
 
 installBigIntJsonPatch();
@@ -42,6 +43,7 @@ export function createApp(): Express {
 
   // Routes
   app.use('/api/auth', authRouter);
+  app.use('/api/save', saveRouter);
   app.use('/api', healthRouter);
 
   // 404 + error handler (toujours en dernier)
