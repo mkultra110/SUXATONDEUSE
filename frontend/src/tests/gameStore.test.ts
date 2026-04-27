@@ -27,7 +27,7 @@ describe('gameStore.manualTap', () => {
   });
 
   it('le tap est boosté par le niveau de Lames', () => {
-    useGameStore.setState({ bladesLevel: 10 });
+    useGameStore.setState({ upgrades: { blades: 10, engine: 0, battery: 0, solar: 0, navigation: 0, weather: 0 } });
     useGameStore.getState().manualTap();
     const cash = useGameStore.getState().cash.toNumber();
     // 0.5 * (1 + 0.05*10) = 0.5 * 1.5 = 0.75
@@ -77,15 +77,15 @@ describe('gameStore.tick', () => {
   });
 });
 
-describe('gameStore.buyBladesUpgrade', () => {
+describe('gameStore.buyUpgrade', () => {
   it('achete un niveau de lames', () => {
     useGameStore.setState({ cash: new Decimal(100) });
-    expect(useGameStore.getState().buyBladesUpgrade()).toBe(true);
-    expect(useGameStore.getState().bladesLevel).toBe(1);
+    expect(useGameStore.getState().buyUpgrade('blades')).toBe(true);
+    expect(useGameStore.getState().upgrades.blades).toBe(1);
   });
 
   it('refuse si cash insuffisant', () => {
-    expect(useGameStore.getState().buyBladesUpgrade()).toBe(false);
+    expect(useGameStore.getState().buyUpgrade('blades')).toBe(false);
   });
 
   it('boost la production existante', () => {
@@ -93,7 +93,7 @@ describe('gameStore.buyBladesUpgrade', () => {
     useGameStore.getState().buyRobot('PUSH_MOWER');
     const before = useGameStore.getState().cashPerSecond.toNumber();
     useGameStore.setState({ cash: new Decimal(100) });
-    useGameStore.getState().buyBladesUpgrade();
+    useGameStore.getState().buyUpgrade('blades');
     const after = useGameStore.getState().cashPerSecond.toNumber();
     expect(after).toBeCloseTo(before * 1.05, 5);
   });
@@ -103,7 +103,7 @@ describe('gameStore.serialize', () => {
   it('produit un payload conforme au schema (cash en string, holdings serialises)', () => {
     useGameStore.setState({ cash: new Decimal(1234) });
     useGameStore.getState().buyRobot('PUSH_MOWER');
-    useGameStore.getState().buyBladesUpgrade();
+    useGameStore.getState().buyUpgrade('blades');
 
     const payload = useGameStore.getState().serialize();
     // 1234 - 60 (push mower) - 50 (lames lvl 1) = 1124
@@ -124,13 +124,13 @@ describe('gameStore.serialize', () => {
   it('roundtrip : hydrate(serialize(s)) preserve les invariants', () => {
     useGameStore.setState({ cash: new Decimal(500) });
     useGameStore.getState().buyRobot('PUSH_MOWER');
-    useGameStore.getState().buyBladesUpgrade();
+    useGameStore.getState().buyUpgrade('blades');
     const beforeHoldings = { ...useGameStore.getState().holdings };
 
     const payload = useGameStore.getState().serialize();
     useGameStore.getState().hydrate(payload);
     const after = useGameStore.getState();
     expect(after.holdings.PUSH_MOWER.owned).toBe(beforeHoldings.PUSH_MOWER.owned);
-    expect(after.bladesLevel).toBe(1);
+    expect(after.upgrades.blades).toBe(1);
   });
 });

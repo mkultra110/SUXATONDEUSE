@@ -55,6 +55,7 @@ export function useGameSession(): {
       const initial = loaded ?? buildInitialSave();
       const cashBefore = new Decimal(initial.cash);
       useGameStore.getState().hydrate(initial);
+      useGameStore.getState().registerLogin();
 
       // Catch-up offline : on calcule la duree depuis lastTickAt et on
       // applique un tick agrege au store.

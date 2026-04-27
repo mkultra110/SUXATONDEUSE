@@ -1,78 +1,92 @@
-// Store Zustand du jeu : state runtime + actions de tick / achat / tap.
-// Utilise immer pour des updates immutables ergonomiques.
-// Cf. GDD section 8.2.
+// Store Zustand du jeu (PHASE 2).
+// Etat runtime + actions : tick / tap / achat robot / upgrade /
+// deblocage parcelle / prestige / achievements.
 
 import Decimal from 'break_infinity.js';
+import { enableMapSet } from 'immer';
 import { create } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
+
+// Active le support des Map/Set dans immer (utilise pour achievementsUnlocked).
+enableMapSet();
+
 import {
+  ACHIEVEMENTS,
+  calculatePrestigeSeeds,
   generatorCost,
+  getPlot,
   getTier,
+  getUpgrade,
   milestoneMultiplier,
+  PLOT_DEFINITIONS,
+  prestigeMultiplier,
+  type PlotType,
   type RobotType,
+  ROBOT_TIERS,
   SAVE_PAYLOAD_VERSION,
   type SavePayload,
+  totalProductionMultiplier,
+  type UpgradeKey,
+  unlockedAchievements,
+  UPGRADE_DEFINITIONS,
 } from '@robomow/shared';
 import { big, bigToString } from '../game/engine/bigNumber.js';
 
-/** Etat d'un type de robot possede : agrege le nombre par tier. */
 export interface RobotHolding {
   type: RobotType;
   owned: number;
 }
 
 interface GameState {
-  // Currencies en string pour serialisation JSON ; converties en Decimal en runtime.
+  // Currencies en runtime (Decimal pour break_infinity).
   cash: Decimal;
   grass: Decimal;
   gems: number;
-  // Production passive (cash/sec) recalculee a chaque mutation.
+  prestigePoints: Decimal;
+  // Cache de la production passive.
   cashPerSecond: Decimal;
-  // Robots possedes regroupes par type.
+  // Holdings par tier.
   holdings: Record<RobotType, RobotHolding>;
-  // Niveau global de l'upgrade Lames (PHASE 1 : un seul upgrade).
-  bladesLevel: number;
+  // Niveau de chaque categorie d'upgrade.
+  upgrades: Record<UpgradeKey, number>;
+  // Etat des parcelles : true si debloquee.
+  plotsUnlocked: Record<PlotType, boolean>;
+  // Prestige
+  prestigeLevel: number;
+  totalPrestiges: number;
+  prestigeMultiplierCache: number;
+  // Achievements deverrouilles
+  achievementsUnlocked: Set<string>;
   // Statistiques cumulees.
   totalCashEarned: Decimal;
   totalGrassMowed: Decimal;
   totalRobotsBought: number;
   totalUpgrades: number;
   playTimeSeconds: number;
-  // Timestamp epoch ms du dernier tick pris en compte (sert offline).
+  // Login streak (PHASE 2 : simple, ne distingue pas multi-jours en local)
+  loginStreak: number;
+  lastLoginISODate: string | null;
+  // Timestamp epoch ms du dernier tick.
   lastTickAt: number;
-  // Indique si le state initial a ete pose (apres load ou first-run).
   isReady: boolean;
 }
 
 interface GameActions {
-  /** Initialise le state depuis un save (ou un save vide). */
   hydrate: (payload: SavePayload) => void;
-  /** Tick logique : avance la simulation de dtSeconds. */
   tick: (dtSeconds: number) => void;
-  /** Tap manuel : ajoute la production d'1 cisaille pendant 1 seconde. */
   manualTap: () => void;
-  /** Achete une unite supplementaire d'un robot. */
   buyRobot: (type: RobotType) => boolean;
-  /** Achete un niveau d'upgrade Lames. */
-  buyBladesUpgrade: () => boolean;
-  /** Serialise le state actuel en SavePayload. */
+  buyUpgrade: (key: UpgradeKey) => boolean;
+  unlockPlot: (type: PlotType) => boolean;
+  triggerPrestige: () => bigint;
+  claimAchievement: (key: string) => boolean;
   serialize: () => SavePayload;
+  registerLogin: () => void;
 }
 
 type GameStore = GameState & GameActions;
 
-const ALL_ROBOT_TYPES: RobotType[] = [
-  'HAND_SHEARS',
-  'PUSH_MOWER',
-  'GAS_MOWER',
-  'ELECTRIC_MOWER',
-  'ROBOMOW_V1',
-  'NAVIBOT',
-  'HELIOCUT',
-  'MEGAMOWER',
-  'AEROMOW',
-  'NANOSWARM',
-];
+const ALL_ROBOT_TYPES: RobotType[] = ROBOT_TIERS.map((t) => t.type);
 
 function emptyHoldings(): Record<RobotType, RobotHolding> {
   const result = {} as Record<RobotType, RobotHolding>;
@@ -82,22 +96,53 @@ function emptyHoldings(): Record<RobotType, RobotHolding> {
   return result;
 }
 
+function emptyUpgrades(): Record<UpgradeKey, number> {
+  const result = {} as Record<UpgradeKey, number>;
+  for (const u of UPGRADE_DEFINITIONS) {
+    result[u.key] = 0;
+  }
+  return result;
+}
+
+function emptyPlots(): Record<PlotType, boolean> {
+  const result = {} as Record<PlotType, boolean>;
+  for (const p of PLOT_DEFINITIONS) {
+    result[p.type] = p.index === 0;
+  }
+  return result;
+}
+
 /** Calcule la production totale (cash/sec) en fonction du state. */
 function computeProduction(state: GameState): Decimal {
   let total = new Decimal(0);
-  const bladesMultiplier = 1 + 0.05 * state.bladesLevel;
+  const upgradeMult = totalProductionMultiplier(state.upgrades);
+  const prestigeMult = state.prestigeMultiplierCache;
+
+  // Multiplicateur global de toutes les parcelles debloquees (somme).
+  let plotsMult = 0;
+  for (const plot of PLOT_DEFINITIONS) {
+    if (state.plotsUnlocked[plot.type]) {
+      plotsMult += plot.globalMultiplier;
+    }
+  }
+  if (plotsMult === 0) plotsMult = 1;
 
   for (const holding of Object.values(state.holdings)) {
     if (holding.owned <= 0) continue;
     const tier = getTier(holding.type);
-    const milestoneMult = milestoneMultiplier(holding.owned);
-    const tierProd = tier.baseGrassPerSecond * holding.owned * milestoneMult * bladesMultiplier;
+    const milestone = milestoneMultiplier(holding.owned);
+    const tierProd =
+      tier.baseGrassPerSecond *
+      holding.owned *
+      milestone *
+      upgradeMult *
+      prestigeMult *
+      plotsMult;
     total = total.add(new Decimal(tierProd));
   }
   return total;
 }
 
-/** Cout d'achat de la prochaine unite d'un type de robot. */
 export function nextRobotCost(holdings: Record<RobotType, RobotHolding>, type: RobotType): Decimal {
   const tier = getTier(type);
   const owned = holdings[type].owned;
@@ -105,9 +150,36 @@ export function nextRobotCost(holdings: Record<RobotType, RobotHolding>, type: R
   return new Decimal(cost.toString());
 }
 
-/** Cout d'achat du prochain niveau de Lames : 50 * 1.15^N. */
-export function nextBladesCost(level: number): Decimal {
-  return new Decimal(50).mul(Decimal.pow(1.15, level));
+export function nextUpgradeCost(key: UpgradeKey, level: number): Decimal {
+  const def = getUpgrade(key);
+  const cost = generatorCost(def.baseCost, def.costGrowth, level);
+  return new Decimal(cost.toString());
+}
+
+export function plotUnlockCost(type: PlotType): Decimal {
+  return new Decimal(getPlot(type).unlockCost.toString());
+}
+
+function recomputeAndAutoUnlockAchievements(draft: GameState): string[] {
+  const tierCounts = ROBOT_TIERS.map((tier) => draft.holdings[tier.type].owned);
+  const robotsOwned = tierCounts.reduce((acc, n) => acc + n, 0);
+  const plotsUnlockedCount = Object.values(draft.plotsUnlocked).filter(Boolean).length;
+  const newly = unlockedAchievements(
+    {
+      totalGrass: BigInt(draft.totalGrassMowed.floor().toString()),
+      totalCash: BigInt(draft.totalCashEarned.floor().toString()),
+      robotsOwned,
+      plotsUnlocked: plotsUnlockedCount,
+      prestigeCount: draft.totalPrestiges,
+      loginStreak: draft.loginStreak,
+      tierCounts,
+    },
+    draft.achievementsUnlocked,
+  );
+  for (const ach of newly) {
+    draft.achievementsUnlocked.add(ach.key);
+  }
+  return newly.map((a) => a.key);
 }
 
 export const useGameStore = create<GameStore>()(
@@ -115,14 +187,22 @@ export const useGameStore = create<GameStore>()(
     cash: new Decimal(0),
     grass: new Decimal(0),
     gems: 0,
+    prestigePoints: new Decimal(0),
     cashPerSecond: new Decimal(0),
     holdings: emptyHoldings(),
-    bladesLevel: 0,
+    upgrades: emptyUpgrades(),
+    plotsUnlocked: emptyPlots(),
+    prestigeLevel: 0,
+    totalPrestiges: 0,
+    prestigeMultiplierCache: 1,
+    achievementsUnlocked: new Set<string>(),
     totalCashEarned: new Decimal(0),
     totalGrassMowed: new Decimal(0),
     totalRobotsBought: 0,
     totalUpgrades: 0,
     playTimeSeconds: 0,
+    loginStreak: 0,
+    lastLoginISODate: null,
     lastTickAt: Date.now(),
     isReady: false,
 
@@ -131,12 +211,26 @@ export const useGameStore = create<GameStore>()(
         draft.cash = big(payload.cash);
         draft.grass = big(payload.grass);
         draft.gems = payload.gems;
+        draft.prestigePoints = big(payload.prestigePoints);
         draft.holdings = emptyHoldings();
         for (const robot of payload.robots) {
-          // En PHASE 1, on agrege par type (pas d'instance individuelle).
           draft.holdings[robot.type].owned += 1;
         }
-        draft.bladesLevel = payload.upgrades['blades'] ?? 0;
+        draft.upgrades = emptyUpgrades();
+        for (const def of UPGRADE_DEFINITIONS) {
+          draft.upgrades[def.key] = payload.upgrades[def.key] ?? 0;
+        }
+        draft.plotsUnlocked = emptyPlots();
+        for (const plot of payload.plots) {
+          draft.plotsUnlocked[plot.type] = plot.isUnlocked;
+        }
+        draft.totalPrestiges = payload.statistics.totalPrestiges;
+        draft.prestigeMultiplierCache = prestigeMultiplier({
+          seedsInMultiplierTree: 0, // PHASE 2 simple : pas d'arbre encore
+          achievementsUnlocked: payload.achievements.length,
+          petsCount: 0,
+        });
+        draft.achievementsUnlocked = new Set(payload.achievements);
         draft.totalCashEarned = big(payload.statistics.totalEarned);
         draft.totalGrassMowed = big(payload.statistics.totalGrassMowed);
         draft.totalRobotsBought = payload.statistics.totalRobotsBought;
@@ -151,28 +245,27 @@ export const useGameStore = create<GameStore>()(
     tick: (dtSeconds) => {
       if (dtSeconds <= 0) return;
       set((draft) => {
-        const production = draft.cashPerSecond;
-        const earned = production.mul(dtSeconds);
+        const earned = draft.cashPerSecond.mul(dtSeconds);
         draft.cash = draft.cash.add(earned);
         draft.totalCashEarned = draft.totalCashEarned.add(earned);
         draft.grass = draft.grass.add(earned);
         draft.totalGrassMowed = draft.totalGrassMowed.add(earned);
         draft.playTimeSeconds += dtSeconds;
         draft.lastTickAt = Date.now();
+        recomputeAndAutoUnlockAchievements(draft);
       });
     },
 
     manualTap: () => {
       set((draft) => {
-        // Tap = produit 1 seconde de la cisaille manuelle de base + upgrades.
         const tier = getTier('HAND_SHEARS');
-        const base = new Decimal(tier.baseGrassPerSecond);
-        const bladesMultiplier = 1 + 0.05 * draft.bladesLevel;
-        const earned = base.mul(bladesMultiplier);
+        const upgradeMult = totalProductionMultiplier(draft.upgrades);
+        const earned = new Decimal(tier.baseGrassPerSecond * upgradeMult);
         draft.cash = draft.cash.add(earned);
         draft.totalCashEarned = draft.totalCashEarned.add(earned);
         draft.grass = draft.grass.add(earned);
         draft.totalGrassMowed = draft.totalGrassMowed.add(earned);
+        recomputeAndAutoUnlockAchievements(draft);
       });
     },
 
@@ -185,21 +278,111 @@ export const useGameStore = create<GameStore>()(
         draft.holdings[type].owned += 1;
         draft.totalRobotsBought += 1;
         draft.cashPerSecond = computeProduction(draft);
+        recomputeAndAutoUnlockAchievements(draft);
       });
       return true;
     },
 
-    buyBladesUpgrade: () => {
+    buyUpgrade: (key) => {
       const state = get();
-      const cost = nextBladesCost(state.bladesLevel);
+      const def = getUpgrade(key);
+      const level = state.upgrades[key];
+      if (level >= def.maxLevel) return false;
+      if (def.unlockPrestigeLevel > state.prestigeLevel) return false;
+      const cost = nextUpgradeCost(key, level);
       if (state.cash.lt(cost)) return false;
       set((draft) => {
         draft.cash = draft.cash.sub(cost);
-        draft.bladesLevel += 1;
+        draft.upgrades[key] += 1;
         draft.totalUpgrades += 1;
         draft.cashPerSecond = computeProduction(draft);
       });
       return true;
+    },
+
+    unlockPlot: (type) => {
+      const state = get();
+      if (state.plotsUnlocked[type]) return false;
+      const cost = plotUnlockCost(type);
+      if (state.cash.lt(cost)) return false;
+      set((draft) => {
+        draft.cash = draft.cash.sub(cost);
+        draft.plotsUnlocked[type] = true;
+        draft.cashPerSecond = computeProduction(draft);
+        recomputeAndAutoUnlockAchievements(draft);
+      });
+      return true;
+    },
+
+    triggerPrestige: () => {
+      const state = get();
+      // Calcule les graines obtenues
+      const totalCashBigInt = BigInt(state.totalCashEarned.floor().toString());
+      const seedsAlreadySpent = BigInt(state.prestigePoints.floor().toString());
+      const newSeeds = calculatePrestigeSeeds(totalCashBigInt, seedsAlreadySpent);
+      if (newSeeds <= 0n) return 0n;
+
+      set((draft) => {
+        // Reset principal
+        draft.cash = new Decimal(0);
+        draft.grass = new Decimal(0);
+        draft.holdings = emptyHoldings();
+        draft.upgrades = emptyUpgrades();
+        draft.plotsUnlocked = emptyPlots();
+        // Conserve : gems, achievements, prestigePoints (cumulees)
+        draft.prestigePoints = draft.prestigePoints.add(new Decimal(newSeeds.toString()));
+        draft.prestigeLevel += 1;
+        draft.totalPrestiges += 1;
+        draft.totalCashEarned = new Decimal(0);
+        draft.totalGrassMowed = new Decimal(0);
+        draft.totalRobotsBought = 0;
+        draft.totalUpgrades = 0;
+        draft.prestigeMultiplierCache = prestigeMultiplier({
+          seedsInMultiplierTree: 0,
+          achievementsUnlocked: draft.achievementsUnlocked.size,
+          petsCount: 0,
+        });
+        draft.cashPerSecond = computeProduction(draft);
+        recomputeAndAutoUnlockAchievements(draft);
+      });
+      return newSeeds;
+    },
+
+    claimAchievement: (key) => {
+      const state = get();
+      if (!state.achievementsUnlocked.has(key)) return false;
+      const ach = ACHIEVEMENTS.find((a) => a.key === key);
+      if (!ach) return false;
+      set((draft) => {
+        // PHASE 2 : on accorde les recompenses (cash + gems) au moment du claim.
+        // Sans suivi separe "claimed", on stocke un suffixe ":claimed" dans le set
+        // pour eviter de claim deux fois.
+        const claimedKey = `${key}:claimed`;
+        if (draft.achievementsUnlocked.has(claimedKey)) return;
+        draft.cash = draft.cash.add(new Decimal(ach.rewardCash.toString()));
+        draft.gems += ach.rewardGems;
+        draft.achievementsUnlocked.add(claimedKey);
+      });
+      return true;
+    },
+
+    registerLogin: () => {
+      set((draft) => {
+        const today = new Date().toISOString().slice(0, 10);
+        if (draft.lastLoginISODate === today) return;
+        if (draft.lastLoginISODate) {
+          const yesterday = new Date(Date.now() - 86_400_000).toISOString().slice(0, 10);
+          if (draft.lastLoginISODate === yesterday) {
+            draft.loginStreak += 1;
+          } else {
+            draft.loginStreak = 1;
+          }
+        } else {
+          draft.loginStreak = 1;
+        }
+        draft.lastLoginISODate = today;
+        recomputeAndAutoUnlockAchievements(draft);
+      });
     },
 
     serialize: () => {
@@ -217,32 +400,32 @@ export const useGameStore = create<GameStore>()(
         })),
       );
 
+      const plots = PLOT_DEFINITIONS.map((p) => ({
+        id: `plot-${p.type.toLowerCase()}`,
+        type: p.type,
+        level: 1,
+        isUnlocked: state.plotsUnlocked[p.type],
+        grassDensity: 1.0,
+        multiplier: p.globalMultiplier,
+      }));
+
       return {
         payloadVersion: SAVE_PAYLOAD_VERSION,
         cash: bigToString(state.cash),
         grass: bigToString(state.grass),
         gems: state.gems,
-        prestigePoints: '0',
-        prestigeMultiplier: 1,
+        prestigePoints: bigToString(state.prestigePoints),
+        prestigeMultiplier: state.prestigeMultiplierCache,
         robots,
-        plots: [
-          {
-            id: 'plot-residential-garden',
-            type: 'RESIDENTIAL_GARDEN',
-            level: 1,
-            isUnlocked: true,
-            grassDensity: 1.0,
-            multiplier: 1.0,
-          },
-        ],
-        upgrades: { blades: state.bladesLevel },
-        achievements: [],
+        plots,
+        upgrades: { ...state.upgrades },
+        achievements: Array.from(state.achievementsUnlocked).filter((k) => !k.endsWith(':claimed')),
         statistics: {
           totalEarned: bigToString(state.totalCashEarned),
           totalGrassMowed: bigToString(state.totalGrassMowed),
           totalRobotsBought: state.totalRobotsBought,
           totalUpgrades: state.totalUpgrades,
-          totalPrestiges: 0,
+          totalPrestiges: state.totalPrestiges,
           playTimeSeconds: state.playTimeSeconds,
         },
         lastTickAt: state.lastTickAt,

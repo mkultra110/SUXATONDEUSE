@@ -48,6 +48,32 @@
     "upgrades": "Upgrades",
     "bladesName": "Blades"
   },
+  "plots": {
+    "title": "Plots"
+  },
+  "prestige": {
+    "title": "Spring Mowing",
+    "subtitle": "Reset progress and keep seeds to boost future cycles.",
+    "level": "Level",
+    "totalPrestiges": "Cycles",
+    "seedsBank": "Stored seeds",
+    "preview": "You will gain:",
+    "notEligible": "Reach {{target}} cumulative cash to unlock (currently {{current}}).",
+    "action": "Start Spring Mowing",
+    "confirmWarning": "⚠ You will lose all robots, plots and upgrades. Confirm?",
+    "confirm": "Confirm"
+  },
+  "achievements": {
+    "title": "Achievements",
+    "claim": "Claim"
+  },
+  "tabs": {
+    "garden": "Garden",
+    "shop": "Shop",
+    "plots": "Plots",
+    "prestige": "Prestige",
+    "achievements": "Achievements"
+  },
   "common": {
     "yes": "Yes",
     "no": "No",

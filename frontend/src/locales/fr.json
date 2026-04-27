@@ -48,6 +48,32 @@
     "upgrades": "Améliorations",
     "bladesName": "Lames"
   },
+  "plots": {
+    "title": "Parcelles"
+  },
+  "prestige": {
+    "title": "Tonte de Printemps",
+    "subtitle": "Recommencez en gardant des graines pour booster les futurs cycles.",
+    "level": "Niveau",
+    "totalPrestiges": "Cycles",
+    "seedsBank": "Graines accumulées",
+    "preview": "Vous gagnerez :",
+    "notEligible": "Atteignez {{target}} de cash cumulé pour débloquer (actuellement {{current}}).",
+    "action": "Lancer la Tonte de Printemps",
+    "confirmWarning": "⚠ Vous allez perdre tous vos robots, parcelles et upgrades. Confirmer ?",
+    "confirm": "Confirmer"
+  },
+  "achievements": {
+    "title": "Succès",
+    "claim": "Récolter"
+  },
+  "tabs": {
+    "garden": "Jardin",
+    "shop": "Boutique",
+    "plots": "Parcelles",
+    "prestige": "Prestige",
+    "achievements": "Succès"
+  },
   "common": {
     "yes": "Oui",
     "no": "Non",

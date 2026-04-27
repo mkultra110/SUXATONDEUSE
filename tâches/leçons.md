@@ -40,3 +40,11 @@
 - **PixiJS `Application.init()`** est asynchrone : toujours gérer le démontage avant init avec un flag `cancelled` pour éviter les leaks de canvas.
 - **`navigator.sendBeacon`** : ne supporte pas les headers custom, donc l'authentification par `Bearer` ne marche pas. On envoie le payload + un HMAC en clair, le serveur authentifie via le cookie httpOnly s'il est présent.
 - **Auto-save** : éviter `setInterval` côté composant React (re-démarrage au remount). Centraliser dans un orchestrator qui s'enregistre à `beforeunload` + `visibilitychange` + intervalles.
+
+### PHASE 2
+
+- **Immer + `Set` / `Map`** : par défaut immer ne supporte pas les structures `Set`/`Map` ; il faut appeler `enableMapSet()` au boot du store. Sans ça, les drafts contenant un `Set` lèvent une erreur cryptique de plugin.
+- **Achievements claimables** : on stocke un suffixe `:claimed` dans le même `Set` plutôt que d'avoir un second `Set`. Plus simple à sérialiser, mais filtrer à la sérialisation pour ne pas exposer le suffixe au backend.
+- **Prestige + recompute production** : après un reset prestige, il faut recalculer `cashPerSecond` car les multiplicateurs de parcelles et upgrades changent. Centraliser dans une fonction `computeProduction(state)` appelée à chaque mutation pertinente.
+- **Leaderboard sur save** : `Promise.all` les upserts par catégorie, mais wrapper dans un `try/catch` qui swallow les erreurs pour ne pas faire échouer la save principale.
+- **Onglets dans GamePage** : pour ne pas démonter/remonter les panels lourds, on peut utiliser CSS `display: none` au lieu d'un rendu conditionnel. PHASE 2 est OK avec rendu conditionnel mais à reconsidérer si lag.

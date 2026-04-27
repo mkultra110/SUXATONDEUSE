@@ -6,6 +6,7 @@ import { prisma } from '../config/prisma.js';
 import { AppError } from '../utils/api.js';
 import { computeHmac } from '../utils/hmac.js';
 import { validateSave } from './anticheat.service.js';
+import { upsertLeaderboardScore } from './leaderboard.service.js';
 
 /** Convertit une string serialisant un BigInt en bigint (tronque decimales). */
 function toBigInt(s: string): bigint {
@@ -99,6 +100,28 @@ export async function persistSave(
       suspicionScore: { increment: validation.suspicionDelta },
     },
   });
+
+  // Met a jour les leaderboards (best-effort, ne bloque pas la save)
+  try {
+    const totalEarnedBigInt = toBigInt(incoming.statistics.totalEarned);
+    const totalGrassBigInt = toBigInt(incoming.statistics.totalGrassMowed);
+    await Promise.all([
+      upsertLeaderboardScore(userId, 'TOTAL_CASH', totalEarnedBigInt),
+      upsertLeaderboardScore(userId, 'TOTAL_GRASS', totalGrassBigInt),
+      upsertLeaderboardScore(
+        userId,
+        'PRESTIGE_LEVEL',
+        BigInt(incoming.statistics.totalPrestiges),
+      ),
+      upsertLeaderboardScore(
+        userId,
+        'ACHIEVEMENTS',
+        BigInt(incoming.achievements.length),
+      ),
+    ]);
+  } catch {
+    // Les erreurs de leaderboard n'interrompent pas la save.
+  }
 
   return { saved: true, serverTime: now.toISOString() };
 }

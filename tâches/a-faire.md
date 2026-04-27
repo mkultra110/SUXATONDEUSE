@@ -59,11 +59,24 @@ But : core loop addictive (tondre → gagner → upgrader) sans méta-systèmes.
 - Bundle frontend gzipped : ~272 KB (+16 KB pour Pixi scene + game logic)
 - Coverage anti-cheat backend : 12 tests dédiés (cible 95 %+ atteinte)
 
-### PHASE 2 — v1 méta-systèmes
+### PHASE 2 — v1 méta-systèmes (LIVRÉE base ✅, daily quests à suivre)
 
-10 tiers robots, 5 parcelles, 6 catégories upgrades, prestige + arbre talents,
-30 achievements, daily quests/login, leaderboard, animations complètes,
-i18n FR/EN, sons.
+- [x] 10 tiers de robots avec déblocage progressif (visible dès qu'on a une unité du précédent)
+- [x] 10 parcelles débloquables avec multipliers globaux (stockés en `plotsUnlocked`)
+- [x] 6 catégories d'upgrades (Lames, Moteur, Batterie, Solaire, Navigation, Météo)
+- [x] Système prestige "Tonte de Printemps" : preview seeds, confirmation double, reset partiel
+- [x] 25 achievements automatiques (distance/cash/robots/plots/prestige/login)
+- [x] Claim d'achievements avec récompenses (cash/gems)
+- [x] Login streak avec détection jour précédent
+- [x] Backend leaderboard service + routes + upsert auto à chaque save
+- [x] UI : ShopPanel étendu, PlotsPanel, PrestigePanel, AchievementsPanel
+- [x] Système d'onglets dans GamePage
+- [x] i18n FR/EN pour tous les nouveaux textes
+- [ ] Daily quests + daily login rewards (PHASE 2.6 — en cours)
+
+**Métriques PHASE 2 base** :
+- 143 tests passent (+26 vs PHASE 1)
+- Bundle frontend gzipped : ~278 KB (sous les 600 KB GDD)
 
 ### PHASE 3 — v2 features avancées
 
