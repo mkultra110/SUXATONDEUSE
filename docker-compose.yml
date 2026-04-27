@@ -32,9 +32,11 @@ services:
     environment:
       NODE_ENV: development
       DATABASE_URL: postgresql://game:gamepass@postgres:5432/robomow
-      JWT_SECRET: dev_jwt_secret_change_me_minimum_32_chars_padding
-      JWT_REFRESH_SECRET: dev_refresh_secret_change_me_minimum_32_chars_pad
-      SAVE_HMAC_SECRET: dev_hmac_secret_change_me_minimum_64_chars_for_anti_cheat_signature_xx
+      JWT_SECRET: ${JWT_SECRET:-dev_jwt_secret_change_me_minimum_32_chars_padding}
+      JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET:-dev_refresh_secret_change_me_minimum_32_chars_pad}
+      SAVE_HMAC_SECRET: ${SAVE_HMAC_SECRET:-dev_hmac_secret_change_me_minimum_64_chars_for_anti_cheat_signature_xx}
+      DISCORD_BOT_API_KEY: ${DISCORD_BOT_API_KEY:-}
+      PUBLIC_GAME_URL: ${PUBLIC_GAME_URL:-http://localhost:5173}
       FRONTEND_URL: http://localhost:5173
       PORT: '3000'
       LOG_LEVEL: debug

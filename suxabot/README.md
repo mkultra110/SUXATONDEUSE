@@ -1,35 +1,92 @@
-# Intégration bot Discord
+# Intégration bot Discord — ROBOMOW TYCOON
 
-Ce dossier contient le snippet à insérer dans le bot Discord existant (`suxabot.py`) pour ajouter la commande `/suxa_tondeuse`.
+La commande `/suxa_tondeuse` appelle l'API backend du jeu pour générer un lien d'accès **valable 1 heure**, et le renvoie à l'utilisateur Discord en éphémère. Une fois le lien expiré, l'utilisateur doit retaper la commande pour en obtenir un nouveau.
+
+## Comment ça marche
+
+```
+Utilisateur Discord       Bot suxabot              Backend RoboMow            Frontend
+       |                       |                         |                       |
+       |--- /suxa_tondeuse --->|                         |                       |
+       |                       |- POST /invite/issue  -->|                       |
+       |                       |     X-Bot-Key            |                      |
+       |                       |<---- {url, expiresAt}---|                       |
+       |<----- lien ephemere --|                         |                       |
+       |                                                                         |
+       |--- clic sur le lien (?invite=xxx) -------------------------------------->|
+       |                                                                         |
+       |                                                  POST /invite/redeem <--|
+       |                                                  set cookie httpOnly --->|
+       |                                                                         |
+       |<---- page de login normale (cookie pose pour 1h) -----------------------|
+       |--- register/login normal (le backend verifie le cookie) ---------------->|
+```
 
 ## Installation
 
-1. Ouvrir `suxabot.py` (le bot principal sur le VPS).
-2. S'assurer que `import os` est présent dans les imports du haut.
-3. Copier-coller le bloc `@tree.command(name="suxa_tondeuse"...)` de [`suxa_tondeuse_command.py`](suxa_tondeuse_command.py) à côté des autres commandes slash (par exemple après `/suxa_casino`).
-4. Relancer le bot.
+### 1. Sur le VPS, dans `suxabot.py`
 
-## Configuration
+a) Vérifier que ces imports sont en haut du fichier :
 
-La commande lit l'URL du tunnel Cloudflare partagé depuis `/tmp/cloudflare_url.txt` (même mécanisme que `/suxa_claude_hq` et `/suxa_casino`). Le frontend ROBOMOW TYCOON doit être servi sur la route `/tondeuse/` derrière le tunnel.
-
-### Routing nginx / Traefik
-
-Côté reverse proxy (nginx ou Traefik dans Coolify), router :
-
-- `<tunnel>/tondeuse/` → frontend (nginx port 80 du conteneur `frontend`)
-- `<tunnel>/tondeuse/api/` → backend Express (port 3000 du conteneur `backend`)
-
-Ou, plus simple en local : exposer directement les ports 5173 (frontend dev) et 3000 (backend) et utiliser la variable d'environnement `ROBOMOW_GAME_URL` pour surcharger.
-
-### Variable d'environnement (option dev)
-
-```bash
-export ROBOMOW_GAME_URL=http://localhost:5173
+```python
+import os
 ```
 
-Si définie, la commande l'utilise au lieu du tunnel Cloudflare.
+(`httpx` est importé localement dans la commande pour ne pas casser le bot s'il n'est pas installé.)
+
+b) Installer httpx si pas déjà :
+
+```bash
+pip install httpx
+```
+
+c) Copier-coller le bloc `@tree.command(...)` de [`suxa_tondeuse_command.py`](suxa_tondeuse_command.py) à côté des autres commandes `/suxa_*` dans `suxabot.py`.
+
+### 2. Variables d'environnement du bot
+
+Au lancement du bot (export ou via systemd unit), définir :
+
+```bash
+export ROBOMOW_API_URL=http://localhost:3100/api
+export ROBOMOW_BOT_KEY=<même valeur que DISCORD_BOT_API_KEY côté backend>
+```
+
+### 3. Variables côté backend (`.env`)
+
+Dans `/root/robomow/.env`, ajouter :
+
+```
+DISCORD_BOT_API_KEY=<clé secrète, min 16 chars>
+PUBLIC_GAME_URL=https://<ton-tunnel-cloudflare>.trycloudflare.com
+```
+
+Génère la clé avec :
+
+```bash
+openssl rand -hex 32
+```
+
+Puis redémarre le backend :
+
+```bash
+cd /root/robomow
+docker compose up -d --force-recreate backend
+```
+
+### 4. Redémarrer le bot
+
+```bash
+pkill -f suxabot.py
+nohup python3 suxabot.py > /tmp/suxabot.log 2>&1 &
+```
 
 ## Test
 
-Dans Discord, taper `/suxa_tondeuse`. La commande répond en éphémère avec un lien cliquable vers le jeu.
+Sur Discord : `/suxa_tondeuse` → tu reçois un lien `https://....trycloudflare.com/?invite=eyJhbG...`. Clique → tu arrives sur la page de login, tu peux t'inscrire/te connecter. Après 1h, le cookie expire, et register/login renvoient `403 — Lien expire`.
+
+## Sécurité
+
+- Le **token d'invite** est un JWT signé par le backend (`JWT_SECRET`), valable 1h, stocké en cookie `httpOnly` après `redeem`. L'utilisateur ne peut pas le forger ni l'étendre.
+- Le **bot key** (`X-Bot-Key`) protège l'endpoint `/invite/issue` — seul le bot Discord avec la clé peut générer des liens.
+- L'API du bot tourne en **localhost** uniquement (port 3100), pas exposée publiquement. Seul le frontend l'atteint via le proxy Vite.
+- Les sessions existantes (refresh token) ne sont pas affectées par l'expiration du lien : un joueur déjà connecté reste connecté tant que son refresh est valide (30 jours).

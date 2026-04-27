@@ -1,56 +1,70 @@
 """
-Commande Discord /suxa_tondeuse — ouvre l'interface web du jeu ROBOMOW TYCOON.
+Commande Discord /suxa_tondeuse
+================================
 
-Snippet a coller dans le fichier principal du bot suxabot, a cote des autres
-commandes /suxa_*. Suit le meme pattern que /suxa_claude_hq et /suxa_casino :
-1. Lit l'URL du tunnel Cloudflare partage depuis /tmp/cloudflare_url.txt.
-2. Construit l'URL complete vers le frontend RoboMow Tycoon (route /tondeuse/).
-3. Repond a l'utilisateur avec le lien (reponse ephemere).
+Quand un utilisateur tape /suxa_tondeuse sur Discord, le bot appelle l'API
+backend du jeu pour obtenir un lien d'acces unique valable 1 heure, puis
+repond a l'utilisateur avec ce lien (en ephemere).
 
-Le frontend nginx ecoute sur le port 80 du conteneur, expose via Coolify/Traefik.
-En dev local on utilise port 5173 (Vite).
+Variables d'environnement requises sur le VPS (a cote de DISCORD_TOKEN) :
+  ROBOMOW_API_URL    URL de base du backend, ex: http://localhost:3100/api
+  ROBOMOW_BOT_KEY    Cle partagee avec le backend (DISCORD_BOT_API_KEY)
+
+Coller ce snippet a cote des autres commandes /suxa_* dans suxabot.py.
 """
 
-# Coller cet import en haut de suxabot.py s'il n'y est pas deja :
+# === Imports a verifier en haut de suxabot.py ===
 # import os
+# import httpx          # pip install httpx (ou aiohttp si tu preferes)
 
-# Coller cette commande dans suxabot.py, dans le bloc des commandes slash.
 
 @tree.command(
     name="suxa_tondeuse",
-    description="Ouvre ROBOMOW TYCOON : ton empire de robots tondeuses.",
+    description="Genere un lien d'acces de 1 heure au jeu ROBOMOW TYCOON.",
 )
 @app_commands.allowed_installs(guilds=True, users=True)
 @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
 async def suxa_tondeuse(interaction: discord.Interaction):
     await interaction.response.defer(ephemeral=True)
     await log_command(interaction, "suxa_tondeuse")
-    try:
-        # URL de base : tunnel Cloudflare partage du bot.
-        # En dev local on peut surcharger via la variable ROBOMOW_GAME_URL.
-        override = os.getenv("ROBOMOW_GAME_URL")
-        if override:
-            game_url = override.rstrip("/") + "/tondeuse/"
-        else:
-            with open("/tmp/cloudflare_url.txt", "r", encoding="utf-8") as f:
-                base = f.read().strip()
-            if not base:
-                await interaction.followup.send(
-                    "Tunnel Cloudflare non disponible.", ephemeral=True
-                )
-                return
-            game_url = f"{base.rstrip('/')}/tondeuse/"
 
+    api_url = os.getenv("ROBOMOW_API_URL", "http://localhost:3100/api")
+    bot_key = os.getenv("ROBOMOW_BOT_KEY")
+
+    if not bot_key:
+        await interaction.followup.send(
+            "Configuration manquante : ROBOMOW_BOT_KEY non definie.", ephemeral=True
+        )
+        return
+
+    try:
+        import httpx
+
+        async with httpx.AsyncClient(timeout=10) as client:
+            resp = await client.post(
+                f"{api_url}/auth/invite/issue",
+                headers={"X-Bot-Key": bot_key, "Content-Type": "application/json"},
+                json={"source": str(interaction.user.id)},
+            )
+            data = resp.json()
+
+        if resp.status_code != 200 or not data.get("success"):
+            err = data.get("error", {}).get("message", "Erreur inconnue")
+            await interaction.followup.send(
+                f"Impossible de generer le lien : {err}", ephemeral=True
+            )
+            return
+
+        invite_url = data["data"]["url"]
+        expires_at = data["data"]["expiresAt"]
         message = (
-            "**🌱 ROBOMOW TYCOON**\n"
-            f"{game_url}\n\n"
-            "*Inscris-toi avec un pseudo + mot de passe et commence a tondre !*"
+            "**ROBOMOW TYCOON**\n"
+            f"Voici ton lien d'acces (valable 1 heure) :\n"
+            f"{invite_url}\n\n"
+            "*Une fois sur la page, inscris-toi avec un pseudo + mot de passe (ou connecte-toi). "
+            "Le lien expire le " + expires_at[:16].replace("T", " a ") + " UTC.*"
         )
         await interaction.followup.send(message, ephemeral=True)
-    except FileNotFoundError:
-        await interaction.followup.send(
-            "Fichier tunnel introuvable. Lance d'abord cloudflared sur le VPS.",
-            ephemeral=True,
-        )
+
     except Exception as e:
-        await interaction.followup.send(f"Erreur : {e}", ephemeral=True)
+        await interaction.followup.send(f"Erreur reseau : {e}", ephemeral=True)

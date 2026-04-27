@@ -20,6 +20,11 @@ const envSchema = z.object({
 
   FRONTEND_URL: z.string().url().default('http://localhost:5173'),
   LOG_LEVEL: z.enum(['trace', 'debug', 'info', 'warn', 'error', 'fatal']).default('info'),
+
+  // Cle partagee avec le bot Discord pour generer les invites (optionnelle en dev).
+  DISCORD_BOT_API_KEY: z.string().min(16).optional(),
+  // URL publique du frontend pour construire les invites (avec /play?invite=xxx).
+  PUBLIC_GAME_URL: z.string().url().optional(),
 });
 
 const parsed = envSchema.safeParse(process.env);

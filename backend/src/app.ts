@@ -12,6 +12,7 @@ import { globalRateLimit } from './middleware/rateLimit.middleware.js';
 import { requestId } from './middleware/requestId.middleware.js';
 import { authRouter } from './routes/auth.routes.js';
 import { healthRouter } from './routes/health.routes.js';
+import { inviteRouter } from './routes/invite.routes.js';
 import { leaderboardRouter } from './routes/leaderboard.routes.js';
 import { saveRouter } from './routes/save.routes.js';
 import { installBigIntJsonPatch } from './utils/bigint.js';
@@ -43,6 +44,7 @@ export function createApp(): Express {
   app.use(globalRateLimit);
 
   // Routes
+  app.use('/api/auth/invite', inviteRouter);
   app.use('/api/auth', authRouter);
   app.use('/api/save', saveRouter);
   app.use('/api/leaderboard', leaderboardRouter);

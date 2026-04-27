@@ -24,6 +24,7 @@ model User {
   isBanned       Boolean   @default(false)
   banReason      String?
 
+
   gameSave           GameSave?
   robots             Robot[]
   plots              Plot[]
