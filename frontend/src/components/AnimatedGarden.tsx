@@ -6,6 +6,7 @@ import { useEffect, useRef, useState, type CSSProperties } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { RobotType } from '@robomow/shared';
 import { useGameStore } from '../stores/gameStore.js';
+import { audio } from '../services/audio.js';
 import {
   Sprite,
   ATLAS_URL,
@@ -210,6 +211,7 @@ export function AnimatedGarden() {
               if (grassRef.has(key)) {
                 grassRef.delete(key);
                 grassChanged = true;
+                audio.playMow();
                 // Marque comme tondue (visuel mowing.png cut tile).
                 setCutGrass((s) => {
                   const n = new Set(s);
@@ -347,6 +349,7 @@ export function AnimatedGarden() {
     setCoins((prev) => [...prev, { id: idRef.current, x, y }].slice(-12));
     setShake(true);
     setTimeout(() => setShake(false), 80);
+    audio.playTap();
     manualTap();
   }
 

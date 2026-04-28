@@ -6,6 +6,7 @@ import { useGameStore } from '../../stores/gameStore.js';
 import { useAuth } from '../../hooks/useAuth.js';
 import { CashCounter } from './CashCounter.js';
 import { WeatherBadge } from './WeatherBadge.js';
+import { AudioControls } from './AudioControls.js';
 
 export function TopBar() {
   const { t } = useTranslation();
@@ -61,6 +62,7 @@ export function TopBar() {
           color="var(--color-accent-purple)"
         />
         <CashCounter />
+        <AudioControls />
         <button onClick={handleLogout} className="pixel-btn pixel-btn-danger text-xs">
           {t('auth.logout')}
         </button>

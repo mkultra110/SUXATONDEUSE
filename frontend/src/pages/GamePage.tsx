@@ -14,6 +14,7 @@ import { StatsPanel } from '../components/hud/StatsPanel.js';
 import { OfflineRewardModal } from '../components/modals/OfflineRewardModal.js';
 import { AnimatedGarden } from '../components/AnimatedGarden.js';
 import { useGameSession } from '../hooks/useGameSession.js';
+import { useAudio } from '../hooks/useAudio.js';
 import { ATLAS_URL, ATLAS_SIZE } from '../components/garden/Sprite.js';
 
 type TabKey =
@@ -71,6 +72,8 @@ function TabIcon({ tabKey }: { tabKey: TabKey }) {
 export function GamePage() {
   const { t } = useTranslation();
   const session = useGameSession();
+  // Bootstrap audio (charge ambient.mp3 si present, demarre apres user gesture).
+  useAudio();
   const [activeTab, setActiveTab] = useState<TabKey>('shop');
 
   if (session.isLoading) {

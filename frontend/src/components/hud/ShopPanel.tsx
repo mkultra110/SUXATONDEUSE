@@ -11,6 +11,7 @@ import {
 import { useGameStore, nextRobotCost, nextUpgradeCost } from '../../stores/gameStore.js';
 import { formatBig } from '../../game/engine/bigNumber.js';
 import { ATLAS_URL, ATLAS_SIZE } from '../garden/Sprite.js';
+import { audio } from '../../services/audio.js';
 
 const ALL_TIERS: RobotType[] = ROBOT_TIERS.map((t) => t.type);
 
@@ -51,7 +52,14 @@ export function ShopPanel() {
             <li key={type}>
               <button
                 disabled={!affordable}
-                onClick={() => buyRobot(type)}
+                onClick={() => {
+                  if (affordable) {
+                    audio.playPurchase();
+                    buyRobot(type);
+                  } else {
+                    audio.playError();
+                  }
+                }}
                 className={`pixel-card w-full flex items-center gap-3 text-left ${
                   affordable ? 'pixel-card-affordable' : ''
                 } ${!affordable && owned === 0 ? 'pixel-card-locked' : ''}`}
@@ -116,7 +124,14 @@ export function ShopPanel() {
               <li key={def.key}>
                 <button
                   disabled={!affordable}
-                  onClick={() => buyUpgrade(def.key)}
+                  onClick={() => {
+                    if (affordable) {
+                      audio.playPurchase();
+                      buyUpgrade(def.key);
+                    } else {
+                      audio.playError();
+                    }
+                  }}
                   className={`pixel-card w-full flex items-center gap-3 text-left ${
                     affordable ? 'pixel-card-affordable' : ''
                   } ${locked || maxed ? 'pixel-card-locked' : ''}`}

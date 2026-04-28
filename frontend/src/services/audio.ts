@@ -1,0 +1,281 @@
+// Service audio : SFX synthetiques (Web Audio API, sans fichier) + slot
+// musique ambiante. Mute / volume persistes dans localStorage.
+
+const STORAGE_KEY = 'suxa-audio';
+
+export interface AudioPrefs {
+  muted: boolean;
+  sfxVolume: number;   // 0..1
+  musicVolume: number; // 0..1
+}
+
+const DEFAULT_PREFS: AudioPrefs = {
+  muted: false,
+  sfxVolume: 0.5,
+  musicVolume: 0.3,
+};
+
+function loadPrefs(): AudioPrefs {
+  if (typeof window === 'undefined') return DEFAULT_PREFS;
+  try {
+    const raw = window.localStorage.getItem(STORAGE_KEY);
+    if (!raw) return DEFAULT_PREFS;
+    const parsed = JSON.parse(raw) as Partial<AudioPrefs>;
+    return { ...DEFAULT_PREFS, ...parsed };
+  } catch {
+    return DEFAULT_PREFS;
+  }
+}
+
+function savePrefs(p: AudioPrefs) {
+  if (typeof window === 'undefined') return;
+  try {
+    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(p));
+  } catch {
+    /* ignore */
+  }
+}
+
+class AudioService {
+  private ctx: AudioContext | null = null;
+  private masterGain: GainNode | null = null;
+  private sfxGain: GainNode | null = null;
+  private musicGain: GainNode | null = null;
+  private musicEl: HTMLAudioElement | null = null;
+  private musicSrc: MediaElementAudioSourceNode | null = null;
+  private prefs: AudioPrefs = loadPrefs();
+  private listeners: Set<(p: AudioPrefs) => void> = new Set();
+  // Throttle pour eviter le tearing audio sur les ticks rapproches.
+  private lastPlay: Map<string, number> = new Map();
+
+  getPrefs(): AudioPrefs {
+    return { ...this.prefs };
+  }
+
+  subscribe(fn: (p: AudioPrefs) => void): () => void {
+    this.listeners.add(fn);
+    return () => this.listeners.delete(fn);
+  }
+
+  private notify() {
+    this.listeners.forEach((fn) => fn(this.getPrefs()));
+  }
+
+  setMuted(muted: boolean) {
+    this.prefs.muted = muted;
+    savePrefs(this.prefs);
+    this.applyVolume();
+    this.notify();
+  }
+
+  toggleMuted() {
+    this.setMuted(!this.prefs.muted);
+  }
+
+  setSfxVolume(v: number) {
+    this.prefs.sfxVolume = Math.max(0, Math.min(1, v));
+    savePrefs(this.prefs);
+    this.applyVolume();
+    this.notify();
+  }
+
+  setMusicVolume(v: number) {
+    this.prefs.musicVolume = Math.max(0, Math.min(1, v));
+    savePrefs(this.prefs);
+    this.applyVolume();
+    this.notify();
+  }
+
+  private ensureCtx(): AudioContext | null {
+    if (typeof window === 'undefined') return null;
+    if (!this.ctx) {
+      try {
+        const Ctor = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+        this.ctx = new Ctor();
+        this.masterGain = this.ctx.createGain();
+        this.sfxGain = this.ctx.createGain();
+        this.musicGain = this.ctx.createGain();
+        this.sfxGain.connect(this.masterGain);
+        this.musicGain.connect(this.masterGain);
+        this.masterGain.connect(this.ctx.destination);
+        this.applyVolume();
+      } catch {
+        return null;
+      }
+    }
+    if (this.ctx.state === 'suspended') {
+      this.ctx.resume().catch(() => {});
+    }
+    return this.ctx;
+  }
+
+  private applyVolume() {
+    if (!this.masterGain || !this.sfxGain || !this.musicGain) return;
+    const m = this.prefs.muted ? 0 : 1;
+    this.masterGain.gain.value = m;
+    this.sfxGain.gain.value = this.prefs.sfxVolume;
+    this.musicGain.gain.value = this.prefs.musicVolume;
+    if (this.musicEl) {
+      this.musicEl.muted = this.prefs.muted;
+    }
+  }
+
+  /** Joue un SFX synthetique avec throttle anti-spam. */
+  private playSynth(
+    name: string,
+    options: {
+      freq: number;
+      freqEnd?: number;
+      duration: number;
+      type?: OscillatorType;
+      attack?: number;
+      decay?: number;
+      gain?: number;
+      throttleMs?: number;
+    },
+  ) {
+    const ctx = this.ensureCtx();
+    if (!ctx || !this.sfxGain) return;
+    const now = ctx.currentTime;
+    const throttle = options.throttleMs ?? 30;
+    const last = this.lastPlay.get(name) ?? 0;
+    if (Date.now() - last < throttle) return;
+    this.lastPlay.set(name, Date.now());
+
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = options.type ?? 'square';
+    osc.frequency.setValueAtTime(options.freq, now);
+    if (options.freqEnd !== undefined) {
+      osc.frequency.exponentialRampToValueAtTime(options.freqEnd, now + options.duration);
+    }
+    const peak = options.gain ?? 0.25;
+    const attack = options.attack ?? 0.005;
+    const decay = options.decay ?? 0.05;
+    gain.gain.setValueAtTime(0, now);
+    gain.gain.linearRampToValueAtTime(peak, now + attack);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + options.duration + decay);
+
+    osc.connect(gain);
+    gain.connect(this.sfxGain);
+    osc.start(now);
+    osc.stop(now + options.duration + decay + 0.05);
+  }
+
+  /** Tap clic herbe — petit pop court. */
+  playTap() {
+    this.playSynth('tap', {
+      freq: 600,
+      freqEnd: 380,
+      duration: 0.06,
+      type: 'square',
+      gain: 0.18,
+      throttleMs: 20,
+    });
+  }
+
+  /** Coupe une tuile d'herbe — bruit organique. */
+  playMow() {
+    this.playSynth('mow', {
+      freq: 220,
+      freqEnd: 90,
+      duration: 0.12,
+      type: 'sawtooth',
+      gain: 0.22,
+      throttleMs: 60,
+    });
+    // Petit 'shhh' aigu superpose.
+    this.playSynth('mow-hi', {
+      freq: 1800,
+      freqEnd: 1200,
+      duration: 0.08,
+      type: 'triangle',
+      gain: 0.06,
+      throttleMs: 60,
+    });
+  }
+
+  /** Achat reussi — accord rapide ascendant. */
+  playPurchase() {
+    const ctx = this.ensureCtx();
+    if (!ctx || !this.sfxGain) return;
+    const now = ctx.currentTime;
+    [523.25, 659.25, 783.99].forEach((f, i) => {
+      const o = ctx.createOscillator();
+      const g = ctx.createGain();
+      o.type = 'square';
+      o.frequency.value = f;
+      g.gain.setValueAtTime(0, now + i * 0.05);
+      g.gain.linearRampToValueAtTime(0.25, now + i * 0.05 + 0.005);
+      g.gain.exponentialRampToValueAtTime(0.001, now + i * 0.05 + 0.18);
+      o.connect(g);
+      g.connect(this.sfxGain!);
+      o.start(now + i * 0.05);
+      o.stop(now + i * 0.05 + 0.25);
+    });
+  }
+
+  /** Echec — buzz court bas. */
+  playError() {
+    this.playSynth('error', {
+      freq: 180,
+      freqEnd: 130,
+      duration: 0.15,
+      type: 'sawtooth',
+      gain: 0.18,
+      throttleMs: 100,
+    });
+  }
+
+  /** Coin pickup — clochette. */
+  playCoin() {
+    this.playSynth('coin', {
+      freq: 1200,
+      freqEnd: 1800,
+      duration: 0.06,
+      type: 'triangle',
+      gain: 0.18,
+      throttleMs: 50,
+    });
+    this.playSynth('coin2', {
+      freq: 1600,
+      duration: 0.08,
+      type: 'sine',
+      gain: 0.1,
+      throttleMs: 50,
+    });
+  }
+
+  /** Charge la musique ambiante (fichier dans /assets/audio/ambient.mp3). */
+  loadMusic(url: string) {
+    const ctx = this.ensureCtx();
+    if (!ctx || !this.musicGain) return;
+    if (this.musicEl) {
+      this.musicEl.pause();
+      this.musicSrc?.disconnect();
+    }
+    this.musicEl = new Audio(url);
+    this.musicEl.loop = true;
+    this.musicEl.crossOrigin = 'anonymous';
+    this.musicEl.muted = this.prefs.muted;
+    try {
+      this.musicSrc = ctx.createMediaElementSource(this.musicEl);
+      this.musicSrc.connect(this.musicGain);
+    } catch {
+      // Fallback : direct HTMLAudio (sans gain control).
+    }
+  }
+
+  startMusic() {
+    if (!this.musicEl) return;
+    this.musicEl.play().catch(() => {
+      // Browsers exigent souvent un user gesture avant de jouer.
+    });
+  }
+
+  stopMusic() {
+    if (this.musicEl) this.musicEl.pause();
+  }
+}
+
+export const audio = new AudioService();
