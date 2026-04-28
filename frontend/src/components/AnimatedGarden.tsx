@@ -1,6 +1,6 @@
-// Scene top-down style Stardew Valley : tuiles d'herbe, ferme avec parcelles
-// cultivees, maison/garage, cloture en bois, puits anime, arbres, papillons,
-// robots qui patrouillent. Sprites Claude Design (terrain/robots/decor/fx).
+// Scene top-down style Stardew Valley avec robots qui tondent vraiment
+// l'herbe : un robot par type possede, ciblage des tuiles d'herbe haute,
+// animation mow, repousse apres delai.
 
 import { useEffect, useRef, useState, type CSSProperties } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -16,11 +16,15 @@ import {
   ROBOT_WALK_FRAMES,
 } from './garden/Sprite.js';
 
-// Echelle pixel-art : chaque pixel source = SCALE pixels affiches.
 const SCALE = 3;
-const TILE = 16 * SCALE; // 48px par tuile
+const TILE = 16 * SCALE;
 const COLS = 14;
 const ROWS = 8;
+
+const TICK_MS = 80;
+const ROBOT_SPEED = 0.05; // tuiles par tick
+const MOW_TICKS = 10; // ~800ms d'anim mow
+const REGROW_MS = 8000;
 
 interface BladeParticle {
   id: number;
@@ -38,6 +42,21 @@ interface CoinParticle {
   y: number;
 }
 
+interface RobotEntity {
+  id: string;
+  type: RobotType;
+  tier: number;
+  x: number;
+  y: number;
+  targetX: number;
+  targetY: number;
+  state: 'walking' | 'mowing';
+  dir: 'left' | 'right' | 'up' | 'down';
+  mowTicksLeft: number;
+  walkFrame: number;
+  speedMul: number;
+}
+
 const ROBOT_TIER_INDEX: Record<RobotType, number> = {
   HAND_SHEARS: 0,
   PUSH_MOWER: 1,
@@ -51,9 +70,8 @@ const ROBOT_TIER_INDEX: Record<RobotType, number> = {
   NANOSWARM: 9,
 };
 
-// Carte fixe de la ferme : '.' herbe, ',' herbe haute, '#' chemin pierre,
-// 'd' terre tondue, 'F' cloture, 'H' maison, 'T' arbre, 'B' buisson,
-// 'W' puits, 'S' panneau, '*' fleur.
+// Carte de la ferme : '.' herbe, ',' herbe haute, '#' chemin, 'd' terre,
+// 'F' cloture, 'H' maison, 'T' arbre, 'B' buisson, 'S' panneau, 'W' puits.
 const FARM_MAP: string[] = [
   '..,..T..,.....',
   '.HHH.,..T.B..,',
@@ -65,26 +83,65 @@ const FARM_MAP: string[] = [
   ',..,.,..,..,..',
 ];
 
+// Tuiles bloquees pour la nav des robots (maison, arbres, cloture, etc.).
+const BLOCKED_CHARS = new Set(['H', 'T', 'B', 'F', 'W', 'S']);
+
+function isBlocked(x: number, y: number): boolean {
+  if (x < 0 || x >= COLS || y < 0 || y >= ROWS) return true;
+  const ch = FARM_MAP[y]?.[x];
+  return !!ch && BLOCKED_CHARS.has(ch);
+}
+
+// Liste initiale des tuiles d'herbe haute depuis FARM_MAP.
+function initialTallGrass(): Set<string> {
+  const set = new Set<string>();
+  FARM_MAP.forEach((row, y) => {
+    [...row].forEach((ch, x) => {
+      if (ch === ',') set.add(`${x},${y}`);
+    });
+  });
+  return set;
+}
+
+function pickRandomTallGrass(set: Set<string>, except?: string): string | null {
+  const arr = Array.from(set).filter((k) => k !== except);
+  if (arr.length === 0) return null;
+  return arr[Math.floor(Math.random() * arr.length)] ?? null;
+}
+
+function pickRandomFreeTile(): { x: number; y: number } {
+  for (let i = 0; i < 30; i++) {
+    const x = Math.floor(Math.random() * COLS);
+    const y = Math.floor(Math.random() * ROWS);
+    if (!isBlocked(x, y)) return { x, y };
+  }
+  return { x: 6, y: 4 };
+}
+
 export function AnimatedGarden() {
   const { t } = useTranslation();
   const manualTap = useGameStore((s) => s.manualTap);
   const cashPerSecond = useGameStore((s) => s.cashPerSecond);
   const holdings = useGameStore((s) => s.holdings);
+
   const [blades, setBlades] = useState<BladeParticle[]>([]);
   const [coins, setCoins] = useState<CoinParticle[]>([]);
   const [shake, setShake] = useState(false);
   const [zoom, setZoom] = useState(1);
+  const [tallGrass, setTallGrass] = useState<Set<string>>(initialTallGrass);
+  const [robots, setRobots] = useState<RobotEntity[]>([]);
+  const [cuttingFx, setCuttingFx] = useState<Array<{ id: number; x: number; y: number }>>([]);
   const wrapperRef = useRef<HTMLDivElement | null>(null);
   const idRef = useRef(0);
 
+  // Resize observer pour scale.
   useEffect(() => {
     if (!wrapperRef.current) return;
     const el = wrapperRef.current;
     const native = COLS * TILE;
     const update = () => {
       const w = el.clientWidth;
-      const z = Math.min(1.2, Math.max(0.4, w / native));
-      setZoom(z);
+      setZoom(Math.min(1.2, Math.max(0.4, w / native)));
     };
     update();
     const ro = new ResizeObserver(update);
@@ -92,12 +149,167 @@ export function AnimatedGarden() {
     return () => ro.disconnect();
   }, []);
 
-  const visibleRobots: RobotType[] = [];
-  for (const holding of Object.values(holdings)) {
-    for (let i = 0; i < holding.owned && visibleRobots.length < 6; i++) {
-      visibleRobots.push(holding.type);
-    }
-  }
+  // Synchronise les robots avec les types possedes (1 par type owned > 0).
+  useEffect(() => {
+    setRobots((prev) => {
+      const ownedTypes = Object.values(holdings)
+        .filter((h) => h.owned > 0)
+        .map((h) => h.type);
+      // Conserve les robots existants, ajoute les nouveaux types.
+      const existing = new Map(prev.map((r) => [r.type, r]));
+      const next: RobotEntity[] = [];
+      ownedTypes.forEach((type, i) => {
+        const ex = existing.get(type);
+        if (ex) {
+          next.push(ex);
+        } else {
+          const { x, y } = pickRandomFreeTile();
+          const tier = ROBOT_TIER_INDEX[type] ?? 0;
+          next.push({
+            id: `${type}-${i}`,
+            type,
+            tier,
+            x,
+            y,
+            targetX: x,
+            targetY: y,
+            state: 'walking',
+            dir: 'right',
+            mowTicksLeft: 0,
+            walkFrame: 0,
+            speedMul: 1 + tier * 0.08,
+          });
+        }
+      });
+      return next;
+    });
+  }, [holdings]);
+
+  // Boucle de simulation : robots se deplacent, tondent, repoussent.
+  useEffect(() => {
+    if (robots.length === 0) return;
+    const interval = setInterval(() => {
+      setRobots((prevRobots) => {
+        // Snapshot mutable du Set d'herbe haute pour decider des cibles.
+        let grassChanged = false;
+        const grassRef = new Set(tallGrass);
+
+        const next = prevRobots.map((r) => {
+          const robot = { ...r };
+
+          if (robot.state === 'mowing') {
+            robot.mowTicksLeft -= 1;
+            robot.walkFrame = (robot.walkFrame + 1) % 4;
+            if (robot.mowTicksLeft <= 0) {
+              // Tonte terminee : tuile cible devient herbe normale.
+              const key = `${Math.round(robot.targetX)},${Math.round(robot.targetY)}`;
+              if (grassRef.has(key)) {
+                grassRef.delete(key);
+                grassChanged = true;
+                // Programme la repousse.
+                setTimeout(() => {
+                  setTallGrass((s) => {
+                    if (s.has(key)) return s;
+                    const next = new Set(s);
+                    next.add(key);
+                    return next;
+                  });
+                }, REGROW_MS + Math.random() * 2000);
+                // Spawn FX particules.
+                idRef.current += 1;
+                const id = idRef.current;
+                const px = (robot.x + 0.5) * (100 / COLS);
+                const py = (robot.y + 0.5) * (100 / ROWS);
+                setCuttingFx((prev) => [...prev, { id, x: px, y: py }]);
+                setTimeout(() => {
+                  setCuttingFx((prev) => prev.filter((f) => f.id !== id));
+                }, 800);
+              }
+              // Choisit nouvelle cible.
+              const nextTarget = pickRandomTallGrass(grassRef);
+              if (nextTarget) {
+                const [tx, ty] = nextTarget.split(',').map(Number) as [number, number];
+                robot.targetX = tx;
+                robot.targetY = ty;
+              } else {
+                const t = pickRandomFreeTile();
+                robot.targetX = t.x;
+                robot.targetY = t.y;
+              }
+              robot.state = 'walking';
+              robot.walkFrame = 0;
+            }
+            return robot;
+          }
+
+          // Walking : avance vers la cible.
+          const dx = robot.targetX - robot.x;
+          const dy = robot.targetY - robot.y;
+          const dist = Math.hypot(dx, dy);
+          if (dist < 0.08) {
+            // Arrivee.
+            robot.x = robot.targetX;
+            robot.y = robot.targetY;
+            const key = `${Math.round(robot.x)},${Math.round(robot.y)}`;
+            if (grassRef.has(key)) {
+              robot.state = 'mowing';
+              robot.mowTicksLeft = MOW_TICKS;
+              robot.walkFrame = 0;
+            } else {
+              // Pas d'herbe ici (cible obsolete) : repick.
+              const nextTarget = pickRandomTallGrass(grassRef);
+              if (nextTarget) {
+                const [tx, ty] = nextTarget.split(',').map(Number) as [number, number];
+                robot.targetX = tx;
+                robot.targetY = ty;
+              } else {
+                const t = pickRandomFreeTile();
+                robot.targetX = t.x;
+                robot.targetY = t.y;
+              }
+            }
+            return robot;
+          }
+
+          // Avance proportionnelle.
+          const step = ROBOT_SPEED * robot.speedMul;
+          const move = Math.min(step, dist);
+          robot.x += (dx / dist) * move;
+          robot.y += (dy / dist) * move;
+          // Direction principale.
+          if (Math.abs(dx) > Math.abs(dy)) {
+            robot.dir = dx > 0 ? 'right' : 'left';
+          } else {
+            robot.dir = dy > 0 ? 'down' : 'up';
+          }
+          robot.walkFrame = (robot.walkFrame + 1) % ROBOT_WALK_FRAMES;
+          return robot;
+        });
+
+        if (grassChanged) {
+          setTallGrass(grassRef);
+        }
+        return next;
+      });
+    }, TICK_MS);
+    return () => clearInterval(interval);
+  }, [robots.length, tallGrass]);
+
+  // Si nouveau robot ajoute mais sans cible, l'envoie sur l'herbe haute.
+  useEffect(() => {
+    setRobots((prev) =>
+      prev.map((r) => {
+        if (r.targetX === r.x && r.targetY === r.y) {
+          const t = pickRandomTallGrass(tallGrass);
+          if (t) {
+            const [tx, ty] = t.split(',').map(Number) as [number, number];
+            return { ...r, targetX: tx, targetY: ty };
+          }
+        }
+        return r;
+      }),
+    );
+  }, [robots.length, tallGrass]);
 
   function handleClick(e: React.MouseEvent<HTMLDivElement>) {
     const rect = e.currentTarget.getBoundingClientRect();
@@ -132,7 +344,6 @@ export function AnimatedGarden() {
     return () => clearTimeout(t1);
   }, [blades.length, coins.length]);
 
-  // Tuile herbe variant pseudo-aleatoire en fonction de (x,y).
   function grassVariant(x: number, y: number) {
     const idx = (x * 31 + y * 17 + (x % 2) * 3) % 4;
     return TERRAIN.GRASS_VARIANTS[idx]!;
@@ -155,53 +366,39 @@ export function AnimatedGarden() {
     >
       <div
         className="farm-stage"
-        style={{
-          width: COLS * TILE,
-          height: ROWS * TILE,
-          transform: `scale(${zoom})`,
-        }}
+        style={{ width: COLS * TILE, height: ROWS * TILE, transform: `scale(${zoom})` }}
       >
-        {/* Couche herbe : tuiles de fond pour toutes les cases. */}
+        {/* Couche herbe : tuiles de fond. */}
         {Array.from({ length: ROWS }).map((_, y) => (
-          <div key={`gr${y}`} style={{ position: 'absolute', top: y * TILE, left: 0, height: TILE, width: COLS * TILE, display: 'flex' }}>
+          <div
+            key={`gr${y}`}
+            style={{ position: 'absolute', top: y * TILE, left: 0, height: TILE, width: COLS * TILE, display: 'flex' }}
+          >
             {Array.from({ length: COLS }).map((_, x) => {
               const v = grassVariant(x, y);
-              return (
-                <Sprite
-                  key={x}
-                  atlas="terrain"
-                  sx={v.sx}
-                  sy={v.sy}
-                  sw={v.sw}
-                  sh={v.sh}
-                  scale={SCALE}
-                />
-              );
+              return <Sprite key={x} atlas="terrain" sx={v.sx} sy={v.sy} sw={v.sw} sh={v.sh} scale={SCALE} />;
             })}
           </div>
         ))}
 
-        {/* Couche chemin / terre / cloture / herbe haute (depuis FARM_MAP). */}
+        {/* Couche statique chemin/terre/cloture depuis FARM_MAP. */}
         {FARM_MAP.map((row, y) =>
           [...row].map((ch, x) => {
             if (ch === '#') return <TileSprite key={`p${x}-${y}`} x={x} y={y} sprite={TERRAIN.STONE_PATH} />;
             if (ch === 'd') return <TileSprite key={`d${x}-${y}`} x={x} y={y} sprite={TERRAIN.DIRT} />;
             if (ch === 'F') return <TileSprite key={`f${x}-${y}`} x={x} y={y} sprite={TERRAIN.FENCE_H} />;
-            if (ch === ',') return <TallGrass key={`tg${x}-${y}`} x={x} y={y} />;
             return null;
           }),
         )}
 
-        {/* Maison/garage 48x64 (avec cheminee), centree sur (1,1). */}
-        <div
-          className="farm-decor"
-          style={{
-            position: 'absolute',
-            left: 0.6 * TILE,
-            top: 0.4 * TILE,
-            zIndex: 5,
-          }}
-        >
+        {/* Couche herbe haute : repoussable. */}
+        {Array.from(tallGrass).map((key) => {
+          const [x, y] = key.split(',').map(Number) as [number, number];
+          return <TallGrass key={`tg${key}`} x={x} y={y} />;
+        })}
+
+        {/* Maison */}
+        <div style={{ position: 'absolute', left: 0.6 * TILE, top: 0.4 * TILE, zIndex: 5 }}>
           <Sprite atlas="decor" {...DECOR.HOUSE} scale={SCALE} />
           <span className="house-smoke" />
         </div>
@@ -215,34 +412,37 @@ export function AnimatedGarden() {
         {/* Buissons */}
         <DecorAt x={9.5} y={2.2} sprite={DECOR.BUSH_BERRY} z={4} />
         <DecorAt x={10} y={5.2} sprite={DECOR.BUSH_FLOWER} z={4} />
-
-        {/* Panneau a cote du chemin */}
         <DecorAt x={2.2} y={3.4} sprite={DECOR.SIGNPOST} z={5} />
-
-        {/* Puits anime (frame change via CSS) */}
         <AnimatedWell x={7} y={6} />
 
-        {/* Cultures sur les rangees de terre */}
         <CropRow x={4} y={3} count={4} colorIdx={0} />
         <CropRow x={4} y={4} count={4} colorIdx={1} />
 
-        {/* Robots animes */}
-        {visibleRobots.length > 0
-          ? visibleRobots.map((type, i) => (
-              <SpriteRobot key={i} index={i} type={type} total={visibleRobots.length} />
-            ))
-          : (
-            <div className="farm-empty">
-              <div className="farm-empty-text">{t('game.tapHint')}</div>
-            </div>
-          )}
+        {/* Robots dynamiques */}
+        {robots.length > 0 ? (
+          robots.map((r) => <DynamicRobot key={r.id} robot={r} />)
+        ) : (
+          <div className="farm-empty">
+            <div className="farm-empty-text">{t('game.tapHint')}</div>
+          </div>
+        )}
 
-        {/* Papillons flottants */}
+        {/* FX brins coupes par robot */}
+        {cuttingFx.map((f) => (
+          <span key={f.id} className="farm-cut-fx" style={{ left: `${f.x}%`, top: `${f.y}%` }}>
+            <span className="cut-blade cb1" />
+            <span className="cut-blade cb2" />
+            <span className="cut-blade cb3" />
+            <span className="cut-blade cb4" />
+            <span className="cut-blade cb5" />
+          </span>
+        ))}
+
+        {/* Papillons */}
         <Butterfly x={6.5} y={1.5} delay={0} variant="PINK" />
         <Butterfly x={4} y={5.5} delay={1.2} variant="YELLOW" />
         <Butterfly x={11} y={2.5} delay={2.5} variant="BLUE" />
 
-        {/* Particules brins coupes */}
         {blades.map((b) => (
           <span
             key={b.id}
@@ -259,26 +459,16 @@ export function AnimatedGarden() {
             }
           />
         ))}
-
-        {/* Pieces flottantes */}
         {coins.map((c) => (
           <span key={c.id} className="farm-coin-particle" style={{ left: `${c.x}%`, top: `${c.y}%` }}>
             🪙
           </span>
         ))}
-
-        {/* Indicateur production passive */}
-        {cashPerSecond.gt(0) && (
-          <div className="farm-prod-indicator">⚙ Auto-tonte</div>
-        )}
+        {cashPerSecond.gt(0) && <div className="farm-prod-indicator">⚙ Auto-tonte</div>}
       </div>
     </div>
   );
 }
-
-// =====================================================================
-// Sous-composants.
-// =====================================================================
 
 function TileSprite({ x, y, sprite }: { x: number; y: number; sprite: { sx: number; sy: number; sw: number; sh: number } }) {
   return (
@@ -289,7 +479,6 @@ function TileSprite({ x, y, sprite }: { x: number; y: number; sprite: { sx: numb
 }
 
 function TallGrass({ x, y }: { x: number; y: number }) {
-  // Animation sway 4 frames sur ligne 1 de terrain.png.
   const seed = (x * 7 + y * 13) % 4;
   return (
     <div
@@ -304,8 +493,8 @@ function TallGrass({ x, y }: { x: number; y: number }) {
         backgroundSize: `${ATLAS_SIZE.terrain[0] * SCALE}px ${ATLAS_SIZE.terrain[1] * SCALE}px`,
         backgroundPosition: `-${seed * 16 * SCALE}px -${16 * SCALE}px`,
         imageRendering: 'pixelated',
-        animation: `tallgrass-sway 0.7s steps(4) infinite`,
-        animationDelay: `${(seed * 0.15).toFixed(2)}s`,
+        animation: 'tallgrass-sway 0.7s steps(4) infinite, tallgrass-grow 0.4s ease-out',
+        animationDelay: `${(seed * 0.15).toFixed(2)}s, 0s`,
         zIndex: 2,
       }}
     />
@@ -364,15 +553,7 @@ function CropRow({ x, y, count, colorIdx }: { x: number; y: number; count: numbe
   return (
     <>
       {Array.from({ length: count }).map((_, i) => (
-        <div
-          key={i}
-          style={{
-            position: 'absolute',
-            left: (x + i) * TILE,
-            top: y * TILE,
-            zIndex: 3,
-          }}
-        >
+        <div key={i} style={{ position: 'absolute', left: (x + i) * TILE, top: y * TILE, zIndex: 3 }}>
           <Sprite atlas="terrain" {...sprite} scale={SCALE} />
         </div>
       ))}
@@ -381,23 +562,10 @@ function CropRow({ x, y, count, colorIdx }: { x: number; y: number; count: numbe
 }
 
 function Butterfly({ x, y, delay, variant }: { x: number; y: number; delay: number; variant: 'PINK' | 'YELLOW' | 'BLUE' }) {
-  const sprites = {
-    PINK: DECOR.BUTTERFLY_PINK,
-    YELLOW: DECOR.BUTTERFLY_YELLOW,
-    BLUE: DECOR.BUTTERFLY_BLUE,
-  };
+  const sprites = { PINK: DECOR.BUTTERFLY_PINK, YELLOW: DECOR.BUTTERFLY_YELLOW, BLUE: DECOR.BUTTERFLY_BLUE };
   const sprite = sprites[variant];
   return (
-    <div
-      className="farm-butterfly"
-      style={{
-        position: 'absolute',
-        left: x * TILE,
-        top: y * TILE,
-        zIndex: 8,
-        animationDelay: `${delay}s`,
-      }}
-    >
+    <div className="farm-butterfly" style={{ position: 'absolute', left: x * TILE, top: y * TILE, zIndex: 8, animationDelay: `${delay}s` }}>
       <div
         style={{
           width: sprite.sw * SCALE,
@@ -414,49 +582,46 @@ function Butterfly({ x, y, delay, variant }: { x: number; y: number; delay: numb
   );
 }
 
-function SpriteRobot({ index, type, total }: { index: number; type: RobotType; total: number }) {
-  const tier = ROBOT_TIER_INDEX[type] ?? 0;
-  const lane = (index % 3);
-  const dir = index % 2 === 0 ? 'right' : 'left';
-  const startY = (3 + lane * 1.2) * TILE;
-  const speed = 8 + (index % 4) * 1.5;
-  const delay = (index / Math.max(total, 1)) * 2;
+function DynamicRobot({ robot }: { robot: RobotEntity }) {
+  const tier = robot.tier;
+  const rowY = robot.state === 'mowing' ? tier * 48 + 24 : (robot.dir === 'up' || robot.dir === 'down' ? tier * 48 : tier * 48 + 24);
+  let colBase: number;
+  if (robot.state === 'mowing') {
+    colBase = 12;
+  } else {
+    switch (robot.dir) {
+      case 'down': colBase = 0; break;
+      case 'up': colBase = 6; break;
+      case 'left': colBase = 0; break;
+      case 'right': colBase = 6; break;
+    }
+  }
+  const frameMax = robot.state === 'mowing' ? 4 : ROBOT_WALK_FRAMES;
+  const frame = robot.walkFrame % frameMax;
+  const sx = (colBase + frame) * ROBOT_SIZE;
+  const sy = rowY;
 
-  // Pour walk-right : row B, cols 6-11 → bg-position-x 6*24=-144 → -288 (animation 6 steps)
-  // Pour walk-left : row B, cols 0-5 → bg-position-x 0 → -144
-  const rowY = tier * 48 + 24;
-  const startCol = dir === 'right' ? 6 : 0;
-  const endCol = startCol + ROBOT_WALK_FRAMES;
-
-  const animX = `robot-walk-${dir}-${tier}`;
-  const animMove = `robot-move-${dir}`;
+  // Centre la sprite sur la tuile (sprite 24×24, tuile 16×16 → decalage -4 native).
+  const left = robot.x * TILE - 4 * SCALE;
+  const top = robot.y * TILE - 8 * SCALE;
 
   return (
-    <>
-      <style>{`
-        @keyframes ${animX} {
-          0% { background-position: -${startCol * ROBOT_SIZE * SCALE}px -${rowY * SCALE}px; }
-          100% { background-position: -${endCol * ROBOT_SIZE * SCALE}px -${rowY * SCALE}px; }
-        }
-      `}</style>
-      <div
-        className={`farm-robot farm-robot-${dir}`}
-        style={
-          {
-            position: 'absolute',
-            top: startY,
-            width: ROBOT_SIZE * SCALE,
-            height: ROBOT_SIZE * SCALE,
-            backgroundImage: `url(${ATLAS_URL.robots})`,
-            backgroundRepeat: 'no-repeat',
-            backgroundSize: `${ATLAS_SIZE.robots[0] * SCALE}px ${ATLAS_SIZE.robots[1] * SCALE}px`,
-            imageRendering: 'pixelated',
-            zIndex: 10,
-            animation: `${animX} 0.6s steps(${ROBOT_WALK_FRAMES}) infinite, ${animMove} ${speed}s linear infinite`,
-            animationDelay: `${delay}s, ${delay}s`,
-          } as CSSProperties
-        }
-      />
-    </>
+    <div
+      style={{
+        position: 'absolute',
+        left,
+        top,
+        width: ROBOT_SIZE * SCALE,
+        height: ROBOT_SIZE * SCALE,
+        backgroundImage: `url(${ATLAS_URL.robots})`,
+        backgroundRepeat: 'no-repeat',
+        backgroundSize: `${ATLAS_SIZE.robots[0] * SCALE}px ${ATLAS_SIZE.robots[1] * SCALE}px`,
+        backgroundPosition: `-${sx * SCALE}px -${sy * SCALE}px`,
+        imageRendering: 'pixelated',
+        zIndex: 10,
+        transition: 'left 80ms linear, top 80ms linear',
+        filter: robot.state === 'mowing' ? 'drop-shadow(0 0 6px rgba(168,230,108,0.8))' : undefined,
+      }}
+    />
   );
 }
