@@ -328,36 +328,19 @@
   100% { transform: scaleY(1); transform-origin: bottom; opacity: 1; }
 }
 
-.farm-cut-fx {
-  position: absolute;
-  width: 0;
-  height: 0;
-  pointer-events: none;
-  z-index: 25;
+@keyframes mow-burst {
+  0% { background-position-x: 0; opacity: 1; }
+  100% { background-position-x: -192px; opacity: 0; }
 }
-.cut-blade {
-  position: absolute;
-  width: 4px;
-  height: 8px;
-  background: #a8e66c;
-  border-radius: 1px;
-  box-shadow: 0 0 3px rgba(143, 191, 79, 0.8);
-  animation: cut-blade-fly 0.8s ease-out forwards;
-}
-.cb1 { --vx: -30px; --vy: -40px; --rot: -45deg; animation-delay: 0s; }
-.cb2 { --vx: 30px; --vy: -40px; --rot: 45deg; animation-delay: 0.05s; }
-.cb3 { --vx: -10px; --vy: -50px; --rot: 15deg; animation-delay: 0.1s; }
-.cb4 { --vx: 20px; --vy: -30px; --rot: -20deg; animation-delay: 0.08s; }
-.cb5 { --vx: -25px; --vy: -25px; --rot: 60deg; animation-delay: 0.12s; }
 
-@keyframes cut-blade-fly {
-  0% { transform: translate(-50%, -50%) rotate(0deg); opacity: 1; }
-  100% {
-    transform:
-      translate(calc(-50% + var(--vx, 0px)), calc(-50% + var(--vy, 0px) + 30px))
-      rotate(var(--rot, 0deg));
-    opacity: 0;
-  }
+@keyframes cutgrass-fade-in {
+  0% { opacity: 0; transform: scaleY(0.6); transform-origin: bottom; }
+  100% { opacity: 1; transform: scaleY(1); }
+}
+
+@keyframes active-bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
 }
 
 @keyframes well-shimmer {

@@ -12,6 +12,7 @@ import {
   ATLAS_SIZE,
   TERRAIN,
   DECOR,
+  MOWING,
   ROBOT_SIZE,
   ROBOT_WALK_FRAMES,
 } from './garden/Sprite.js';
@@ -129,8 +130,9 @@ export function AnimatedGarden() {
   const [shake, setShake] = useState(false);
   const [zoom, setZoom] = useState(1);
   const [tallGrass, setTallGrass] = useState<Set<string>>(initialTallGrass);
+  const [cutGrass, setCutGrass] = useState<Set<string>>(new Set());
   const [robots, setRobots] = useState<RobotEntity[]>([]);
-  const [cuttingFx, setCuttingFx] = useState<Array<{ id: number; x: number; y: number }>>([]);
+  const [bursts, setBursts] = useState<Array<{ id: number; tileX: number; tileY: number; t0: number }>>([]);
   const wrapperRef = useRef<HTMLDivElement | null>(null);
   const idRef = useRef(0);
 
@@ -201,29 +203,42 @@ export function AnimatedGarden() {
             robot.mowTicksLeft -= 1;
             robot.walkFrame = (robot.walkFrame + 1) % 4;
             if (robot.mowTicksLeft <= 0) {
-              // Tonte terminee : tuile cible devient herbe normale.
-              const key = `${Math.round(robot.targetX)},${Math.round(robot.targetY)}`;
+              // Tonte terminee : tuile cible passe de "tall" a "cut".
+              const tx = Math.round(robot.targetX);
+              const ty = Math.round(robot.targetY);
+              const key = `${tx},${ty}`;
               if (grassRef.has(key)) {
                 grassRef.delete(key);
                 grassChanged = true;
-                // Programme la repousse.
+                // Marque comme tondue (visuel mowing.png cut tile).
+                setCutGrass((s) => {
+                  const n = new Set(s);
+                  n.add(key);
+                  return n;
+                });
+                // Programme la repousse : cut → tall apres delai.
+                const regrow = REGROW_MS + Math.random() * 2000;
                 setTimeout(() => {
+                  setCutGrass((s) => {
+                    if (!s.has(key)) return s;
+                    const n = new Set(s);
+                    n.delete(key);
+                    return n;
+                  });
                   setTallGrass((s) => {
                     if (s.has(key)) return s;
-                    const next = new Set(s);
-                    next.add(key);
-                    return next;
+                    const n = new Set(s);
+                    n.add(key);
+                    return n;
                   });
-                }, REGROW_MS + Math.random() * 2000);
-                // Spawn FX particules.
+                }, regrow);
+                // Spawn burst sprite-anime sur la tuile.
                 idRef.current += 1;
                 const id = idRef.current;
-                const px = (robot.x + 0.5) * (100 / COLS);
-                const py = (robot.y + 0.5) * (100 / ROWS);
-                setCuttingFx((prev) => [...prev, { id, x: px, y: py }]);
+                setBursts((prev) => [...prev, { id, tileX: tx, tileY: ty, t0: Date.now() }]);
                 setTimeout(() => {
-                  setCuttingFx((prev) => prev.filter((f) => f.id !== id));
-                }, 800);
+                  setBursts((prev) => prev.filter((f) => f.id !== id));
+                }, 600);
               }
               // Choisit nouvelle cible.
               const nextTarget = pickRandomTallGrass(grassRef);
@@ -391,6 +406,12 @@ export function AnimatedGarden() {
           }),
         )}
 
+        {/* Couche herbe tondue (mowing.png cut tiles). */}
+        {Array.from(cutGrass).map((key) => {
+          const [x, y] = key.split(',').map(Number) as [number, number];
+          return <CutGrass key={`cg${key}`} x={x} y={y} />;
+        })}
+
         {/* Couche herbe haute : repoussable. */}
         {Array.from(tallGrass).map((key) => {
           const [x, y] = key.split(',').map(Number) as [number, number];
@@ -427,15 +448,9 @@ export function AnimatedGarden() {
           </div>
         )}
 
-        {/* FX brins coupes par robot */}
-        {cuttingFx.map((f) => (
-          <span key={f.id} className="farm-cut-fx" style={{ left: `${f.x}%`, top: `${f.y}%` }}>
-            <span className="cut-blade cb1" />
-            <span className="cut-blade cb2" />
-            <span className="cut-blade cb3" />
-            <span className="cut-blade cb4" />
-            <span className="cut-blade cb5" />
-          </span>
+        {/* Burst de brins coupes (sprite mowing.png anime 4 frames) */}
+        {bursts.map((b) => (
+          <BurstSprite key={b.id} tileX={b.tileX} tileY={b.tileY} />
         ))}
 
         {/* Papillons */}
@@ -475,6 +490,50 @@ function TileSprite({ x, y, sprite }: { x: number; y: number; sprite: { sx: numb
     <div style={{ position: 'absolute', left: x * TILE, top: y * TILE, zIndex: 2 }}>
       <Sprite atlas="terrain" {...sprite} scale={SCALE} />
     </div>
+  );
+}
+
+function CutGrass({ x, y }: { x: number; y: number }) {
+  const seed = (x * 11 + y * 7) % 4;
+  const variant = MOWING.CUT_GRASS_VARIANTS[seed]!;
+  return (
+    <div
+      style={{
+        position: 'absolute',
+        left: x * TILE,
+        top: y * TILE,
+        width: 16 * SCALE,
+        height: 16 * SCALE,
+        backgroundImage: `url(${ATLAS_URL.mowing})`,
+        backgroundRepeat: 'no-repeat',
+        backgroundSize: `${ATLAS_SIZE.mowing[0] * SCALE}px ${ATLAS_SIZE.mowing[1] * SCALE}px`,
+        backgroundPosition: `-${variant.sx * SCALE}px -${variant.sy * SCALE}px`,
+        imageRendering: 'pixelated',
+        zIndex: 2,
+        animation: 'cutgrass-fade-in 0.25s ease-out',
+      }}
+    />
+  );
+}
+
+function BurstSprite({ tileX, tileY }: { tileX: number; tileY: number }) {
+  return (
+    <div
+      style={{
+        position: 'absolute',
+        left: tileX * TILE,
+        top: tileY * TILE,
+        width: MOWING.BURST_W * SCALE,
+        height: MOWING.BURST_H * SCALE,
+        backgroundImage: `url(${ATLAS_URL.mowing})`,
+        backgroundRepeat: 'no-repeat',
+        backgroundSize: `${ATLAS_SIZE.mowing[0] * SCALE}px ${ATLAS_SIZE.mowing[1] * SCALE}px`,
+        backgroundPosition: `-${MOWING.BURST_X * SCALE}px -${MOWING.BURST_Y * SCALE}px`,
+        imageRendering: 'pixelated',
+        zIndex: 25,
+        animation: 'mow-burst 0.6s steps(4) forwards',
+      }}
+    />
   );
 }
 
@@ -601,27 +660,79 @@ function DynamicRobot({ robot }: { robot: RobotEntity }) {
   const sx = (colBase + frame) * ROBOT_SIZE;
   const sy = rowY;
 
-  // Centre la sprite sur la tuile (sprite 24×24, tuile 16×16 → decalage -4 native).
+  // Centre la sprite sur la tuile (24×24 vs tuile 16×16 → decalage -4 native).
   const left = robot.x * TILE - 4 * SCALE;
   const top = robot.y * TILE - 8 * SCALE;
 
+  // Lame rotative sous le robot (frames mowing.png).
+  const bladeFrame = robot.walkFrame % MOWING.BLADE_FRAMES;
+  const bladeBgX = (MOWING.BLADE_X + bladeFrame * MOWING.BLADE_W) * SCALE;
+
+  // Indicateur "active" au-dessus du robot pendant la tonte.
+  const activeFrame = Math.floor(robot.walkFrame / 2) % MOWING.ACTIVE_FRAMES;
+  const activeBgX = (MOWING.ACTIVE_X + activeFrame * MOWING.ACTIVE_W) * SCALE;
+
   return (
-    <div
-      style={{
-        position: 'absolute',
-        left,
-        top,
-        width: ROBOT_SIZE * SCALE,
-        height: ROBOT_SIZE * SCALE,
-        backgroundImage: `url(${ATLAS_URL.robots})`,
-        backgroundRepeat: 'no-repeat',
-        backgroundSize: `${ATLAS_SIZE.robots[0] * SCALE}px ${ATLAS_SIZE.robots[1] * SCALE}px`,
-        backgroundPosition: `-${sx * SCALE}px -${sy * SCALE}px`,
-        imageRendering: 'pixelated',
-        zIndex: 10,
-        transition: 'left 80ms linear, top 80ms linear',
-        filter: robot.state === 'mowing' ? 'drop-shadow(0 0 6px rgba(168,230,108,0.8))' : undefined,
-      }}
-    />
+    <>
+      {/* Lame rotative metallique sous le robot quand il tond. */}
+      {robot.state === 'mowing' && (
+        <div
+          style={{
+            position: 'absolute',
+            left: robot.x * TILE,
+            top: robot.y * TILE + 14 * SCALE,
+            width: MOWING.BLADE_W * SCALE,
+            height: MOWING.BLADE_H * SCALE,
+            backgroundImage: `url(${ATLAS_URL.mowing})`,
+            backgroundRepeat: 'no-repeat',
+            backgroundSize: `${ATLAS_SIZE.mowing[0] * SCALE}px ${ATLAS_SIZE.mowing[1] * SCALE}px`,
+            backgroundPosition: `-${bladeBgX}px -${MOWING.BLADE_Y * SCALE}px`,
+            imageRendering: 'pixelated',
+            zIndex: 9,
+            transform: 'translateX(-4px)',
+            filter: 'drop-shadow(0 0 4px rgba(255,255,255,0.6))',
+          }}
+        />
+      )}
+
+      {/* Robot lui-meme. */}
+      <div
+        style={{
+          position: 'absolute',
+          left,
+          top,
+          width: ROBOT_SIZE * SCALE,
+          height: ROBOT_SIZE * SCALE,
+          backgroundImage: `url(${ATLAS_URL.robots})`,
+          backgroundRepeat: 'no-repeat',
+          backgroundSize: `${ATLAS_SIZE.robots[0] * SCALE}px ${ATLAS_SIZE.robots[1] * SCALE}px`,
+          backgroundPosition: `-${sx * SCALE}px -${sy * SCALE}px`,
+          imageRendering: 'pixelated',
+          zIndex: 10,
+          transition: 'left 80ms linear, top 80ms linear',
+          filter: robot.state === 'mowing' ? 'drop-shadow(0 0 6px rgba(168,230,108,0.8))' : undefined,
+        }}
+      />
+
+      {/* Indicateur "tonte active" au-dessus du robot. */}
+      {robot.state === 'mowing' && (
+        <div
+          style={{
+            position: 'absolute',
+            left: robot.x * TILE,
+            top: robot.y * TILE - 18 * SCALE,
+            width: MOWING.ACTIVE_W * SCALE,
+            height: MOWING.ACTIVE_H * SCALE,
+            backgroundImage: `url(${ATLAS_URL.mowing})`,
+            backgroundRepeat: 'no-repeat',
+            backgroundSize: `${ATLAS_SIZE.mowing[0] * SCALE}px ${ATLAS_SIZE.mowing[1] * SCALE}px`,
+            backgroundPosition: `-${activeBgX}px -${MOWING.ACTIVE_Y * SCALE}px`,
+            imageRendering: 'pixelated',
+            zIndex: 11,
+            animation: 'active-bob 0.5s ease-in-out infinite',
+          }}
+        />
+      )}
+    </>
   );
 }

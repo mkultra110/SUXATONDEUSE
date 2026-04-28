@@ -3,7 +3,7 @@
 
 import type { CSSProperties } from 'react';
 
-export type AtlasName = 'terrain' | 'robots' | 'decor' | 'ui' | 'fx';
+export type AtlasName = 'terrain' | 'robots' | 'decor' | 'ui' | 'fx' | 'mowing';
 
 export const ATLAS_URL: Record<AtlasName, string> = {
   terrain: '/assets/sprites/terrain.png',
@@ -11,6 +11,7 @@ export const ATLAS_URL: Record<AtlasName, string> = {
   decor: '/assets/sprites/decor.png',
   ui: '/assets/sprites/ui.png',
   fx: '/assets/sprites/fx.png',
+  mowing: '/assets/sprites/mowing.png',
 };
 
 export const ATLAS_SIZE: Record<AtlasName, [number, number]> = {
@@ -19,6 +20,7 @@ export const ATLAS_SIZE: Record<AtlasName, [number, number]> = {
   decor: [512, 256],
   ui: [384, 256],
   fx: [256, 128],
+  mowing: [256, 128],
 };
 
 interface SpriteProps {
@@ -101,6 +103,43 @@ export const DECOR = {
   BUTTERFLY_W: 8,
   // Mushrooms 8x8.
   MUSHROOM_RED: { sx: 0, sy: 176, sw: 8, sh: 8 },
+} as const;
+
+// mowing.png : tiles d'herbe tondue + transition tonte + lame + burst + active.
+export const MOWING = {
+  // 4 variantes d'herbe tondue 16×16.
+  CUT_GRASS_VARIANTS: [
+    { sx: 0, sy: 0, sw: 16, sh: 16 },
+    { sx: 16, sy: 0, sw: 16, sh: 16 },
+    { sx: 32, sy: 0, sw: 16, sh: 16 },
+    { sx: 48, sy: 0, sw: 16, sh: 16 },
+  ],
+  // 4 frames transition tall → cut.
+  TRANSITION_FRAMES: 4,
+  TRANSITION_X: 64, // x de depart des 4 frames de transition
+  TRANSITION_Y: 0,
+  TRANSITION_W: 16,
+  TRANSITION_H: 16,
+  // Lame rotative 24×8 sous le robot, 4 frames a (0,16), (24,16), (48,16), (72,16).
+  BLADE_FRAMES: 4,
+  BLADE_X: 0,
+  BLADE_Y: 16,
+  BLADE_W: 24,
+  BLADE_H: 8,
+  // Burst de brins 16×16, 4 frames a x=0..63, y=32.
+  BURST_FRAMES: 4,
+  BURST_X: 0,
+  BURST_Y: 32,
+  BURST_W: 16,
+  BURST_H: 16,
+  // Indicateur "active" 16×16, 4 frames a x=64..127, y=32.
+  ACTIVE_FRAMES: 4,
+  ACTIVE_X: 64,
+  ACTIVE_Y: 32,
+  ACTIVE_W: 16,
+  ACTIVE_H: 16,
+  // Trail (16×8) trace de roues a (0, 64).
+  TRAIL: { sx: 0, sy: 64, sw: 16, sh: 8 },
 } as const;
 
 export const UI = {
