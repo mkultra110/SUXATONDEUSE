@@ -34,44 +34,88 @@ export function useGameSession(): {
     if (!user || startedRef.current) return;
     startedRef.current = true;
     let cancelled = false;
+    let resolved = false;
+
+    // Filet de securite : si rien ne se debloque en 8s, on force le rendu
+    // avec un save initial pour ne pas bloquer le joueur sur le loading.
+    const safetyTimeout = setTimeout(() => {
+      if (cancelled || resolved) return;
+      // eslint-disable-next-line no-console
+      console.warn('[session] Loading timeout 8s atteint, fallback save initial');
+      try {
+        useGameStore.getState().hydrate(buildInitialSave());
+        startGameLoop();
+        startAutoSave({ userId: user.id });
+      } catch (err) {
+        // eslint-disable-next-line no-console
+        console.error('[session] Fallback failed', err);
+      }
+      resolved = true;
+      setIsLoading(false);
+    }, 8000);
 
     void (async () => {
-      let loaded: SavePayload | null = null;
       try {
-        const server = await apiLoadSave();
-        if (server) loaded = server.payload;
-      } catch {
-        // Reseau down : on tombera sur le local.
-      }
-      if (!loaded) {
+        let loaded: SavePayload | null = null;
         try {
-          loaded = await loadLocal();
+          const server = await apiLoadSave();
+          if (server) loaded = server.payload;
+        } catch (err) {
+          // eslint-disable-next-line no-console
+          console.warn('[session] apiLoadSave failed', err);
+        }
+        if (!loaded) {
+          try {
+            loaded = await loadLocal();
+          } catch (err) {
+            // eslint-disable-next-line no-console
+            console.warn('[session] loadLocal failed', err);
+            loaded = null;
+          }
+        }
+        if (cancelled || resolved) return;
+
+        const initial = loaded ?? buildInitialSave();
+        const cashBefore = new Decimal(initial.cash);
+        useGameStore.getState().hydrate(initial);
+        useGameStore.getState().registerLogin();
+
+        // Catch-up offline : on calcule la duree depuis lastTickAt et on
+        // applique un tick agrege au store.
+        const elapsed = (Date.now() - initial.lastTickAt) / 1000;
+        if (elapsed > 30) {
+          try {
+            catchUpOffline(elapsed);
+            const cashAfter = useGameStore.getState().cash;
+            const earned = cashAfter.sub(cashBefore);
+            if (earned.gt(0)) {
+              setOfflineReward({ durationSeconds: elapsed, cashEarned: earned });
+            }
+          } catch (err) {
+            // eslint-disable-next-line no-console
+            console.warn('[session] catchUpOffline failed', err);
+          }
+        }
+
+        startGameLoop();
+        startAutoSave({ userId: user.id });
+        resolved = true;
+        setIsLoading(false);
+      } catch (err) {
+        // eslint-disable-next-line no-console
+        console.error('[session] Bootstrap fatal', err);
+        try {
+          useGameStore.getState().hydrate(buildInitialSave());
+          startGameLoop();
+          startAutoSave({ userId: user.id });
         } catch {
-          loaded = null;
+          /* ignore */
         }
+        resolved = true;
+        setIsLoading(false);
+      } finally {
+        clearTimeout(safetyTimeout);
       }
-      if (cancelled) return;
-
-      const initial = loaded ?? buildInitialSave();
-      const cashBefore = new Decimal(initial.cash);
-      useGameStore.getState().hydrate(initial);
-      useGameStore.getState().registerLogin();
-
-      // Catch-up offline : on calcule la duree depuis lastTickAt et on
-      // applique un tick agrege au store.
-      const elapsed = (Date.now() - initial.lastTickAt) / 1000;
-      if (elapsed > 30) {
-        catchUpOffline(elapsed);
-        const cashAfter = useGameStore.getState().cash;
-        const earned = cashAfter.sub(cashBefore);
-        if (earned.gt(0)) {
-          setOfflineReward({ durationSeconds: elapsed, cashEarned: earned });
-        }
-      }
-
-      startGameLoop();
-      startAutoSave({ userId: user.id });
-      setIsLoading(false);
     })();
 
     return () => {

@@ -27,6 +27,64 @@
     "AEROMOW": "Tells war stories",
     "NANOSWARM": "Elite unit, gold medal"
   },
+  "robotQuotes": {
+    "HAND_SHEARS": [
+      "One more blade and it's coffee time!",
+      "Granny, I found my spring.",
+      "Click-clack, click-clack... progress."
+    ],
+    "PUSH_MOWER": [
+      "It's soft today, gotta push harder.",
+      "We'll talk again when you've mowed a golf course.",
+      "By gosh, I could use some oil."
+    ],
+    "GAS_MOWER": [
+      "La la la~ ♪ Sunday mowing...",
+      "Vroom vroom, smells like freedom!",
+      "A song while working makes it nicer."
+    ],
+    "ELECTRIC_MOWER": [
+      "Have you seen my pétanque balls?",
+      "Mowing today, pétanque tomorrow.",
+      "Field is spotless, let's check the score."
+    ],
+    "ROBOMOW_V1": [
+      "Knit one, purl one...",
+      "I was knitting a scarf for Pompon.",
+      "Knitting break in 3... 2... 1..."
+    ],
+    "NAVIBOT": [
+      "Apple pie to celebrate!",
+      "Sunday is pie day. It's the rule.",
+      "Need apples from Granny's garden."
+    ],
+    "HELIOCUT": [
+      "Sun at zenith, panels at full!",
+      "Solar charge = moustache charge.",
+      "With this weather, I could mow all night."
+    ],
+    "MEGAMOWER": [
+      "My hat won't fall, on Yvette's word.",
+      "The bigger, the better.",
+      "Hop hop hop, that's a clean cut!"
+    ],
+    "AEROMOW": [
+      "In my day, we used a scythe!",
+      "I tell you, the war taught me to fly.",
+      "Don't forget where you came from, kids."
+    ],
+    "NANOSWARM": [
+      "Gold medal for precision, sir.",
+      "A coordinated swarm is art.",
+      "Granny will be proud. Again."
+    ]
+  },
+  "easterEggs": {
+    "ladybug": "A ladybug! Brings luck, kid.",
+    "pompon": "Pompon's still asleep... 14h nap today.",
+    "scarecrow": "He's watching you. He watches everyone.",
+    "lantern": "This lantern's been flickering since 1962."
+  },
   "meme": {
     "purchaseSuccess": "Joining the team! Ready to mow.",
     "notEnough": "Oh dear, your purse is a bit thin, kid.",
