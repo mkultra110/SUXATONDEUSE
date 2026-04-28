@@ -19,6 +19,10 @@ export default defineConfig(({ mode }) => {
       port: 5173,
       strictPort: true,
       host: true,
+      // Autorise les hosts inconnus (tunnels Cloudflare a URL changeante,
+      // sous-domaines de prod, etc.). En prod cote nginx, le filtrage est
+      // fait par Traefik.
+      allowedHosts: true,
       proxy: {
         '/api': {
           target: env.VITE_API_PROXY_TARGET || 'http://localhost:3000',

@@ -19,8 +19,10 @@ services:
   adminer:
     image: adminer:latest
     restart: unless-stopped
+    # Port 8081 sur l'hote pour ne pas entrer en conflit avec un eventuel
+    # service web existant sur 8080 (gunicorn, etc.).
     ports:
-      - '8080:8080'
+      - '8081:8080'
     depends_on:
       postgres:
         condition: service_healthy
@@ -40,8 +42,9 @@ services:
       FRONTEND_URL: http://localhost:5173
       PORT: '3000'
       LOG_LEVEL: debug
+    # Port 3100 sur l'hote (3000 souvent pris par d'autres node sur le VPS).
     ports:
-      - '3000:3000'
+      - '3100:3000'
     volumes:
       - ./backend/src:/app/backend/src
       - ./backend/prisma:/app/backend/prisma
@@ -55,7 +58,10 @@ services:
       context: .
       dockerfile: frontend/Dockerfile.dev
     environment:
-      VITE_API_URL: http://localhost:3000/api
+      # Chemin relatif : le navigateur appelle /api, Vite proxy vers backend
+      # en interne via VITE_API_PROXY_TARGET. Permet de servir le jeu via un
+      # tunnel Cloudflare ou un domaine HTTPS sans CORS.
+      VITE_API_URL: /api
       VITE_API_PROXY_TARGET: http://backend:3000
     ports:
       - '5173:5173'
@@ -63,6 +69,9 @@ services:
       - ./frontend/src:/app/frontend/src
       - ./frontend/index.html:/app/frontend/index.html
       - ./frontend/public:/app/frontend/public
+      # Mount du fichier de config Vite pour pouvoir l'editer sans rebuild
+      # de l'image (notamment allowedHosts pour les tunnels).
+      - ./frontend/vite.config.ts:/app/frontend/vite.config.ts
       - ./shared/src:/app/shared/src
     depends_on:
       - backend
