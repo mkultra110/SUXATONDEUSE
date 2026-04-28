@@ -1,42 +1,294 @@
+@import './tokens.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Pixel art : interpolation desactivee partout */
+/* ================================================================
+   Base globale
+   ================================================================ */
+
 @layer base {
-  canvas,
-  img.pixel {
+  canvas, img.pixel {
     image-rendering: pixelated;
     image-rendering: crisp-edges;
   }
-  body {
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+  html, body {
+    background: var(--color-paper-2);
+    color: var(--color-text-body);
+    font-family: var(--font-body);
+    letter-spacing: var(--letter-spacing-pixel);
+    line-height: var(--line-height-body);
+    -webkit-font-smoothing: none;
+    font-smooth: never;
+    overscroll-behavior: none;
   }
-}
-
-@layer components {
-  .panel {
-    @apply rounded-lg bg-panel-base text-ink-base shadow-lg;
+  h1, h2, h3, h4 {
+    font-family: var(--font-title);
+    color: var(--color-text-title);
+    letter-spacing: var(--letter-spacing-tight);
+    line-height: var(--line-height-tight);
+    font-weight: 600;
   }
-  .btn {
-    @apply rounded-md bg-grass-base px-4 py-2 font-bold text-ink-base transition-transform;
-    @apply hover:scale-105 active:scale-95;
-  }
-  .btn-primary {
-    @apply bg-accent-gold text-ink-base hover:brightness-110;
-  }
-  .btn-danger {
-    @apply bg-accent-danger text-panel-base hover:brightness-110;
-  }
-  .input {
-    @apply w-full rounded border-2 border-robot-shadow bg-panel-paper px-3 py-2 text-ink-base;
-    @apply focus:border-grass-base focus:outline-none;
+  .numeric, .tabular {
+    font-family: var(--font-numeric);
+    font-variant-numeric: tabular-nums;
+    font-weight: 600;
   }
 }
 
 /* ================================================================
-   Garden Scene (visuel CSS pur, remplace le canvas Pixi)
+   Composants cozy (PixelButton, PixelPanel, PixelCard, PixelTab)
+   ================================================================ */
+
+@layer components {
+  /* Aliases retro-compatibles : les composants existants utilisent .panel/.btn/.input */
+  .panel { @apply pixel-panel; }
+  .btn { @apply pixel-btn; }
+  .btn-primary { @apply pixel-btn pixel-btn-gold; }
+  .btn-danger { @apply pixel-btn pixel-btn-danger; }
+  .input { @apply pixel-input; }
+
+  /* Panel parchemin avec bordure bois pixel */
+  .pixel-panel {
+    background: var(--color-paper-1);
+    border: 3px solid var(--color-wood-5);
+    border-radius: 4px;
+    box-shadow:
+      inset 0 -3px 0 var(--color-wood-3),
+      inset 0 3px 0 var(--color-paper-2),
+      0 4px 0 var(--color-wood-5),
+      0 6px 12px rgba(92, 61, 36, 0.4);
+    color: var(--color-text-body);
+    padding: 12px;
+  }
+
+  .pixel-panel-dark {
+    background: var(--color-wood-4);
+    border: 3px solid var(--color-wood-5);
+    border-radius: 4px;
+    box-shadow:
+      inset 0 -3px 0 var(--color-wood-5),
+      inset 0 3px 0 var(--color-wood-3),
+      0 4px 0 var(--color-wood-5),
+      0 6px 12px rgba(0, 0, 0, 0.4);
+    color: var(--color-text-light);
+    padding: 12px;
+  }
+
+  /* Card boutique / parcelle / pet */
+  .pixel-card {
+    background: var(--color-paper-1);
+    border: 3px solid var(--color-wood-4);
+    border-radius: 4px;
+    box-shadow:
+      inset 0 -2px 0 var(--color-wood-3),
+      0 3px 0 var(--color-wood-4),
+      0 4px 8px rgba(92, 61, 36, 0.3);
+    transition: transform 100ms ease-out, box-shadow 100ms ease-out;
+    padding: 8px;
+    color: var(--color-text-body);
+  }
+  .pixel-card:hover {
+    transform: translateY(-2px);
+    box-shadow:
+      inset 0 -2px 0 var(--color-wood-3),
+      0 5px 0 var(--color-wood-4),
+      0 8px 14px rgba(92, 61, 36, 0.4);
+  }
+  .pixel-card-affordable {
+    border-color: var(--color-grass-5);
+    box-shadow:
+      inset 0 -2px 0 var(--color-grass-3),
+      0 3px 0 var(--color-grass-6),
+      0 0 16px rgba(143, 191, 79, 0.4);
+    animation: pixel-pulse 2.5s ease-in-out infinite;
+  }
+  .pixel-card-locked {
+    background: var(--color-paper-3);
+    border-color: var(--color-wood-3);
+    color: var(--color-text-muted);
+    filter: grayscale(0.5);
+    opacity: 0.7;
+  }
+
+  /* Boutons */
+  .pixel-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    min-height: 44px;
+    padding: 8px 14px;
+    font-family: var(--font-button);
+    font-size: var(--text-sm);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-text-light);
+    background: var(--color-grass-4);
+    border: 3px solid var(--color-grass-6);
+    border-radius: 4px;
+    box-shadow:
+      inset 0 -3px 0 var(--color-grass-6),
+      inset 0 2px 0 var(--color-grass-2),
+      0 3px 0 var(--color-grass-7),
+      0 5px 8px rgba(29, 74, 24, 0.4);
+    cursor: pointer;
+    transition: transform 80ms ease-out, box-shadow 80ms ease-out, filter 80ms ease-out;
+    user-select: none;
+  }
+  .pixel-btn:hover:not(:disabled) {
+    transform: translateY(-1px);
+    filter: brightness(1.08);
+  }
+  .pixel-btn:active:not(:disabled) {
+    transform: translateY(2px);
+    box-shadow:
+      inset 0 -1px 0 var(--color-grass-6),
+      inset 0 2px 0 var(--color-grass-2),
+      0 1px 0 var(--color-grass-7),
+      0 2px 4px rgba(29, 74, 24, 0.4);
+  }
+
+  .pixel-btn-gold {
+    background: var(--color-accent-gold);
+    border-color: #a87a1f;
+    color: var(--color-text-title);
+    box-shadow:
+      inset 0 -3px 0 #a87a1f,
+      inset 0 2px 0 #fde08a,
+      0 3px 0 #6b4d12,
+      0 5px 8px rgba(168, 122, 31, 0.4);
+  }
+  .pixel-btn-danger {
+    background: var(--color-accent-red);
+    border-color: #8b1f1f;
+    color: var(--color-text-light);
+    box-shadow:
+      inset 0 -3px 0 #8b1f1f,
+      inset 0 2px 0 #ee7676,
+      0 3px 0 #5c1414,
+      0 5px 8px rgba(139, 31, 31, 0.4);
+  }
+  .pixel-btn-wood {
+    background: var(--color-wood-3);
+    border-color: var(--color-wood-5);
+    color: var(--color-text-light);
+    box-shadow:
+      inset 0 -3px 0 var(--color-wood-5),
+      inset 0 2px 0 var(--color-wood-2),
+      0 3px 0 var(--color-wood-5),
+      0 5px 8px rgba(92, 61, 36, 0.4);
+  }
+  .pixel-btn:disabled {
+    background: var(--color-wood-3) !important;
+    border-color: var(--color-wood-4) !important;
+    box-shadow:
+      inset 0 -2px 0 var(--color-wood-4),
+      0 2px 0 var(--color-wood-5) !important;
+    color: var(--color-paper-3) !important;
+    cursor: not-allowed;
+    filter: grayscale(0.4);
+    opacity: 0.7;
+    transform: none !important;
+  }
+
+  /* Onglets navigation */
+  .pixel-tab {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 6px;
+    min-height: 56px;
+    background: var(--color-paper-2);
+    border: 3px solid var(--color-wood-4);
+    border-radius: 4px;
+    color: var(--color-text-muted);
+    font-family: var(--font-button);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    cursor: pointer;
+    transition: all 100ms ease-out;
+    gap: 2px;
+    box-shadow:
+      inset 0 -2px 0 var(--color-wood-3),
+      0 2px 0 var(--color-wood-4);
+  }
+  .pixel-tab:hover {
+    transform: translateY(-1px);
+    background: var(--color-paper-1);
+  }
+  .pixel-tab-active {
+    background: var(--color-accent-gold);
+    border-color: #a87a1f;
+    color: var(--color-text-title);
+    box-shadow:
+      inset 0 -2px 0 #a87a1f,
+      0 2px 0 #6b4d12,
+      0 0 12px rgba(245, 196, 67, 0.6);
+  }
+  .pixel-tab-emoji {
+    font-size: 20px;
+    line-height: 1;
+  }
+
+  /* Inputs */
+  .pixel-input {
+    width: 100%;
+    padding: 10px 12px;
+    background: var(--color-paper-2);
+    border: 3px solid var(--color-wood-4);
+    border-radius: 4px;
+    color: var(--color-text-body);
+    font-family: var(--font-body);
+    font-size: var(--text-base);
+    box-shadow: inset 0 2px 4px rgba(92, 61, 36, 0.3);
+    transition: border-color 120ms ease-out, box-shadow 120ms ease-out;
+  }
+  .pixel-input:focus {
+    outline: none;
+    border-color: var(--color-grass-5);
+    box-shadow:
+      inset 0 2px 4px rgba(92, 61, 36, 0.3),
+      0 0 0 3px rgba(143, 191, 79, 0.4);
+  }
+}
+
+/* ================================================================
+   Animations cozy
+   ================================================================ */
+
+@keyframes pixel-pulse {
+  0%, 100% { filter: brightness(1); }
+  50% { filter: brightness(1.1); }
+}
+
+@keyframes currency-pop {
+  0% { transform: scale(1); }
+  40% { transform: scale(1.2); filter: brightness(1.4) drop-shadow(0 0 4px var(--color-accent-gold)); }
+  100% { transform: scale(1); filter: brightness(1); }
+}
+.animate-currency-pop { animation: currency-pop 0.25s ease-out; }
+
+@keyframes shake {
+  0%, 100% { transform: translate(0, 0); }
+  25% { transform: translate(-2px, 1px); }
+  50% { transform: translate(2px, -1px); }
+  75% { transform: translate(-1px, 2px); }
+}
+.animate-shake { animation: shake 0.08s ease-in-out; }
+
+@keyframes glow-pulse {
+  0%, 100% { box-shadow: 0 0 8px currentColor; }
+  50% { box-shadow: 0 0 24px currentColor; }
+}
+.animate-glow { animation: glow-pulse 2s ease-in-out infinite; }
+
+/* ================================================================
+   Garden Scene (visuel CSS pur — version cozy avec palette tokens)
    ================================================================ */
 
 .garden-scene {
@@ -44,16 +296,24 @@
   aspect-ratio: 16 / 9;
   width: 100%;
   max-width: 768px;
-  border-radius: 1rem;
+  border-radius: 8px;
   overflow: hidden;
   cursor: pointer;
   user-select: none;
   background:
-    linear-gradient(180deg, #2ce8f5 0%, #0099db 35%, #63c74d 35%, #3e8948 100%);
+    linear-gradient(
+      180deg,
+      var(--color-sky-noon) 0%,
+      var(--color-sky-morning) 30%,
+      var(--color-grass-3) 45%,
+      var(--color-grass-5) 100%
+    );
   box-shadow:
-    inset 0 0 60px rgba(0, 0, 0, 0.3),
-    0 8px 24px rgba(0, 0, 0, 0.4);
-  border: 4px solid #193c3e;
+    inset 0 0 0 3px var(--color-wood-5),
+    inset 0 0 60px rgba(0, 0, 0, 0.2),
+    0 4px 0 var(--color-wood-5),
+    0 8px 24px rgba(92, 61, 36, 0.4);
+  border: 3px solid var(--color-wood-5);
 }
 
 .garden-scene > * {
@@ -67,27 +327,28 @@
   width: 56px;
   height: 56px;
   border-radius: 50%;
-  background: radial-gradient(circle, #fee761 0%, #feae34 70%, transparent 100%);
-  box-shadow: 0 0 40px #fee761;
+  background: radial-gradient(circle, var(--color-accent-gold) 0%, #f29bb8 70%, transparent 100%);
+  box-shadow: 0 0 40px var(--color-accent-gold);
   animation: sun-pulse 3s ease-in-out infinite;
 }
 
 @keyframes sun-pulse {
   0%, 100% { transform: scale(1); filter: brightness(1); }
-  50% { transform: scale(1.05); filter: brightness(1.2); }
+  50% { transform: scale(1.05); filter: brightness(1.15); }
 }
 
 .garden-cloud {
   position: absolute;
-  background: rgba(255, 255, 255, 0.9);
+  background: var(--color-paper-1);
   border-radius: 100px;
   filter: blur(0.5px);
+  opacity: 0.85;
 }
 .garden-cloud::before,
 .garden-cloud::after {
   content: '';
   position: absolute;
-  background: rgba(255, 255, 255, 0.9);
+  background: var(--color-paper-1);
   border-radius: 100px;
 }
 .cloud-1 {
@@ -106,7 +367,7 @@
   top: 15%;
   width: 50px;
   height: 16px;
-  opacity: 0.75;
+  opacity: 0.7;
   animation: cloud-drift 70s linear infinite;
   animation-delay: -25s;
 }
@@ -120,7 +381,7 @@
   top: 18%;
   width: 40px;
   height: 14px;
-  opacity: 0.6;
+  opacity: 0.5;
   animation: cloud-drift 90s linear infinite;
   animation-delay: -50s;
 }
@@ -143,9 +404,9 @@
 .garden-tree-trunk {
   width: 8px;
   height: 24px;
-  background: #733e39;
+  background: var(--color-wood-5);
   margin: 0 auto;
-  box-shadow: inset -2px 0 0 #3e2731;
+  box-shadow: inset -2px 0 0 var(--color-dirt-5);
 }
 .garden-tree-foliage {
   position: absolute;
@@ -155,7 +416,13 @@
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  background: radial-gradient(circle, #63c74d 30%, #3e8948 70%, #265c42 100%);
+  background:
+    radial-gradient(
+      circle,
+      var(--color-grass-3) 30%,
+      var(--color-grass-5) 70%,
+      var(--color-grass-7) 100%
+    );
   box-shadow:
     inset -4px -4px 0 rgba(0, 0, 0, 0.2),
     2px 2px 0 rgba(0, 0, 0, 0.3);
@@ -181,7 +448,7 @@
   left: 0;
   width: 100%;
   height: 24px;
-  background: #e43b44;
+  background: var(--color-accent-red);
   clip-path: polygon(0 100%, 50% 0, 100% 100%);
   box-shadow: inset -4px 0 0 rgba(0, 0, 0, 0.2);
 }
@@ -191,8 +458,8 @@
   left: 4px;
   right: 4px;
   bottom: 0;
-  background: #e4a672;
-  box-shadow: inset -4px -4px 0 rgba(0, 0, 0, 0.2);
+  background: var(--color-dirt-1);
+  box-shadow: inset -4px -4px 0 var(--color-dirt-2);
 }
 .garden-house-door {
   position: absolute;
@@ -201,8 +468,8 @@
   transform: translateX(-50%);
   width: 14px;
   height: 20px;
-  background: #3e2731;
-  box-shadow: inset 1px 0 0 rgba(255, 255, 255, 0.1);
+  background: var(--color-wood-5);
+  box-shadow: inset 1px 0 0 rgba(255, 248, 231, 0.1);
 }
 .garden-house-window {
   position: absolute;
@@ -210,8 +477,8 @@
   right: 10px;
   width: 12px;
   height: 12px;
-  background: #2ce8f5;
-  box-shadow: inset -2px -2px 0 rgba(0, 0, 0, 0.3);
+  background: var(--color-water-2);
+  box-shadow: inset -2px -2px 0 var(--color-water-3);
 }
 
 .garden-grass-layer {
@@ -253,11 +520,15 @@
 .garden-empty-text {
   margin-top: 8px;
   padding: 6px 12px;
-  background: rgba(0, 0, 0, 0.5);
-  color: #fef6e0;
-  border-radius: 6px;
-  font-size: 12px;
-  font-weight: bold;
+  background: var(--color-wood-5);
+  color: var(--color-paper-1);
+  border-radius: 4px;
+  border: 2px solid var(--color-wood-4);
+  font-family: var(--font-button);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 
 @keyframes empty-bounce {
@@ -329,8 +600,8 @@
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: #181425;
-  box-shadow: inset 1px 1px 0 #5a6988;
+  background: var(--color-metal-5);
+  box-shadow: inset 1px 1px 0 var(--color-metal-3);
   animation: robot-wheel 0.4s linear infinite;
 }
 .garden-robot-wheel-l { left: 4px; }
@@ -349,7 +620,14 @@
   width: 32px;
   height: 6px;
   border-radius: 50%;
-  background: conic-gradient(from 0deg, #d6d6d6, #ffffff, #d6d6d6, #ffffff, #d6d6d6);
+  background: conic-gradient(
+    from 0deg,
+    var(--color-metal-2),
+    var(--color-metal-1),
+    var(--color-metal-2),
+    var(--color-metal-1),
+    var(--color-metal-2)
+  );
   animation: robot-blades 0.15s linear infinite;
   box-shadow: 0 0 4px rgba(255, 255, 255, 0.4);
 }
@@ -364,10 +642,10 @@
   position: absolute;
   width: 4px;
   height: 8px;
-  background: #a8e66c;
+  background: var(--color-grass-3);
   border-radius: 1px;
   pointer-events: none;
-  box-shadow: 0 0 4px rgba(168, 230, 108, 0.6);
+  box-shadow: 0 0 4px rgba(143, 191, 79, 0.6);
   animation: blade-fly 0.7s ease-out forwards;
   --vx: 0px;
   --vy: 0px;
@@ -392,7 +670,7 @@
   position: absolute;
   font-size: 24px;
   pointer-events: none;
-  text-shadow: 0 0 8px #fee761;
+  text-shadow: 0 0 8px var(--color-accent-gold);
   animation: coin-pop 0.9s ease-out forwards;
   transform: translate(-50%, 0);
 }
@@ -404,34 +682,20 @@
   100% { transform: translate(-50%, -120px) scale(0.7); opacity: 0; }
 }
 
-/* Indicateur production */
 .garden-prod-indicator {
   position: absolute;
   top: 8px;
   left: 8px;
   padding: 4px 10px;
-  border-radius: 999px;
-  background: rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(4px);
-  color: #fee761;
-  font-size: 11px;
-  font-weight: bold;
+  background: var(--color-wood-5);
+  border: 2px solid var(--color-wood-4);
+  color: var(--color-accent-gold);
+  font-family: var(--font-button);
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  border-radius: 4px;
   pointer-events: none;
+  box-shadow: 0 2px 0 var(--color-wood-5);
 }
-
-/* Screen shake au tap */
-@keyframes shake {
-  0%, 100% { transform: translate(0, 0); }
-  25% { transform: translate(-2px, 1px); }
-  50% { transform: translate(2px, -1px); }
-  75% { transform: translate(-1px, 2px); }
-}
-.animate-shake { animation: shake 0.08s ease-in-out; }
-
-/* Currency pop sur les compteurs */
-@keyframes currency-pop {
-  0% { transform: scale(1); }
-  40% { transform: scale(1.25); filter: brightness(1.3); }
-  100% { transform: scale(1); filter: brightness(1); }
-}
-.animate-currency-pop { animation: currency-pop 0.25s ease-out; }

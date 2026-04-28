@@ -1,4 +1,5 @@
-// Compteur de cash avec animation count-up bouncy a chaque mutation notable.
+// Compteur de cash cozy : icone + chiffre + cps en dessous, bounce a chaque
+// gain notable.
 
 import { useEffect, useRef, useState } from 'react';
 import { useGameStore } from '../../stores/gameStore.js';
@@ -15,21 +16,39 @@ export function CashCounter() {
     if (current === lastValue.current) return;
     lastValue.current = current;
     setPop(true);
-    const t = setTimeout(() => setPop(false), 200);
+    const t = setTimeout(() => setPop(false), 250);
     return () => clearTimeout(t);
   }, [cash]);
 
   return (
-    <div className="flex flex-col items-end">
-      <div
-        className={`flex items-center gap-2 text-xl font-bold text-accent-gold ${
-          pop ? 'animate-currency-pop' : ''
-        }`}
-      >
-        <span aria-hidden>🪙</span>
-        <span className="tabular-nums">{formatBig(cash)}</span>
+    <div
+      className={`flex flex-col items-center px-2 py-1 rounded ${pop ? 'animate-currency-pop' : ''}`}
+      style={{
+        background: 'var(--color-wood-5)',
+        border: '2px solid #a87a1f',
+        boxShadow:
+          'inset 0 -2px 0 rgba(0,0,0,0.3), 0 0 8px rgba(245, 196, 67, 0.3)',
+      }}
+    >
+      <div className="flex items-center gap-1.5">
+        <span className="text-base" aria-hidden>🪙</span>
+        <span
+          className="numeric text-sm"
+          style={{
+            color: 'var(--color-accent-gold)',
+            textShadow: '1px 1px 0 var(--color-text-title)',
+          }}
+        >
+          {formatBig(cash)}
+        </span>
       </div>
-      <div className="text-xs text-panel-paper tabular-nums">
+      <div
+        className="numeric leading-none mt-0.5"
+        style={{
+          color: 'var(--color-paper-3)',
+          fontSize: '10px',
+        }}
+      >
         +{formatBig(cps)}/s
       </div>
     </div>

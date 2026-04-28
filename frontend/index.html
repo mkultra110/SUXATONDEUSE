@@ -5,12 +5,17 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <meta name="description" content="SUXA TONDEUSE — bâtissez votre empire de robots tondeuses" />
-    <meta name="theme-color" content="#63c74d" />
+    <meta name="theme-color" content="#f5e8c8" />
     <link rel="manifest" href="/manifest.webmanifest" />
     <title>SUXA TONDEUSE</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&family=Pixelify+Sans:wght@400;500;600;700&family=Silkscreen:wght@400;700&family=Inter:wght@400;500;600;700&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+
     <style>
-      /* Pixel art : interpolation desactivee sur tous les canvas */
-      canvas {
+      /* Pixel art : pas d'interpolation sur les canvas et icones */
+      canvas, img.pixel {
         image-rendering: pixelated;
         image-rendering: crisp-edges;
       }
@@ -19,10 +24,25 @@
         padding: 0;
         width: 100%;
         height: 100%;
-        overflow: hidden;
-        background: #181425;
-        font-family: 'Inter', system-ui, -apple-system, sans-serif;
-        color: #fef6e0;
+      }
+      body {
+        background: #f5e8c8;
+        color: #3d2f24;
+        font-family: 'm6x11plus', 'VT323', monospace;
+        letter-spacing: 0.05em;
+        line-height: 1.6;
+        -webkit-font-smoothing: none;
+        font-smooth: never;
+        -webkit-tap-highlight-color: transparent;
+        user-select: none;
+        -webkit-user-select: none;
+        overscroll-behavior: none;
+      }
+      .numeric, .counter, .price {
+        font-family: 'Inter', 'Nunito', system-ui, sans-serif;
+        font-variant-numeric: tabular-nums;
+        font-weight: 600;
+        letter-spacing: 0;
       }
     </style>
   </head>

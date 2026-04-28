@@ -1,5 +1,5 @@
-// Page principale du jeu (PHASE 2).
-// TopBar + canvas + onglets de panneaux : Shop | Plots | Prestige | Achievements.
+// Page principale du jeu (refonte cozy).
+// TopBar + jardin anime + onglets pixel-art (Boutique/Plots/Daily/...).
 
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -41,32 +41,41 @@ export function GamePage() {
 
   if (session.isLoading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-grass-deep text-panel-base">
+      <div
+        className="flex min-h-screen items-center justify-center"
+        style={{
+          background: 'var(--color-paper-2)',
+          color: 'var(--color-text-body)',
+          fontFamily: 'var(--font-title)',
+        }}
+      >
         {t('game.loading')}
       </div>
     );
   }
 
   return (
-    <div className="flex min-h-screen flex-col bg-gradient-to-b from-sky-deep to-grass-deep p-2 gap-2">
+    <div
+      className="flex min-h-screen flex-col gap-2 p-2"
+      style={{
+        background:
+          'linear-gradient(180deg, var(--color-sky-morning) 0%, var(--color-paper-2) 30%, var(--color-paper-2) 100%)',
+      }}
+    >
       <TopBar />
-      <main className="flex flex-1 flex-col items-center gap-4 lg:flex-row lg:items-start lg:justify-center lg:gap-6">
+      <main className="flex flex-1 flex-col items-center gap-3 lg:flex-row lg:items-start lg:justify-center lg:gap-6">
         <div className="flex flex-col items-center gap-2 flex-1 w-full">
           <AnimatedGarden />
         </div>
         <div className="flex flex-col gap-2 w-full max-w-sm">
-          <nav className="grid grid-cols-4 gap-1 lg:grid-cols-7">
+          <nav className="grid grid-cols-4 gap-1.5 lg:grid-cols-7">
             {TABS.map((tab) => (
               <button
                 key={tab.key}
                 onClick={() => setActiveTab(tab.key)}
-                className={`flex flex-col items-center justify-center rounded p-2 text-xs font-bold transition ${
-                  activeTab === tab.key
-                    ? 'bg-accent-gold text-ink-base'
-                    : 'bg-panel-base text-ink-dark hover:bg-panel-paper'
-                }`}
+                className={`pixel-tab ${activeTab === tab.key ? 'pixel-tab-active' : ''}`}
               >
-                <span aria-hidden className="text-lg">
+                <span aria-hidden className="pixel-tab-emoji">
                   {tab.emoji}
                 </span>
                 <span>{t(`tabs.${tab.key}`)}</span>
