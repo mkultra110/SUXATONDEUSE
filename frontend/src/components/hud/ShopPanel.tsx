@@ -187,10 +187,18 @@ interface ShopCardProps {
 }
 
 function ShopCard({ affordable, locked, badge, art, name, rate, cost, onClick }: ShopCardProps) {
+  const [wiggle, setWiggle] = useState(false);
+  function handleClickWiggle() {
+    if (affordable) {
+      setWiggle(true);
+      setTimeout(() => setWiggle(false), 400);
+    }
+    onClick();
+  }
   return (
     <div
-      className="panel-9"
-      onClick={onClick}
+      className={`panel-9 ${wiggle ? 'card-wiggle' : ''}`}
+      onClick={handleClickWiggle}
       style={{
         padding: 10,
         display: 'flex',
@@ -257,7 +265,7 @@ function ShopCard({ affordable, locked, badge, art, name, rate, cost, onClick }:
         disabled={!affordable}
         onClick={(e) => {
           e.stopPropagation();
-          onClick();
+          handleClickWiggle();
         }}
         style={{
           background: cost === null ? 'var(--color-wood-3)' : affordable ? 'var(--color-grass-4)' : 'var(--color-paper-3)',

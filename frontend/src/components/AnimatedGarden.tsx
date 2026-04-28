@@ -8,6 +8,8 @@ import type { RobotType } from '@robomow/shared';
 import { useGameStore } from '../stores/gameStore.js';
 import { audio } from '../services/audio.js';
 import { LadybugIcon, LanternIcon, PomponIcon, ScarecrowIcon } from './icons/PixelIcon.js';
+import { SpeechBubble } from './hud/SpeechBubble.js';
+import i18next from 'i18next';
 import {
   Sprite,
   ATLAS_URL,
@@ -137,6 +139,7 @@ export function AnimatedGarden() {
   const [bursts, setBursts] = useState<Array<{ id: number; tileX: number; tileY: number; t0: number }>>([]);
   const [floatingNums, setFloatingNums] = useState<Array<{ id: number; x: number; y: number; n: number; vx: number }>>([]);
   const [scarecrowHeadRot, setScarecrowHeadRot] = useState(0);
+  const [bubbles, setBubbles] = useState<Array<{ id: number; x: number; y: number; text: string }>>([]);
   const wrapperRef = useRef<HTMLDivElement | null>(null);
   const idRef = useRef(0);
 
@@ -359,6 +362,31 @@ export function AnimatedGarden() {
     setScarecrowHeadRot(clamped);
   }
 
+  // Spawn une bulle de dialogue a la position (xPx, yPx) en pixels stage.
+  function spawnBubble(xPx: number, yPx: number, text: string) {
+    idRef.current += 1;
+    const id = idRef.current;
+    setBubbles((prev) => [...prev, { id, x: xPx, y: yPx, text }].slice(-3));
+    setTimeout(() => {
+      setBubbles((prev) => prev.filter((b) => b.id !== id));
+    }, 3000);
+  }
+
+  // Tap sur un robot : spawn une bulle avec quote aleatoire de sa personnalite.
+  function handleRobotTap(robot: RobotEntity) {
+    const quotes = i18next.t(`robotQuotes.${robot.type}`, { returnObjects: true }) as string[] | string;
+    const list = Array.isArray(quotes) ? quotes : [quotes];
+    const pick = list[Math.floor(Math.random() * list.length)] ?? '...';
+    spawnBubble(robot.x * TILE + ROBOT_SIZE * SCALE / 2 - 4 * SCALE, robot.y * TILE - 4 * SCALE, pick);
+    audio.playTap();
+  }
+
+  // Tap sur un easter egg : tooltip court avec voice Meme.
+  function handleEasterEgg(xPx: number, yPx: number, key: 'ladybug' | 'pompon' | 'scarecrow' | 'lantern') {
+    const text = i18next.t(`easterEggs.${key}`, '...');
+    spawnBubble(xPx, yPx, text);
+  }
+
   function handleClick(e: React.MouseEvent<HTMLDivElement>) {
     const rect = e.currentTarget.getBoundingClientRect();
     const x = ((e.clientX - rect.left) / rect.width) * 100;
@@ -466,10 +494,25 @@ export function AnimatedGarden() {
           <Sprite atlas="decor" {...DECOR.HOUSE} scale={SCALE} />
           <span className="house-smoke" />
         </div>
-        <div className="farm-pompon" title="Pompon le chat" style={{ left: 1.2 * TILE, top: 0.55 * TILE }}>
+        <div
+          className="farm-pompon"
+          title="Pompon le chat"
+          style={{ left: 1.2 * TILE, top: 0.55 * TILE, cursor: 'pointer', pointerEvents: 'auto' }}
+          onClick={(e) => {
+            e.stopPropagation();
+            handleEasterEgg(1.2 * TILE + 21, 0.55 * TILE, 'pompon');
+          }}
+        >
           <PomponIcon size={42} />
         </div>
-        <div className="farm-lantern" style={{ left: 3.6 * TILE, top: 1.1 * TILE, transformOrigin: '50% 0' }}>
+        <div
+          className="farm-lantern"
+          style={{ left: 3.6 * TILE, top: 1.1 * TILE, transformOrigin: '50% 0', cursor: 'pointer', pointerEvents: 'auto' }}
+          onClick={(e) => {
+            e.stopPropagation();
+            handleEasterEgg(3.6 * TILE + 14, 1.1 * TILE, 'lantern');
+          }}
+        >
           <LanternIcon size={28} />
         </div>
 
@@ -490,7 +533,7 @@ export function AnimatedGarden() {
 
         {/* Robots dynamiques */}
         {robots.length > 0 ? (
-          robots.map((r) => <DynamicRobot key={r.id} robot={r} />)
+          robots.map((r) => <DynamicRobot key={r.id} robot={r} onTap={handleRobotTap} />)
         ) : (
           <div className="farm-empty">
             <div className="farm-empty-text">{t('game.tapHint')}</div>
@@ -541,7 +584,17 @@ export function AnimatedGarden() {
         <Butterfly x={11} y={2.5} delay={2.5} variant="BLUE" />
 
         {/* Easter egg cozy : coccinelle qui marche tres lentement (Margaux Lefevre signature). */}
-        <div className="farm-ladybug" title="Coccinelle">
+        <div
+          className="farm-ladybug"
+          title="Coccinelle"
+          style={{ cursor: 'pointer', pointerEvents: 'auto' }}
+          onClick={(e) => {
+            e.stopPropagation();
+            const rect = (e.currentTarget as HTMLDivElement).getBoundingClientRect();
+            const stageRect = (e.currentTarget.parentElement as HTMLDivElement).getBoundingClientRect();
+            handleEasterEgg(rect.left - stageRect.left + 8, rect.top - stageRect.top, 'ladybug');
+          }}
+        >
           <LadybugIcon size={16} />
         </div>
 
@@ -553,9 +606,15 @@ export function AnimatedGarden() {
               left: 12.2 * TILE,
               top: 4.5 * TILE,
               ['--head-rot' as string]: `${scarecrowHeadRot}deg`,
+              cursor: 'pointer',
+              pointerEvents: 'auto',
             } as CSSProperties
           }
           title="Épouvantail"
+          onClick={(e) => {
+            e.stopPropagation();
+            handleEasterEgg(12.2 * TILE + 28, 4.5 * TILE, 'scarecrow');
+          }}
         >
           <ScarecrowIcon size={56} />
         </div>
@@ -582,6 +641,18 @@ export function AnimatedGarden() {
           </span>
         ))}
         {cashPerSecond.gt(0) && <div className="farm-prod-indicator">⚙ Auto-tonte</div>}
+
+        {/* Speech bubbles (robots quotes + easter eggs) */}
+        {bubbles.map((b) => (
+          <SpeechBubble
+            key={b.id}
+            x={b.x}
+            y={b.y}
+            text={b.text}
+            durationMs={3000}
+            onDone={() => setBubbles((prev) => prev.filter((x) => x.id !== b.id))}
+          />
+        ))}
       </div>
     </div>
   );
@@ -743,7 +814,7 @@ function Butterfly({ x, y, delay, variant }: { x: number; y: number; delay: numb
   );
 }
 
-function DynamicRobot({ robot }: { robot: RobotEntity }) {
+function DynamicRobot({ robot, onTap }: { robot: RobotEntity; onTap?: (r: RobotEntity) => void }) {
   const tier = robot.tier;
   const rowY = robot.state === 'mowing' ? tier * 48 + 24 : (robot.dir === 'up' || robot.dir === 'down' ? tier * 48 : tier * 48 + 24);
   let colBase: number;
@@ -799,6 +870,10 @@ function DynamicRobot({ robot }: { robot: RobotEntity }) {
 
       {/* Robot lui-meme. */}
       <div
+        onClick={(e) => {
+          e.stopPropagation();
+          onTap?.(robot);
+        }}
         style={{
           position: 'absolute',
           left,
@@ -813,6 +888,8 @@ function DynamicRobot({ robot }: { robot: RobotEntity }) {
           zIndex: 10,
           transition: 'left 80ms linear, top 80ms linear',
           filter: robot.state === 'mowing' ? 'drop-shadow(0 0 6px rgba(168,230,108,0.8))' : undefined,
+          cursor: 'pointer',
+          pointerEvents: 'auto',
         }}
       />
 

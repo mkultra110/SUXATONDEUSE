@@ -27,6 +27,64 @@
     "AEROMOW": "Raconte la guerre",
     "NANOSWARM": "Robot d'élite, médaille en or"
   },
+  "robotQuotes": {
+    "HAND_SHEARS": [
+      "Encore un brin et c'est l'heure du café !",
+      "Mémé, j'ai retrouvé mon ressort.",
+      "Clic-clac, clic-clac... ça avance."
+    ],
+    "PUSH_MOWER": [
+      "C'est mou aujourd'hui, faut pousser plus fort.",
+      "On en reparle quand t'auras tondu un golf.",
+      "Bon sang d'bois, j'aurais besoin d'un peu d'huile."
+    ],
+    "GAS_MOWER": [
+      "La la la~ ♪ tonte du dimanche...",
+      "Vroum vroum, ça sent la liberté !",
+      "Une chanson en travaillant, c'est plus joli."
+    ],
+    "ELECTRIC_MOWER": [
+      "T'as pas vu mes boules de pétanque ?",
+      "Tonte aujourd'hui, pétanque demain.",
+      "Le terrain est nickel, vérifions le score."
+    ],
+    "ROBOMOW_V1": [
+      "Une maille à l'endroit, une à l'envers...",
+      "Je tricotais une écharpe pour Pompon.",
+      "Pause-tricot dans 3... 2... 1..."
+    ],
+    "NAVIBOT": [
+      "Une tarte aux pommes pour fêter ça !",
+      "Dimanche c'est tarte. C'est la règle.",
+      "Faut des pommes du jardin de Mémé."
+    ],
+    "HELIOCUT": [
+      "Soleil au zénith, panneaux à fond !",
+      "Recharge solaire = recharge moustache.",
+      "Avec ce temps, je pourrais tondre toute la nuit."
+    ],
+    "MEGAMOWER": [
+      "Mon chapeau ne tombera pas, foi de Yvette.",
+      "Plus c'est grand, plus c'est beau.",
+      "Hop hop hop, ça décape !"
+    ],
+    "AEROMOW": [
+      "De mon temps, on tondait à la faux !",
+      "Je vous dis que la guerre m'a appris à voler.",
+      "Faut pas oublier d'où on vient, les jeunes."
+    ],
+    "NANOSWARM": [
+      "Médaille d'or de la précision, monsieur.",
+      "Un essaim coordonné, c'est de l'art.",
+      "Mémé sera fière. Encore."
+    ]
+  },
+  "easterEggs": {
+    "ladybug": "Une coccinelle ! Ça porte chance, chaton.",
+    "pompon": "Pompon dort encore... 14h de sieste aujourd'hui.",
+    "scarecrow": "Il te regarde. Il regarde tout le monde.",
+    "lantern": "Cette lanterne flickere depuis 1962."
+  },
   "meme": {
     "purchaseSuccess": "Marcel rejoint l'équipe ! Il a hâte de bosser.",
     "notEnough": "Oh là là, ta tirelire est un peu maigre, chaton.",

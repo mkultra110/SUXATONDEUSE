@@ -409,6 +409,25 @@
   50% { transform: translateY(-3px); }
 }
 
+/* Speech bubble pop-in (signature Meme Gisele voice) */
+@keyframes speech-pop {
+  0% { opacity: 0; transform: translate(-50%, -100%) scale(0.7); }
+  60% { opacity: 1; transform: translate(-50%, -100%) scale(1.08); }
+  100% { opacity: 1; transform: translate(-50%, -100%) scale(1); }
+}
+
+/* Wiggle satisfaction sur les cards a l'achat */
+@keyframes card-wiggle {
+  0%, 100% { transform: rotate(0deg); }
+  20% { transform: rotate(-3deg) translateY(-1px); }
+  40% { transform: rotate(3deg) translateY(-2px); }
+  60% { transform: rotate(-2deg) translateY(-1px); }
+  80% { transform: rotate(1deg); }
+}
+.card-wiggle {
+  animation: card-wiggle 400ms ease-out;
+}
+
 /* Animations weather widget (SVG icons in TopBar) */
 @keyframes weather-sun-spin {
   from { transform: rotate(0deg); }
