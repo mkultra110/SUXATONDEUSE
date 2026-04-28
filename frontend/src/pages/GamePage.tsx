@@ -80,11 +80,11 @@ export function GamePage() {
   if (session.isLoading) {
     return (
       <div
-        className="flex min-h-screen items-center justify-center"
+        className="flex min-h-screen items-center justify-center meme"
         style={{
           background: 'var(--color-paper-2)',
           color: 'var(--color-text-body)',
-          fontFamily: 'var(--font-title)',
+          fontSize: 24,
         }}
       >
         {t('meme.loading')}

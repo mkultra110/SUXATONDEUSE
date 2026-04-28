@@ -409,6 +409,17 @@
   50% { transform: translateY(-3px); }
 }
 
+/* Skill tree : pulse hex achetable + scintillement etoiles fond. */
+@keyframes hex-pulse {
+  0%, 100% { transform: translate(-50%, -50%) scale(1); }
+  50% { transform: translate(-50%, -50%) scale(1.08); }
+}
+
+@keyframes star-twinkle {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 1; }
+}
+
 /* Prestige cutscene : spirale doree + typewriter + fade-in scale. */
 @keyframes prestige-spiral {
   0% {

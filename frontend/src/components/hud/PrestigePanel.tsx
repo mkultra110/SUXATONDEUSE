@@ -8,6 +8,7 @@ import { useGameStore } from '../../stores/gameStore.js';
 import { formatBig } from '../../game/engine/bigNumber.js';
 import { SeedIcon, StarIcon } from '../icons/PixelIcon.js';
 import { PrestigeCutscene } from './PrestigeCutscene.js';
+import { SkillTree } from './SkillTree.js';
 
 export function PrestigePanel() {
   const { t } = useTranslation();
@@ -18,6 +19,7 @@ export function PrestigePanel() {
   const triggerPrestige = useGameStore((s) => s.triggerPrestige);
   const [confirming, setConfirming] = useState(false);
   const [cutscene, setCutscene] = useState<{ seeds: bigint; prestigeNum: number } | null>(null);
+  const [skillTreeOpen, setSkillTreeOpen] = useState(false);
 
   const totalCashBigInt = BigInt(totalCash.floor().toString());
   const seedsAlreadySpent = BigInt(prestigePoints.floor().toString());
@@ -180,6 +182,19 @@ export function PrestigePanel() {
           </p>
         )}
 
+        {/* Bouton Arbre de prestige (toujours visible si on a des graines) */}
+        {prestigePoints.gt(0) && (
+          <button
+            type="button"
+            onClick={() => setSkillTreeOpen(true)}
+            className="pixel-btn pixel-btn-wood"
+            style={{ fontSize: 12, padding: '10px 14px' }}
+          >
+            <StarIcon size={14} />
+            Voir l'arbre de prestige
+          </button>
+        )}
+
         {!confirming ? (
           <button
             type="button"
@@ -214,9 +229,15 @@ export function PrestigePanel() {
         <PrestigeCutscene
           seedsGained={cutscene.seeds}
           totalPrestiges={cutscene.prestigeNum}
-          onComplete={() => setCutscene(null)}
+          onComplete={() => {
+            setCutscene(null);
+            // Apres la cutscene, ouvre l'arbre de prestige.
+            setSkillTreeOpen(true);
+          }}
         />
       )}
+
+      {skillTreeOpen && <SkillTree onClose={() => setSkillTreeOpen(false)} />}
     </aside>
   );
 }

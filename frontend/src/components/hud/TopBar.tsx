@@ -7,7 +7,10 @@ import { useAuth } from '../../hooks/useAuth.js';
 import { CashCounter } from './CashCounter.js';
 import { WeatherBadge } from './WeatherBadge.js';
 import { AudioControls } from './AudioControls.js';
-import { FuelIcon, SeedIcon, RobotLogo } from '../icons/PixelIcon.js';
+import { FuelIcon, SeedIcon, RobotLogo, StarIcon } from '../icons/PixelIcon.js';
+
+// 1 jour de jeu = 60 secondes reelles (matche le day-night-overlay).
+const SECONDS_PER_GAME_DAY = 60;
 
 export function TopBar() {
   const { t } = useTranslation();
@@ -15,6 +18,8 @@ export function TopBar() {
   const { user, logout } = useAuth();
   const gems = useGameStore((s) => s.gems);
   const prestigePoints = useGameStore((s) => s.prestigePoints);
+  const playTime = useGameStore((s) => s.playTimeSeconds);
+  const dayNumber = Math.floor(playTime / SECONDS_PER_GAME_DAY) + 1;
 
   async function handleLogout() {
     await logout();
@@ -51,6 +56,34 @@ export function TopBar() {
         </div>
       </div>
       <div className="flex items-center gap-3 flex-wrap">
+        {/* Day counter "JOUR X" : 1 jour de jeu = 60s reel (sync day-night cycle) */}
+        <div
+          className="flex items-center gap-1.5 px-2 py-1 rounded"
+          style={{
+            background: 'var(--color-wood-5)',
+            border: '2px solid #a87a1f',
+            boxShadow: 'inset 0 -2px 0 rgba(0,0,0,0.3), 0 0 8px rgba(245, 196, 67, 0.2)',
+          }}
+          title={`Jour ${dayNumber}`}
+        >
+          <StarIcon size={14} />
+          <span
+            style={{
+              fontFamily: 'var(--font-button)',
+              fontSize: 9,
+              color: 'var(--color-paper-3)',
+              letterSpacing: '0.12em',
+            }}
+          >
+            JOUR
+          </span>
+          <span
+            className="numeric"
+            style={{ color: 'var(--color-accent-gold)', fontSize: 18, lineHeight: 1 }}
+          >
+            {dayNumber}
+          </span>
+        </div>
         <WeatherBadge />
         <Counter
           icon={<span className="icon-fuel-tangue"><FuelIcon size={16} /></span>}

@@ -76,8 +76,9 @@
   /* TYPOGRAPHIE */
   --font-title: 'Pixelify Sans', 'Press Start 2P', monospace;
   --font-body: 'm6x11plus', 'VT323', monospace;
-  --font-numeric: 'Inter', 'Nunito', system-ui, sans-serif;
+  --font-numeric: 'VT323', 'Inter', monospace;
   --font-button: 'Silkscreen', 'Press Start 2P', monospace;
+  --font-meme: 'Patrick Hand', 'Caveat', cursive;
 
   /* TAILLES (mobile-first 375 px) */
   --text-xs: 12px;
