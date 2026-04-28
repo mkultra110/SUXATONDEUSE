@@ -39,7 +39,7 @@
       "By gosh, I could use some oil."
     ],
     "GAS_MOWER": [
-      "La la la~ ♪ Sunday mowing...",
+      "La la la la la, Sunday mowing...",
       "Vroom vroom, smells like freedom!",
       "A song while working makes it nicer."
     ],
@@ -150,7 +150,7 @@
     "preview": "You will gain:",
     "notEligible": "Reach {{target}} cumulative cash to unlock (currently {{current}}).",
     "action": "Start Spring Mowing",
-    "confirmWarning": "⚠ You will lose all robots, plots and upgrades. Confirm?",
+    "confirmWarning": "Warning: you will lose all robots, plots and upgrades. Confirm?",
     "confirm": "Confirm"
   },
   "achievements": {

@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useAudio } from '../../hooks/useAudio.js';
+import { SoundOnIcon, SoundOffIcon } from '../icons/PixelIcon.js';
 
 export function AudioControls() {
   const { prefs, toggleMute, setSfxVolume, setMusicVolume } = useAudio();
@@ -27,7 +28,7 @@ export function AudioControls() {
           fontSize: '14px',
         }}
       >
-        {prefs.muted ? '🔇' : '🔊'}
+        {prefs.muted ? <SoundOffIcon size={18} /> : <SoundOnIcon size={18} />}
       </button>
 
       {open && (
@@ -96,7 +97,10 @@ export function AudioControls() {
               borderColor: prefs.muted ? '#8b1f1f' : 'var(--color-grass-6)',
             }}
           >
-            {prefs.muted ? '🔇 Active le son' : '🔊 Coupe le son'}
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
+              {prefs.muted ? <SoundOffIcon size={14} /> : <SoundOnIcon size={14} />}
+              {prefs.muted ? 'Active le son' : 'Coupe le son'}
+            </span>
           </button>
 
           <label style={{ fontSize: 11, color: 'var(--color-text-muted)' }}>

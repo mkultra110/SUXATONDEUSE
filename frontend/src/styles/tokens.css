@@ -13,7 +13,7 @@
 }
 
 :root {
-  /* 🌱 HERBE — 7 nuances (jaune-vert clair → vert foncé) */
+  /* HERBE — 7 nuances (jaune-vert clair → vert foncé) */
   --color-grass-1: #d8e89a;
   --color-grass-2: #b8d672;
   --color-grass-3: #8fbf4f;
@@ -22,46 +22,46 @@
   --color-grass-6: #2f6b22;
   --color-grass-7: #1d4a18;
 
-  /* 🟫 TERRE — 5 nuances */
+  /* TERRE — 5 nuances */
   --color-dirt-1: #e8d2a8;
   --color-dirt-2: #c9a576;
   --color-dirt-3: #a37c4f;
   --color-dirt-4: #7a5631;
   --color-dirt-5: #4d3520;
 
-  /* ☁️ CIEL — 4 phases day cycle */
+  /* CIEL — 4 phases day cycle */
   --color-sky-morning: #fde0c4;
   --color-sky-noon: #a8d8f0;
   --color-sky-evening: #f3a87c;
   --color-sky-night: #2a3a6b;
 
-  /* 🪵 BOIS COZY (UI panels) — 5 nuances */
+  /* BOIS COZY (UI panels) — 5 nuances */
   --color-wood-1: #f5e6c8;
   --color-wood-2: #e3c896;
   --color-wood-3: #c49b6a;
   --color-wood-4: #8b6240;
   --color-wood-5: #5c3d24;
 
-  /* 💧 EAU — 3 turquoises pastel */
+  /* EAU — 3 turquoises pastel */
   --color-water-1: #c8ecec;
   --color-water-2: #7ec5c5;
   --color-water-3: #4a96a8;
 
-  /* 🤖 METAL ROBOT — 5 chrome bleute */
+  /* METAL ROBOT — 5 chrome bleute */
   --color-metal-1: #e8eef2;
   --color-metal-2: #b8c4d0;
   --color-metal-3: #8595a8;
   --color-metal-4: #556678;
   --color-metal-5: #2f3a4a;
 
-  /* 🎯 ACCENTS */
+  /* ACCENTS */
   --color-accent-red: #d54c4c;
   --color-accent-gold: #f5c443;
   --color-accent-rose: #f29bb8;
   --color-accent-fuel: #6dbf5c;
   --color-accent-purple: #9b6dc4;
 
-  /* 📜 PAPIER VIEILLI — 4 cremes */
+  /* PAPIER VIEILLI — 4 cremes */
   --color-paper-1: #fff8e7;
   --color-paper-2: #f5e8c8;
   --color-paper-3: #e8d4a3;

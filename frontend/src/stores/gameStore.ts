@@ -197,6 +197,42 @@ export function nextRobotCost(holdings: Record<RobotType, RobotHolding>, type: R
   return new Decimal(cost.toString());
 }
 
+// Cout cumule pour acheter `amount` robots a partir de l'etat courant.
+export function bulkRobotCost(
+  holdings: Record<RobotType, RobotHolding>,
+  type: RobotType,
+  amount: number,
+): Decimal {
+  const tier = getTier(type);
+  const startOwned = holdings[type].owned;
+  let total = new Decimal(0);
+  for (let i = 0; i < amount; i++) {
+    const c = generatorCost(tier.baseCost, tier.costGrowth, startOwned + i);
+    total = total.add(new Decimal(c.toString()));
+  }
+  return total;
+}
+
+// Combien on peut acheter avec son cash actuel (cap a 9999 pour eviter
+// la boucle infinie en cas de cout proche de zero).
+export function maxAffordableRobots(
+  holdings: Record<RobotType, RobotHolding>,
+  type: RobotType,
+  cash: Decimal,
+): number {
+  const tier = getTier(type);
+  const startOwned = holdings[type].owned;
+  let remaining = cash;
+  let count = 0;
+  while (count < 9999) {
+    const c = new Decimal(generatorCost(tier.baseCost, tier.costGrowth, startOwned + count).toString());
+    if (remaining.lt(c)) break;
+    remaining = remaining.sub(c);
+    count++;
+  }
+  return count;
+}
+
 export function nextUpgradeCost(key: UpgradeKey, level: number): Decimal {
   const def = getUpgrade(key);
   const cost = generatorCost(def.baseCost, def.costGrowth, level);

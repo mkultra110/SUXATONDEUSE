@@ -39,7 +39,7 @@
       "Bon sang d'bois, j'aurais besoin d'un peu d'huile."
     ],
     "GAS_MOWER": [
-      "La la la~ ♪ tonte du dimanche...",
+      "La la la la la, tonte du dimanche...",
       "Vroum vroum, ça sent la liberté !",
       "Une chanson en travaillant, c'est plus joli."
     ],
@@ -150,7 +150,7 @@
     "preview": "Vous gagnerez :",
     "notEligible": "Atteignez {{target}} de cash cumulé pour débloquer (actuellement {{current}}).",
     "action": "Lancer la Tonte de Printemps",
-    "confirmWarning": "⚠ Vous allez perdre tous vos robots, parcelles et upgrades. Confirmer ?",
+    "confirmWarning": "Attention : vous allez perdre tous vos robots, parcelles et upgrades. Confirmer ?",
     "confirm": "Confirmer"
   },
   "achievements": {

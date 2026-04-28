@@ -11,7 +11,7 @@ import {
   UPGRADE_DEFINITIONS,
   type UpgradeKey,
 } from '@robomow/shared';
-import { useGameStore, nextRobotCost, nextUpgradeCost } from '../../stores/gameStore.js';
+import { useGameStore, nextRobotCost, nextUpgradeCost, bulkRobotCost, maxAffordableRobots } from '../../stores/gameStore.js';
 import { formatBig } from '../../game/engine/bigNumber.js';
 import { ATLAS_URL, ATLAS_SIZE } from '../garden/Sprite.js';
 import { audio } from '../../services/audio.js';
@@ -29,6 +29,7 @@ import {
 const ALL_TIERS: RobotType[] = ROBOT_TIERS.map((t) => t.type);
 
 type ShopTab = 'robots' | 'upgrades';
+type BulkSize = 1 | 10 | 100 | 'max';
 
 export function ShopPanel() {
   const { t } = useTranslation();
@@ -40,6 +41,7 @@ export function ShopPanel() {
   const buyUpgrade = useGameStore((s) => s.buyUpgrade);
 
   const [tab, setTab] = useState<ShopTab>('robots');
+  const [bulk, setBulk] = useState<BulkSize>(1);
 
   const visibleTiers = ALL_TIERS.filter((type, i) => {
     if (i === 0) return true;
@@ -62,7 +64,7 @@ export function ShopPanel() {
       </header>
 
       {/* Sous-tabs Robots / Ameliorations */}
-      <div className="flex gap-1 p-1 rounded" style={{ background: 'var(--color-wood-4)', border: '2px solid var(--color-wood-5)' }}>
+      <div className="flex gap-1 p-1" style={{ background: 'var(--color-wood-4)', border: '2px solid var(--color-wood-5)' }}>
         <SubTab active={tab === 'robots'} onClick={() => setTab('robots')}>
           Robots
         </SubTab>
@@ -70,6 +72,60 @@ export function ShopPanel() {
           {t('shop.upgrades')}
         </SubTab>
       </div>
+
+      {/* Selecteur multi-buy : x1 / x10 / x100 / xMax. Visible seulement
+          dans l'onglet Robots (les upgrades sont level-by-level). */}
+      {tab === 'robots' && (
+        <div
+          className="flex items-center gap-1 p-1"
+          style={{
+            background: 'var(--color-paper-2)',
+            border: '2px solid var(--color-wood-5)',
+          }}
+        >
+          <span
+            style={{
+              fontFamily: 'var(--font-button)',
+              fontSize: 9,
+              color: 'var(--color-text-muted)',
+              padding: '0 4px',
+              letterSpacing: '0.1em',
+              textTransform: 'uppercase',
+            }}
+          >
+            ACHAT
+          </span>
+          {(['1', '10', '100', 'max'] as const).map((size) => {
+            const value = (size === 'max' ? 'max' : Number(size)) as BulkSize;
+            const isActive = bulk === value;
+            return (
+              <button
+                key={size}
+                type="button"
+                onClick={() => setBulk(value)}
+                style={{
+                  flex: 1,
+                  padding: '5px 8px',
+                  border: '2px solid var(--color-wood-5)',
+                  borderRadius: 0,
+                  cursor: 'pointer',
+                  fontFamily: 'var(--font-title)',
+                  fontWeight: 700,
+                  fontSize: 12,
+                  color: isActive ? 'var(--color-text-title)' : 'var(--color-text-muted)',
+                  background: isActive ? 'var(--color-accent-gold)' : 'var(--color-paper-1)',
+                  boxShadow: isActive
+                    ? 'inset 0 -2px 0 #a87a1f, 0 0 8px rgba(245, 196, 67, 0.5)'
+                    : 'inset 0 -2px 0 var(--color-wood-3)',
+                  transition: 'all 100ms ease-out',
+                }}
+              >
+                {size === 'max' ? 'MAX' : `×${size}`}
+              </button>
+            );
+          })}
+        </div>
+      )}
 
       {/* Body scrollable */}
       <div className="overflow-y-auto pr-1" style={{ maxHeight: 'calc(80vh - 120px)' }}>
@@ -79,21 +135,41 @@ export function ShopPanel() {
               const tier = ROBOT_TIERS.find((tt) => tt.type === type);
               if (!tier) return null;
               const owned = holdings[type].owned;
-              const cost = nextRobotCost(holdings, type);
-              const affordable = cash.gte(cost);
+              // Determiner combien on essaie d'acheter selon le bulk.
+              const desiredAmount =
+                bulk === 'max' ? Math.max(1, maxAffordableRobots(holdings, type, cash)) : bulk;
+              // Cost cumule pour bulk N (utile pour x10/x100), single pour x1.
+              const totalCost =
+                desiredAmount === 1
+                  ? nextRobotCost(holdings, type)
+                  : bulkRobotCost(holdings, type, desiredAmount);
+              const affordableSingle = cash.gte(nextRobotCost(holdings, type));
+              const affordableBulk = cash.gte(totalCost);
+              const buyableNow =
+                bulk === 'max'
+                  ? maxAffordableRobots(holdings, type, cash)
+                  : affordableBulk
+                    ? desiredAmount
+                    : 0;
               return (
                 <ShopCard
                   key={type}
-                  affordable={affordable}
+                  affordable={affordableSingle && buyableNow > 0}
                   badge={owned > 0 ? `×${owned}` : null}
                   art={<RobotArt tier={tier.index} />}
                   name={t(`robotNicknames.${type}`, tier.name)}
-                  rate={t(`robotPersonalities.${type}`, `+${tier.baseGrassPerSecond}/s`)}
-                  cost={cost}
+                  rate={
+                    buyableNow > 1
+                      ? `Acheter ×${buyableNow}`
+                      : t(`robotPersonalities.${type}`, `+${tier.baseGrassPerSecond}/s`)
+                  }
+                  cost={buyableNow > 0 ? totalCost : nextRobotCost(holdings, type)}
                   onClick={() => {
-                    if (affordable) {
+                    if (buyableNow > 0) {
                       audio.playPurchase();
-                      buyRobot(type);
+                      for (let i = 0; i < buyableNow; i++) {
+                        buyRobot(type);
+                      }
                     } else {
                       audio.playError();
                     }

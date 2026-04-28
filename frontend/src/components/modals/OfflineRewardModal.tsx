@@ -4,6 +4,7 @@ import Decimal from 'break_infinity.js';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { formatBig } from '../../game/engine/bigNumber.js';
+import { CoinIcon } from '../icons/PixelIcon.js';
 
 interface Props {
   durationSeconds: number;
@@ -48,8 +49,9 @@ export function OfflineRewardModal({ durationSeconds, cashEarned, onAcknowledge 
         </p>
         <div className="flex flex-col items-center gap-1 panel bg-grass-shadow p-4">
           <span className="text-sm text-panel-paper">{t('game.offlineRewards.earned')}</span>
-          <span className="text-3xl font-bold text-accent-gold tabular-nums">
-            🪙 {formatBig(animatedValue)}
+          <span className="flex items-center gap-2 text-3xl font-bold text-accent-gold numeric">
+            <CoinIcon size={28} />
+            {formatBig(animatedValue)}
           </span>
         </div>
         <button onClick={onAcknowledge} className="btn btn-primary w-full text-lg">

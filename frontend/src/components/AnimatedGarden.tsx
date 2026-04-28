@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 import type { RobotType } from '@robomow/shared';
 import { useGameStore } from '../stores/gameStore.js';
 import { audio } from '../services/audio.js';
-import { LadybugIcon, LanternIcon, PomponIcon, ScarecrowIcon } from './icons/PixelIcon.js';
+import { LadybugIcon, LanternIcon, PomponIcon, ScarecrowIcon, CoinIcon, IconGear } from './icons/PixelIcon.js';
 import { SpeechBubble } from './hud/SpeechBubble.js';
 import i18next from 'i18next';
 import {
@@ -25,6 +25,9 @@ const SCALE = 3;
 const TILE = 16 * SCALE;
 const COLS = 14;
 const ROWS = 8;
+// Robots a scale 2 (48px = 1 tuile) au lieu de 3 (72px = 1.5 tuile).
+// Plus credible top-down, aligne sur la grille des sprites de terrain.
+const ROBOT_SCALE = 2;
 
 const TICK_MS = 80;
 const ROBOT_SPEED = 0.05; // tuiles par tick
@@ -55,6 +58,9 @@ interface RobotEntity {
   y: number;
   targetX: number;
   targetY: number;
+  // Waypoints BFS : robot avance d'une tuile a la fois en suivant
+  // ce chemin pour eviter les obstacles. Vide quand arrive a destination.
+  path: Array<{ x: number; y: number }>;
   state: 'walking' | 'mowing';
   dir: 'left' | 'right' | 'up' | 'down';
   mowTicksLeft: number;
@@ -77,24 +83,93 @@ const ROBOT_TIER_INDEX: Record<RobotType, number> = {
 
 // Carte de la ferme : '.' herbe, ',' herbe haute, '#' chemin, 'd' terre,
 // 'F' cloture, 'H' maison, 'T' arbre, 'B' buisson, 'S' panneau, 'W' puits.
+// Layout aere : maison en haut-gauche, parcelles cultivees au centre,
+// chemin diagonale, herbe haute repartie sur tous les bords.
 const FARM_MAP: string[] = [
-  '..,..T..,.....',
-  '.HHH.,..T.B..,',
-  '.HHH...........',
-  '..S.dddd...,..',
-  '..#.dddd..T..,',
-  ',.#.FFFF..B..,',
-  '.,#......W...,',
+  '.,...........,',
+  '.HHH..,......,',
+  '.HHH.#.....,..',
+  '.....#.dddd...',
+  '.,...#.dddd..,',
+  ',....#.FFFF...',
+  '.,...#......,.',
   ',..,.,..,..,..',
 ];
 
 // Tuiles bloquees pour la nav des robots (maison, arbres, cloture, etc.).
 const BLOCKED_CHARS = new Set(['H', 'T', 'B', 'F', 'W', 'S']);
 
+// Tuiles occupees par les decors places en absolu via <DecorAt> ou
+// composants dedies. Doit rester synchro avec les positions JSX plus bas.
+// Format : [x, y, width, height] en tuiles.
+const BLOCKED_DECOR_TILES: ReadonlyArray<readonly [number, number, number, number]> = [
+  [5, 0, 1, 2],   // TREE_A en (5.5, 0.0)
+  [11, 0, 1, 2],  // TREE_B en (11.4, 0.4)
+  [0, 5, 1, 2],   // TREE_C en (0.5, 5.5)
+  [2, 6, 1, 2],   // TREE_A en (2.8, 6.6)
+  [4, 1, 1, 1],   // BUSH_BERRY en (4.0, 1.8)
+  [11, 5, 1, 1],  // BUSH_FLOWER en (11.4, 5.4)
+  [6, 2, 1, 2],   // SIGNPOST en (6.0, 2.5)
+  [11, 2, 2, 2],  // WELL en (11.5, 2.5) - 32x32 = 2 tuiles
+  [12, 4, 1, 2],  // SCARECROW en (12.6, 4.0)
+];
+
 function isBlocked(x: number, y: number): boolean {
   if (x < 0 || x >= COLS || y < 0 || y >= ROWS) return true;
   const ch = FARM_MAP[y]?.[x];
-  return !!ch && BLOCKED_CHARS.has(ch);
+  if (ch && BLOCKED_CHARS.has(ch)) return true;
+  for (const [bx, by, bw, bh] of BLOCKED_DECOR_TILES) {
+    if (x >= bx && x < bx + bw && y >= by && y < by + bh) return true;
+  }
+  return false;
+}
+
+// BFS pathfinding 4-connexe (haut/bas/gauche/droite, pas de diagonales
+// pour eviter les coupes a travers les coins de blocs).
+// Retourne le chemin de waypoints (excluant start) ou null si pas joignable.
+function bfsPath(
+  sx: number,
+  sy: number,
+  tx: number,
+  ty: number,
+): Array<{ x: number; y: number }> | null {
+  if (sx === tx && sy === ty) return [];
+  const start = `${sx},${sy}`;
+  const target = `${tx},${ty}`;
+  const visited = new Set<string>([start]);
+  const parent = new Map<string, string>();
+  const queue: Array<[number, number]> = [[sx, sy]];
+  while (queue.length > 0) {
+    const [cx, cy] = queue.shift()!;
+    if (cx === tx && cy === ty) break;
+    for (const [dx, dy] of [
+      [1, 0],
+      [-1, 0],
+      [0, 1],
+      [0, -1],
+    ] as const) {
+      const nx = cx + dx;
+      const ny = cy + dy;
+      const key = `${nx},${ny}`;
+      if (visited.has(key)) continue;
+      if (isBlocked(nx, ny)) continue;
+      visited.add(key);
+      parent.set(key, `${cx},${cy}`);
+      queue.push([nx, ny]);
+    }
+  }
+  if (!parent.has(target) && start !== target) return null;
+  // Remonte le chemin.
+  const path: Array<{ x: number; y: number }> = [];
+  let cur = target;
+  while (cur !== start) {
+    const [x, y] = cur.split(',').map(Number) as [number, number];
+    path.unshift({ x, y });
+    const p = parent.get(cur);
+    if (!p) return null;
+    cur = p;
+  }
+  return path;
 }
 
 // Liste initiale des tuiles d'herbe haute depuis FARM_MAP.
@@ -108,12 +183,6 @@ function initialTallGrass(): Set<string> {
   return set;
 }
 
-function pickRandomTallGrass(set: Set<string>, except?: string): string | null {
-  const arr = Array.from(set).filter((k) => k !== except);
-  if (arr.length === 0) return null;
-  return arr[Math.floor(Math.random() * arr.length)] ?? null;
-}
-
 function pickRandomFreeTile(): { x: number; y: number } {
   for (let i = 0; i < 30; i++) {
     const x = Math.floor(Math.random() * COLS);
@@ -121,6 +190,53 @@ function pickRandomFreeTile(): { x: number; y: number } {
     if (!isBlocked(x, y)) return { x, y };
   }
   return { x: 6, y: 4 };
+}
+
+// Helper : assigne une nouvelle cible au robot avec chemin BFS.
+// Priorite herbe haute reachable, sinon tuile libre random.
+function assignNewTarget(robot: RobotEntity, grass: Set<string>): void {
+  const sx = Math.round(robot.x);
+  const sy = Math.round(robot.y);
+  // Cherche une herbe haute reachable.
+  const grassList = Array.from(grass);
+  // Shuffle pour eviter le pattern "tjs la meme tuile".
+  for (let i = grassList.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [grassList[i], grassList[j]] = [grassList[j]!, grassList[i]!];
+  }
+  for (const k of grassList) {
+    const [tx, ty] = k.split(',').map(Number) as [number, number];
+    if (isBlocked(tx, ty)) continue;
+    const path = bfsPath(sx, sy, tx, ty);
+    if (path && path.length > 0) {
+      robot.targetX = tx;
+      robot.targetY = ty;
+      robot.path = path;
+      return;
+    }
+    // Si target = current cell et c'est de l'herbe haute, on a deja gagne.
+    if (sx === tx && sy === ty) {
+      robot.targetX = tx;
+      robot.targetY = ty;
+      robot.path = [];
+      return;
+    }
+  }
+  // Pas d'herbe reachable : marche aleatoire.
+  for (let i = 0; i < 12; i++) {
+    const t = pickRandomFreeTile();
+    const path = bfsPath(sx, sy, t.x, t.y);
+    if (path) {
+      robot.targetX = t.x;
+      robot.targetY = t.y;
+      robot.path = path;
+      return;
+    }
+  }
+  // Fallback : reste sur place.
+  robot.targetX = sx;
+  robot.targetY = sy;
+  robot.path = [];
 }
 
 export function AnimatedGarden() {
@@ -182,6 +298,7 @@ export function AnimatedGarden() {
             y,
             targetX: x,
             targetY: y,
+            path: [],
             state: 'walking',
             dir: 'right',
             mowTicksLeft: 0,
@@ -247,70 +364,73 @@ export function AnimatedGarden() {
                 setTimeout(() => {
                   setBursts((prev) => prev.filter((f) => f.id !== id));
                 }, 600);
-                // Floating number "+5" en pourcentage du conteneur.
+                // Floating number = cash reellement gagne pendant la duree
+                // de la tonte (MOW_TICKS * TICK_MS / 1000), reparti sur tous
+                // les robots qui tondent en parallele. Sync avec cashPerSecond.
                 idRef.current += 1;
                 const fnId = idRef.current;
                 const xPct = ((tx + 0.5) / COLS) * 100;
                 const yPct = ((ty + 0.3) / ROWS) * 100;
                 const vx = (Math.random() - 0.5) * 30;
-                const reward = 5 + Math.floor(robot.tier * 1.5);
-                setFloatingNums((prev) => [...prev, { id: fnId, x: xPct, y: yPct, n: reward, vx }].slice(-8));
+                const cps = useGameStore.getState().cashPerSecond;
+                const mowDurationSec = (MOW_TICKS * TICK_MS) / 1000;
+                const robotShare = Math.max(1, prevRobots.length);
+                const earnedDecimal = cps.mul(mowDurationSec).div(robotShare);
+                // Format compact pour que l'affichage reste lisible.
+                const earned = earnedDecimal.gte(1)
+                  ? Math.max(1, Math.round(Number(earnedDecimal.toString())))
+                  : Number(earnedDecimal.toString().slice(0, 6));
+                setFloatingNums((prev) => [
+                  ...prev,
+                  { id: fnId, x: xPct, y: yPct, n: earned, vx },
+                ].slice(-8));
                 setTimeout(() => {
                   setFloatingNums((prev) => prev.filter((f) => f.id !== fnId));
                 }, 1100);
               }
-              // Choisit nouvelle cible.
-              const nextTarget = pickRandomTallGrass(grassRef);
-              if (nextTarget) {
-                const [tx, ty] = nextTarget.split(',').map(Number) as [number, number];
-                robot.targetX = tx;
-                robot.targetY = ty;
-              } else {
-                const t = pickRandomFreeTile();
-                robot.targetX = t.x;
-                robot.targetY = t.y;
-              }
+              // Choisit nouvelle cible + chemin BFS.
+              assignNewTarget(robot, grassRef);
               robot.state = 'walking';
               robot.walkFrame = 0;
             }
             return robot;
           }
 
-          // Walking : avance vers la cible.
-          const dx = robot.targetX - robot.x;
-          const dy = robot.targetY - robot.y;
-          const dist = Math.hypot(dx, dy);
-          if (dist < 0.08) {
-            // Arrivee.
-            robot.x = robot.targetX;
-            robot.y = robot.targetY;
+          // Walking : avance vers le prochain waypoint du chemin.
+          // Si chemin vide ou destination atteinte, repique une cible.
+          if (robot.path.length === 0) {
+            // Pas de chemin = arrive ou stuck. Si on est sur de l'herbe haute → tonte.
             const key = `${Math.round(robot.x)},${Math.round(robot.y)}`;
             if (grassRef.has(key)) {
               robot.state = 'mowing';
               robot.mowTicksLeft = MOW_TICKS;
               robot.walkFrame = 0;
+              robot.targetX = Math.round(robot.x);
+              robot.targetY = Math.round(robot.y);
             } else {
-              // Pas d'herbe ici (cible obsolete) : repick.
-              const nextTarget = pickRandomTallGrass(grassRef);
-              if (nextTarget) {
-                const [tx, ty] = nextTarget.split(',').map(Number) as [number, number];
-                robot.targetX = tx;
-                robot.targetY = ty;
-              } else {
-                const t = pickRandomFreeTile();
-                robot.targetX = t.x;
-                robot.targetY = t.y;
-              }
+              assignNewTarget(robot, grassRef);
             }
             return robot;
           }
 
-          // Avance proportionnelle.
+          const next = robot.path[0]!;
+          const dx = next.x - robot.x;
+          const dy = next.y - robot.y;
+          const dist = Math.hypot(dx, dy);
+
+          if (dist < 0.08) {
+            // Waypoint atteint : on snap et on consomme.
+            robot.x = next.x;
+            robot.y = next.y;
+            robot.path = robot.path.slice(1);
+            return robot;
+          }
+
           const step = ROBOT_SPEED * robot.speedMul;
           const move = Math.min(step, dist);
           robot.x += (dx / dist) * move;
           robot.y += (dy / dist) * move;
-          // Direction principale.
+          // Direction = waypoint suivant (cardinal pur car BFS 4-connexe).
           if (Math.abs(dx) > Math.abs(dy)) {
             robot.dir = dx > 0 ? 'right' : 'left';
           } else {
@@ -329,16 +449,14 @@ export function AnimatedGarden() {
     return () => clearInterval(interval);
   }, [robots.length, tallGrass]);
 
-  // Si nouveau robot ajoute mais sans cible, l'envoie sur l'herbe haute.
+  // Si nouveau robot ajoute mais sans cible/path, lui calcule un BFS.
   useEffect(() => {
     setRobots((prev) =>
       prev.map((r) => {
-        if (r.targetX === r.x && r.targetY === r.y) {
-          const t = pickRandomTallGrass(tallGrass);
-          if (t) {
-            const [tx, ty] = t.split(',').map(Number) as [number, number];
-            return { ...r, targetX: tx, targetY: ty };
-          }
+        if (r.path.length === 0 && r.targetX === r.x && r.targetY === r.y) {
+          const next = { ...r };
+          assignNewTarget(next, tallGrass);
+          return next;
         }
         return r;
       }),
@@ -516,20 +634,21 @@ export function AnimatedGarden() {
           <LanternIcon size={28} />
         </div>
 
-        {/* Arbres */}
-        <DecorAt x={5} y={0.2} sprite={DECOR.TREE_A} z={6} sway />
-        <DecorAt x={9} y={1.2} sprite={DECOR.TREE_B} z={6} sway />
-        <DecorAt x={11} y={4.0} sprite={DECOR.TREE_C} z={6} sway />
-        <DecorAt x={1} y={6.0} sprite={DECOR.TREE_A} z={6} sway />
+        {/* Arbres : repartis aux 4 coins/bords */}
+        <DecorAt x={5.5} y={0.0} sprite={DECOR.TREE_A} z={6} sway />
+        <DecorAt x={11.4} y={0.4} sprite={DECOR.TREE_B} z={6} sway />
+        <DecorAt x={0.5} y={5.5} sprite={DECOR.TREE_C} z={6} sway />
+        <DecorAt x={2.8} y={6.6} sprite={DECOR.TREE_A} z={6} sway />
 
         {/* Buissons */}
-        <DecorAt x={9.5} y={2.2} sprite={DECOR.BUSH_BERRY} z={4} />
-        <DecorAt x={10} y={5.2} sprite={DECOR.BUSH_FLOWER} z={4} />
-        <DecorAt x={2.2} y={3.4} sprite={DECOR.SIGNPOST} z={5} />
-        <AnimatedWell x={7} y={6} />
+        <DecorAt x={4.0} y={1.8} sprite={DECOR.BUSH_BERRY} z={4} />
+        <DecorAt x={11.4} y={5.4} sprite={DECOR.BUSH_FLOWER} z={4} />
+        <DecorAt x={6.0} y={2.5} sprite={DECOR.SIGNPOST} z={5} />
+        <AnimatedWell x={11.5} y={2.5} />
 
-        <CropRow x={4} y={3} count={4} colorIdx={0} />
-        <CropRow x={4} y={4} count={4} colorIdx={1} />
+        {/* Crops dans les rangees de terre (cols 7-10, rangs 3-4) */}
+        <CropRow x={7} y={3} count={4} colorIdx={0} />
+        <CropRow x={7} y={4} count={4} colorIdx={1} />
 
         {/* Robots dynamiques */}
         {robots.length > 0 ? (
@@ -598,13 +717,14 @@ export function AnimatedGarden() {
           <LadybugIcon size={16} />
         </div>
 
-        {/* Epouvantail (Camille v9) : tete qui tourne vers le curseur. */}
+        {/* Epouvantail (Camille v9) : tete qui tourne vers le curseur. Plus
+            petit (40px) pour ne pas dominer la scene. */}
         <div
           className="farm-scarecrow"
           style={
             {
-              left: 12.2 * TILE,
-              top: 4.5 * TILE,
+              left: 12.6 * TILE,
+              top: 4.0 * TILE,
               ['--head-rot' as string]: `${scarecrowHeadRot}deg`,
               cursor: 'pointer',
               pointerEvents: 'auto',
@@ -613,10 +733,10 @@ export function AnimatedGarden() {
           title="Épouvantail"
           onClick={(e) => {
             e.stopPropagation();
-            handleEasterEgg(12.2 * TILE + 28, 4.5 * TILE, 'scarecrow');
+            handleEasterEgg(12.6 * TILE + 20, 4.0 * TILE, 'scarecrow');
           }}
         >
-          <ScarecrowIcon size={56} />
+          <ScarecrowIcon size={40} />
         </div>
 
         {blades.map((b) => (
@@ -637,10 +757,15 @@ export function AnimatedGarden() {
         ))}
         {coins.map((c) => (
           <span key={c.id} className="farm-coin-particle" style={{ left: `${c.x}%`, top: `${c.y}%` }}>
-            🪙
+            <CoinIcon size={20} />
           </span>
         ))}
-        {cashPerSecond.gt(0) && <div className="farm-prod-indicator">⚙ Auto-tonte</div>}
+        {cashPerSecond.gt(0) && (
+          <div className="farm-prod-indicator">
+            <IconGear size={12} />
+            <span style={{ marginLeft: 4 }}>Auto-tonte</span>
+          </div>
+        )}
 
         {/* Speech bubbles (robots quotes + easter eggs) */}
         {bubbles.map((b) => (
@@ -833,17 +958,21 @@ function DynamicRobot({ robot, onTap }: { robot: RobotEntity; onTap?: (r: RobotE
   const sx = (colBase + frame) * ROBOT_SIZE;
   const sy = rowY;
 
-  // Centre la sprite sur la tuile (24×24 vs tuile 16×16 → decalage -4 native).
-  const left = robot.x * TILE - 4 * SCALE;
-  const top = robot.y * TILE - 8 * SCALE;
+  // Centre la sprite robot 24×24 sur la tuile 16×16 :
+  // - Robot affiche a ROBOT_SCALE = 2 (48px), tuile a SCALE = 3 (48px).
+  // - Decalage horizontal pour centrer : (TILE - 24*ROBOT_SCALE) / 2 = 0px.
+  // - Decalage vertical : on remonte la sprite de 4*ROBOT_SCALE pour que les
+  //   pieds touchent le sol de la tuile.
+  const left = robot.x * TILE;
+  const top = robot.y * TILE - 4 * ROBOT_SCALE;
 
-  // Lame rotative sous le robot (frames mowing.png).
+  // Lame rotative sous le robot (frames mowing.png) - aussi a ROBOT_SCALE.
   const bladeFrame = robot.walkFrame % MOWING.BLADE_FRAMES;
-  const bladeBgX = (MOWING.BLADE_X + bladeFrame * MOWING.BLADE_W) * SCALE;
+  const bladeBgX = (MOWING.BLADE_X + bladeFrame * MOWING.BLADE_W) * ROBOT_SCALE;
 
   // Indicateur "active" au-dessus du robot pendant la tonte.
   const activeFrame = Math.floor(robot.walkFrame / 2) % MOWING.ACTIVE_FRAMES;
-  const activeBgX = (MOWING.ACTIVE_X + activeFrame * MOWING.ACTIVE_W) * SCALE;
+  const activeBgX = (MOWING.ACTIVE_X + activeFrame * MOWING.ACTIVE_W) * ROBOT_SCALE;
 
   return (
     <>
@@ -853,16 +982,15 @@ function DynamicRobot({ robot, onTap }: { robot: RobotEntity; onTap?: (r: RobotE
           style={{
             position: 'absolute',
             left: robot.x * TILE,
-            top: robot.y * TILE + 14 * SCALE,
-            width: MOWING.BLADE_W * SCALE,
-            height: MOWING.BLADE_H * SCALE,
+            top: robot.y * TILE + (ROBOT_SIZE - 4) * ROBOT_SCALE,
+            width: MOWING.BLADE_W * ROBOT_SCALE,
+            height: MOWING.BLADE_H * ROBOT_SCALE,
             backgroundImage: `url(${ATLAS_URL.mowing})`,
             backgroundRepeat: 'no-repeat',
-            backgroundSize: `${ATLAS_SIZE.mowing[0] * SCALE}px ${ATLAS_SIZE.mowing[1] * SCALE}px`,
-            backgroundPosition: `-${bladeBgX}px -${MOWING.BLADE_Y * SCALE}px`,
+            backgroundSize: `${ATLAS_SIZE.mowing[0] * ROBOT_SCALE}px ${ATLAS_SIZE.mowing[1] * ROBOT_SCALE}px`,
+            backgroundPosition: `-${bladeBgX}px -${MOWING.BLADE_Y * ROBOT_SCALE}px`,
             imageRendering: 'pixelated',
             zIndex: 9,
-            transform: 'translateX(-4px)',
             filter: 'drop-shadow(0 0 4px rgba(255,255,255,0.6))',
           }}
         />
@@ -878,12 +1006,12 @@ function DynamicRobot({ robot, onTap }: { robot: RobotEntity; onTap?: (r: RobotE
           position: 'absolute',
           left,
           top,
-          width: ROBOT_SIZE * SCALE,
-          height: ROBOT_SIZE * SCALE,
+          width: ROBOT_SIZE * ROBOT_SCALE,
+          height: ROBOT_SIZE * ROBOT_SCALE,
           backgroundImage: `url(${ATLAS_URL.robots})`,
           backgroundRepeat: 'no-repeat',
-          backgroundSize: `${ATLAS_SIZE.robots[0] * SCALE}px ${ATLAS_SIZE.robots[1] * SCALE}px`,
-          backgroundPosition: `-${sx * SCALE}px -${sy * SCALE}px`,
+          backgroundSize: `${ATLAS_SIZE.robots[0] * ROBOT_SCALE}px ${ATLAS_SIZE.robots[1] * ROBOT_SCALE}px`,
+          backgroundPosition: `-${sx * ROBOT_SCALE}px -${sy * ROBOT_SCALE}px`,
           imageRendering: 'pixelated',
           zIndex: 10,
           transition: 'left 80ms linear, top 80ms linear',
@@ -899,13 +1027,13 @@ function DynamicRobot({ robot, onTap }: { robot: RobotEntity; onTap?: (r: RobotE
           style={{
             position: 'absolute',
             left: robot.x * TILE,
-            top: robot.y * TILE - 18 * SCALE,
-            width: MOWING.ACTIVE_W * SCALE,
-            height: MOWING.ACTIVE_H * SCALE,
+            top: robot.y * TILE - 12 * ROBOT_SCALE,
+            width: MOWING.ACTIVE_W * ROBOT_SCALE,
+            height: MOWING.ACTIVE_H * ROBOT_SCALE,
             backgroundImage: `url(${ATLAS_URL.mowing})`,
             backgroundRepeat: 'no-repeat',
-            backgroundSize: `${ATLAS_SIZE.mowing[0] * SCALE}px ${ATLAS_SIZE.mowing[1] * SCALE}px`,
-            backgroundPosition: `-${activeBgX}px -${MOWING.ACTIVE_Y * SCALE}px`,
+            backgroundSize: `${ATLAS_SIZE.mowing[0] * ROBOT_SCALE}px ${ATLAS_SIZE.mowing[1] * ROBOT_SCALE}px`,
+            backgroundPosition: `-${activeBgX}px -${MOWING.ACTIVE_Y * ROBOT_SCALE}px`,
             imageRendering: 'pixelated',
             zIndex: 11,
             animation: 'active-bob 0.5s ease-in-out infinite',

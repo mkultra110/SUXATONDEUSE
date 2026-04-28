@@ -545,6 +545,70 @@ export function LeafIcon({ size = 16, className, style, title }: IconProps) {
   );
 }
 
+// Note de musique pixel-art (16×16) avec hampe + drapeau, palette gold
+// pour ressembler clairement a un sprite jeu et pas a l'emoji systeme.
+export function SoundOnIcon({ size = 16, className, style, title }: IconProps) {
+  return (
+    <svg viewBox="0 0 16 16" shapeRendering="crispEdges" className={className} style={pixelStyle(size, style)} role={title ? 'img' : undefined} aria-label={title}>
+      {/* Hampe verticale */}
+      <rect x="9" y="2" width="2" height="9" fill="#5c3d24" />
+      {/* Drapeau de la note */}
+      <rect x="11" y="2" width="3" height="2" fill="#5c3d24" />
+      <rect x="11" y="3" width="3" height="1" fill="#FFD921" />
+      <rect x="13" y="2" width="1" height="4" fill="#5c3d24" />
+      <rect x="13" y="3" width="1" height="3" fill="#FFD921" />
+      {/* Tete de note (ovale) */}
+      <rect x="4" y="9" width="6" height="1" fill="#5c3d24" />
+      <rect x="3" y="10" width="8" height="3" fill="#5c3d24" />
+      <rect x="4" y="13" width="6" height="1" fill="#5c3d24" />
+      <rect x="4" y="10" width="6" height="3" fill="#FFD921" />
+      <rect x="5" y="11" width="2" height="1" fill="#fde08a" />
+    </svg>
+  );
+}
+
+// Note de musique barree d'une croix rouge pour 'mute'.
+export function SoundOffIcon({ size = 16, className, style, title }: IconProps) {
+  return (
+    <svg viewBox="0 0 16 16" shapeRendering="crispEdges" className={className} style={pixelStyle(size, style)} role={title ? 'img' : undefined} aria-label={title}>
+      {/* Note grisee */}
+      <rect x="9" y="2" width="2" height="9" fill="#5c3d24" />
+      <rect x="11" y="2" width="3" height="2" fill="#5c3d24" />
+      <rect x="13" y="2" width="1" height="4" fill="#5c3d24" />
+      <rect x="11" y="3" width="3" height="1" fill="#A57144" />
+      <rect x="13" y="3" width="1" height="3" fill="#A57144" />
+      <rect x="4" y="9" width="6" height="1" fill="#5c3d24" />
+      <rect x="3" y="10" width="8" height="3" fill="#5c3d24" />
+      <rect x="4" y="13" width="6" height="1" fill="#5c3d24" />
+      <rect x="4" y="10" width="6" height="3" fill="#A57144" />
+      {/* Croix rouge diagonale par-dessus */}
+      <rect x="1" y="1" width="2" height="2" fill="#d54c4c" />
+      <rect x="3" y="3" width="2" height="2" fill="#d54c4c" />
+      <rect x="5" y="5" width="2" height="2" fill="#d54c4c" />
+      <rect x="7" y="7" width="2" height="2" fill="#d54c4c" />
+      <rect x="9" y="9" width="2" height="2" fill="#d54c4c" />
+      <rect x="11" y="11" width="2" height="2" fill="#d54c4c" />
+      <rect x="13" y="13" width="2" height="2" fill="#d54c4c" />
+    </svg>
+  );
+}
+
+// Cadenas grand format pour ecran d'invite (32×32).
+export function BigLockIcon({ size = 64, className, style, title }: IconProps) {
+  return (
+    <svg viewBox="0 0 16 16" shapeRendering="crispEdges" className={className} style={pixelStyle(size, style)} role={title ? 'img' : undefined} aria-label={title}>
+      <rect x="5" y="2" width="6" height="2" fill="#5c3d24" />
+      <rect x="4" y="3" width="2" height="4" fill="#5c3d24" />
+      <rect x="10" y="3" width="2" height="4" fill="#5c3d24" />
+      <rect x="3" y="7" width="10" height="7" fill="#c49b6a" />
+      <rect x="3" y="7" width="10" height="2" fill="#f5e6c8" />
+      <rect x="3" y="13" width="10" height="1" fill="#5c3d24" />
+      <rect x="7" y="9" width="2" height="3" fill="#5c3d24" />
+      <rect x="7" y="11" width="2" height="2" fill="#FFD921" />
+    </svg>
+  );
+}
+
 // Pompon le chat : chat tigre orange-blanc qui dort, vu de profil (24×12).
 // Easter egg cozy a placer sur le toit de la maison.
 export function PomponIcon({ size = 32, className, style, title }: IconProps) {
