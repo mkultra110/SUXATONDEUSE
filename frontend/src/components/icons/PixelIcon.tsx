@@ -365,3 +365,32 @@ export function RobotLogo({ size = 24, className, style, title }: IconProps) {
     </svg>
   );
 }
+
+// Lanterne suspendue (16×16) : structure metal + flamme jaune chaud.
+// Halo gold via CSS box-shadow + animation flicker irregulier.
+export function LanternIcon({ size = 24, className, style, title }: IconProps) {
+  return (
+    <svg viewBox="0 0 16 16" shapeRendering="crispEdges" className={className} style={pixelStyle(size, style)} role={title ? 'img' : undefined} aria-label={title}>
+      {/* anneau de suspension */}
+      <rect x="7" y="0" width="2" height="2" fill="#3A1F08" />
+      <rect x="7" y="2" width="2" height="1" fill="#6B3710" />
+      {/* chapeau */}
+      <rect x="4" y="3" width="8" height="2" fill="#3A1F08" />
+      <rect x="5" y="2" width="6" height="1" fill="#6B3710" />
+      {/* corps cage */}
+      <rect x="3" y="5" width="1" height="7" fill="#3A1F08" />
+      <rect x="12" y="5" width="1" height="7" fill="#3A1F08" />
+      <rect x="4" y="5" width="8" height="7" fill="#FFE4A0" />
+      <rect x="6" y="5" width="1" height="7" fill="#3A1F08" />
+      <rect x="9" y="5" width="1" height="7" fill="#3A1F08" />
+      {/* flamme jaune chaude */}
+      <rect x="7" y="6" width="2" height="4" fill="#FFD921" />
+      <rect x="7" y="7" width="2" height="2" fill="#F5F5DC" />
+      <rect x="6" y="8" width="1" height="2" fill="#FFD921" />
+      <rect x="9" y="8" width="1" height="2" fill="#FFD921" />
+      {/* base */}
+      <rect x="4" y="12" width="8" height="1" fill="#6B3710" />
+      <rect x="5" y="13" width="6" height="1" fill="#3A1F08" />
+    </svg>
+  );
+}
