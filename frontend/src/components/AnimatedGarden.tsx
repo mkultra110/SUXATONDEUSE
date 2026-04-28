@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 import type { RobotType } from '@robomow/shared';
 import { useGameStore } from '../stores/gameStore.js';
 import { audio } from '../services/audio.js';
-import { LadybugIcon, LanternIcon } from './icons/PixelIcon.js';
+import { LadybugIcon, LanternIcon, PomponIcon } from './icons/PixelIcon.js';
 import {
   Sprite,
   ATLAS_URL,
@@ -422,10 +422,13 @@ export function AnimatedGarden() {
           return <TallGrass key={`tg${key}`} x={x} y={y} />;
         })}
 
-        {/* Maison + lanterne suspendue (flicker irregulier 16/31/53/79%) */}
+        {/* Maison + Pompon le chat sur le toit + lanterne suspendue */}
         <div style={{ position: 'absolute', left: 0.6 * TILE, top: 0.4 * TILE, zIndex: 5 }}>
           <Sprite atlas="decor" {...DECOR.HOUSE} scale={SCALE} />
           <span className="house-smoke" />
+        </div>
+        <div className="farm-pompon" title="Pompon le chat" style={{ left: 1.2 * TILE, top: 0.55 * TILE }}>
+          <PomponIcon size={42} />
         </div>
         <div className="farm-lantern" style={{ left: 3.6 * TILE, top: 1.1 * TILE, transformOrigin: '50% 0' }}>
           <LanternIcon size={28} />

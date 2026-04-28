@@ -409,6 +409,21 @@
   50% { transform: translateY(-3px); }
 }
 
+/* Pompon le chat sur le toit : easter egg Camille v9. Dort en respirant
+   (scaleY ±2% sur 2.4s) et la queue bouge legerement. */
+.farm-pompon {
+  position: absolute;
+  z-index: 7;
+  pointer-events: none;
+  animation: pompon-breathe 2.4s ease-in-out infinite;
+  transform-origin: bottom center;
+  filter: drop-shadow(0 1px 0 rgba(0,0,0,0.4));
+}
+@keyframes pompon-breathe {
+  0%, 100% { transform: scaleY(1); }
+  50% { transform: scaleY(0.96) translateY(1px); }
+}
+
 /* Lanterne suspendue avec flicker irregulier (signature Margaux v8) :
    timing volontairement non-symetrique 16/31/53/79% pour eviter
    l'aspect mecanique d'une animation reguliere. */

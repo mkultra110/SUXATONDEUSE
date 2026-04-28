@@ -3,6 +3,38 @@
     "title": "SUXA TONDEUSE",
     "tagline": "Bâtissez votre empire de robots tondeuses"
   },
+  "robotNicknames": {
+    "HAND_SHEARS": "Marcel",
+    "PUSH_MOWER": "Hubert",
+    "GAS_MOWER": "Gisèle",
+    "ELECTRIC_MOWER": "Roger",
+    "ROBOMOW_V1": "Solange",
+    "NAVIBOT": "Bernadette",
+    "HELIOCUT": "Robert",
+    "MEGAMOWER": "Yvette",
+    "AEROMOW": "Maurice",
+    "NANOSWARM": "Léopold"
+  },
+  "robotPersonalities": {
+    "HAND_SHEARS": "Le doyen, fidèle au poste depuis 1962",
+    "PUSH_MOWER": "Râleur mais efficace",
+    "GAS_MOWER": "Chante en travaillant",
+    "ELECTRIC_MOWER": "Passionné de pétanque",
+    "ROBOMOW_V1": "Tricote pendant les pauses",
+    "NAVIBOT": "Tarte aux pommes le dimanche",
+    "HELIOCUT": "Moustache en guidon",
+    "MEGAMOWER": "Chapeau de paille toujours",
+    "AEROMOW": "Raconte la guerre",
+    "NANOSWARM": "Robot d'élite, médaille en or"
+  },
+  "meme": {
+    "purchaseSuccess": "Marcel rejoint l'équipe ! Il a hâte de bosser.",
+    "notEnough": "Oh là là, ta tirelire est un peu maigre, chaton.",
+    "questDone": "Bravo ! Mémé sort le gâteau au yaourt.",
+    "prestigeReady": "Une nouvelle saison s'annonce... Prêt pour le grand renouveau ?",
+    "loading": "Mémé prépare le café...",
+    "welcomeBack": "Te revoilà ! La ferme a continué à tourner, regarde un peu..."
+  },
   "auth": {
     "login": {
       "title": "Connexion",

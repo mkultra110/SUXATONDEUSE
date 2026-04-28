@@ -3,6 +3,38 @@
     "title": "SUXA TONDEUSE",
     "tagline": "Build your robot mower empire"
   },
+  "robotNicknames": {
+    "HAND_SHEARS": "Marcel",
+    "PUSH_MOWER": "Hubert",
+    "GAS_MOWER": "Gisèle",
+    "ELECTRIC_MOWER": "Roger",
+    "ROBOMOW_V1": "Solange",
+    "NAVIBOT": "Bernadette",
+    "HELIOCUT": "Robert",
+    "MEGAMOWER": "Yvette",
+    "AEROMOW": "Maurice",
+    "NANOSWARM": "Léopold"
+  },
+  "robotPersonalities": {
+    "HAND_SHEARS": "The elder, on duty since 1962",
+    "PUSH_MOWER": "Grumpy but efficient",
+    "GAS_MOWER": "Sings while working",
+    "ELECTRIC_MOWER": "Passionate about pétanque",
+    "ROBOMOW_V1": "Knits during breaks",
+    "NAVIBOT": "Apple pie every Sunday",
+    "HELIOCUT": "Handlebar moustache",
+    "MEGAMOWER": "Always wears a straw hat",
+    "AEROMOW": "Tells war stories",
+    "NANOSWARM": "Elite unit, gold medal"
+  },
+  "meme": {
+    "purchaseSuccess": "Joining the team! Ready to mow.",
+    "notEnough": "Oh dear, your purse is a bit thin, kid.",
+    "questDone": "Bravo! Granny's bringing out the yogurt cake.",
+    "prestigeReady": "A new season approaches... Ready for the great renewal?",
+    "loading": "Granny's making coffee...",
+    "welcomeBack": "Back already! The farm kept running, look at this..."
+  },
   "auth": {
     "login": {
       "title": "Sign in",

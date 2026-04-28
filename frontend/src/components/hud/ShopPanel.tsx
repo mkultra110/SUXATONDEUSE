@@ -87,8 +87,8 @@ export function ShopPanel() {
                   affordable={affordable}
                   badge={owned > 0 ? `×${owned}` : null}
                   art={<RobotArt tier={tier.index} />}
-                  name={tier.name}
-                  rate={`+${tier.baseGrassPerSecond}/s`}
+                  name={t(`robotNicknames.${type}`, tier.name)}
+                  rate={t(`robotPersonalities.${type}`, `+${tier.baseGrassPerSecond}/s`)}
                   cost={cost}
                   onClick={() => {
                     if (affordable) {

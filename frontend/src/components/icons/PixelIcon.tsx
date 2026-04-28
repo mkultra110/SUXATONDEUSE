@@ -366,6 +366,40 @@ export function RobotLogo({ size = 24, className, style, title }: IconProps) {
   );
 }
 
+// Pompon le chat : chat tigre orange-blanc qui dort, vu de profil (24×12).
+// Easter egg cozy a placer sur le toit de la maison.
+export function PomponIcon({ size = 32, className, style, title }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 12" shapeRendering="crispEdges" className={className} style={pixelStyle(size, style)} role={title ? 'img' : undefined} aria-label={title}>
+      {/* corps couche - rayures orange/blanc */}
+      <rect x="3" y="5" width="14" height="5" fill="#E67E22" />
+      <rect x="3" y="6" width="14" height="1" fill="#F5C443" />
+      <rect x="5" y="5" width="2" height="5" fill="#FFF8DC" />
+      <rect x="9" y="5" width="2" height="5" fill="#FFF8DC" />
+      <rect x="13" y="5" width="2" height="5" fill="#FFF8DC" />
+      {/* tete (cote droit) */}
+      <rect x="17" y="3" width="5" height="5" fill="#E67E22" />
+      <rect x="17" y="3" width="5" height="1" fill="#F5C443" />
+      {/* oreilles */}
+      <rect x="17" y="2" width="2" height="1" fill="#E67E22" />
+      <rect x="20" y="2" width="2" height="1" fill="#E67E22" />
+      <rect x="17" y="1" width="1" height="1" fill="#5c3d24" />
+      <rect x="21" y="1" width="1" height="1" fill="#5c3d24" />
+      {/* oeil ferme */}
+      <rect x="20" y="5" width="1" height="1" fill="#5c3d24" />
+      {/* nez/moustache */}
+      <rect x="22" y="5" width="1" height="1" fill="#FFB3C1" />
+      {/* pattes */}
+      <rect x="4" y="10" width="2" height="2" fill="#E67E22" />
+      <rect x="14" y="10" width="2" height="2" fill="#E67E22" />
+      {/* queue qui depasse a gauche */}
+      <rect x="0" y="6" width="3" height="2" fill="#E67E22" />
+      <rect x="1" y="5" width="1" height="1" fill="#E67E22" />
+      <rect x="2" y="4" width="1" height="1" fill="#E67E22" />
+    </svg>
+  );
+}
+
 // Lanterne suspendue (16×16) : structure metal + flamme jaune chaud.
 // Halo gold via CSS box-shadow + animation flicker irregulier.
 export function LanternIcon({ size = 24, className, style, title }: IconProps) {

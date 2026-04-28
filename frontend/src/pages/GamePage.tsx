@@ -86,7 +86,7 @@ export function GamePage() {
           fontFamily: 'var(--font-title)',
         }}
       >
-        {t('game.loading')}
+        {t('meme.loading')}
       </div>
     );
   }
