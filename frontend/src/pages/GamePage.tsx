@@ -12,7 +12,7 @@ import { DailyPanel } from '../components/hud/DailyPanel.js';
 import { CollectionPanel } from '../components/hud/CollectionPanel.js';
 import { StatsPanel } from '../components/hud/StatsPanel.js';
 import { OfflineRewardModal } from '../components/modals/OfflineRewardModal.js';
-import { PixiCanvas } from '../game/engine/PixiCanvas.js';
+import { AnimatedGarden } from '../components/AnimatedGarden.js';
 import { useGameSession } from '../hooks/useGameSession.js';
 
 type TabKey =
@@ -51,11 +51,8 @@ export function GamePage() {
     <div className="flex min-h-screen flex-col bg-gradient-to-b from-sky-deep to-grass-deep p-2 gap-2">
       <TopBar />
       <main className="flex flex-1 flex-col items-center gap-4 lg:flex-row lg:items-start lg:justify-center lg:gap-6">
-        <div className="flex flex-col items-center gap-2 flex-1">
-          <PixiCanvas />
-          <p className="text-center text-panel-paper text-xs max-w-2xl">
-            {t('game.tapHint')}
-          </p>
+        <div className="flex flex-col items-center gap-2 flex-1 w-full">
+          <AnimatedGarden />
         </div>
         <div className="flex flex-col gap-2 w-full max-w-sm">
           <nav className="grid grid-cols-4 gap-1 lg:grid-cols-7">

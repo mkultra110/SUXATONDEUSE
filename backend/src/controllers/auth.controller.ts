@@ -14,10 +14,14 @@ import { TOKEN_TTLS } from '../utils/jwt.js';
 
 const REFRESH_COOKIE = 'rt';
 
+// sameSite='lax' (au lieu de 'strict') pour que le cookie soit envoye
+// lors du refresh silencieux (F5 sur la page) y compris quand le frontend
+// est servi via un tunnel/sous-domaine different. 'strict' bloquait les
+// reloads venant d'une navigation top-level cross-site (ex: lien Discord).
 const refreshCookieOptions = {
   httpOnly: true,
   secure: isProd,
-  sameSite: 'strict' as const,
+  sameSite: 'lax' as const,
   path: '/api/auth',
   maxAge: TOKEN_TTLS.refreshSeconds * 1000,
 };

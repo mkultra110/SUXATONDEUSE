@@ -20,7 +20,7 @@ Coller ce snippet a cote des autres commandes /suxa_* dans suxabot.py.
 
 @tree.command(
     name="suxa_tondeuse",
-    description="Genere un lien d'acces de 1 heure au jeu ROBOMOW TYCOON.",
+    description="Genere un lien d'acces de 1 heure au jeu SUXA TONDEUSE.",
 )
 @app_commands.allowed_installs(guilds=True, users=True)
 @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
@@ -58,7 +58,7 @@ async def suxa_tondeuse(interaction: discord.Interaction):
         invite_url = data["data"]["url"]
         expires_at = data["data"]["expiresAt"]
         message = (
-            "**ROBOMOW TYCOON**\n"
+            "**SUXA TONDEUSE**\n"
             f"Voici ton lien d'acces (valable 1 heure) :\n"
             f"{invite_url}\n\n"
             "*Une fois sur la page, inscris-toi avec un pseudo + mot de passe (ou connecte-toi). "

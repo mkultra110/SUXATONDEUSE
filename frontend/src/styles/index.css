@@ -34,3 +34,404 @@
     @apply focus:border-grass-base focus:outline-none;
   }
 }
+
+/* ================================================================
+   Garden Scene (visuel CSS pur, remplace le canvas Pixi)
+   ================================================================ */
+
+.garden-scene {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  width: 100%;
+  max-width: 768px;
+  border-radius: 1rem;
+  overflow: hidden;
+  cursor: pointer;
+  user-select: none;
+  background:
+    linear-gradient(180deg, #2ce8f5 0%, #0099db 35%, #63c74d 35%, #3e8948 100%);
+  box-shadow:
+    inset 0 0 60px rgba(0, 0, 0, 0.3),
+    0 8px 24px rgba(0, 0, 0, 0.4);
+  border: 4px solid #193c3e;
+}
+
+.garden-scene > * {
+  pointer-events: none;
+}
+
+.garden-sun {
+  position: absolute;
+  top: 6%;
+  right: 8%;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #fee761 0%, #feae34 70%, transparent 100%);
+  box-shadow: 0 0 40px #fee761;
+  animation: sun-pulse 3s ease-in-out infinite;
+}
+
+@keyframes sun-pulse {
+  0%, 100% { transform: scale(1); filter: brightness(1); }
+  50% { transform: scale(1.05); filter: brightness(1.2); }
+}
+
+.garden-cloud {
+  position: absolute;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 100px;
+  filter: blur(0.5px);
+}
+.garden-cloud::before,
+.garden-cloud::after {
+  content: '';
+  position: absolute;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 100px;
+}
+.cloud-1 {
+  top: 8%;
+  width: 70px;
+  height: 22px;
+  animation: cloud-drift 50s linear infinite;
+}
+.cloud-1::before {
+  width: 32px;
+  height: 28px;
+  top: -14px;
+  left: 14px;
+}
+.cloud-2 {
+  top: 15%;
+  width: 50px;
+  height: 16px;
+  opacity: 0.75;
+  animation: cloud-drift 70s linear infinite;
+  animation-delay: -25s;
+}
+.cloud-2::before {
+  width: 24px;
+  height: 22px;
+  top: -10px;
+  left: 10px;
+}
+.cloud-3 {
+  top: 18%;
+  width: 40px;
+  height: 14px;
+  opacity: 0.6;
+  animation: cloud-drift 90s linear infinite;
+  animation-delay: -50s;
+}
+.cloud-3::before {
+  width: 20px;
+  height: 18px;
+  top: -8px;
+  left: 8px;
+}
+
+@keyframes cloud-drift {
+  from { transform: translateX(-120px); }
+  to { transform: translateX(calc(100% + 120px)); }
+}
+
+.garden-tree {
+  position: absolute;
+  bottom: 35%;
+}
+.garden-tree-trunk {
+  width: 8px;
+  height: 24px;
+  background: #733e39;
+  margin: 0 auto;
+  box-shadow: inset -2px 0 0 #3e2731;
+}
+.garden-tree-foliage {
+  position: absolute;
+  bottom: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #63c74d 30%, #3e8948 70%, #265c42 100%);
+  box-shadow:
+    inset -4px -4px 0 rgba(0, 0, 0, 0.2),
+    2px 2px 0 rgba(0, 0, 0, 0.3);
+  animation: tree-sway 4s ease-in-out infinite;
+  transform-origin: 50% 100%;
+}
+
+@keyframes tree-sway {
+  0%, 100% { transform: translateX(-50%) rotate(-2deg); }
+  50% { transform: translateX(-50%) rotate(2deg); }
+}
+
+.garden-house {
+  position: absolute;
+  bottom: 30%;
+  left: 8%;
+  width: 64px;
+  height: 56px;
+}
+.garden-house-roof {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 24px;
+  background: #e43b44;
+  clip-path: polygon(0 100%, 50% 0, 100% 100%);
+  box-shadow: inset -4px 0 0 rgba(0, 0, 0, 0.2);
+}
+.garden-house-body {
+  position: absolute;
+  top: 24px;
+  left: 4px;
+  right: 4px;
+  bottom: 0;
+  background: #e4a672;
+  box-shadow: inset -4px -4px 0 rgba(0, 0, 0, 0.2);
+}
+.garden-house-door {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 14px;
+  height: 20px;
+  background: #3e2731;
+  box-shadow: inset 1px 0 0 rgba(255, 255, 255, 0.1);
+}
+.garden-house-window {
+  position: absolute;
+  top: 30px;
+  right: 10px;
+  width: 12px;
+  height: 12px;
+  background: #2ce8f5;
+  box-shadow: inset -2px -2px 0 rgba(0, 0, 0, 0.3);
+}
+
+.garden-grass-layer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 35%;
+  pointer-events: none;
+}
+
+.garden-blade {
+  position: absolute;
+  bottom: 0;
+  width: 2px;
+  border-radius: 1px 1px 0 0;
+  transform-origin: bottom;
+  animation: blade-sway 2.5s ease-in-out infinite;
+  box-shadow: 0 -2px 2px rgba(168, 230, 108, 0.4);
+}
+
+@keyframes blade-sway {
+  0%, 100% { transform: rotate(-4deg); }
+  50% { transform: rotate(4deg); }
+}
+
+.garden-empty {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  pointer-events: none;
+}
+.garden-empty-emoji {
+  font-size: 56px;
+  animation: empty-bounce 1s ease-in-out infinite;
+}
+.garden-empty-text {
+  margin-top: 8px;
+  padding: 6px 12px;
+  background: rgba(0, 0, 0, 0.5);
+  color: #fef6e0;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+@keyframes empty-bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+/* Robot pixel-art */
+.garden-robot {
+  position: absolute;
+  width: 48px;
+  height: 48px;
+  animation: robot-mow 8s ease-in-out infinite;
+}
+
+@keyframes robot-mow {
+  0%, 100% { left: 14%; }
+  50% { left: 78%; }
+}
+
+.garden-robot-body {
+  position: absolute;
+  top: 6px;
+  left: 8px;
+  right: 8px;
+  bottom: 12px;
+  border-radius: 6px;
+  box-shadow:
+    inset -3px -3px 0 rgba(0, 0, 0, 0.3),
+    inset 3px 3px 0 rgba(255, 255, 255, 0.3),
+    0 4px 8px rgba(0, 0, 0, 0.4);
+  animation: robot-bob 0.4s ease-in-out infinite;
+}
+
+@keyframes robot-bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-2px); }
+}
+
+.garden-robot-led {
+  position: absolute;
+  top: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 6px;
+  height: 4px;
+  border-radius: 2px;
+  animation: robot-led 1s ease-in-out infinite;
+}
+
+@keyframes robot-led {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.garden-robot-panel {
+  position: absolute;
+  bottom: 4px;
+  left: 4px;
+  right: 4px;
+  height: 2px;
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 1px;
+}
+
+.garden-robot-wheel {
+  position: absolute;
+  bottom: 0;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #181425;
+  box-shadow: inset 1px 1px 0 #5a6988;
+  animation: robot-wheel 0.4s linear infinite;
+}
+.garden-robot-wheel-l { left: 4px; }
+.garden-robot-wheel-r { right: 4px; }
+
+@keyframes robot-wheel {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.garden-robot-blades {
+  position: absolute;
+  bottom: -2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 32px;
+  height: 6px;
+  border-radius: 50%;
+  background: conic-gradient(from 0deg, #d6d6d6, #ffffff, #d6d6d6, #ffffff, #d6d6d6);
+  animation: robot-blades 0.15s linear infinite;
+  box-shadow: 0 0 4px rgba(255, 255, 255, 0.4);
+}
+
+@keyframes robot-blades {
+  from { transform: translateX(-50%) rotate(0deg); }
+  to { transform: translateX(-50%) rotate(360deg); }
+}
+
+/* Particules de brins coupes */
+.garden-blade-particle {
+  position: absolute;
+  width: 4px;
+  height: 8px;
+  background: #a8e66c;
+  border-radius: 1px;
+  pointer-events: none;
+  box-shadow: 0 0 4px rgba(168, 230, 108, 0.6);
+  animation: blade-fly 0.7s ease-out forwards;
+  --vx: 0px;
+  --vy: 0px;
+  --rot: 0deg;
+}
+
+@keyframes blade-fly {
+  0% {
+    transform: translate(0, 0) rotate(var(--rot));
+    opacity: 1;
+  }
+  100% {
+    transform:
+      translate(var(--vx), calc(var(--vy) + 80px))
+      rotate(calc(var(--rot) + 360deg));
+    opacity: 0;
+  }
+}
+
+/* Pieces flottantes */
+.garden-coin-particle {
+  position: absolute;
+  font-size: 24px;
+  pointer-events: none;
+  text-shadow: 0 0 8px #fee761;
+  animation: coin-pop 0.9s ease-out forwards;
+  transform: translate(-50%, 0);
+}
+
+@keyframes coin-pop {
+  0% { transform: translate(-50%, 0) scale(0.5); opacity: 0; }
+  20% { transform: translate(-50%, -20px) scale(1.2); opacity: 1; }
+  80% { transform: translate(-50%, -80px) scale(1); opacity: 1; }
+  100% { transform: translate(-50%, -120px) scale(0.7); opacity: 0; }
+}
+
+/* Indicateur production */
+.garden-prod-indicator {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  color: #fee761;
+  font-size: 11px;
+  font-weight: bold;
+  pointer-events: none;
+}
+
+/* Screen shake au tap */
+@keyframes shake {
+  0%, 100% { transform: translate(0, 0); }
+  25% { transform: translate(-2px, 1px); }
+  50% { transform: translate(2px, -1px); }
+  75% { transform: translate(-1px, 2px); }
+}
+.animate-shake { animation: shake 0.08s ease-in-out; }
+
+/* Currency pop sur les compteurs */
+@keyframes currency-pop {
+  0% { transform: scale(1); }
+  40% { transform: scale(1.25); filter: brightness(1.3); }
+  100% { transform: scale(1); filter: brightness(1); }
+}
+.animate-currency-pop { animation: currency-pop 0.25s ease-out; }
