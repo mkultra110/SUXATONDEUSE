@@ -1,6 +1,9 @@
-// Boutique cozy : 10 tiers de robots + 6 categories d'upgrades.
-// Cards parchemin avec bordure bois, boutons gold pixel-art.
+// Boutique style proto Claude Design v5 :
+// - Sous-tabs Robots / Ameliorations
+// - Grid 2-col de cards panel-9 avec clous decoratifs (signature Margaux)
+// - Bouton "shop-buy" gold sur chaque card avec CoinIcon
 
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   ROBOT_TIERS,
@@ -25,6 +28,8 @@ import {
 
 const ALL_TIERS: RobotType[] = ROBOT_TIERS.map((t) => t.type);
 
+type ShopTab = 'robots' | 'upgrades';
+
 export function ShopPanel() {
   const { t } = useTranslation();
   const cash = useGameStore((s) => s.cash);
@@ -34,6 +39,8 @@ export function ShopPanel() {
   const buyRobot = useGameStore((s) => s.buyRobot);
   const buyUpgrade = useGameStore((s) => s.buyUpgrade);
 
+  const [tab, setTab] = useState<ShopTab>('robots');
+
   const visibleTiers = ALL_TIERS.filter((type, i) => {
     if (i === 0) return true;
     const prev = ALL_TIERS[i - 1];
@@ -42,99 +49,85 @@ export function ShopPanel() {
   });
 
   return (
-    <aside className="pixel-panel flex flex-col gap-3 max-h-[80vh] overflow-y-auto">
-      <h2
-        className="flex items-center gap-2 text-lg leading-none"
-        style={{ fontFamily: 'var(--font-title)', color: 'var(--color-text-title)' }}
-      >
-        <NavShopIcon size={20} />
-        {t('shop.title')}
-      </h2>
-
-      {/* Robots */}
-      <ul className="flex flex-col gap-2">
-        {visibleTiers.map((type) => {
-          const tier = ROBOT_TIERS.find((tt) => tt.type === type);
-          if (!tier) return null;
-          const owned = holdings[type].owned;
-          const cost = nextRobotCost(holdings, type);
-          const affordable = cash.gte(cost);
-          return (
-            <li key={type}>
-              <button
-                disabled={!affordable}
-                onClick={() => {
-                  if (affordable) {
-                    audio.playPurchase();
-                    buyRobot(type);
-                  } else {
-                    audio.playError();
-                  }
-                }}
-                className={`pixel-card w-full flex items-center gap-3 text-left ${
-                  affordable ? 'pixel-card-affordable' : ''
-                } ${!affordable && owned === 0 ? 'pixel-card-locked' : ''}`}
-                style={{ cursor: affordable ? 'pointer' : 'not-allowed' }}
-              >
-                <RobotIcon tier={tier.index} />
-                <div className="flex-1 min-w-0">
-                  <div
-                    className="leading-tight"
-                    style={{
-                      fontFamily: 'var(--font-title)',
-                      color: 'var(--color-text-title)',
-                      fontSize: '14px',
-                    }}
-                  >
-                    {tier.name}
-                  </div>
-                  <div
-                    style={{ color: 'var(--color-text-muted)', fontSize: '11px' }}
-                  >
-                    +{tier.baseGrassPerSecond}/s · ×{owned}
-                  </div>
-                </div>
-                <div
-                  className="numeric flex flex-col items-end"
-                  style={{ color: 'var(--color-accent-gold)' }}
-                >
-                  <CoinIcon size={12} />
-                  <span className="text-sm leading-tight">{formatBig(cost)}</span>
-                </div>
-              </button>
-            </li>
-          );
-        })}
-      </ul>
-
-      {/* Ameliorations */}
-      <div
-        className="border-t-2 pt-3 mt-1"
-        style={{ borderColor: 'var(--color-wood-3)' }}
-      >
-        <h3
-          className="mb-2"
-          style={{
-            fontFamily: 'var(--font-button)',
-            fontSize: '11px',
-            color: 'var(--color-text-muted)',
-            textTransform: 'uppercase',
-            letterSpacing: '0.1em',
-          }}
+    <aside className="flex flex-col gap-3 max-h-[80vh]">
+      {/* Header */}
+      <header className="flex items-center justify-between gap-2 px-1">
+        <h2
+          className="flex items-center gap-2 text-lg leading-none"
+          style={{ fontFamily: 'var(--font-title)', color: 'var(--color-text-title)' }}
         >
+          <NavShopIcon size={22} />
+          {t('shop.title')}
+        </h2>
+      </header>
+
+      {/* Sous-tabs Robots / Ameliorations */}
+      <div className="flex gap-1 p-1 rounded" style={{ background: 'var(--color-wood-4)', border: '2px solid var(--color-wood-5)' }}>
+        <SubTab active={tab === 'robots'} onClick={() => setTab('robots')}>
+          Robots
+        </SubTab>
+        <SubTab active={tab === 'upgrades'} onClick={() => setTab('upgrades')}>
           {t('shop.upgrades')}
-        </h3>
-        <ul className="flex flex-col gap-1.5">
-          {UPGRADE_DEFINITIONS.map((def) => {
-            const level: number = upgrades[def.key as UpgradeKey] ?? 0;
-            const locked = def.unlockPrestigeLevel > prestigeLevel;
-            const maxed = level >= def.maxLevel;
-            const cost = nextUpgradeCost(def.key, level);
-            const affordable = !locked && !maxed && cash.gte(cost);
-            return (
-              <li key={def.key}>
-                <button
-                  disabled={!affordable}
+        </SubTab>
+      </div>
+
+      {/* Body scrollable */}
+      <div className="overflow-y-auto pr-1" style={{ maxHeight: 'calc(80vh - 120px)' }}>
+        {tab === 'robots' && (
+          <div className="grid grid-cols-2 gap-2.5">
+            {visibleTiers.map((type) => {
+              const tier = ROBOT_TIERS.find((tt) => tt.type === type);
+              if (!tier) return null;
+              const owned = holdings[type].owned;
+              const cost = nextRobotCost(holdings, type);
+              const affordable = cash.gte(cost);
+              return (
+                <ShopCard
+                  key={type}
+                  affordable={affordable}
+                  badge={owned > 0 ? `×${owned}` : null}
+                  art={<RobotArt tier={tier.index} />}
+                  name={tier.name}
+                  rate={`+${tier.baseGrassPerSecond}/s`}
+                  cost={cost}
+                  onClick={() => {
+                    if (affordable) {
+                      audio.playPurchase();
+                      buyRobot(type);
+                    } else {
+                      audio.playError();
+                    }
+                  }}
+                />
+              );
+            })}
+          </div>
+        )}
+
+        {tab === 'upgrades' && (
+          <div className="grid grid-cols-2 gap-2.5">
+            {UPGRADE_DEFINITIONS.map((def) => {
+              const level: number = upgrades[def.key as UpgradeKey] ?? 0;
+              const locked = def.unlockPrestigeLevel > prestigeLevel;
+              const maxed = level >= def.maxLevel;
+              const cost = nextUpgradeCost(def.key, level);
+              const affordable = !locked && !maxed && cash.gte(cost);
+              return (
+                <ShopCard
+                  key={def.key}
+                  affordable={affordable}
+                  locked={locked}
+                  badge={`niv. ${level}`}
+                  art={<UpgradeArt upgradeKey={def.key} />}
+                  name={def.name}
+                  rate={
+                    locked
+                      ? `Prestige ${def.unlockPrestigeLevel} requis`
+                      : maxed
+                        ? 'NIVEAU MAX'
+                        : def.description
+                  }
+                  cost={maxed ? null : cost}
                   onClick={() => {
                     if (affordable) {
                       audio.playPurchase();
@@ -143,75 +136,178 @@ export function ShopPanel() {
                       audio.playError();
                     }
                   }}
-                  className={`pixel-card w-full flex items-center gap-3 text-left ${
-                    affordable ? 'pixel-card-affordable' : ''
-                  } ${locked || maxed ? 'pixel-card-locked' : ''}`}
-                  style={{ cursor: affordable ? 'pointer' : 'not-allowed' }}
-                >
-                  <UpgradeIcon upgradeKey={def.key} />
-                  <div className="flex-1 min-w-0">
-                    <div
-                      className="leading-tight"
-                      style={{
-                        fontFamily: 'var(--font-title)',
-                        color: 'var(--color-text-title)',
-                        fontSize: '13px',
-                      }}
-                    >
-                      {def.name}
-                    </div>
-                    <div
-                      className="leading-tight"
-                      style={{ color: 'var(--color-text-muted)', fontSize: '10px' }}
-                    >
-                      {def.description} · niv. {level}
-                      {locked && ` · prestige ${def.unlockPrestigeLevel} requis`}
-                      {maxed && ' · MAX'}
-                    </div>
-                  </div>
-                  <div
-                    className="numeric flex flex-col items-end"
-                    style={{ color: 'var(--color-accent-gold)' }}
-                  >
-                    {maxed ? (
-                      <span className="text-xs">—</span>
-                    ) : (
-                      <>
-                        <CoinIcon size={12} />
-                        <span className="text-sm leading-tight">{formatBig(cost)}</span>
-                      </>
-                    )}
-                  </div>
-                </button>
-              </li>
-            );
-          })}
-        </ul>
+                />
+              );
+            })}
+          </div>
+        )}
       </div>
     </aside>
   );
 }
 
-/** Icone robot : sprite reel depuis robots.png (frame idle, row A col 12). */
-function RobotIcon({ tier }: { tier: number }) {
+// =====================================================================
+// Sous-composants
+// =====================================================================
+
+function SubTab({ active, onClick, children }: { active: boolean; onClick: () => void; children: React.ReactNode }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      style={{
+        flex: 1,
+        padding: '6px 12px',
+        borderRadius: 4,
+        border: 'none',
+        cursor: 'pointer',
+        fontFamily: 'var(--font-title)',
+        fontWeight: 600,
+        fontSize: 13,
+        color: active ? 'var(--color-text-title)' : 'var(--color-paper-2)',
+        background: active ? 'var(--color-paper-1)' : 'transparent',
+        boxShadow: active ? 'inset 0 -2px 0 var(--color-wood-3)' : undefined,
+        transition: 'all 100ms ease-out',
+      }}
+    >
+      {children}
+    </button>
+  );
+}
+
+interface ShopCardProps {
+  affordable: boolean;
+  locked?: boolean;
+  badge?: string | null;
+  art: React.ReactNode;
+  name: string;
+  rate: string;
+  cost: { toString(): string } | null;
+  onClick: () => void;
+}
+
+function ShopCard({ affordable, locked, badge, art, name, rate, cost, onClick }: ShopCardProps) {
+  return (
+    <div
+      className="panel-9"
+      onClick={onClick}
+      style={{
+        padding: 10,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        gap: 6,
+        position: 'relative',
+        cursor: affordable ? 'pointer' : 'not-allowed',
+        opacity: locked ? 0.6 : 1,
+        filter: locked ? 'grayscale(0.5)' : undefined,
+      }}
+    >
+      <span className="nail-bl" />
+      <span className="nail-br" />
+      {badge && (
+        <span
+          style={{
+            position: 'absolute',
+            top: -4,
+            right: -4,
+            background: affordable ? 'var(--color-grass-5)' : 'var(--color-accent-red)',
+            color: 'var(--color-paper-1)',
+            fontFamily: 'var(--font-button)',
+            fontSize: 9,
+            padding: '2px 5px',
+            border: `2px solid ${affordable ? '#1d4a18' : '#7a2a2a'}`,
+            borderRadius: 3,
+            transform: 'rotate(8deg)',
+            letterSpacing: '0.05em',
+            zIndex: 2,
+          }}
+        >
+          {badge}
+        </span>
+      )}
+      {art}
+      <div
+        style={{
+          fontFamily: 'var(--font-title)',
+          fontWeight: 600,
+          fontSize: 13,
+          color: 'var(--color-text-title)',
+          textAlign: 'center',
+          lineHeight: 1.1,
+          minHeight: 28,
+        }}
+      >
+        {name}
+      </div>
+      <div
+        style={{
+          fontFamily: 'var(--font-body)',
+          fontSize: 10,
+          color: 'var(--color-text-muted)',
+          textAlign: 'center',
+          lineHeight: 1.1,
+          minHeight: 12,
+        }}
+      >
+        {rate}
+      </div>
+      <button
+        type="button"
+        disabled={!affordable}
+        onClick={(e) => {
+          e.stopPropagation();
+          onClick();
+        }}
+        style={{
+          background: cost === null ? 'var(--color-wood-3)' : affordable ? 'var(--color-grass-4)' : 'var(--color-paper-3)',
+          color: cost === null ? 'var(--color-paper-1)' : affordable ? 'var(--color-paper-1)' : 'var(--color-text-muted)',
+          border: '2px solid var(--color-wood-5)',
+          borderRadius: 5,
+          padding: '5px 10px',
+          fontFamily: 'var(--font-title)',
+          fontWeight: 600,
+          fontSize: 13,
+          cursor: affordable ? 'pointer' : 'not-allowed',
+          display: 'flex',
+          alignItems: 'center',
+          gap: 4,
+          boxShadow: affordable ? '0 3px 0 var(--color-grass-7)' : '0 3px 0 var(--color-wood-3)',
+          minWidth: 80,
+          justifyContent: 'center',
+        }}
+      >
+        {cost === null ? (
+          <span>MAX</span>
+        ) : (
+          <>
+            <CoinIcon size={13} />
+            <span>{formatBig(cost as never)}</span>
+          </>
+        )}
+      </button>
+    </div>
+  );
+}
+
+function RobotArt({ tier }: { tier: number }) {
   const SCALE = 2;
   const ROBOT_W = 24;
-  const sx = 12 * ROBOT_W; // col 12 = idle
-  const sy = tier * 48;    // row A
+  const sx = 12 * ROBOT_W; // col 12 = idle frame (row A)
+  const sy = tier * 48;
   const [aw, ah] = ATLAS_SIZE.robots;
   return (
     <div
-      className="flex-shrink-0"
       style={{
-        width: ROBOT_W * SCALE,
-        height: ROBOT_W * SCALE,
-        background: 'linear-gradient(180deg, var(--color-grass-3), var(--color-grass-5))',
+        width: 64,
+        height: 64,
+        background: 'var(--color-paper-2)',
         border: '2px solid var(--color-wood-5)',
         borderRadius: 4,
-        boxShadow: 'inset 0 -2px 0 rgba(0,0,0,0.25), 0 2px 0 var(--color-wood-5)',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
+        boxShadow: 'inset 0 -2px 0 var(--color-wood-3), 0 2px 0 var(--color-wood-5)',
         overflow: 'hidden',
       }}
     >
@@ -230,8 +326,7 @@ function RobotIcon({ tier }: { tier: number }) {
   );
 }
 
-/** Icone upgrade : encadre cozy avec sprite SVG pixel art (zero emoji). */
-function UpgradeIcon({ upgradeKey }: { upgradeKey: string }) {
+function UpgradeArt({ upgradeKey }: { upgradeKey: string }) {
   const map: Record<string, { Icon: typeof IconBlade; bg: string }> = {
     blades: { Icon: IconBlade, bg: 'var(--color-metal-2)' },
     engine: { Icon: IconGear, bg: 'var(--color-wood-2)' },
@@ -244,17 +339,19 @@ function UpgradeIcon({ upgradeKey }: { upgradeKey: string }) {
   const { Icon } = info;
   return (
     <div
-      className="flex-shrink-0 flex items-center justify-center"
       style={{
-        width: 36,
-        height: 36,
+        width: 64,
+        height: 64,
         background: info.bg,
         border: '2px solid var(--color-wood-5)',
         borderRadius: 4,
-        boxShadow: 'inset 0 -2px 0 rgba(0,0,0,0.25), inset 0 2px 0 rgba(255,255,255,0.3), 0 2px 0 var(--color-wood-5)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        boxShadow: 'inset 0 -2px 0 rgba(0,0,0,0.2), inset 0 2px 0 rgba(255,255,255,0.4), 0 2px 0 var(--color-wood-5)',
       }}
     >
-      <Icon size={20} />
+      <Icon size={36} />
     </div>
   );
 }
