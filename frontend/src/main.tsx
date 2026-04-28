@@ -20,6 +20,21 @@ const queryClient = new QueryClient({
   },
 });
 
+// Eruda mobile console : active si ?debug=1 dans l'URL.
+// Ajoute un bouton flottant qui ouvre une console + log + network panel
+// directement dans la page (utile sur iOS Safari ou la console est inaccessible).
+const debugParam = new URLSearchParams(window.location.search).get('debug');
+if (debugParam === '1' && !document.getElementById('eruda-script')) {
+  const script = document.createElement('script');
+  script.id = 'eruda-script';
+  script.src = 'https://cdn.jsdelivr.net/npm/eruda@3.4.1/eruda.min.js';
+  script.onload = () => {
+    const w = window as unknown as { eruda?: { init: () => void } };
+    w.eruda?.init();
+  };
+  document.head.appendChild(script);
+}
+
 const rootEl = document.getElementById('root');
 if (!rootEl) throw new Error('Element #root introuvable');
 

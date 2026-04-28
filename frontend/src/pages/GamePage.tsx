@@ -78,16 +78,55 @@ export function GamePage() {
   const [activeTab, setActiveTab] = useState<TabKey>('shop');
 
   if (session.isLoading) {
+    const phaseLabels: Record<string, string> = {
+      idle: 'Mémé range la cuisine...',
+      server: 'Mémé contacte le serveur...',
+      local: 'Mémé fouille dans son carnet...',
+      hydrate: 'Mémé installe la ferme...',
+      offline: 'Mémé compte les pièces gagnées...',
+      starting: 'Mémé sort le café...',
+      error: 'Aïe, le tracteur fait des siennes...',
+    };
+    const label = phaseLabels[session.phase] ?? t('meme.loading');
     return (
       <div
-        className="flex min-h-screen items-center justify-center meme"
-        style={{
-          background: 'var(--color-paper-2)',
-          color: 'var(--color-text-body)',
-          fontSize: 24,
-        }}
+        className="flex min-h-screen flex-col items-center justify-center gap-4 px-4"
+        style={{ background: 'var(--color-paper-2)' }}
       >
-        {t('meme.loading')}
+        <div className="meme" style={{ fontSize: 28, color: 'var(--color-text-body)', textAlign: 'center' }}>
+          {label}
+        </div>
+        {session.errorMessage && (
+          <div
+            className="meme"
+            style={{
+              fontSize: 16,
+              color: 'var(--color-accent-red)',
+              textAlign: 'center',
+              maxWidth: 320,
+              padding: '8px 12px',
+              background: 'var(--color-paper-1)',
+              border: '2px solid var(--color-accent-red)',
+              borderRadius: 4,
+            }}
+          >
+            {session.errorMessage}
+          </div>
+        )}
+        <button
+          type="button"
+          onClick={session.forceContinue}
+          className="pixel-btn pixel-btn-gold"
+          style={{ marginTop: 12, fontSize: 12 }}
+        >
+          Continuer en mode hors-ligne
+        </button>
+        <p
+          className="meme"
+          style={{ fontSize: 14, color: 'var(--color-text-muted)', textAlign: 'center', maxWidth: 280 }}
+        >
+          Si Mémé bloque plus de 8 secondes, le bouton ci-dessus te débloque.
+        </p>
       </div>
     );
   }

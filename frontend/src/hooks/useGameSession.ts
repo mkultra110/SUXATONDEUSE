@@ -20,15 +20,48 @@ export interface OfflineReward {
   cashEarned: Decimal;
 }
 
+export type LoadingPhase =
+  | 'idle'
+  | 'server'
+  | 'local'
+  | 'hydrate'
+  | 'offline'
+  | 'starting'
+  | 'ready'
+  | 'error';
+
 export function useGameSession(): {
   isLoading: boolean;
+  phase: LoadingPhase;
+  errorMessage: string | null;
+  forceContinue: () => void;
   offlineReward: OfflineReward | null;
   acknowledgeOfflineReward: () => void;
 } {
   const user = useAuthStore((s) => s.user);
   const [isLoading, setIsLoading] = useState(true);
+  const [phase, setPhase] = useState<LoadingPhase>('idle');
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [offlineReward, setOfflineReward] = useState<OfflineReward | null>(null);
   const startedRef = useRef(false);
+  const userIdRef = useRef<string | null>(null);
+  userIdRef.current = user?.id ?? null;
+
+  function forceContinue() {
+    // eslint-disable-next-line no-console
+    console.warn('[session] forceContinue() : utilisateur a clique sur Continuer hors-ligne');
+    try {
+      useGameStore.getState().hydrate(buildInitialSave());
+      startGameLoop();
+      if (userIdRef.current) startAutoSave({ userId: userIdRef.current });
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.error('[session] forceContinue failed', err);
+    }
+    setPhase('ready');
+    setErrorMessage(null);
+    setIsLoading(false);
+  }
 
   useEffect(() => {
     if (!user || startedRef.current) return;
@@ -57,6 +90,7 @@ export function useGameSession(): {
     void (async () => {
       try {
         let loaded: SavePayload | null = null;
+        setPhase('server');
         try {
           const server = await apiLoadSave();
           if (server) loaded = server.payload;
@@ -65,6 +99,7 @@ export function useGameSession(): {
           console.warn('[session] apiLoadSave failed', err);
         }
         if (!loaded) {
+          setPhase('local');
           try {
             loaded = await loadLocal();
           } catch (err) {
@@ -75,15 +110,15 @@ export function useGameSession(): {
         }
         if (cancelled || resolved) return;
 
+        setPhase('hydrate');
         const initial = loaded ?? buildInitialSave();
         const cashBefore = new Decimal(initial.cash);
         useGameStore.getState().hydrate(initial);
         useGameStore.getState().registerLogin();
 
-        // Catch-up offline : on calcule la duree depuis lastTickAt et on
-        // applique un tick agrege au store.
         const elapsed = (Date.now() - initial.lastTickAt) / 1000;
         if (elapsed > 30) {
+          setPhase('offline');
           try {
             catchUpOffline(elapsed);
             const cashAfter = useGameStore.getState().cash;
@@ -97,13 +132,17 @@ export function useGameSession(): {
           }
         }
 
+        setPhase('starting');
         startGameLoop();
         startAutoSave({ userId: user.id });
         resolved = true;
+        setPhase('ready');
         setIsLoading(false);
       } catch (err) {
         // eslint-disable-next-line no-console
         console.error('[session] Bootstrap fatal', err);
+        setErrorMessage(err instanceof Error ? err.message : String(err));
+        setPhase('error');
         try {
           useGameStore.getState().hydrate(buildInitialSave());
           startGameLoop();
@@ -128,6 +167,9 @@ export function useGameSession(): {
 
   return {
     isLoading,
+    phase,
+    errorMessage,
+    forceContinue,
     offlineReward,
     acknowledgeOfflineReward: () => setOfflineReward(null),
   };
