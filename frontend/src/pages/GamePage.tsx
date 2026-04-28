@@ -13,6 +13,7 @@ import { CollectionPanel } from '../components/hud/CollectionPanel.js';
 import { StatsPanel } from '../components/hud/StatsPanel.js';
 import { OfflineRewardModal } from '../components/modals/OfflineRewardModal.js';
 import { AnimatedGarden } from '../components/AnimatedGarden.js';
+import { AchievementToast } from '../components/hud/AchievementToast.js';
 import { useGameSession } from '../hooks/useGameSession.js';
 import { useAudio } from '../hooks/useAudio.js';
 import { ATLAS_URL, ATLAS_SIZE } from '../components/garden/Sprite.js';
@@ -134,6 +135,7 @@ export function GamePage() {
           onAcknowledge={session.acknowledgeOfflineReward}
         />
       )}
+      <AchievementToast />
     </div>
   );
 }

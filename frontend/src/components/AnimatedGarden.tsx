@@ -135,6 +135,7 @@ export function AnimatedGarden() {
   const [cutGrass, setCutGrass] = useState<Set<string>>(new Set());
   const [robots, setRobots] = useState<RobotEntity[]>([]);
   const [bursts, setBursts] = useState<Array<{ id: number; tileX: number; tileY: number; t0: number }>>([]);
+  const [floatingNums, setFloatingNums] = useState<Array<{ id: number; x: number; y: number; n: number; vx: number }>>([]);
   const wrapperRef = useRef<HTMLDivElement | null>(null);
   const idRef = useRef(0);
 
@@ -242,6 +243,17 @@ export function AnimatedGarden() {
                 setTimeout(() => {
                   setBursts((prev) => prev.filter((f) => f.id !== id));
                 }, 600);
+                // Floating number "+5" en pourcentage du conteneur.
+                idRef.current += 1;
+                const fnId = idRef.current;
+                const xPct = ((tx + 0.5) / COLS) * 100;
+                const yPct = ((ty + 0.3) / ROWS) * 100;
+                const vx = (Math.random() - 0.5) * 30;
+                const reward = 5 + Math.floor(robot.tier * 1.5);
+                setFloatingNums((prev) => [...prev, { id: fnId, x: xPct, y: yPct, n: reward, vx }].slice(-8));
+                setTimeout(() => {
+                  setFloatingNums((prev) => prev.filter((f) => f.id !== fnId));
+                }, 1100);
               }
               // Choisit nouvelle cible.
               const nextTarget = pickRandomTallGrass(grassRef);
@@ -351,6 +363,14 @@ export function AnimatedGarden() {
     setShake(true);
     setTimeout(() => setShake(false), 80);
     audio.playTap();
+    // Floating number "+1" au tap.
+    idRef.current += 1;
+    const fnId = idRef.current;
+    const vx = (Math.random() - 0.5) * 40;
+    setFloatingNums((prev) => [...prev, { id: fnId, x, y, n: 1, vx }].slice(-8));
+    setTimeout(() => {
+      setFloatingNums((prev) => prev.filter((f) => f.id !== fnId));
+    }, 1100);
     manualTap();
   }
 
@@ -461,6 +481,39 @@ export function AnimatedGarden() {
         {/* Burst de brins coupes (sprite mowing.png anime 4 frames) */}
         {bursts.map((b) => (
           <BurstSprite key={b.id} tileX={b.tileX} tileY={b.tileY} />
+        ))}
+
+        {/* Floating numbers "+X coin" qui montent depuis le robot/tap. */}
+        {floatingNums.map((f) => (
+          <span
+            key={f.id}
+            className="farm-floating-number"
+            style={
+              {
+                left: `${f.x}%`,
+                top: `${f.y}%`,
+                ['--vx' as string]: `${f.vx}px`,
+              } as CSSProperties
+            }
+          >
+            +{f.n}
+            <svg viewBox="0 0 16 16" shapeRendering="crispEdges" style={{ width: 14, height: 14, imageRendering: 'pixelated' }}>
+              <rect x="5" y="2" width="6" height="1" fill="#5c3d24" />
+              <rect x="3" y="3" width="2" height="1" fill="#5c3d24" />
+              <rect x="11" y="3" width="2" height="1" fill="#5c3d24" />
+              <rect x="2" y="4" width="1" height="2" fill="#5c3d24" />
+              <rect x="13" y="4" width="1" height="2" fill="#5c3d24" />
+              <rect x="2" y="10" width="1" height="2" fill="#5c3d24" />
+              <rect x="13" y="10" width="1" height="2" fill="#5c3d24" />
+              <rect x="3" y="12" width="2" height="1" fill="#5c3d24" />
+              <rect x="11" y="12" width="2" height="1" fill="#5c3d24" />
+              <rect x="5" y="13" width="6" height="1" fill="#5c3d24" />
+              <rect x="3" y="4" width="10" height="8" fill="#f5c443" />
+              <rect x="3" y="4" width="10" height="2" fill="#f5e6c8" />
+              <rect x="6" y="6" width="4" height="4" fill="#c49b6a" />
+              <rect x="7" y="7" width="2" height="2" fill="#f5e6c8" />
+            </svg>
+          </span>
         ))}
 
         {/* Papillons */}

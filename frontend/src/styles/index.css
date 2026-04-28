@@ -409,6 +409,67 @@
   50% { transform: translateY(-3px); }
 }
 
+/* Toast polaroid achievement : drop bounce avec rotation finale.
+   Anim Camille easeBack cubic-bezier(0.34, 1.56, 0.64, 1). */
+@keyframes polaroid-drop {
+  0%   { transform: translateY(-200px) rotate(-12deg); opacity: 0; }
+  60%  { transform: translateY(8px) rotate(2deg); opacity: 1; }
+  78%  { transform: translateY(0) rotate(-1deg); }
+  90%  { transform: translateY(4px) rotate(var(--final-rotate, 0deg)); }
+  100% { transform: translateY(0) rotate(var(--final-rotate, 0deg)); opacity: 1; }
+}
+
+/* Rayons solaires rotatifs — utilise pour le polaroid + prestige hero. */
+@keyframes sun-rays-spin {
+  from { transform: translate(-50%, -50%) rotate(0deg); }
+  to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* Floating number "+X" qui monte depuis un point d'impact (tap robot,
+   gain de tonte). Utilise la variable --vx pour l'horizontal random. */
+.farm-floating-number {
+  position: absolute;
+  pointer-events: none;
+  z-index: 30;
+  font-family: var(--font-numeric);
+  font-weight: 700;
+  font-size: 16px;
+  color: var(--color-accent-gold);
+  text-shadow: 1px 1px 0 var(--color-wood-5), 2px 2px 0 var(--color-wood-5);
+  white-space: nowrap;
+  animation: floating-number 1100ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  --vx: 0px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+@keyframes floating-number {
+  0%   { transform: translate(-50%, 0) scale(0.6); opacity: 0; }
+  15%  { transform: translate(-50%, -8px) scale(1.15); opacity: 1; }
+  85%  { opacity: 1; }
+  100% { transform: translate(calc(-50% + var(--vx)), -70px) scale(0.85); opacity: 0; }
+}
+
+/* Day/night cycle background (60s loop) : passe par dawn → day → dusk → night.
+   Applique sur le fond du farm-scene en complement des sprites. */
+@keyframes day-night-overlay {
+  0%   { background-color: rgba(255, 217, 179, 0.18); } /* dawn warm */
+  20%  { background-color: rgba(168, 216, 238, 0.05); } /* day clear */
+  50%  { background-color: rgba(168, 216, 238, 0); } /* full noon */
+  70%  { background-color: rgba(255, 107, 71, 0.18); } /* dusk orange */
+  85%  { background-color: rgba(58, 42, 94, 0.28); } /* night purple */
+  100% { background-color: rgba(255, 217, 179, 0.18); } /* back to dawn */
+}
+.farm-scene::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 20;
+  mix-blend-mode: multiply;
+  animation: day-night-overlay 60s linear infinite;
+}
+
 /* Pompon le chat sur le toit : easter egg Camille v9. Dort en respirant
    (scaleY ±2% sur 2.4s) et la queue bouge legerement. */
 .farm-pompon {
