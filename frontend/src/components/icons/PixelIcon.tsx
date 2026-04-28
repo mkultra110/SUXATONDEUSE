@@ -609,6 +609,92 @@ export function BigLockIcon({ size = 64, className, style, title }: IconProps) {
   );
 }
 
+// Boite aux lettres rouge francaise (style La Poste) avec drapeau lateral
+// qui se leve quand il y a une notif. Le drapeau pivote via CSS var --flag-rot.
+export function MailboxIcon({ size = 32, className, style, title }: IconProps) {
+  return (
+    <svg viewBox="0 0 16 24" shapeRendering="crispEdges" className={className} style={pixelStyle(size, style)} role={title ? 'img' : undefined} aria-label={title}>
+      {/* Mat */}
+      <rect x="7" y="14" width="2" height="10" fill="#5c3d24" />
+      <rect x="6" y="22" width="4" height="2" fill="#3A1F08" />
+      {/* Boite rouge */}
+      <rect x="2" y="6" width="12" height="9" fill="#B52121" />
+      <rect x="2" y="6" width="12" height="2" fill="#D94343" />
+      <rect x="2" y="13" width="12" height="2" fill="#5A0E0E" />
+      <rect x="1" y="7" width="1" height="7" fill="#5A0E0E" />
+      <rect x="14" y="7" width="1" height="7" fill="#5A0E0E" />
+      {/* Toit arrondi */}
+      <rect x="3" y="5" width="10" height="1" fill="#B52121" />
+      <rect x="4" y="4" width="8" height="1" fill="#D94343" />
+      {/* Fente courrier */}
+      <rect x="5" y="9" width="6" height="1" fill="#3A1F08" />
+      {/* Drapeau lateral (cote droit) - pivote via la classe parent */}
+      <g
+        className="mailbox-flag"
+        style={{
+          transformOrigin: '14px 11px',
+          transformBox: 'fill-box',
+        }}
+      >
+        <rect x="14" y="9" width="1" height="3" fill="#5c3d24" />
+        <rect x="15" y="9" width="3" height="2" fill="#FFD921" />
+      </g>
+      {/* Logo La Poste-style (bandeau jaune) */}
+      <rect x="5" y="11" width="6" height="1" fill="#FFD921" />
+    </svg>
+  );
+}
+
+// Cocotte la poule (16×16) - petit corps blanc + creste rouge.
+export function CocotteIcon({ size = 32, className, style, title }: IconProps) {
+  return (
+    <svg viewBox="0 0 16 16" shapeRendering="crispEdges" className={className} style={pixelStyle(size, style)} role={title ? 'img' : undefined} aria-label={title}>
+      {/* Corps blanc */}
+      <rect x="3" y="6" width="9" height="6" fill="#FFF8DC" />
+      <rect x="2" y="7" width="11" height="4" fill="#FFF8DC" />
+      {/* Tete */}
+      <rect x="11" y="5" width="3" height="3" fill="#FFF8DC" />
+      {/* Creste rouge */}
+      <rect x="11" y="3" width="2" height="2" fill="#B52121" />
+      <rect x="13" y="4" width="1" height="1" fill="#B52121" />
+      {/* Bec orange */}
+      <rect x="14" y="6" width="1" height="1" fill="#E67E22" />
+      {/* Oeil */}
+      <rect x="12" y="6" width="1" height="1" fill="#3A1F08" />
+      {/* Pattes */}
+      <rect x="5" y="12" width="1" height="2" fill="#E67E22" />
+      <rect x="9" y="12" width="1" height="2" fill="#E67E22" />
+      {/* Aile */}
+      <rect x="5" y="8" width="3" height="2" fill="#FFD921" />
+      <rect x="6" y="9" width="2" height="1" fill="#E19D1D" />
+      {/* Queue */}
+      <rect x="2" y="6" width="2" height="2" fill="#FFD921" />
+    </svg>
+  );
+}
+
+// Carnet de Marcel (icone tab) - petit cahier ferme avec elastique.
+export function NotebookIcon({ size = 24, className, style, title }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" shapeRendering="crispEdges" className={className} style={pixelStyle(size, style)} role={title ? 'img' : undefined} aria-label={title}>
+      <rect x="4" y="3" width="16" height="18" fill="#5c3d24" />
+      <rect x="5" y="4" width="14" height="16" fill="#FFF8DC" />
+      <rect x="5" y="4" width="14" height="2" fill="#EBD9A8" />
+      <rect x="6" y="8" width="12" height="1" fill="#A8D8EE" />
+      <rect x="6" y="11" width="12" height="1" fill="#A8D8EE" />
+      <rect x="6" y="14" width="12" height="1" fill="#A8D8EE" />
+      <rect x="6" y="17" width="8" height="1" fill="#A8D8EE" />
+      {/* Spirale */}
+      <rect x="3" y="5" width="2" height="1" fill="#7A8691" />
+      <rect x="3" y="9" width="2" height="1" fill="#7A8691" />
+      <rect x="3" y="13" width="2" height="1" fill="#7A8691" />
+      <rect x="3" y="17" width="2" height="1" fill="#7A8691" />
+      {/* Elastique rouge */}
+      <rect x="14" y="2" width="1" height="20" fill="#B52121" />
+    </svg>
+  );
+}
+
 // Pompon le chat : chat tigre orange-blanc qui dort, vu de profil (24×12).
 // Easter egg cozy a placer sur le toit de la maison.
 export function PomponIcon({ size = 32, className, style, title }: IconProps) {

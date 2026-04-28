@@ -14,6 +14,7 @@ import { StatsPanel } from '../components/hud/StatsPanel.js';
 import { OfflineRewardModal } from '../components/modals/OfflineRewardModal.js';
 import { AnimatedGarden } from '../components/AnimatedGarden.js';
 import { AchievementToast } from '../components/hud/AchievementToast.js';
+import { MemeGiselePopup } from '../components/hud/MemeGiselePopup.js';
 import { useGameSession } from '../hooks/useGameSession.js';
 import { useAudio } from '../hooks/useAudio.js';
 import { ATLAS_URL, ATLAS_SIZE } from '../components/garden/Sprite.js';
@@ -175,6 +176,7 @@ export function GamePage() {
         />
       )}
       <AchievementToast />
+      <MemeGiselePopup />
     </div>
   );
 }

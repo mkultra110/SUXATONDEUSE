@@ -653,6 +653,31 @@
   animation: day-night-overlay 60s linear infinite;
 }
 
+/* Boite aux lettres rouge : drapeau lateral qui se leve quand clique. */
+.farm-mailbox .mailbox-flag {
+  transform: rotate(0deg);
+  transform-origin: 14px 11px;
+  transform-box: fill-box;
+  transition: transform 200ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.farm-mailbox.farm-mailbox-flag .mailbox-flag {
+  transform: rotate(-80deg);
+}
+
+/* Cocotte la poule : entre en hop joyeux. */
+.farm-cocotte {
+  animation: cocotte-hop 0.8s cubic-bezier(0.34, 1.56, 0.64, 1), cocotte-bob 0.5s ease-in-out 0.8s infinite;
+}
+@keyframes cocotte-hop {
+  0% { transform: translateX(80px) translateY(0) rotate(20deg); opacity: 0; }
+  60% { transform: translateX(-8px) translateY(-12px) rotate(-5deg); opacity: 1; }
+  100% { transform: translateX(0) translateY(0) rotate(0deg); opacity: 1; }
+}
+@keyframes cocotte-bob {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-4px) rotate(2deg); }
+}
+
 /* Pompon le chat sur le toit : easter egg Camille v9. Dort en respirant
    (scaleY ±2% sur 2.4s) et la queue bouge legerement. */
 .farm-pompon {

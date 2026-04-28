@@ -7,9 +7,12 @@ import { useTranslation } from 'react-i18next';
 import type { RobotType } from '@robomow/shared';
 import { useGameStore } from '../stores/gameStore.js';
 import { audio } from '../services/audio.js';
-import { LadybugIcon, LanternIcon, PomponIcon, ScarecrowIcon, CoinIcon, IconGear } from './icons/PixelIcon.js';
+import { LadybugIcon, LanternIcon, PomponIcon, ScarecrowIcon, CoinIcon, IconGear, MailboxIcon, CocotteIcon } from './icons/PixelIcon.js';
 import { SpeechBubble } from './hud/SpeechBubble.js';
 import i18next from 'i18next';
+
+const MAILBOX_TILE_X = 13.0;
+const MAILBOX_TILE_Y = 6.4;
 import {
   Sprite,
   ATLAS_URL,
@@ -112,6 +115,7 @@ const BLOCKED_DECOR_TILES: ReadonlyArray<readonly [number, number, number, numbe
   [6, 2, 1, 2],   // SIGNPOST en (6.0, 2.5)
   [11, 2, 2, 2],  // WELL en (11.5, 2.5) - 32x32 = 2 tuiles
   [12, 4, 1, 2],  // SCARECROW en (12.6, 4.0)
+  [13, 6, 1, 2],  // MAILBOX en (13.0, 6.4)
 ];
 
 function isBlocked(x: number, y: number): boolean {
@@ -256,6 +260,10 @@ export function AnimatedGarden() {
   const [floatingNums, setFloatingNums] = useState<Array<{ id: number; x: number; y: number; n: number; vx: number }>>([]);
   const [scarecrowHeadRot, setScarecrowHeadRot] = useState(0);
   const [bubbles, setBubbles] = useState<Array<{ id: number; x: number; y: number; text: string }>>([]);
+  // Easter egg : 7 clics sur la boite aux lettres -> Cocotte pond un oeuf bonus.
+  const [mailboxClicks, setMailboxClicks] = useState(0);
+  const [mailboxFlag, setMailboxFlag] = useState(false);
+  const [cocotteVisible, setCocotteVisible] = useState(false);
   const wrapperRef = useRef<HTMLDivElement | null>(null);
   const idRef = useRef(0);
 
@@ -505,6 +513,38 @@ export function AnimatedGarden() {
     spawnBubble(xPx, yPx, text);
   }
 
+  // Tap sur la boite aux lettres : declenche le drapeau + compteur 7 clics.
+  function handleMailbox(e: React.MouseEvent<HTMLDivElement>) {
+    e.stopPropagation();
+    setMailboxFlag(true);
+    setTimeout(() => setMailboxFlag(false), 1200);
+    setMailboxClicks((prev) => {
+      const next = prev + 1;
+      if (next === 7) {
+        // Cocotte la poule apparait + 50 cash bonus + bulle.
+        setCocotteVisible(true);
+        spawnBubble(
+          MAILBOX_TILE_X * TILE,
+          (MAILBOX_TILE_Y - 1.5) * TILE,
+          'Cocotte a pondu un œuf bonus ! +50 🪙',
+        );
+        // Cocotte disparait apres 4s.
+        setTimeout(() => setCocotteVisible(false), 4000);
+        audio.playPurchase();
+        return 0;
+      }
+      // Petits messages a 3 et 5 clics.
+      if (next === 3) {
+        spawnBubble(MAILBOX_TILE_X * TILE, MAILBOX_TILE_Y * TILE - 8, 'Quelqu\'un frappe...');
+      } else if (next === 5) {
+        spawnBubble(MAILBOX_TILE_X * TILE, MAILBOX_TILE_Y * TILE - 8, 'On entend des cris de poule...');
+      } else {
+        audio.playTap();
+      }
+      return next;
+    });
+  }
+
   function handleClick(e: React.MouseEvent<HTMLDivElement>) {
     const rect = e.currentTarget.getBoundingClientRect();
     const x = ((e.clientX - rect.left) / rect.width) * 100;
@@ -738,6 +778,60 @@ export function AnimatedGarden() {
         >
           <ScarecrowIcon size={40} />
         </div>
+
+        {/* Boite aux lettres rouge francaise (Camille Rousset, easter egg
+            7 clics = Cocotte pond un oeuf). Drapeau qui se leve sur clic. */}
+        <div
+          className={`farm-mailbox ${mailboxFlag ? 'farm-mailbox-flag' : ''}`}
+          style={{
+            position: 'absolute',
+            left: MAILBOX_TILE_X * TILE,
+            top: MAILBOX_TILE_Y * TILE,
+            zIndex: 6,
+            cursor: 'pointer',
+            pointerEvents: 'auto',
+            filter: 'drop-shadow(0 1px 0 rgba(0,0,0,0.4))',
+          }}
+          onClick={handleMailbox}
+          title="Boite aux lettres"
+        >
+          <MailboxIcon size={48} />
+          {mailboxClicks > 0 && mailboxClicks < 7 && (
+            <span
+              style={{
+                position: 'absolute',
+                top: -8,
+                right: -8,
+                background: 'var(--color-accent-red)',
+                color: 'var(--color-paper-1)',
+                fontFamily: 'var(--font-button)',
+                fontSize: 9,
+                padding: '2px 5px',
+                border: '2px solid var(--color-wood-5)',
+                fontWeight: 700,
+              }}
+            >
+              {mailboxClicks}
+            </span>
+          )}
+        </div>
+
+        {/* Cocotte la poule : apparait apres le 7eme clic. */}
+        {cocotteVisible && (
+          <div
+            className="farm-cocotte"
+            style={{
+              position: 'absolute',
+              left: (MAILBOX_TILE_X - 0.5) * TILE,
+              top: (MAILBOX_TILE_Y + 1.2) * TILE,
+              zIndex: 7,
+              pointerEvents: 'none',
+              filter: 'drop-shadow(0 1px 0 rgba(0,0,0,0.5))',
+            }}
+          >
+            <CocotteIcon size={42} />
+          </div>
+        )}
 
         {blades.map((b) => (
           <span

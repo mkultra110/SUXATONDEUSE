@@ -39,20 +39,17 @@ export function TopBar() {
               letterSpacing: '0.05em',
             }}
           >
-            {t('app.title')}
+            La Ferme des Tournesols
           </h1>
-          {user && (
-            <p
-              className="text-xs leading-tight mt-0.5"
-              style={{
-                color: 'var(--color-paper-3)',
-                fontFamily: 'var(--font-body)',
-                letterSpacing: '0.05em',
-              }}
-            >
-              {user.username}
-            </p>
-          )}
+          <p
+            className="text-xs leading-tight mt-0.5 meme"
+            style={{
+              color: 'var(--color-paper-3)',
+              fontStyle: 'italic',
+            }}
+          >
+            Fondée en 1962 par Mémé Gisèle{user ? ` · ${user.username}` : ''}
+          </p>
         </div>
       </div>
       <div className="flex items-center gap-3 flex-wrap">
