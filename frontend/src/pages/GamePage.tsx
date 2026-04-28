@@ -14,6 +14,7 @@ import { StatsPanel } from '../components/hud/StatsPanel.js';
 import { OfflineRewardModal } from '../components/modals/OfflineRewardModal.js';
 import { AnimatedGarden } from '../components/AnimatedGarden.js';
 import { useGameSession } from '../hooks/useGameSession.js';
+import { ATLAS_URL, ATLAS_SIZE } from '../components/garden/Sprite.js';
 
 type TabKey =
   | 'shop'
@@ -24,15 +25,48 @@ type TabKey =
   | 'collection'
   | 'stats';
 
-const TABS: Array<{ key: TabKey; emoji: string }> = [
-  { key: 'shop', emoji: '🛒' },
-  { key: 'plots', emoji: '🌳' },
-  { key: 'daily', emoji: '📅' },
-  { key: 'collection', emoji: '🐾' },
-  { key: 'prestige', emoji: '🌱' },
-  { key: 'achievements', emoji: '🏆' },
-  { key: 'stats', emoji: '📊' },
+// Tab icons depuis ui.png : 16x16, y=48, x = col * 16.
+// Ordre dans l'atlas : boutique, parcelles, journalier, collection, prestige, succes, stats.
+const TAB_ICON_COL: Record<TabKey, number> = {
+  shop: 0,
+  plots: 1,
+  daily: 2,
+  collection: 3,
+  prestige: 4,
+  achievements: 5,
+  stats: 6,
+};
+
+const TABS: Array<{ key: TabKey }> = [
+  { key: 'shop' },
+  { key: 'plots' },
+  { key: 'daily' },
+  { key: 'collection' },
+  { key: 'prestige' },
+  { key: 'achievements' },
+  { key: 'stats' },
 ];
+
+function TabIcon({ tabKey }: { tabKey: TabKey }) {
+  const SCALE = 2;
+  const col = TAB_ICON_COL[tabKey];
+  const sx = col * 16;
+  const sy = 48;
+  const [aw, ah] = ATLAS_SIZE.ui;
+  return (
+    <div
+      style={{
+        width: 16 * SCALE,
+        height: 16 * SCALE,
+        backgroundImage: `url(${ATLAS_URL.ui})`,
+        backgroundRepeat: 'no-repeat',
+        backgroundSize: `${aw * SCALE}px ${ah * SCALE}px`,
+        backgroundPosition: `-${sx * SCALE}px -${sy * SCALE}px`,
+        imageRendering: 'pixelated',
+      }}
+    />
+  );
+}
 
 export function GamePage() {
   const { t } = useTranslation();
@@ -75,9 +109,7 @@ export function GamePage() {
                 onClick={() => setActiveTab(tab.key)}
                 className={`pixel-tab ${activeTab === tab.key ? 'pixel-tab-active' : ''}`}
               >
-                <span aria-hidden className="pixel-tab-emoji">
-                  {tab.emoji}
-                </span>
+                <TabIcon tabKey={tab.key} />
                 <span>{t(`tabs.${tab.key}`)}</span>
               </button>
             ))}

@@ -10,6 +10,7 @@ import {
 } from '@robomow/shared';
 import { useGameStore, nextRobotCost, nextUpgradeCost } from '../../stores/gameStore.js';
 import { formatBig } from '../../game/engine/bigNumber.js';
+import { ATLAS_URL, ATLAS_SIZE } from '../garden/Sprite.js';
 
 const ALL_TIERS: RobotType[] = ROBOT_TIERS.map((t) => t.type);
 
@@ -165,65 +166,48 @@ export function ShopPanel() {
   );
 }
 
-/** Icone simple pour un robot tier — version SVG pixel art procedurale. */
+/** Icone robot : sprite reel depuis robots.png (frame idle, row A col 12). */
 function RobotIcon({ tier }: { tier: number }) {
-  const palette = [
-    ['#e8eef2', '#8595a8'], // metal clair
-    ['#b8c4d0', '#556678'], // metal moyen
-    ['#8595a8', '#2f3a4a'], // metal fonce
-    ['#f5c443', '#a87a1f'], // electrique dore
-    ['#d54c4c', '#8b1f1f'], // robomow rouge
-    ['#7ec5c5', '#4a96a8'], // navibot turquoise
-    ['#f29bb8', '#c45a83'], // helio rose
-    ['#9b6dc4', '#5c3d7f'], // mega violet
-    ['#a8d8f0', '#4a96a8'], // aero bleu ciel
-    ['#fff8e7', '#c49b6a'], // nano blanc
-  ];
-  const [body, accent] = palette[tier % palette.length] ?? palette[0]!;
+  const SCALE = 2;
+  const ROBOT_W = 24;
+  const sx = 12 * ROBOT_W; // col 12 = idle
+  const sy = tier * 48;    // row A
+  const [aw, ah] = ATLAS_SIZE.robots;
   return (
     <div
       className="flex-shrink-0"
       style={{
-        width: 32,
-        height: 32,
-        background: body,
-        border: `2px solid ${accent}`,
+        width: ROBOT_W * SCALE,
+        height: ROBOT_W * SCALE,
+        background: 'linear-gradient(180deg, var(--color-grass-3), var(--color-grass-5))',
+        border: '2px solid var(--color-wood-5)',
         borderRadius: 4,
-        position: 'relative',
-        boxShadow: `inset -2px -2px 0 ${accent}, 0 2px 0 ${accent}`,
+        boxShadow: 'inset 0 -2px 0 rgba(0,0,0,0.25), 0 2px 0 var(--color-wood-5)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        overflow: 'hidden',
       }}
     >
-      <span
+      <div
         style={{
-          position: 'absolute',
-          top: 4,
-          left: '50%',
-          transform: 'translateX(-50%)',
-          width: 6,
-          height: 3,
-          background: 'var(--color-accent-red)',
-          borderRadius: 1,
-        }}
-      />
-      <span
-        style={{
-          position: 'absolute',
-          bottom: 2,
-          left: 4,
-          right: 4,
-          height: 2,
-          background: 'var(--color-text-title)',
-          opacity: 0.4,
+          width: ROBOT_W * SCALE,
+          height: ROBOT_W * SCALE,
+          backgroundImage: `url(${ATLAS_URL.robots})`,
+          backgroundRepeat: 'no-repeat',
+          backgroundSize: `${aw * SCALE}px ${ah * SCALE}px`,
+          backgroundPosition: `-${sx * SCALE}px -${sy * SCALE}px`,
+          imageRendering: 'pixelated',
         }}
       />
     </div>
   );
 }
 
-/** Icone pour les categories d'upgrades. */
+/** Icone upgrade : encadre cozy avec emoji centre. */
 function UpgradeIcon({ upgradeKey }: { upgradeKey: string }) {
   const map: Record<string, { emoji: string; bg: string }> = {
-    blades: { emoji: '🔪', bg: 'var(--color-metal-2)' },
+    blades: { emoji: '⚔️', bg: 'var(--color-metal-2)' },
     engine: { emoji: '⚙️', bg: 'var(--color-wood-2)' },
     battery: { emoji: '🔋', bg: 'var(--color-grass-3)' },
     solar: { emoji: '☀️', bg: 'var(--color-accent-gold)' },
@@ -235,13 +219,13 @@ function UpgradeIcon({ upgradeKey }: { upgradeKey: string }) {
     <div
       className="flex-shrink-0 flex items-center justify-center"
       style={{
-        width: 28,
-        height: 28,
+        width: 36,
+        height: 36,
         background: info.bg,
-        border: '2px solid var(--color-wood-4)',
+        border: '2px solid var(--color-wood-5)',
         borderRadius: 4,
-        fontSize: 16,
-        boxShadow: 'inset -2px -2px 0 rgba(0,0,0,0.2), 0 2px 0 var(--color-wood-4)',
+        fontSize: 20,
+        boxShadow: 'inset 0 -2px 0 rgba(0,0,0,0.25), inset 0 2px 0 rgba(255,255,255,0.3), 0 2px 0 var(--color-wood-5)',
       }}
     >
       {info.emoji}
