@@ -12,6 +12,16 @@ import { useGameStore, nextRobotCost, nextUpgradeCost } from '../../stores/gameS
 import { formatBig } from '../../game/engine/bigNumber.js';
 import { ATLAS_URL, ATLAS_SIZE } from '../garden/Sprite.js';
 import { audio } from '../../services/audio.js';
+import {
+  CoinIcon,
+  NavShopIcon,
+  IconBlade,
+  IconGear,
+  IconBattery,
+  IconSolar,
+  IconBrain,
+  IconWeather,
+} from '../icons/PixelIcon.js';
 
 const ALL_TIERS: RobotType[] = ROBOT_TIERS.map((t) => t.type);
 
@@ -34,10 +44,11 @@ export function ShopPanel() {
   return (
     <aside className="pixel-panel flex flex-col gap-3 max-h-[80vh] overflow-y-auto">
       <h2
-        className="text-lg leading-none"
+        className="flex items-center gap-2 text-lg leading-none"
         style={{ fontFamily: 'var(--font-title)', color: 'var(--color-text-title)' }}
       >
-        🛒 {t('shop.title')}
+        <NavShopIcon size={20} />
+        {t('shop.title')}
       </h2>
 
       {/* Robots */}
@@ -87,7 +98,7 @@ export function ShopPanel() {
                   className="numeric flex flex-col items-end"
                   style={{ color: 'var(--color-accent-gold)' }}
                 >
-                  <span className="text-xs leading-none">🪙</span>
+                  <CoinIcon size={12} />
                   <span className="text-sm leading-tight">{formatBig(cost)}</span>
                 </div>
               </button>
@@ -166,7 +177,7 @@ export function ShopPanel() {
                       <span className="text-xs">—</span>
                     ) : (
                       <>
-                        <span className="text-xs leading-none">🪙</span>
+                        <CoinIcon size={12} />
                         <span className="text-sm leading-tight">{formatBig(cost)}</span>
                       </>
                     )}
@@ -219,17 +230,18 @@ function RobotIcon({ tier }: { tier: number }) {
   );
 }
 
-/** Icone upgrade : encadre cozy avec emoji centre. */
+/** Icone upgrade : encadre cozy avec sprite SVG pixel art (zero emoji). */
 function UpgradeIcon({ upgradeKey }: { upgradeKey: string }) {
-  const map: Record<string, { emoji: string; bg: string }> = {
-    blades: { emoji: '⚔️', bg: 'var(--color-metal-2)' },
-    engine: { emoji: '⚙️', bg: 'var(--color-wood-2)' },
-    battery: { emoji: '🔋', bg: 'var(--color-grass-3)' },
-    solar: { emoji: '☀️', bg: 'var(--color-accent-gold)' },
-    navigation: { emoji: '🧭', bg: 'var(--color-water-1)' },
-    weather: { emoji: '☔', bg: 'var(--color-water-2)' },
+  const map: Record<string, { Icon: typeof IconBlade; bg: string }> = {
+    blades: { Icon: IconBlade, bg: 'var(--color-metal-2)' },
+    engine: { Icon: IconGear, bg: 'var(--color-wood-2)' },
+    battery: { Icon: IconBattery, bg: 'var(--color-grass-3)' },
+    solar: { Icon: IconSolar, bg: 'var(--color-accent-gold)' },
+    navigation: { Icon: IconBrain, bg: 'var(--color-water-1)' },
+    weather: { Icon: IconWeather, bg: 'var(--color-water-2)' },
   };
-  const info = map[upgradeKey] ?? { emoji: '🔧', bg: 'var(--color-wood-2)' };
+  const info = map[upgradeKey] ?? { Icon: IconGear, bg: 'var(--color-wood-2)' };
+  const { Icon } = info;
   return (
     <div
       className="flex-shrink-0 flex items-center justify-center"
@@ -239,11 +251,10 @@ function UpgradeIcon({ upgradeKey }: { upgradeKey: string }) {
         background: info.bg,
         border: '2px solid var(--color-wood-5)',
         borderRadius: 4,
-        fontSize: 20,
         boxShadow: 'inset 0 -2px 0 rgba(0,0,0,0.25), inset 0 2px 0 rgba(255,255,255,0.3), 0 2px 0 var(--color-wood-5)',
       }}
     >
-      {info.emoji}
+      <Icon size={20} />
     </div>
   );
 }

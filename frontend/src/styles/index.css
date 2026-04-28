@@ -38,6 +38,49 @@
 }
 
 /* ================================================================
+   Panels signature (Claude Design v5) : 9-slice cuivre/papier avec
+   4 clous decoratifs aux coins. C'est l'element visuel signature
+   qui rend tous les panels coherents et reconnaissables.
+   ================================================================ */
+
+.panel-9 {
+  position: relative;
+  background: var(--color-wood-2, #e3c896);
+  border: 2px solid var(--color-wood-5);
+  box-shadow:
+    inset 0 0 0 2px var(--color-wood-4),
+    inset 0 2px 0 3px var(--color-paper-1),
+    inset 0 -2px 0 3px var(--color-wood-3),
+    0 4px 0 0 rgba(92, 61, 36, 0.8);
+  padding: 14px 16px;
+  border-radius: 6px;
+}
+.panel-9::before, .panel-9::after,
+.panel-9 > .nail-bl, .panel-9 > .nail-br {
+  content: '';
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  background: var(--color-wood-3);
+  box-shadow: inset 0 1px 0 var(--color-paper-1);
+}
+.panel-9::before { top: 5px; left: 5px; }
+.panel-9::after  { top: 5px; right: 5px; }
+.panel-9 > .nail-bl { bottom: 5px; left: 5px; }
+.panel-9 > .nail-br { bottom: 5px; right: 5px; }
+
+.panel-paper {
+  background: var(--color-paper-1);
+  border: 2px solid var(--color-wood-5);
+  box-shadow:
+    inset 0 0 0 1px var(--color-paper-3),
+    inset 0 2px 0 2px var(--color-paper-2),
+    0 2px 0 0 var(--color-wood-5);
+  border-radius: 6px;
+  padding: 12px 14px;
+}
+
+/* ================================================================
    Composants cozy (PixelButton, PixelPanel, PixelCard, PixelTab)
    ================================================================ */
 
@@ -341,6 +384,26 @@
 @keyframes active-bob {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-3px); }
+}
+
+/* Coccinelle Easter egg : marche tres lentement le long du bord bas. */
+.farm-ladybug {
+  position: absolute;
+  bottom: 4px;
+  left: -16px;
+  z-index: 12;
+  animation: ladybug-walk 80s linear infinite;
+  pointer-events: none;
+  filter: drop-shadow(0 1px 0 rgba(0,0,0,0.4));
+}
+@keyframes ladybug-walk {
+  0% { left: -16px; transform: rotate(0deg) scaleX(1); }
+  20% { left: 25%; transform: rotate(-3deg) scaleX(1); }
+  21% { transform: rotate(0deg) scaleX(-1); }
+  40% { left: 50%; transform: rotate(2deg) scaleX(-1); }
+  41% { transform: rotate(0deg) scaleX(1); }
+  70% { left: 80%; transform: rotate(-2deg) scaleX(1); }
+  100% { left: 110%; transform: rotate(0deg) scaleX(1); }
 }
 
 @keyframes well-shimmer {

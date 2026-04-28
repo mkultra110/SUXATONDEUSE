@@ -1,4 +1,4 @@
-// Barre du haut cozy : titre Pixelify + currencies pixel + logout.
+// Barre du haut cozy : titre Pixelify + currencies pixel SVG + logout.
 
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -7,6 +7,7 @@ import { useAuth } from '../../hooks/useAuth.js';
 import { CashCounter } from './CashCounter.js';
 import { WeatherBadge } from './WeatherBadge.js';
 import { AudioControls } from './AudioControls.js';
+import { FuelIcon, SeedIcon, RobotLogo } from '../icons/PixelIcon.js';
 
 export function TopBar() {
   const { t } = useTranslation();
@@ -23,7 +24,7 @@ export function TopBar() {
   return (
     <header className="pixel-panel-dark flex w-full items-center justify-between gap-3 flex-wrap">
       <div className="flex items-center gap-2">
-        <span className="text-2xl" aria-hidden>🤖</span>
+        <RobotLogo size={28} />
         <div>
           <h1
             className="text-lg leading-none"
@@ -52,12 +53,12 @@ export function TopBar() {
       <div className="flex items-center gap-3 flex-wrap">
         <WeatherBadge />
         <Counter
-          icon="⛽"
+          icon={<FuelIcon size={16} />}
           value={gems.toString()}
           color="var(--color-accent-fuel)"
         />
         <Counter
-          icon="🌱"
+          icon={<SeedIcon size={16} />}
           value={prestigePoints.toString()}
           color="var(--color-accent-purple)"
         />
@@ -71,7 +72,7 @@ export function TopBar() {
   );
 }
 
-function Counter({ icon, value, color }: { icon: string; value: string; color: string }) {
+function Counter({ icon, value, color }: { icon: React.ReactNode; value: string; color: string }) {
   return (
     <div
       className="flex items-center gap-1.5 px-2 py-1 rounded"
@@ -81,7 +82,7 @@ function Counter({ icon, value, color }: { icon: string; value: string; color: s
         boxShadow: 'inset 0 -2px 0 rgba(0,0,0,0.3)',
       }}
     >
-      <span className="text-base" aria-hidden>{icon}</span>
+      {icon}
       <span className="numeric text-sm" style={{ color }}>{value}</span>
     </div>
   );

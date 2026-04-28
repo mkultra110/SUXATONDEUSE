@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next';
 import type { RobotType } from '@robomow/shared';
 import { useGameStore } from '../stores/gameStore.js';
 import { audio } from '../services/audio.js';
+import { LadybugIcon } from './icons/PixelIcon.js';
 import {
   Sprite,
   ATLAS_URL,
@@ -460,6 +461,11 @@ export function AnimatedGarden() {
         <Butterfly x={6.5} y={1.5} delay={0} variant="PINK" />
         <Butterfly x={4} y={5.5} delay={1.2} variant="YELLOW" />
         <Butterfly x={11} y={2.5} delay={2.5} variant="BLUE" />
+
+        {/* Easter egg cozy : coccinelle qui marche tres lentement (Margaux Lefevre signature). */}
+        <div className="farm-ladybug" title="Coccinelle">
+          <LadybugIcon size={16} />
+        </div>
 
         {blades.map((b) => (
           <span

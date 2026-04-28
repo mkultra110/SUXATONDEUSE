@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { LoginForm } from '../components/auth/LoginForm.js';
 import { RegisterForm } from '../components/auth/RegisterForm.js';
+import { RobotLogo } from '../components/icons/PixelIcon.js';
 
 export function AuthPage() {
   const { t } = useTranslation();
@@ -23,7 +24,8 @@ export function AuthPage() {
           'linear-gradient(180deg, var(--color-sky-morning) 0%, var(--color-sky-noon) 40%, var(--color-grass-2) 70%, var(--color-grass-4) 100%)',
       }}
     >
-      <header className="text-center">
+      <header className="text-center flex flex-col items-center gap-2">
+        <RobotLogo size={64} />
         <h1
           className="leading-none"
           style={{
@@ -34,7 +36,7 @@ export function AuthPage() {
             letterSpacing: '0.02em',
           }}
         >
-          🤖 {t('app.title')}
+          {t('app.title')}
         </h1>
         <p
           className="mt-2"

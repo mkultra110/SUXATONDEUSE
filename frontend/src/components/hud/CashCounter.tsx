@@ -4,6 +4,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useGameStore } from '../../stores/gameStore.js';
 import { formatBig } from '../../game/engine/bigNumber.js';
+import { CoinIcon } from '../icons/PixelIcon.js';
 
 export function CashCounter() {
   const cash = useGameStore((s) => s.cash);
@@ -31,7 +32,7 @@ export function CashCounter() {
       }}
     >
       <div className="flex items-center gap-1.5">
-        <span className="text-base" aria-hidden>🪙</span>
+        <CoinIcon size={16} />
         <span
           className="numeric text-sm"
           style={{
