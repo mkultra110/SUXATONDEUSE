@@ -7,6 +7,7 @@ import { calculatePrestigeSeeds, FIRST_PRESTIGE_THRESHOLD_CASH } from '@robomow/
 import { useGameStore } from '../../stores/gameStore.js';
 import { formatBig } from '../../game/engine/bigNumber.js';
 import { SeedIcon, StarIcon } from '../icons/PixelIcon.js';
+import { PrestigeCutscene } from './PrestigeCutscene.js';
 
 export function PrestigePanel() {
   const { t } = useTranslation();
@@ -16,6 +17,7 @@ export function PrestigePanel() {
   const totalPrestiges = useGameStore((s) => s.totalPrestiges);
   const triggerPrestige = useGameStore((s) => s.triggerPrestige);
   const [confirming, setConfirming] = useState(false);
+  const [cutscene, setCutscene] = useState<{ seeds: bigint; prestigeNum: number } | null>(null);
 
   const totalCashBigInt = BigInt(totalCash.floor().toString());
   const seedsAlreadySpent = BigInt(prestigePoints.floor().toString());
@@ -24,7 +26,10 @@ export function PrestigePanel() {
 
   function handlePrestige() {
     const gained = triggerPrestige();
-    if (gained > 0n) setConfirming(false);
+    if (gained > 0n) {
+      setConfirming(false);
+      setCutscene({ seeds: gained, prestigeNum: totalPrestiges + 1 });
+    }
   }
 
   return (
@@ -204,6 +209,14 @@ export function PrestigePanel() {
           </div>
         )}
       </div>
+
+      {cutscene && (
+        <PrestigeCutscene
+          seedsGained={cutscene.seeds}
+          totalPrestiges={cutscene.prestigeNum}
+          onComplete={() => setCutscene(null)}
+        />
+      )}
     </aside>
   );
 }

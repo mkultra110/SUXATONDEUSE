@@ -409,6 +409,69 @@
   50% { transform: translateY(-3px); }
 }
 
+/* Prestige cutscene : spirale doree + typewriter + fade-in scale. */
+@keyframes prestige-spiral {
+  0% {
+    transform: translate(-50%, -50%) rotate(var(--angle, 0deg)) translateX(0) scale(0.6);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) rotate(var(--angle, 0deg)) translateX(var(--radius, 100px)) translateY(-200px) scale(1.2);
+    opacity: 0;
+  }
+}
+
+@keyframes typewriter {
+  0% { width: 0; }
+  100% { width: 100%; }
+}
+
+@keyframes fade-in-scale {
+  0% { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+  100% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+}
+
+/* Animations currency icons (TopBar) : signature Camille v9.
+   Coin tourne par steps(8), fuel tangue ±3deg, seed pulse scale,
+   star/seed prestige a un halo dore qui pulse. */
+@keyframes coin-spin {
+  0% { transform: scaleX(1); }
+  12.5% { transform: scaleX(0.7); }
+  25% { transform: scaleX(0.3); }
+  37.5% { transform: scaleX(-0.7); }
+  50% { transform: scaleX(-1); }
+  62.5% { transform: scaleX(-0.7); }
+  75% { transform: scaleX(-0.3); }
+  87.5% { transform: scaleX(0.7); }
+  100% { transform: scaleX(1); }
+}
+.icon-coin-spin {
+  animation: coin-spin 3.2s steps(8) infinite;
+  display: inline-block;
+}
+
+@keyframes fuel-tangue {
+  0%, 100% { transform: rotate(-3deg); }
+  50% { transform: rotate(3deg); }
+}
+.icon-fuel-tangue {
+  animation: fuel-tangue 2.4s ease-in-out infinite;
+  display: inline-block;
+  transform-origin: bottom center;
+}
+
+@keyframes seed-pulse {
+  0%, 100% { transform: scale(1); filter: drop-shadow(0 0 0 transparent); }
+  50% { transform: scale(1.08); filter: drop-shadow(0 0 6px rgba(155, 109, 196, 0.6)); }
+}
+.icon-seed-pulse {
+  animation: seed-pulse 1.8s ease-in-out infinite;
+  display: inline-block;
+}
+
 /* Toast polaroid achievement : drop bounce avec rotation finale.
    Anim Camille easeBack cubic-bezier(0.34, 1.56, 0.64, 1). */
 @keyframes polaroid-drop {

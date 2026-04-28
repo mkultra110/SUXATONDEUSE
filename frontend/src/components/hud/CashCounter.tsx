@@ -32,7 +32,7 @@ export function CashCounter() {
       }}
     >
       <div className="flex items-center gap-1.5">
-        <CoinIcon size={16} />
+        <span className="icon-coin-spin"><CoinIcon size={16} /></span>
         <span
           className="numeric text-sm"
           style={{

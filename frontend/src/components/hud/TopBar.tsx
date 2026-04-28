@@ -53,12 +53,12 @@ export function TopBar() {
       <div className="flex items-center gap-3 flex-wrap">
         <WeatherBadge />
         <Counter
-          icon={<FuelIcon size={16} />}
+          icon={<span className="icon-fuel-tangue"><FuelIcon size={16} /></span>}
           value={gems.toString()}
           color="var(--color-accent-fuel)"
         />
         <Counter
-          icon={<SeedIcon size={16} />}
+          icon={<span className="icon-seed-pulse"><SeedIcon size={16} /></span>}
           value={prestigePoints.toString()}
           color="var(--color-accent-purple)"
         />
