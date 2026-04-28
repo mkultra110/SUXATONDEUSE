@@ -143,7 +143,11 @@ export function GamePage() {
       <TopBar />
       <main className="flex flex-1 flex-col items-center gap-3 lg:flex-row lg:items-start lg:justify-center lg:gap-6">
         <div className="flex flex-col items-center gap-2 flex-1 w-full">
-          <AnimatedGarden />
+          <div className="farm-frame-wrap">
+            <span className="frame-rivet-bl" />
+            <span className="frame-rivet-br" />
+            <AnimatedGarden />
+          </div>
         </div>
         <div className="flex flex-col gap-2 w-full max-w-sm">
           <nav className="grid grid-cols-4 gap-1.5 lg:grid-cols-7">

@@ -1,5 +1,6 @@
 // Barre du haut cozy : titre Pixelify + currencies pixel SVG + logout.
 
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { useGameStore } from '../../stores/gameStore.js';
@@ -7,7 +8,8 @@ import { useAuth } from '../../hooks/useAuth.js';
 import { CashCounter } from './CashCounter.js';
 import { WeatherBadge } from './WeatherBadge.js';
 import { AudioControls } from './AudioControls.js';
-import { FuelIcon, SeedIcon, RobotLogo, StarIcon } from '../icons/PixelIcon.js';
+import { MarcelLog } from './MarcelLog.js';
+import { FuelIcon, SeedIcon, RobotLogo, StarIcon, NotebookIcon } from '../icons/PixelIcon.js';
 
 // 1 jour de jeu = 60 secondes reelles (matche le day-night-overlay).
 const SECONDS_PER_GAME_DAY = 60;
@@ -20,6 +22,7 @@ export function TopBar() {
   const prestigePoints = useGameStore((s) => s.prestigePoints);
   const playTime = useGameStore((s) => s.playTimeSeconds);
   const dayNumber = Math.floor(playTime / SECONDS_PER_GAME_DAY) + 1;
+  const [marcelOpen, setMarcelOpen] = useState(false);
 
   async function handleLogout() {
     await logout();
@@ -93,11 +96,21 @@ export function TopBar() {
           color="var(--color-accent-purple)"
         />
         <CashCounter />
+        <button
+          type="button"
+          onClick={() => setMarcelOpen(true)}
+          className="pixel-btn pixel-btn-wood"
+          title="Carnet de Marcel"
+          style={{ minHeight: 'auto', padding: '4px 8px' }}
+        >
+          <NotebookIcon size={18} />
+        </button>
         <AudioControls />
         <button onClick={handleLogout} className="pixel-btn pixel-btn-danger text-xs">
           {t('auth.logout')}
         </button>
       </div>
+      {marcelOpen && <MarcelLog onClose={() => setMarcelOpen(false)} />}
     </header>
   );
 }

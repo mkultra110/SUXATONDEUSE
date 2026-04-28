@@ -5,6 +5,7 @@
 import { useEffect, useRef, useState, type CSSProperties } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { RobotType } from '@robomow/shared';
+import { weatherForHour } from '@robomow/shared';
 import { useGameStore } from '../stores/gameStore.js';
 import { audio } from '../services/audio.js';
 import { LadybugIcon, LanternIcon, PomponIcon, ScarecrowIcon, CoinIcon, IconGear, MailboxIcon, CocotteIcon } from './icons/PixelIcon.js';
@@ -264,6 +265,12 @@ export function AnimatedGarden() {
   const [mailboxClicks, setMailboxClicks] = useState(0);
   const [mailboxFlag, setMailboxFlag] = useState(false);
   const [cocotteVisible, setCocotteVisible] = useState(false);
+  // Meteo dynamique : refresh toutes les minutes, declenche pluie/neige.
+  const [currentWeather, setCurrentWeather] = useState(() => weatherForHour(new Date()));
+  useEffect(() => {
+    const id = setInterval(() => setCurrentWeather(weatherForHour(new Date())), 60_000);
+    return () => clearInterval(id);
+  }, []);
   const wrapperRef = useRef<HTMLDivElement | null>(null);
   const idRef = useRef(0);
 
@@ -858,6 +865,38 @@ export function AnimatedGarden() {
           <div className="farm-prod-indicator">
             <IconGear size={12} />
             <span style={{ marginLeft: 4 }}>Auto-tonte</span>
+          </div>
+        )}
+
+        {/* Meteo dynamique : pluie ou neige selon currentWeather */}
+        {(currentWeather === 'rain' || currentWeather === 'storm') && (
+          <div className="farm-weather-overlay">
+            {Array.from({ length: 30 }).map((_, i) => (
+              <span
+                key={`rain${i}`}
+                className="farm-rain-drop"
+                style={{
+                  left: `${(i * 37) % 100}%`,
+                  animationDelay: `${(i * 0.07) % 0.8}s`,
+                  animationDuration: `${0.6 + (i % 3) * 0.1}s`,
+                }}
+              />
+            ))}
+          </div>
+        )}
+        {currentWeather === 'snow' && (
+          <div className="farm-weather-overlay">
+            {Array.from({ length: 24 }).map((_, i) => (
+              <span
+                key={`snow${i}`}
+                className="farm-snow-flake"
+                style={{
+                  left: `${(i * 41) % 100}%`,
+                  animationDelay: `${(i * 0.15) % 4}s`,
+                  animationDuration: `${3 + (i % 4) * 0.4}s`,
+                }}
+              />
+            ))}
           </div>
         )}
 
