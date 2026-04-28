@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 import type { RobotType } from '@robomow/shared';
 import { useGameStore } from '../stores/gameStore.js';
 import { audio } from '../services/audio.js';
-import { LadybugIcon, LanternIcon, PomponIcon } from './icons/PixelIcon.js';
+import { LadybugIcon, LanternIcon, PomponIcon, ScarecrowIcon } from './icons/PixelIcon.js';
 import {
   Sprite,
   ATLAS_URL,
@@ -136,6 +136,7 @@ export function AnimatedGarden() {
   const [robots, setRobots] = useState<RobotEntity[]>([]);
   const [bursts, setBursts] = useState<Array<{ id: number; tileX: number; tileY: number; t0: number }>>([]);
   const [floatingNums, setFloatingNums] = useState<Array<{ id: number; x: number; y: number; n: number; vx: number }>>([]);
+  const [scarecrowHeadRot, setScarecrowHeadRot] = useState(0);
   const wrapperRef = useRef<HTMLDivElement | null>(null);
   const idRef = useRef(0);
 
@@ -341,6 +342,23 @@ export function AnimatedGarden() {
     );
   }, [robots.length, tallGrass]);
 
+  function handleMouseMove(e: React.MouseEvent<HTMLDivElement>) {
+    // Calcule l'angle entre le scarecrow (12, 5.5) et le curseur
+    // pour faire tourner sa tete (max ±30deg).
+    const rect = e.currentTarget.getBoundingClientRect();
+    const mx = e.clientX - rect.left;
+    const my = e.clientY - rect.top;
+    const sx = (12.5 / COLS) * rect.width;
+    const sy = (5.5 / ROWS) * rect.height;
+    const dx = mx - sx;
+    const dy = my - sy;
+    const rad = Math.atan2(dy, dx);
+    const deg = (rad * 180) / Math.PI;
+    // Limite a ±30deg autour de 90 (tete face au sud).
+    const clamped = Math.max(-30, Math.min(30, deg - 90));
+    setScarecrowHeadRot(clamped);
+  }
+
   function handleClick(e: React.MouseEvent<HTMLDivElement>) {
     const rect = e.currentTarget.getBoundingClientRect();
     const x = ((e.clientX - rect.left) / rect.width) * 100;
@@ -392,6 +410,7 @@ export function AnimatedGarden() {
     <div
       ref={wrapperRef}
       onClick={handleClick}
+      onMouseMove={handleMouseMove}
       className={`farm-scene ${shake ? 'animate-shake' : ''}`}
       style={
         {
@@ -524,6 +543,21 @@ export function AnimatedGarden() {
         {/* Easter egg cozy : coccinelle qui marche tres lentement (Margaux Lefevre signature). */}
         <div className="farm-ladybug" title="Coccinelle">
           <LadybugIcon size={16} />
+        </div>
+
+        {/* Epouvantail (Camille v9) : tete qui tourne vers le curseur. */}
+        <div
+          className="farm-scarecrow"
+          style={
+            {
+              left: 12.2 * TILE,
+              top: 4.5 * TILE,
+              ['--head-rot' as string]: `${scarecrowHeadRot}deg`,
+            } as CSSProperties
+          }
+          title="Épouvantail"
+        >
+          <ScarecrowIcon size={56} />
         </div>
 
         {blades.map((b) => (

@@ -15,6 +15,37 @@ interface ToastEntry {
   spawnedAt: number;
 }
 
+interface ConfettiPiece {
+  id: number;
+  vx: number;
+  vy: number;
+  rot: number;
+  color: string;
+  delay: number;
+  size: number;
+}
+
+const CONFETTI_COLORS = [
+  'var(--color-accent-gold)',
+  'var(--color-grass-4)',
+  'var(--color-accent-red)',
+  'var(--color-accent-pink)',
+  'var(--color-accent-purple)',
+  'var(--color-water-2)',
+];
+
+function spawnConfetti(): ConfettiPiece[] {
+  return Array.from({ length: 40 }).map((_, i) => ({
+    id: i,
+    vx: (Math.random() - 0.5) * 400,
+    vy: 200 + Math.random() * 400,
+    rot: (Math.random() - 0.5) * 1440,
+    color: CONFETTI_COLORS[i % CONFETTI_COLORS.length] ?? CONFETTI_COLORS[0]!,
+    delay: Math.random() * 100,
+    size: 4 + Math.floor(Math.random() * 5),
+  }));
+}
+
 const TOAST_DURATION_MS = 3500;
 const MAX_STACK = 3;
 
@@ -22,6 +53,7 @@ export function AchievementToast() {
   const unlocked = useGameStore((s) => s.achievementsUnlocked);
   const [toasts, setToasts] = useState<ToastEntry[]>([]);
   const [seenKeys] = useState<Set<string>>(() => new Set());
+  const [confetti, setConfetti] = useState<ConfettiPiece[] | null>(null);
 
   // Detecte les nouveaux deblocages.
   useEffect(() => {
@@ -45,10 +77,14 @@ export function AchievementToast() {
     }
     if (added) {
       audio.playPurchase();
+      // Confetti burst.
+      const pieces = spawnConfetti();
+      setConfetti(pieces);
+      setTimeout(() => setConfetti(null), 2000);
     }
   }, [unlocked, seenKeys]);
 
-  if (toasts.length === 0) return null;
+  if (toasts.length === 0 && !confetti) return null;
 
   return (
     <div
@@ -70,6 +106,30 @@ export function AchievementToast() {
         if (!ach) return null;
         return <Polaroid key={toast.id} achievement={ach} rotation={toast.rotation} />;
       })}
+      {confetti && (
+        <div className="confetti-burst">
+          {confetti.map((p) => (
+            <span
+              key={p.id}
+              className="confetti-piece"
+              style={
+                {
+                  width: p.size,
+                  height: p.size + 2,
+                  left: 0,
+                  top: 0,
+                  background: p.color,
+                  animationDelay: `${p.delay}ms`,
+                  ['--vx' as string]: `${p.vx}px`,
+                  ['--vy' as string]: `${p.vy}px`,
+                  ['--rot' as string]: `${p.rot}deg`,
+                  ['--c' as string]: p.color,
+                } as React.CSSProperties
+              }
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 }

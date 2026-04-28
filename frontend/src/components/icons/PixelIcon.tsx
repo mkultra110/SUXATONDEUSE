@@ -366,6 +366,185 @@ export function RobotLogo({ size = 24, className, style, title }: IconProps) {
   );
 }
 
+// Epouvantail (16×24) : tete (top half) animable separement via une
+// classe parent --head-rot. La tete est dans un <g> dedie pour que le
+// transform tourne juste la tete autour du cou.
+export function ScarecrowIcon({ size = 32, className, style, title }: IconProps) {
+  return (
+    <svg viewBox="0 0 16 24" shapeRendering="crispEdges" className={className} style={pixelStyle(size, style)} role={title ? 'img' : undefined} aria-label={title}>
+      {/* Mat vertical bois */}
+      <rect x="7" y="9" width="2" height="14" fill="#6B3710" />
+      <rect x="2" y="11" width="12" height="2" fill="#6B3710" />
+      <rect x="2" y="11" width="12" height="1" fill="#9B5C24" />
+      {/* Vetements (chemise) - en x */}
+      <rect x="3" y="13" width="10" height="6" fill="#D32F2F" />
+      <rect x="3" y="13" width="10" height="1" fill="#FFD921" />
+      <rect x="4" y="14" width="8" height="3" fill="#D32F2F" />
+      {/* Brins paille pieds */}
+      <rect x="5" y="22" width="1" height="2" fill="#FFD921" />
+      <rect x="7" y="22" width="2" height="2" fill="#FFD921" />
+      <rect x="10" y="22" width="1" height="2" fill="#FFD921" />
+      {/* Tete (sera tournee) */}
+      <g className="farm-scarecrow-head">
+        {/* Sac toile en jute */}
+        <rect x="4" y="2" width="8" height="7" fill="#DDA059" />
+        <rect x="4" y="2" width="8" height="1" fill="#FFE4A0" />
+        <rect x="4" y="8" width="8" height="1" fill="#95560E" />
+        {/* Yeux noirs (boutons) */}
+        <rect x="6" y="5" width="1" height="1" fill="#2A1818" />
+        <rect x="9" y="5" width="1" height="1" fill="#2A1818" />
+        {/* Bouche cousue X */}
+        <rect x="7" y="7" width="2" height="1" fill="#5C3D24" />
+        {/* Chapeau de paille */}
+        <rect x="3" y="0" width="10" height="2" fill="#FFD921" />
+        <rect x="2" y="1" width="12" height="1" fill="#E19D1D" />
+        <rect x="5" y="0" width="6" height="1" fill="#FFE4A0" />
+        {/* Brins de paille qui depassent du sac */}
+        <rect x="3" y="3" width="1" height="2" fill="#FFD921" />
+        <rect x="12" y="4" width="1" height="2" fill="#FFD921" />
+        <rect x="2" y="5" width="2" height="1" fill="#FFD921" />
+      </g>
+    </svg>
+  );
+}
+
+// Soleil pixel art (16×16) avec rayons. Ajouter classe sun-rotate pour
+// animer la rotation des rayons sans bouger le disque central.
+export function SunIcon({ size = 16, className, style, title }: IconProps) {
+  return (
+    <svg viewBox="0 0 16 16" shapeRendering="crispEdges" className={className} style={pixelStyle(size, style)} role={title ? 'img' : undefined} aria-label={title}>
+      {/* Rayons (cardinaux + diagonaux) */}
+      <g>
+        <rect x="7" y="0" width="2" height="2" fill="#F4C430" />
+        <rect x="7" y="14" width="2" height="2" fill="#F4C430" />
+        <rect x="0" y="7" width="2" height="2" fill="#F4C430" />
+        <rect x="14" y="7" width="2" height="2" fill="#F4C430" />
+        <rect x="2" y="2" width="2" height="2" fill="#F4C430" />
+        <rect x="12" y="2" width="2" height="2" fill="#F4C430" />
+        <rect x="2" y="12" width="2" height="2" fill="#F4C430" />
+        <rect x="12" y="12" width="2" height="2" fill="#F4C430" />
+      </g>
+      {/* Disque */}
+      <rect x="6" y="4" width="4" height="8" fill="#FFD921" />
+      <rect x="4" y="6" width="8" height="4" fill="#FFD921" />
+      <rect x="5" y="5" width="6" height="6" fill="#FFD921" />
+      {/* Highlight clair en haut-gauche */}
+      <rect x="6" y="5" width="2" height="2" fill="#FFE4A0" />
+      <rect x="5" y="7" width="2" height="2" fill="#FFE4A0" />
+    </svg>
+  );
+}
+
+// Nuage (16×12) avec ombre dessous.
+export function CloudIcon({ size = 16, className, style, title }: IconProps) {
+  return (
+    <svg viewBox="0 0 16 12" shapeRendering="crispEdges" className={className} style={pixelStyle(size, style)} role={title ? 'img' : undefined} aria-label={title}>
+      <rect x="4" y="2" width="6" height="3" fill="#FFF8DC" />
+      <rect x="2" y="4" width="12" height="5" fill="#FFF8DC" />
+      <rect x="3" y="9" width="10" height="1" fill="#C9B380" />
+      <rect x="5" y="3" width="4" height="1" fill="#FFFFFF" />
+    </svg>
+  );
+}
+
+// Nuage de pluie (16×16) : nuage gris + 3 gouttes bleues.
+export function RainIcon({ size = 16, className, style, title }: IconProps) {
+  return (
+    <svg viewBox="0 0 16 16" shapeRendering="crispEdges" className={className} style={pixelStyle(size, style)} role={title ? 'img' : undefined} aria-label={title}>
+      <rect x="4" y="1" width="6" height="3" fill="#B8C2CC" />
+      <rect x="2" y="3" width="12" height="5" fill="#B8C2CC" />
+      <rect x="3" y="8" width="10" height="1" fill="#7A8691" />
+      <rect x="3" y="10" width="1" height="2" fill="#4F94CD" />
+      <rect x="7" y="11" width="1" height="3" fill="#4F94CD" />
+      <rect x="11" y="10" width="1" height="2" fill="#4F94CD" />
+      <rect x="3" y="13" width="1" height="2" fill="#4F94CD" />
+      <rect x="11" y="13" width="1" height="2" fill="#4F94CD" />
+    </svg>
+  );
+}
+
+// Nuage d'orage (16×16) : nuage sombre + eclair jaune.
+export function StormIcon({ size = 16, className, style, title }: IconProps) {
+  return (
+    <svg viewBox="0 0 16 16" shapeRendering="crispEdges" className={className} style={pixelStyle(size, style)} role={title ? 'img' : undefined} aria-label={title}>
+      <rect x="4" y="1" width="6" height="3" fill="#7A8691" />
+      <rect x="2" y="3" width="12" height="5" fill="#7A8691" />
+      <rect x="3" y="8" width="10" height="1" fill="#4A5560" />
+      <rect x="9" y="9" width="2" height="2" fill="#FFD921" />
+      <rect x="7" y="10" width="3" height="2" fill="#FFD921" />
+      <rect x="6" y="11" width="3" height="2" fill="#FFD921" />
+      <rect x="5" y="12" width="3" height="2" fill="#FFD921" />
+      <rect x="6" y="13" width="2" height="2" fill="#FFD921" />
+    </svg>
+  );
+}
+
+// Vent (16×16) : 3 lignes ondulantes.
+export function WindIcon({ size = 16, className, style, title }: IconProps) {
+  return (
+    <svg viewBox="0 0 16 16" shapeRendering="crispEdges" className={className} style={pixelStyle(size, style)} role={title ? 'img' : undefined} aria-label={title}>
+      <rect x="2" y="4" width="9" height="1" fill="#A8D8EE" />
+      <rect x="11" y="3" width="2" height="2" fill="#A8D8EE" />
+      <rect x="13" y="2" width="1" height="1" fill="#A8D8EE" />
+      <rect x="13" y="5" width="1" height="1" fill="#A8D8EE" />
+      <rect x="2" y="8" width="11" height="1" fill="#A8D8EE" />
+      <rect x="13" y="7" width="2" height="2" fill="#A8D8EE" />
+      <rect x="2" y="12" width="7" height="1" fill="#A8D8EE" />
+      <rect x="9" y="11" width="2" height="2" fill="#A8D8EE" />
+    </svg>
+  );
+}
+
+// Flocon de neige (16×16) : 6 branches.
+export function SnowIcon({ size = 16, className, style, title }: IconProps) {
+  return (
+    <svg viewBox="0 0 16 16" shapeRendering="crispEdges" className={className} style={pixelStyle(size, style)} role={title ? 'img' : undefined} aria-label={title}>
+      <g fill="#A8D8EE">
+        <rect x="7" y="2" width="2" height="12" />
+        <rect x="2" y="7" width="12" height="2" />
+      </g>
+      <g fill="#FFF8DC">
+        <rect x="7" y="2" width="2" height="2" />
+        <rect x="7" y="12" width="2" height="2" />
+        <rect x="2" y="7" width="2" height="2" />
+        <rect x="12" y="7" width="2" height="2" />
+      </g>
+      <rect x="3" y="3" width="2" height="2" fill="#A8D8EE" />
+      <rect x="11" y="3" width="2" height="2" fill="#A8D8EE" />
+      <rect x="3" y="11" width="2" height="2" fill="#A8D8EE" />
+      <rect x="11" y="11" width="2" height="2" fill="#A8D8EE" />
+    </svg>
+  );
+}
+
+// Fleur (16×16) — pour saison printemps.
+export function FlowerIcon({ size = 16, className, style, title }: IconProps) {
+  return (
+    <svg viewBox="0 0 16 16" shapeRendering="crispEdges" className={className} style={pixelStyle(size, style)} role={title ? 'img' : undefined} aria-label={title}>
+      <rect x="6" y="3" width="4" height="4" fill="#F29BB8" />
+      <rect x="5" y="4" width="6" height="2" fill="#F29BB8" />
+      <rect x="7" y="4" width="2" height="2" fill="#FFD921" />
+      <rect x="7" y="7" width="2" height="6" fill="#6BA53A" />
+      <rect x="5" y="9" width="2" height="2" fill="#8FBF4F" />
+      <rect x="9" y="11" width="2" height="2" fill="#8FBF4F" />
+    </svg>
+  );
+}
+
+// Feuille morte automne.
+export function LeafIcon({ size = 16, className, style, title }: IconProps) {
+  return (
+    <svg viewBox="0 0 16 16" shapeRendering="crispEdges" className={className} style={pixelStyle(size, style)} role={title ? 'img' : undefined} aria-label={title}>
+      <rect x="6" y="2" width="4" height="2" fill="#E67E22" />
+      <rect x="4" y="4" width="8" height="6" fill="#E67E22" />
+      <rect x="3" y="6" width="10" height="2" fill="#E67E22" />
+      <rect x="5" y="10" width="6" height="2" fill="#A22A06" />
+      <rect x="7" y="12" width="2" height="3" fill="#5C3D24" />
+      <rect x="6" y="6" width="4" height="1" fill="#FFD921" />
+    </svg>
+  );
+}
+
 // Pompon le chat : chat tigre orange-blanc qui dort, vu de profil (24×12).
 // Easter egg cozy a placer sur le toit de la maison.
 export function PomponIcon({ size = 32, className, style, title }: IconProps) {
