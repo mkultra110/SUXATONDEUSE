@@ -731,6 +731,32 @@
 .farm-frame-wrap > .frame-rivet-bl { bottom: 4px; left: 4px; }
 .farm-frame-wrap > .frame-rivet-br { bottom: 4px; right: 4px; }
 
+/* Shop carousel horizontal scroll-snap (signature RCT-Touch mobile).
+   Cards 140px de large, swipe horizontal au doigt, snap-align start. */
+.shop-carousel {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  padding: 4px 4px 12px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-wood-3) transparent;
+}
+.shop-carousel::-webkit-scrollbar { height: 6px; }
+.shop-carousel::-webkit-scrollbar-track { background: transparent; }
+.shop-carousel::-webkit-scrollbar-thumb {
+  background: var(--color-wood-3);
+  border-radius: 3px;
+}
+.shop-carousel > * {
+  flex: 0 0 auto;
+  width: 140px;
+  scroll-snap-align: start;
+}
+
 /* FABs flottants RCT-Touch (Carnet de Marcel + Retour) */
 .farm-fab {
   width: 56px;

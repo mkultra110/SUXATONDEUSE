@@ -12,6 +12,8 @@ import {
   type UpgradeKey,
 } from '@robomow/shared';
 import { useGameStore, nextRobotCost, nextUpgradeCost, bulkRobotCost, maxAffordableRobots } from '../../stores/gameStore.js';
+import { useUIStore } from '../../stores/uiStore.js';
+import { useResponsive } from '../../hooks/useResponsive.js';
 import { formatBig } from '../../game/engine/bigNumber.js';
 import { ATLAS_URL, ATLAS_SIZE } from '../garden/Sprite.js';
 import { audio } from '../../services/audio.js';
@@ -40,8 +42,12 @@ export function ShopPanel() {
   const buyRobot = useGameStore((s) => s.buyRobot);
   const buyUpgrade = useGameStore((s) => s.buyUpgrade);
 
-  const [tab, setTab] = useState<ShopTab>('robots');
-  const [bulk, setBulk] = useState<BulkSize>(1);
+  // Sub-tab et bulk size persistes dans uiStore (cross-session).
+  const tab = useUIStore((s) => s.shopTab) as ShopTab;
+  const setTab = useUIStore((s) => s.setShopTab);
+  const bulk = useUIStore((s) => s.shopBulkSize) as BulkSize;
+  const setBulk = useUIStore((s) => s.setShopBulkSize);
+  const breakpoint = useResponsive();
 
   const visibleTiers = ALL_TIERS.filter((type, i) => {
     if (i === 0) return true;
@@ -63,14 +69,11 @@ export function ShopPanel() {
         </h2>
       </header>
 
-      {/* Sous-tabs Robots / Ameliorations */}
-      <div className="flex gap-1 p-1" style={{ background: 'var(--color-wood-4)', border: '2px solid var(--color-wood-5)' }}>
-        <SubTab active={tab === 'robots'} onClick={() => setTab('robots')}>
-          Robots
-        </SubTab>
-        <SubTab active={tab === 'upgrades'} onClick={() => setTab('upgrades')}>
-          {t('shop.upgrades')}
-        </SubTab>
+      {/* Filter chips arrondies (signature RCT-Touch : Junior/Family/Thrill).
+          Adaptees en : Robots / Ameliorations. Decorations a venir. */}
+      <div className="flex gap-2 px-1" role="tablist" aria-label="Categorie boutique">
+        <FilterChip active={tab === 'robots'} onClick={() => setTab('robots')} label="Robots" count={visibleTiers.length} />
+        <FilterChip active={tab === 'upgrades'} onClick={() => setTab('upgrades')} label={t('shop.upgrades')} count={UPGRADE_DEFINITIONS.length} />
       </div>
 
       {/* Selecteur multi-buy : x1 / x10 / x100 / xMax. Visible seulement
@@ -130,7 +133,7 @@ export function ShopPanel() {
       {/* Body scrollable */}
       <div className="overflow-y-auto pr-1" style={{ maxHeight: 'calc(80vh - 120px)' }}>
         {tab === 'robots' && (
-          <div className="grid grid-cols-2 gap-2.5">
+          <div className={breakpoint === 'mobile' ? 'shop-carousel' : 'grid grid-cols-2 gap-2.5'}>
             {visibleTiers.map((type) => {
               const tier = ROBOT_TIERS.find((tt) => tt.type === type);
               if (!tier) return null;
@@ -181,7 +184,7 @@ export function ShopPanel() {
         )}
 
         {tab === 'upgrades' && (
-          <div className="grid grid-cols-2 gap-2.5">
+          <div className={breakpoint === 'mobile' ? 'shop-carousel' : 'grid grid-cols-2 gap-2.5'}>
             {UPGRADE_DEFINITIONS.map((def) => {
               const level: number = upgrades[def.key as UpgradeKey] ?? 0;
               const locked = def.unlockPrestigeLevel > prestigeLevel;
@@ -226,27 +229,61 @@ export function ShopPanel() {
 // Sous-composants
 // =====================================================================
 
-function SubTab({ active, onClick, children }: { active: boolean; onClick: () => void; children: React.ReactNode }) {
+// FilterChip arrondi style RCT-Touch : pill cuivre actif / bois clair inactif.
+function FilterChip({
+  active,
+  onClick,
+  label,
+  count,
+}: {
+  active: boolean;
+  onClick: () => void;
+  label: string;
+  count?: number;
+}) {
   return (
     <button
       type="button"
+      role="tab"
+      aria-selected={active}
       onClick={onClick}
       style={{
-        flex: 1,
-        padding: '6px 12px',
-        borderRadius: 4,
-        border: 'none',
+        padding: '6px 14px',
+        minHeight: 32,
+        borderRadius: 9999,
+        border: '2px solid var(--color-wood-5)',
         cursor: 'pointer',
         fontFamily: 'var(--font-title)',
-        fontWeight: 600,
-        fontSize: 13,
-        color: active ? 'var(--color-text-title)' : 'var(--color-paper-2)',
-        background: active ? 'var(--color-paper-1)' : 'transparent',
-        boxShadow: active ? 'inset 0 -2px 0 var(--color-wood-3)' : undefined,
+        fontWeight: 700,
+        fontSize: 12,
+        letterSpacing: '0.04em',
+        color: active ? 'var(--color-paper-1)' : 'var(--color-wood-5)',
+        background: active ? 'var(--color-wood-4)' : 'var(--color-paper-1)',
+        boxShadow: active
+          ? 'inset 0 -2px 0 rgba(0, 0, 0, 0.3), inset 0 2px 4px rgba(0, 0, 0, 0.2), 0 0 12px rgba(184, 115, 51, 0.4)'
+          : 'inset 0 -2px 0 var(--color-wood-3), 0 1px 0 var(--color-wood-5)',
         transition: 'all 100ms ease-out',
+        display: 'inline-flex',
+        alignItems: 'center',
+        gap: 6,
       }}
     >
-      {children}
+      <span>{label}</span>
+      {count !== undefined && count > 0 && (
+        <span
+          style={{
+            background: active ? 'var(--color-paper-1)' : 'var(--color-wood-3)',
+            color: active ? 'var(--color-wood-5)' : 'var(--color-paper-1)',
+            padding: '0 6px',
+            borderRadius: 9999,
+            fontSize: 10,
+            minWidth: 18,
+            textAlign: 'center',
+          }}
+        >
+          {count}
+        </span>
+      )}
     </button>
   );
 }
