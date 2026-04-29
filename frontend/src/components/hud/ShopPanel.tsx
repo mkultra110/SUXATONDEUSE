@@ -3,7 +3,7 @@
 // - Grid 2-col de cards panel-9 avec clous decoratifs (signature Margaux)
 // - Bouton "shop-buy" gold sur chaque card avec CoinIcon
 
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   ROBOT_TIERS,
@@ -18,6 +18,8 @@ import { formatBig } from '../../game/engine/bigNumber.js';
 import { ATLAS_URL, ATLAS_SIZE } from '../garden/Sprite.js';
 import { audio } from '../../services/audio.js';
 import { shineForCount, SHINE_COLOR, SHINE_GLOW, type RobotShine } from '../../utils/playerLevel.js';
+import { useEffectsStore } from '../../stores/effectsStore.js';
+import { formatEta } from '../../utils/eta.js';
 import {
   CoinIcon,
   NavShopIcon,
@@ -37,6 +39,7 @@ type BulkSize = 1 | 10 | 100 | 'max';
 export function ShopPanel() {
   const { t } = useTranslation();
   const cash = useGameStore((s) => s.cash);
+  const cashPerSecond = useGameStore((s) => s.cashPerSecond);
   const holdings = useGameStore((s) => s.holdings);
   const upgrades = useGameStore((s) => s.upgrades);
   const prestigeLevel = useGameStore((s) => s.prestigeLevel);
@@ -49,6 +52,8 @@ export function ShopPanel() {
   const bulk = useUIStore((s) => s.shopBulkSize) as BulkSize;
   const setBulk = useUIStore((s) => s.setShopBulkSize);
   const breakpoint = useResponsive();
+  const search = useEffectsStore((s) => s.shopSearch);
+  const setSearch = useEffectsStore((s) => s.setShopSearch);
 
   const visibleTiers = ALL_TIERS.filter((type, i) => {
     if (i === 0) return true;
@@ -76,6 +81,28 @@ export function ShopPanel() {
         <FilterChip active={tab === 'robots'} onClick={() => setTab('robots')} label="Robots" count={visibleTiers.length} />
         <FilterChip active={tab === 'upgrades'} onClick={() => setTab('upgrades')} label={t('shop.upgrades')} count={UPGRADE_DEFINITIONS.length} />
       </div>
+
+      {/* Recherche / filtre */}
+      <input
+        type="search"
+        placeholder="Rechercher…"
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+        style={{
+          padding: '6px 10px',
+          margin: '0 4px',
+          background: 'var(--color-paper-1)',
+          border: '2px solid var(--color-wood-5)',
+          borderRadius: 4,
+          fontFamily: 'var(--font-body)',
+          fontSize: 12,
+          color: 'var(--color-text-body)',
+          outline: 'none',
+        }}
+        aria-label="Rechercher dans la boutique"
+      />
+      {/* Bouton Undo (5s window) */}
+      <UndoButton />
 
       {/* Selecteur multi-buy : x1 / x10 / x100 / xMax. Visible seulement
           dans l'onglet Robots (les upgrades sont level-by-level). */}
@@ -135,7 +162,21 @@ export function ShopPanel() {
       <div className="overflow-y-auto pr-1" style={{ maxHeight: 'calc(80vh - 120px)' }}>
         {tab === 'robots' && (
           <div className={breakpoint === 'mobile' ? 'shop-carousel' : 'grid grid-cols-2 gap-2.5'}>
-            {visibleTiers.map((type) => {
+            {visibleTiers
+              .filter((type) => {
+                if (!search) return true;
+                const q = search.toLowerCase();
+                if (q === 'achetable' || q === 'available') {
+                  return cash.gte(nextRobotCost(holdings, type));
+                }
+                const tierDef = ROBOT_TIERS.find((tt) => tt.type === type);
+                if (!tierDef) return false;
+                return (
+                  tierDef.name.toLowerCase().includes(q) ||
+                  type.toLowerCase().includes(q)
+                );
+              })
+              .map((type) => {
               const tier = ROBOT_TIERS.find((tt) => tt.type === type);
               if (!tier) return null;
               const owned = holdings[type].owned;
@@ -156,12 +197,15 @@ export function ShopPanel() {
                     ? desiredAmount
                     : 0;
               const shine = shineForCount(owned);
+              const remaining = totalCost.sub(cash);
+              const eta = !affordableSingle ? formatEta(remaining, cashPerSecond) : null;
               return (
                 <ShopCard
                   key={type}
                   affordable={affordableSingle && buyableNow > 0}
                   badge={owned > 0 ? `×${owned}` : null}
                   shine={shine}
+                  eta={eta}
                   art={<RobotArt tier={tier.index} shine={shine} />}
                   name={t(`robotNicknames.${type}`, tier.name)}
                   rate={
@@ -188,7 +232,15 @@ export function ShopPanel() {
 
         {tab === 'upgrades' && (
           <div className={breakpoint === 'mobile' ? 'shop-carousel' : 'grid grid-cols-2 gap-2.5'}>
-            {UPGRADE_DEFINITIONS.map((def) => {
+            {UPGRADE_DEFINITIONS.filter((def) => {
+              if (!search) return true;
+              const q = search.toLowerCase();
+              if (q === 'achetable' || q === 'available') {
+                const lvl = upgrades[def.key as UpgradeKey] ?? 0;
+                return lvl < def.maxLevel && cash.gte(nextUpgradeCost(def.key, lvl));
+              }
+              return def.name.toLowerCase().includes(q) || def.key.toLowerCase().includes(q);
+            }).map((def) => {
               const level: number = upgrades[def.key as UpgradeKey] ?? 0;
               const locked = def.unlockPrestigeLevel > prestigeLevel;
               const maxed = level >= def.maxLevel;
@@ -251,6 +303,65 @@ export function ShopPanel() {
 // =====================================================================
 // Sous-composants
 // =====================================================================
+
+// Bouton Undo : reculer la derniere action (5s window).
+function UndoButton() {
+  const undoStack = useEffectsStore((s) => s.undoStack);
+  const popUndo = useEffectsStore((s) => s.popUndo);
+  // Cleanup auto les entries expirees toutes les 500ms.
+  useRef(setInterval(() => useEffectsStore.getState().cleanUndo(), 500));
+  const lastEntry = undoStack[undoStack.length - 1];
+  if (!lastEntry) return null;
+  const remainingMs = lastEntry.expiresAt - Date.now();
+  if (remainingMs <= 0) return null;
+  return (
+    <button
+      type="button"
+      onClick={() => {
+        const entry = popUndo();
+        if (!entry) return;
+        // Rollback : restaure le state precedent.
+        const state = useGameStore.getState();
+        if (entry.kind === 'robot') {
+          useGameStore.setState({
+            cash: state.cash.add({ toString: () => entry.cashStr } as never),
+            holdings: {
+              ...state.holdings,
+              [entry.key as keyof typeof state.holdings]: {
+                type: entry.key as keyof typeof state.holdings,
+                owned: entry.previousValue,
+              },
+            },
+          });
+        } else if (entry.kind === 'upgrade') {
+          useGameStore.setState({
+            cash: state.cash.add({ toString: () => entry.cashStr } as never),
+            upgrades: {
+              ...state.upgrades,
+              [entry.key as keyof typeof state.upgrades]: entry.previousValue,
+            },
+          });
+        }
+      }}
+      style={{
+        padding: '4px 10px',
+        margin: '0 4px',
+        background: 'var(--color-accent-red)',
+        color: 'var(--color-paper-1)',
+        border: '2px solid var(--color-wood-5)',
+        borderRadius: 4,
+        fontFamily: 'var(--font-button)',
+        fontSize: 10,
+        letterSpacing: '0.1em',
+        textTransform: 'uppercase',
+        cursor: 'pointer',
+      }}
+      aria-label={`Annuler ${lastEntry.label}`}
+    >
+      ↶ Annuler {lastEntry.label}
+    </button>
+  );
+}
 
 // FilterChip arrondi style RCT-Touch : pill cuivre actif / bois clair inactif.
 function FilterChip({
@@ -316,21 +427,37 @@ interface ShopCardProps {
   locked?: boolean;
   badge?: string | null;
   shine?: RobotShine;
+  eta?: string | null;
   art: React.ReactNode;
   name: string;
   rate: string;
   cost: { toString(): string } | null;
   onClick: () => void;
+  onLongPress?: () => void;
 }
 
-function ShopCard({ affordable, locked, badge, shine, art, name, rate, cost, onClick }: ShopCardProps) {
+function ShopCard({ affordable, locked, badge, shine, eta, art, name, rate, cost, onClick, onLongPress }: ShopCardProps) {
   const [wiggle, setWiggle] = useState(false);
+  const longPressTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   function handleClickWiggle() {
     if (affordable) {
       setWiggle(true);
       setTimeout(() => setWiggle(false), 400);
     }
     onClick();
+  }
+  function startLongPress() {
+    if (!onLongPress) return;
+    longPressTimer.current = setTimeout(() => {
+      onLongPress();
+      longPressTimer.current = null;
+    }, 500);
+  }
+  function cancelLongPress() {
+    if (longPressTimer.current) {
+      clearTimeout(longPressTimer.current);
+      longPressTimer.current = null;
+    }
   }
   const hasShine = shine && shine !== 'none';
   // Css var consommee par .shop-card-shine pour la couleur du halo.
@@ -341,6 +468,10 @@ function ShopCard({ affordable, locked, badge, shine, art, name, rate, cost, onC
     <div
       className={`panel-9 ${wiggle ? 'card-wiggle' : ''} ${hasShine ? 'shop-card-shine' : ''}`}
       onClick={handleClickWiggle}
+      onPointerDown={startLongPress}
+      onPointerUp={cancelLongPress}
+      onPointerLeave={cancelLongPress}
+      onPointerCancel={cancelLongPress}
       style={{
         padding: 10,
         display: 'flex',
@@ -354,6 +485,16 @@ function ShopCard({ affordable, locked, badge, shine, art, name, rate, cost, onC
         ...shineStyle,
       }}
     >
+      {eta && (
+        <span
+          className="eta-badge"
+          style={{ position: 'absolute', top: 4, left: 4, zIndex: 2 }}
+          aria-label={`Achetable dans ${eta}`}
+          title={`Achetable dans ${eta}`}
+        >
+          {eta}
+        </span>
+      )}
       <span className="nail-bl" />
       <span className="nail-br" />
       {badge && (

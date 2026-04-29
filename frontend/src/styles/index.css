@@ -1746,6 +1746,203 @@ button[role='tab']:focus-visible {
   box-shadow: 0 2px 0 var(--color-wood-5);
 }
 
+/* === Combo counter (taps rapides) === */
+@keyframes combo-pop {
+  0% { transform: translate(-50%, -50%) scale(0.5); opacity: 0; }
+  60% { transform: translate(-50%, -50%) scale(1.15); opacity: 1; }
+  100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+}
+
+/* === Floating cash numbers === */
+@keyframes floating-cash {
+  0% { opacity: 0; transform: translate(-50%, 0) scale(0.6); }
+  20% { opacity: 1; transform: translate(-50%, -8px) scale(1.1); }
+  100% { opacity: 0; transform: translate(-50%, -80px) scale(1); }
+}
+
+/* === Milestone (palier 5 niveaux) === */
+@keyframes milestone-flash {
+  0% { opacity: 0.85; }
+  100% { opacity: 0; }
+}
+@keyframes milestone-badge-drop {
+  0% { transform: translate(-50%, -120px) scale(0.6) rotate(-15deg); opacity: 0; }
+  60% { transform: translate(-50%, 0) scale(1.15) rotate(8deg); opacity: 1; }
+  80% { transform: translate(-50%, 0) scale(0.95) rotate(-3deg); }
+  100% { transform: translate(-50%, 0) scale(1) rotate(0deg); opacity: 1; }
+}
+
+/* === Screen shake === */
+.screen-shake-active {
+  animation: screen-shake 0.18s linear infinite;
+}
+@keyframes screen-shake {
+  0%, 100% { transform: translate(0, 0); }
+  25% { transform: translate(calc(var(--shake-intensity, 0.5) * -4px), calc(var(--shake-intensity, 0.5) * 2px)); }
+  50% { transform: translate(calc(var(--shake-intensity, 0.5) * 3px), calc(var(--shake-intensity, 0.5) * -3px)); }
+  75% { transform: translate(calc(var(--shake-intensity, 0.5) * -2px), calc(var(--shake-intensity, 0.5) * 4px)); }
+}
+
+/* === Chromatic aberration flash (level-up / rank-up) === */
+.chromatic-flash-active::before,
+.chromatic-flash-active::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 1450;
+  pointer-events: none;
+  mix-blend-mode: screen;
+  animation: chromatic-fade 220ms ease-out forwards;
+}
+.chromatic-flash-active::before {
+  background: radial-gradient(circle at 50% 50%, rgba(255, 0, 0, 0.18), transparent 60%);
+  transform: translateX(-3px);
+}
+.chromatic-flash-active::after {
+  background: radial-gradient(circle at 50% 50%, rgba(0, 200, 255, 0.18), transparent 60%);
+  transform: translateX(3px);
+}
+@keyframes chromatic-fade {
+  0% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* === Cash threshold pulse (TopBar glow) === */
+.cash-threshold-pulse header {
+  animation: topbar-pulse 0.6s ease-out 4;
+}
+@keyframes topbar-pulse {
+  0%, 100% { box-shadow: inset 0 -3px 0 var(--color-wood-4), 0 4px 12px rgba(0,0,0,0.3); }
+  50% {
+    box-shadow:
+      inset 0 -3px 0 var(--color-wood-4),
+      0 4px 12px rgba(0,0,0,0.3),
+      0 0 24px rgba(245, 196, 67, 0.8),
+      0 0 48px rgba(245, 196, 67, 0.5);
+  }
+}
+
+/* === Robot aura par tier (apply via class .robot-aura-bronze etc) === */
+.robot-aura-bronze { filter: drop-shadow(0 0 4px rgba(165, 113, 68, 0.6)); }
+.robot-aura-silver { filter: drop-shadow(0 0 6px rgba(184, 196, 208, 0.7)); }
+.robot-aura-gold { filter: drop-shadow(0 0 8px rgba(255, 217, 33, 0.8)); }
+.robot-aura-diamond {
+  filter: drop-shadow(0 0 10px rgba(168, 216, 238, 0.9));
+  animation: aura-shimmer 2.4s ease-in-out infinite;
+}
+@keyframes aura-shimmer {
+  0%, 100% { filter: drop-shadow(0 0 8px rgba(168, 216, 238, 0.7)); }
+  50% { filter: drop-shadow(0 0 16px rgba(255, 255, 255, 0.9)); }
+}
+
+/* === Speed lines === */
+.speed-lines-active::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    90deg,
+    transparent 0,
+    transparent 30px,
+    rgba(255, 255, 255, 0.18) 30px,
+    rgba(255, 255, 255, 0.18) 32px
+  );
+  animation: speed-lines-slide 0.6s linear infinite;
+  pointer-events: none;
+  z-index: 5;
+}
+@keyframes speed-lines-slide {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-32px); }
+}
+
+/* === Sunflower bloom (recolte critique) === */
+@keyframes sunflower-bloom {
+  0% { transform: scale(0) rotate(0deg); opacity: 0; }
+  40% { transform: scale(1.4) rotate(180deg); opacity: 1; }
+  100% { transform: scale(2) rotate(360deg); opacity: 0; }
+}
+.sunflower-bloom {
+  animation: sunflower-bloom 1.2s ease-out forwards;
+}
+
+/* === Petal rain === */
+@keyframes petal-fall {
+  0% { transform: translateY(-50px) rotate(0deg); opacity: 0; }
+  10% { opacity: 0.85; }
+  100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+}
+
+/* === Golden butterfly fly path === */
+@keyframes golden-fly-left {
+  0% { left: -60px; transform: translateY(0); }
+  50% { transform: translateY(-30px); }
+  100% { left: calc(100vw + 60px); transform: translateY(0); }
+}
+@keyframes golden-fly-right {
+  0% { right: -60px; transform: translateY(0); }
+  50% { transform: translateY(-30px); }
+  100% { right: calc(100vw + 60px); transform: translateY(0); }
+}
+
+/* === Tile saturation par tier (apply on garden container) === */
+.tile-saturate-cozy { filter: saturate(1.05); }
+.tile-saturate-bountiful { filter: saturate(1.12) brightness(1.02); }
+.tile-saturate-lush { filter: saturate(1.2) brightness(1.04); }
+.tile-saturate-legendary { filter: saturate(1.3) brightness(1.06) contrast(1.05); }
+
+/* === Robot scale par level (transform) === */
+.robot-scale-1 { transform: scale(1.05); }
+.robot-scale-2 { transform: scale(1.1); }
+.robot-scale-3 { transform: scale(1.18); }
+.robot-scale-4 { transform: scale(1.25); }
+.robot-scale-5 { transform: scale(1.35); }
+
+/* === Anniversary glow === */
+@keyframes anniversary-glow {
+  0%, 100% { box-shadow: 0 0 20px rgba(255, 217, 33, 0.4); }
+  50% { box-shadow: 0 0 40px rgba(255, 217, 33, 0.8), 0 0 60px rgba(245, 196, 67, 0.5); }
+}
+
+/* === ETA badge === */
+.eta-badge {
+  background: var(--color-wood-3);
+  color: var(--color-text-muted);
+  font-family: var(--font-button);
+  font-size: 9px;
+  padding: 1px 4px;
+  border-radius: 2px;
+  border: 1px solid var(--color-wood-5);
+  letter-spacing: 0.05em;
+}
+
+/* === Achievement tilt + golden === */
+.achievement-unlocked {
+  animation: achievement-shine 3s ease-in-out infinite;
+  transform: rotate(-2deg);
+}
+@keyframes achievement-shine {
+  0%, 100% { box-shadow: 0 0 6px rgba(245, 196, 67, 0.4); }
+  50% { box-shadow: 0 0 14px rgba(245, 196, 67, 0.8); }
+}
+
+/* === Power Score halo SVG ring (TopBar) === */
+.power-halo-ring {
+  animation: power-halo-spin 8s linear infinite;
+  transform-origin: center;
+}
+@keyframes power-halo-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* === Pulse generique (utilise par PetalRain banner et autres) === */
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: translateX(-50%) scale(1); }
+  50% { opacity: 0.85; transform: translateX(-50%) scale(1.04); }
+}
+.pulse { animation: pulse 1.6s ease-in-out infinite; }
+
 /* Level-up celebration : banner drop centre avec rebond + glow. */
 @keyframes levelup-drop {
   0% {

@@ -3,7 +3,9 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { useGameStore } from '../../stores/gameStore.js';
+import { useEffectsStore } from '../../stores/effectsStore.js';
 import { audio } from '../../services/audio.js';
+import { haptic } from '../../utils/vibration.js';
 import { computePlayerLevel, rankForLevel } from '../../utils/playerLevel.js';
 import { StarIcon } from '../icons/PixelIcon.js';
 
@@ -21,9 +23,13 @@ export function LevelUpCelebration() {
       // Si on franchit un palier de rang, c'est un evenement encore plus visible.
       setPop({ id, level, rank: rank.title, rankColor: rank.color });
       audio.playPurchase();
-      // Si nouveau rang : 2eme audio bling.
+      haptic.levelUp();
+      useEffectsStore.getState().triggerShake(0.4, 300);
+      useEffectsStore.getState().triggerChromatic(220);
+      // Si nouveau rang : 2eme audio bling + shake plus fort.
       if (rank.title !== previousRank.title) {
-        setTimeout(() => audio.playPurchase(), 200);
+        setTimeout(() => audio.playRankUp(), 200);
+        useEffectsStore.getState().triggerShake(0.8, 500);
       }
       const t = setTimeout(() => {
         setPop((p) => (p && p.id === id ? null : p));

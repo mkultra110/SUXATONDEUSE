@@ -5,9 +5,11 @@
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth.js';
+import { useUIStore } from '../../stores/uiStore.js';
 import { ConfirmDialog } from './ConfirmDialog.js';
 import { MarcelLog } from './MarcelLog.js';
-import { NotebookIcon, IconGear, StarIcon, HeartIcon, CrossIcon } from '../icons/PixelIcon.js';
+import { SettingsPanel } from './SettingsPanel.js';
+import { NotebookIcon, IconGear, StarIcon, HeartIcon, CrossIcon, NavCollectionIcon, TrophyIcon } from '../icons/PixelIcon.js';
 
 interface KebabMenuProps {
   onClose?: () => void;
@@ -17,7 +19,10 @@ export function KebabMenu({ onClose }: KebabMenuProps) {
   const [open, setOpen] = useState(false);
   const [marcelOpen, setMarcelOpen] = useState(false);
   const [aboutOpen, setAboutOpen] = useState(false);
+  const [settingsOpen, setSettingsOpen] = useState(false);
   const [confirmLogout, setConfirmLogout] = useState(false);
+  const setPolaroidAlbumOpen = useUIStore((s) => s.setPolaroidAlbumOpen);
+  const setStatsHebdoOpen = useUIStore((s) => s.setStatsHebdoOpen);
   const navigate = useNavigate();
   const { logout } = useAuth();
   const ref = useRef<HTMLDivElement>(null);
@@ -96,6 +101,23 @@ export function KebabMenu({ onClose }: KebabMenuProps) {
               icon={<IconGear size={18} />}
               label="Réglages"
               onClick={() => {
+                setSettingsOpen(true);
+                setOpen(false);
+              }}
+            />
+            <MenuItem
+              icon={<NavCollectionIcon size={18} />}
+              label="Album de la ferme"
+              onClick={() => {
+                setPolaroidAlbumOpen(true);
+                setOpen(false);
+              }}
+            />
+            <MenuItem
+              icon={<TrophyIcon size={18} />}
+              label="Bilan"
+              onClick={() => {
+                setStatsHebdoOpen(true);
                 setOpen(false);
               }}
             />
@@ -127,6 +149,8 @@ export function KebabMenu({ onClose }: KebabMenuProps) {
       </div>
       {marcelOpen && <MarcelLog onClose={() => setMarcelOpen(false)} />}
       {aboutOpen && <AboutDialog onClose={() => setAboutOpen(false)} />}
+      <SettingsPanel open={settingsOpen} onClose={() => setSettingsOpen(false)} />
+
       <ConfirmDialog
         open={confirmLogout}
         title="Deconnexion ?"

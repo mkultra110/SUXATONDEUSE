@@ -16,6 +16,8 @@ import {
 import { themeForMapLevel } from '../utils/mapThemes.js';
 import { bossForMapLevel, type BossDef } from '../utils/bossMaps.js';
 import { audio } from '../services/audio.js';
+import { useEffectsStore } from '../stores/effectsStore.js';
+import { haptic } from '../utils/vibration.js';
 import { LadybugIcon, LanternIcon, PomponIcon, ScarecrowIcon, CoinIcon, IconGear, MailboxIcon, CocotteIcon } from './icons/PixelIcon.js';
 import { SpeechBubble } from './hud/SpeechBubble.js';
 import i18next from 'i18next';
@@ -768,6 +770,9 @@ export function AnimatedGarden() {
       setFloatingNums((prev) => prev.filter((f) => f.id !== fnId));
     }, 1100);
     manualTap();
+    // Bump le combo counter global et vibration tap.
+    useEffectsStore.getState().bumpCombo();
+    haptic.tap();
   }
 
   useEffect(() => {
@@ -789,7 +794,7 @@ export function AnimatedGarden() {
       ref={wrapperRef}
       onClick={handleClick}
       onMouseMove={handleMouseMove}
-      className={`farm-scene ${shake ? 'animate-shake' : ''}`}
+      className={`farm-scene tile-saturate-${tier} ${shake ? 'animate-shake' : ''}`}
       style={
         {
           width: '100%',

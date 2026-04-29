@@ -92,9 +92,30 @@ export function MemeGiselePopup() {
     }
 
     schedule(FIRST_DELAY_MS);
+
+    // Listener global "meme-dialogue" emis par GameEffectsLayer pour
+    // afficher un dialogue conditionnel (ex: premier prestige, anniversaire).
+    function onCustomDialogue(e: Event) {
+      const detail = (e as CustomEvent<{ id: string; text: string }>).detail;
+      if (!detail) return;
+      const id = Date.now();
+      setPopup({ id, quote: detail.text, visible: true });
+      audio.playPurchase();
+      setTimeout(() => {
+        if (cancelled) return;
+        setPopup((p) => (p && p.id === id ? { ...p, visible: false } : p));
+        setTimeout(() => {
+          if (cancelled) return;
+          setPopup((p) => (p && p.id === id ? null : p));
+        }, 400);
+      }, 8000);
+    }
+    window.addEventListener('meme-dialogue', onCustomDialogue);
+
     return () => {
       cancelled = true;
       if (nextTimer) clearTimeout(nextTimer);
+      window.removeEventListener('meme-dialogue', onCustomDialogue);
     };
   }, []);
 

@@ -19,6 +19,10 @@ import { DesktopSidebar } from '../components/hud/DesktopSidebar.js';
 import { RightStatsPanel } from '../components/hud/RightStatsPanel.js';
 import { SpecialDateBanner } from '../components/hud/SpecialDateBanner.js';
 import { LevelUpCelebration } from '../components/hud/LevelUpCelebration.js';
+import { GameEffectsLayer } from '../components/hud/GameEffectsLayer.js';
+import { AnniversaryGift } from '../components/hud/AnniversaryGift.js';
+import { PolaroidAlbum } from '../components/hud/PolaroidAlbum.js';
+import { StatsHebdo } from '../components/hud/StatsHebdo.js';
 import { useGameSession } from '../hooks/useGameSession.js';
 import { useAudio } from '../hooks/useAudio.js';
 import { useResponsive } from '../hooks/useResponsive.js';
@@ -280,6 +284,10 @@ export function GamePage() {
       <MemeGiselePopup />
       <SpecialDateBanner />
       <LevelUpCelebration />
+      <GameEffectsLayer />
+      <AnniversaryGift />
+      <PolaroidAlbum />
+      <StatsHebdo />
       <ActivityFAB onClick={() => setMarcelLogOpen(true)} notificationCount={0} />
       {marcelLogOpen && <MarcelLog onClose={() => setMarcelLogOpen(false)} />}
     </div>
