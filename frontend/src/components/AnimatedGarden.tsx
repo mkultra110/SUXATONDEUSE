@@ -13,6 +13,7 @@ import {
   TIER_BUTTERFLIES,
   TIER_FLOWERS_COUNT,
 } from '../utils/playerLevel.js';
+import { themeForMapLevel } from '../utils/mapThemes.js';
 import { audio } from '../services/audio.js';
 import { LadybugIcon, LanternIcon, PomponIcon, ScarecrowIcon, CoinIcon, IconGear, MailboxIcon, CocotteIcon } from './icons/PixelIcon.js';
 import { SpeechBubble } from './hud/SpeechBubble.js';
@@ -349,6 +350,9 @@ export function AnimatedGarden() {
 
   const tilesMowed = mapInitialCount - tallGrass.size;
   const mapPercent = mapInitialCount > 0 ? Math.round((tilesMowed / mapInitialCount) * 100) : 100;
+
+  // Theme courant : palette + particules + ambiance changent par paliers.
+  const mapTheme = useMemo(() => themeForMapLevel(mapLevel), [mapLevel]);
 
   // Decor density scale avec le player level (signature progression).
   // Plus le joueur monte en niveau, plus le jardin gagne en richesse :
@@ -1007,19 +1011,64 @@ export function AnimatedGarden() {
           </div>
         )}
 
-        {/* Progress map : "Map N · X% tondu" en haut-droite */}
+        {/* Progress map : "Map N · NomTheme · X%" en haut-droite */}
         <div className="farm-map-progress">
           <div className="farm-map-progress-label">
-            <span style={{ color: 'var(--color-accent-gold)' }}>MAP {mapLevel}</span>
+            <span style={{ color: mapTheme.accentColor }}>MAP {mapLevel}</span>
             <span className="numeric" style={{ marginLeft: 6 }}>{mapPercent}%</span>
+          </div>
+          <div
+            className="meme"
+            style={{
+              fontSize: 10,
+              color: mapTheme.accentColor,
+              fontStyle: 'italic',
+              lineHeight: 1,
+              marginTop: 2,
+              textAlign: 'center',
+            }}
+          >
+            {mapTheme.name}
           </div>
           <div className="farm-map-progress-bar">
             <div
               className="farm-map-progress-fill"
-              style={{ width: `${mapPercent}%` }}
+              style={{
+                width: `${mapPercent}%`,
+                background: `linear-gradient(90deg, ${mapTheme.accentColor}, var(--color-accent-gold))`,
+                boxShadow: `0 0 6px ${mapTheme.accentColor}`,
+              }}
             />
           </div>
         </div>
+
+        {/* Theme overlay tint (multiply) au-dessus du jardin pour ambiance. */}
+        <div
+          className="farm-theme-overlay"
+          style={{
+            background: mapTheme.skyTint,
+            mixBlendMode: 'multiply',
+          }}
+        />
+
+        {/* Theme particles overlay : sakura / fireflies / embers / etc. */}
+        {mapTheme.particleEffect !== 'none' && (
+          <div className={`farm-particles farm-particles-${mapTheme.particleEffect}`}>
+            {Array.from({ length: 6 + mapTheme.particleDensity * 6 }).map((_, i) => (
+              <span
+                key={i}
+                className={`farm-particle farm-particle-${mapTheme.particleEffect}`}
+                style={
+                  {
+                    left: `${(i * 53) % 100}%`,
+                    animationDelay: `${(i * 0.4) % 4}s`,
+                    animationDuration: `${4 + (i % 5) * 0.6}s`,
+                  } as CSSProperties
+                }
+              />
+            ))}
+          </div>
+        )}
 
         {/* Map transition overlay (fade flash) */}
         {mapTransition && (

@@ -832,6 +832,137 @@
   100% { transform: scale(1); opacity: 1; }
 }
 
+/* Theme overlay : tint qui change l'ambiance du jardin par map level. */
+.farm-theme-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 21;
+  transition: background 1500ms ease-out;
+}
+
+/* Particles overlay (theme-specific). */
+.farm-particles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 23;
+  overflow: hidden;
+}
+.farm-particle {
+  position: absolute;
+  top: -10%;
+}
+
+/* Sakura : petales rose pale qui tombent en flottant. */
+.farm-particle-sakura {
+  width: 6px;
+  height: 6px;
+  background: radial-gradient(ellipse at 35% 35%, #FFE0EC 0%, #F29BB8 60%, #E76F8B 100%);
+  border-radius: 50% 0 50% 0;
+  box-shadow: 0 0 4px rgba(242, 155, 184, 0.5);
+  animation: sakura-fall 6s linear infinite;
+}
+@keyframes sakura-fall {
+  0% { transform: translate(0, -10%) rotate(0deg); opacity: 0; }
+  10% { opacity: 0.95; }
+  100% { transform: translate(40px, 110vh) rotate(720deg); opacity: 0; }
+}
+
+/* Fireflies : petits points lumineux jaunes qui flottent. */
+.farm-particle-fireflies {
+  width: 4px;
+  height: 4px;
+  background: #FFD921;
+  border-radius: 50%;
+  box-shadow: 0 0 8px #FFD921, 0 0 16px rgba(255, 217, 33, 0.6);
+  animation: firefly-float 5s ease-in-out infinite;
+}
+@keyframes firefly-float {
+  0% { transform: translate(0, 0); opacity: 0; }
+  20% { opacity: 1; }
+  50% { transform: translate(30px, 50vh); opacity: 1; }
+  80% { opacity: 0.7; }
+  100% { transform: translate(-20px, 100vh); opacity: 0; }
+}
+
+/* Embers : braises rouges qui montent. */
+.farm-particle-embers {
+  width: 4px;
+  height: 4px;
+  background: radial-gradient(circle, #FFD921 0%, #E76F1C 40%, #B52121 100%);
+  border-radius: 50%;
+  box-shadow: 0 0 8px #E76F1C, 0 0 16px rgba(230, 100, 30, 0.7);
+  animation: ember-rise 4s ease-out infinite;
+  top: 100%;
+}
+@keyframes ember-rise {
+  0% { transform: translate(0, 0) scale(1); opacity: 0; }
+  20% { opacity: 1; }
+  80% { opacity: 0.6; }
+  100% { transform: translate(20px, -110vh) scale(0.3); opacity: 0; }
+}
+
+/* Snowflakes : flocons blancs qui tombent en drift. */
+.farm-particle-snowflakes {
+  width: 4px;
+  height: 4px;
+  background: #FFFFFF;
+  border-radius: 0;
+  box-shadow: 0 0 4px rgba(255, 255, 255, 0.8);
+  animation: snowflake-drift 6s linear infinite;
+}
+@keyframes snowflake-drift {
+  0% { transform: translate(0, -10%) rotate(0deg); opacity: 0; }
+  10% { opacity: 1; }
+  50% { transform: translate(15px, 50vh) rotate(180deg); }
+  100% { transform: translate(-10px, 110vh) rotate(360deg); opacity: 0; }
+}
+
+/* Aurora : ondulations vertes diaphanes traversantes. */
+.farm-particles-aurora {
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(126, 197, 197, 0.15) 30%,
+    rgba(126, 197, 197, 0.05) 50%,
+    transparent 100%
+  );
+  animation: aurora-shift 8s ease-in-out infinite;
+}
+@keyframes aurora-shift {
+  0%, 100% { background-position: 0 0; }
+  50% { background-position: 0 30%; }
+}
+.farm-particle-aurora {
+  width: 60px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(126, 197, 197, 0.6), transparent);
+  top: 30%;
+  left: -60px;
+  animation: aurora-line 6s linear infinite;
+  box-shadow: 0 0 8px rgba(126, 197, 197, 0.5);
+}
+@keyframes aurora-line {
+  0% { transform: translate(0, 0); opacity: 0; }
+  20% { opacity: 0.8; }
+  100% { transform: translate(110vw, 40px); opacity: 0; }
+}
+
+/* Gold sparkles : etoiles dorees qui scintillent. */
+.farm-particle-gold-sparkles {
+  width: 6px;
+  height: 6px;
+  background:
+    radial-gradient(circle at 50% 50%, #FFFFFF 0%, #FFD921 40%, transparent 70%);
+  animation: gold-sparkle 3s ease-in-out infinite;
+}
+@keyframes gold-sparkle {
+  0%, 100% { transform: scale(0.4) rotate(0); opacity: 0; }
+  20% { transform: scale(1.4) rotate(45deg); opacity: 1; }
+  60% { transform: scale(0.8) rotate(180deg); opacity: 0.7; }
+}
+
 /* Bonus flowers sway leger pour les fleurs ajoutees par player level. */
 @keyframes bonus-flower-sway {
   0%, 100% { transform: rotate(-3deg); }
