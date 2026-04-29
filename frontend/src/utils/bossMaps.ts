@@ -3,7 +3,20 @@
 // de coups de tonte ; chaque tuile coupee = 1 degat. Quand HP = 0, on
 // passe a la map suivante avec un bonus.
 
-export type BossKind = 'tournesol-geant' | 'champignon-mauve' | 'cactus-titan' | 'arbre-ancien' | 'cristal-pur';
+export type BossKind =
+  | 'tournesol-geant'
+  | 'champignon-mauve'
+  | 'cactus-titan'
+  | 'arbre-ancien'
+  | 'cristal-pur'
+  | 'taupe-geante'
+  | 'corbeau-noir'
+  | 'sanglier'
+  | 'mante-religieuse'
+  | 'citrouille-mere'
+  | 'krampus'
+  | 'tournesol-mutant'
+  | 'arbre-foudre';
 
 export interface BossDef {
   kind: BossKind;
@@ -49,6 +62,62 @@ export const BOSSES: ReadonlyArray<BossDef> = [
     hp: 400,
     tagline: 'Tellement pur qu\'il ferait pâlir les diamants.',
     color: '#A8D8EE',
+  },
+  {
+    kind: 'taupe-geante',
+    name: 'Taupe Géante',
+    hp: 600,
+    tagline: 'Elle creuse plus vite qu\'elle ne réfléchit.',
+    color: '#5C3A1F',
+  },
+  {
+    kind: 'corbeau-noir',
+    name: 'Corbeau Noir',
+    hp: 750,
+    tagline: 'Vole, esquive, ricane. Adore voler les pièces.',
+    color: '#1a1a1a',
+  },
+  {
+    kind: 'sanglier',
+    name: 'Sanglier des Bois',
+    hp: 1000,
+    tagline: 'Charge en ligne droite, casse tout sur son chemin.',
+    color: '#3A1F08',
+  },
+  {
+    kind: 'mante-religieuse',
+    name: 'Mante Religieuse',
+    hp: 1500,
+    tagline: 'Phase prière, phase attaque. Mefie-toi des deux.',
+    color: '#8FBF4F',
+  },
+  {
+    kind: 'citrouille-mere',
+    name: 'Citrouille Mère',
+    hp: 2000,
+    tagline: 'Crache du feu d\'Halloween. Pop ses petites citrouilles.',
+    color: '#E67E22',
+  },
+  {
+    kind: 'krampus',
+    name: 'Krampus',
+    hp: 3000,
+    tagline: 'L\'anti-Père Noël. Il brûle ton sapin.',
+    color: '#A22A06',
+  },
+  {
+    kind: 'tournesol-mutant',
+    name: 'Tournesol Mutant',
+    hp: 4500,
+    tagline: 'Tire des graines explosives, plus mauvais que son cousin.',
+    color: '#FFD921',
+  },
+  {
+    kind: 'arbre-foudre',
+    name: 'Arbre de la Foudre',
+    hp: 6500,
+    tagline: 'Touché par mille éclairs, il en redemande.',
+    color: '#A855F7',
   },
 ];
 

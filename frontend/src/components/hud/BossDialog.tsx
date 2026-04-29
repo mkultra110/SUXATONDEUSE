@@ -25,6 +25,38 @@ const BOSS_QUOTES: Record<string, string[]> = {
     '« Tellement pur que j\'aveugle Marcel. »',
     '« Mémé m\'a confondu avec un diamant. »',
   ],
+  'taupe-geante': [
+    '« Tu m\'entends ? Non, j\'suis sourde de naissance. »',
+    '« Mes tunnels passent sous ta cuisine, attention. »',
+  ],
+  'corbeau-noir': [
+    '« Croak ! Je vais te piquer toutes tes pieces. »',
+    '« On dit "noir comme un corbeau", mais j\'ai du goût. »',
+  ],
+  'sanglier': [
+    '« Charge ! Pousse-toi mon coco. »',
+    '« Mes defenses ont fait l\'affaire de plus d\'un robot. »',
+  ],
+  'mante-religieuse': [
+    '« Je prie pour toi. Mais juste avant l\'attaque. »',
+    '« Mon mari m\'a dit "non merci" une fois. Une seule. »',
+  ],
+  'citrouille-mere': [
+    '« Boo ! Mes enfants vont tous te grignoter. »',
+    '« Joyeux Halloween, mon petit fermier. »',
+  ],
+  'krampus': [
+    '« Ho ho ho... la liste rouge cette annee, c\'est toi. »',
+    '« Je brule les sapins. C\'est ma signature. »',
+  ],
+  'tournesol-mutant': [
+    '« Mon cousin t\'a echappé. Pas moi. »',
+    '« Mes graines explosent au contact. Bonne chance. »',
+  ],
+  'arbre-foudre': [
+    '« Mille foudres m\'ont rendu plus fort. Mille. »',
+    '« Je suis plus electrique que le voisin. »',
+  ],
 };
 
 export function BossDialog({ boss, onDismiss }: { boss: BossDef; onDismiss: () => void }) {

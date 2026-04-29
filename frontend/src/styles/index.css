@@ -2390,6 +2390,39 @@ button[role='tab']:focus-visible {
   100% { opacity: 0; transform: translateY(-10px); }
 }
 
+/* === Halo lunaire (idee #149) === */
+.moon-halo {
+  position: fixed;
+  top: 4%;
+  right: 8%;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.7) 0%, rgba(184, 196, 208, 0.3) 40%, transparent 70%);
+  z-index: 30;
+  pointer-events: none;
+  filter: blur(2px);
+}
+
+/* === Lapin zigzag (idee #75) === */
+@keyframes rabbit-zigzag {
+  0% { transform: translate(0, 0); opacity: 0; }
+  10% { opacity: 1; transform: translate(20vw, -8px); }
+  30% { transform: translate(40vw, 4px); }
+  50% { transform: translate(60vw, -8px); }
+  70% { transform: translate(80vw, 4px); }
+  100% { transform: translate(110vw, 0); opacity: 0; }
+}
+.rabbit-cameo {
+  position: fixed;
+  bottom: 12px;
+  left: 0;
+  font-size: 22px;
+  z-index: 30;
+  pointer-events: none;
+  animation: rabbit-zigzag 5s linear forwards;
+}
+
 /* Level-up celebration : banner drop centre avec rebond + glow. */
 @keyframes levelup-drop {
   0% {

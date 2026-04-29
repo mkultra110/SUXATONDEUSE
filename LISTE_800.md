@@ -79,12 +79,12 @@ Statut implementation :
 - [ ] 67. Trefles a 4 feuilles caches (chance bonus si trouves)
 - [ ] 68. Coccinelle qui se pose et envole
 - [ ] 69. Crapaud qui saute (rare)
-- [ ] 70. Herisson qui passe la nuit
-- [ ] 71. Renard qui rode autour des cocottes
+- [x] 70. Herisson qui passe la nuit
+- [x] 71. Renard qui rode autour des cocottes
 - [ ] 72. Petit chat noir qui passe (Halloween)
 - [ ] 73. Chouette sur la cheminee la nuit
 - [ ] 74. Faisan qui vole bas au-dessus du champ
-- [ ] 75. Lapin qui traverse en zig-zag
+- [x] 75. Lapin qui traverse en zig-zag
 - [ ] 76. Effet "cinemascope" (bandes noires) sur cutscene
 - [ ] 77. Vignettage sur boss intro
 - [ ] 78. Tilt shift effect sur la map (focus center)
@@ -158,16 +158,16 @@ Statut implementation :
 - [ ] 146. Ecran qui s'embue puis se nettoie (lent)
 - [ ] 147. Lensflare sur soleil
 - [ ] 148. God rays a travers les nuages
-- [ ] 149. Halo lunaire la nuit
+- [x] 149. Halo lunaire la nuit
 - [ ] 150. Aurora dance lente theme legendaire
 
 ## B. Boss & Ennemis (151-250)
 
 - [x] 151. Boss tous les 10 niveaux (5 cycles)
-- [ ] 152. Boss "Taupe Geante" : se cache et reapparait, HP regen
-- [ ] 153. Boss "Corbeau Noir" : vole, immune aux robots terrestres
+- [x] 152. Boss "Taupe Geante" : se cache et reapparait, HP regen
+- [x] 153. Boss "Corbeau Noir" : vole, immune aux robots terrestres
 - [ ] 154. Boss "Raton Laveur" : vole les pieces (debuff)
-- [ ] 155. Boss "Sanglier" : charge en ligne droite, casse des tuiles
+- [x] 155. Boss "Sanglier" : charge en ligne droite, casse des tuiles
 - [ ] 156. Boss "Loup-Garou" : se transforme la nuit
 - [ ] 157. Boss "Sorciere du Bocage" : invoque des minions
 - [ ] 158. Boss "Vampire des Vignes" : aspire la production
@@ -175,7 +175,7 @@ Statut implementation :
 - [ ] 160. Boss "Limace Royale" : laisse une trainee toxique
 - [ ] 161. Boss "Mille-Pattes" : segments individuels a tondre
 - [ ] 162. Boss "Maman Frelon" : invoque des essaims
-- [ ] 163. Boss "Mante Religieuse" : deux phases (priere / attaque)
+- [x] 163. Boss "Mante Religieuse" : deux phases (priere / attaque)
 - [ ] 164. Boss "Crapaud Geant" : avale et regurgite tuiles
 - [ ] 165. Boss "Couleuvre" : mouvement onduluant rapide
 - [ ] 166. Boss "Hibou Sage" : pose des enigmes a resoudre
@@ -187,10 +187,10 @@ Statut implementation :
 - [ ] 172. Boss "Taupe Cyborg" : armure robotique
 - [ ] 173. Boss "Limace Monstre" : grossit a chaque coup
 - [ ] 174. Boss "Asticot Geant" : creuse des trous-pieges
-- [ ] 175. Boss "Tournesol Mutant" : tire des graines explosives
+- [x] 175. Boss "Tournesol Mutant" : tire des graines explosives
 - [ ] 176. Boss "Chataigne Volante" : pluie de chataignes piquantes
 - [ ] 177. Boss "Pomme Vehicule" : roule avec inertie
-- [ ] 178. Boss "Citrouille Halloween" : crachoir de feu
+- [x] 178. Boss "Citrouille Halloween" : crachoir de feu
 - [ ] 179. Boss "Sapin Vivant" : projettes ses pommes de pin
 - [ ] 180. Boss "Bambou Imperial" : pousse vite et bloque
 - [ ] 181. Boss "Liane Etrangleuse" : enserre des tuiles
@@ -223,10 +223,10 @@ Statut implementation :
 - [ ] 208. Boss recurrent "Loup Solitaire" l'hiver uniquement
 - [ ] 209. Boss recurrent "Loup-Garou" pleine lune
 - [ ] 210. Boss "Diable de Tasmanie" qui spawn alea
-- [ ] 211. Boss "Krampus" en decembre
+- [x] 211. Boss "Krampus" en decembre
 - [ ] 212. Boss "Pere Fouettard" en decembre
 - [ ] 213. Boss "Lapin de Paques Demoniac" en avril
-- [ ] 214. Boss "Citrouille Mere" Halloween
+- [x] 214. Boss "Citrouille Mere" Halloween
 - [ ] 215. Boss "Cupidon Maudit" Saint-Valentin
 - [ ] 216. Boss "Renard du Bocage" 1/300 maps
 - [ ] 217. Boss "Putain de Bourdon" easter egg
