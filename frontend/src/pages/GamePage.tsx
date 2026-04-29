@@ -1,16 +1,15 @@
-// Page principale du jeu (refonte cozy).
-// TopBar + jardin anime + onglets pixel-art (Boutique/Plots/Daily/...).
+// Page principale du jeu — refonte tab bar 7 -> 5 onglets style RCT/Stardew.
+// 5 onglets : Boutique / Parcelles / Quêtes / Collection / Progrès
+// (où Progrès groupe Prestige+Succès+Stats via SegmentedControl interne).
 
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { TopBar } from '../components/hud/TopBar.js';
 import { ShopPanel } from '../components/hud/ShopPanel.js';
 import { PlotsPanel } from '../components/hud/PlotsPanel.js';
-import { PrestigePanel } from '../components/hud/PrestigePanel.js';
-import { AchievementsPanel } from '../components/hud/AchievementsPanel.js';
 import { DailyPanel } from '../components/hud/DailyPanel.js';
 import { CollectionPanel } from '../components/hud/CollectionPanel.js';
-import { StatsPanel } from '../components/hud/StatsPanel.js';
+import { ProgresPanel } from '../components/hud/ProgresPanel.js';
 import { OfflineRewardModal } from '../components/modals/OfflineRewardModal.js';
 import { AnimatedGarden } from '../components/AnimatedGarden.js';
 import { AchievementToast } from '../components/hud/AchievementToast.js';
@@ -19,35 +18,25 @@ import { useGameSession } from '../hooks/useGameSession.js';
 import { useAudio } from '../hooks/useAudio.js';
 import { ATLAS_URL, ATLAS_SIZE } from '../components/garden/Sprite.js';
 
-type TabKey =
-  | 'shop'
-  | 'plots'
-  | 'prestige'
-  | 'achievements'
-  | 'daily'
-  | 'collection'
-  | 'stats';
+// 5 onglets max selon iOS HIG / Material 3 / NN/g.
+type TabKey = 'shop' | 'plots' | 'daily' | 'collection' | 'progress';
 
-// Tab icons depuis ui.png : 16x16, y=48, x = col * 16.
-// Ordre dans l'atlas : boutique, parcelles, journalier, collection, prestige, succes, stats.
+// Mapping vers les sprites tab du atlas ui.png (16x16, y=48).
+// Pour 'progress' on reutilise l'icone prestige (col 4).
 const TAB_ICON_COL: Record<TabKey, number> = {
   shop: 0,
   plots: 1,
   daily: 2,
   collection: 3,
-  prestige: 4,
-  achievements: 5,
-  stats: 6,
+  progress: 4,
 };
 
-const TABS: Array<{ key: TabKey }> = [
+const TABS: ReadonlyArray<{ key: TabKey }> = [
   { key: 'shop' },
   { key: 'plots' },
   { key: 'daily' },
   { key: 'collection' },
-  { key: 'prestige' },
-  { key: 'achievements' },
-  { key: 'stats' },
+  { key: 'progress' },
 ];
 
 function TabIcon({ tabKey }: { tabKey: TabKey }) {
@@ -150,10 +139,16 @@ export function GamePage() {
           </div>
         </div>
         <div className="flex flex-col gap-2 w-full max-w-sm">
-          <nav className="grid grid-cols-4 gap-1.5 lg:grid-cols-7">
+          <nav
+            role="tablist"
+            aria-label="Navigation principale"
+            className="grid grid-cols-5 gap-1.5"
+          >
             {TABS.map((tab) => (
               <button
                 key={tab.key}
+                role="tab"
+                aria-selected={activeTab === tab.key}
                 onClick={() => setActiveTab(tab.key)}
                 className={`pixel-tab ${activeTab === tab.key ? 'pixel-tab-active' : ''}`}
               >
@@ -166,9 +161,7 @@ export function GamePage() {
           {activeTab === 'plots' && <PlotsPanel />}
           {activeTab === 'daily' && <DailyPanel />}
           {activeTab === 'collection' && <CollectionPanel />}
-          {activeTab === 'prestige' && <PrestigePanel />}
-          {activeTab === 'achievements' && <AchievementsPanel />}
-          {activeTab === 'stats' && <StatsPanel />}
+          {activeTab === 'progress' && <ProgresPanel />}
         </div>
       </main>
 

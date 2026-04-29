@@ -158,14 +158,15 @@
     "claim": "Récolter"
   },
   "tabs": {
-    "garden": "Jardin",
+    "garden": "Ferme",
     "shop": "Boutique",
     "plots": "Parcelles",
     "prestige": "Prestige",
     "achievements": "Succès",
-    "daily": "Journalier",
+    "daily": "Quêtes",
     "collection": "Collection",
-    "stats": "Stats"
+    "stats": "Stats",
+    "progress": "Progrès"
   },
   "weather": {
     "sun": "Ensoleillé",
