@@ -466,7 +466,7 @@ function ShopCard({ affordable, locked, badge, shine, eta, art, name, rate, cost
     : undefined;
   return (
     <div
-      className={`panel-9 ${wiggle ? 'card-wiggle' : ''} ${hasShine ? 'shop-card-shine' : ''}`}
+      className={`panel-9 ${wiggle ? 'card-wiggle' : ''} ${hasShine ? 'shop-card-shine shop-card-sparkle' : ''}`}
       onClick={handleClickWiggle}
       onPointerDown={startLongPress}
       onPointerUp={cancelLongPress}

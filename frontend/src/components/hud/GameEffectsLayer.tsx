@@ -12,6 +12,7 @@ import { haptic } from '../../utils/vibration.js';
 import { ROBOT_TIERS, UPGRADE_DEFINITIONS, type RobotType, type UpgradeKey } from '@robomow/shared';
 import { pickDialogue, type DialogueContext } from '../../utils/memeDialogues.js';
 import { computePlayerLevel, rankForLevel } from '../../utils/playerLevel.js';
+import { notify, requestNotificationPermission } from '../../utils/notifications.js';
 import { GoldenButterfly } from './GoldenButterfly.js';
 import { PetalRain } from './PetalRain.js';
 import { ComboCounter } from './ComboCounter.js';
@@ -141,6 +142,24 @@ export function GameEffectsLayer() {
     }, 2000);
     return () => clearInterval(interval);
   }, [autoBuyEnabled, totalPrestiges, buyRobot, buyUpgrade]);
+
+  // === Notifications navigateur (idees #428 #430 #431) ===
+  // On demande la permission au 1er prestige (geste utilisateur de
+  // confiance ; pas au boot pour eviter d'aggro l'utilisateur).
+  useEffect(() => {
+    if (totalPrestiges < 1) return;
+    void requestNotificationPermission();
+  }, [totalPrestiges]);
+  // Achievement unlocked notification.
+  const lastAchSize = useRef(0);
+  useEffect(() => {
+    const state = useGameStore.getState();
+    const owned = Array.from(state.achievementsUnlocked).filter((k) => !k.endsWith(':claimed')).length;
+    if (owned > lastAchSize.current && lastAchSize.current > 0) {
+      notify('Succes debloque !', 'Va voir ton trophee dans le carnet.');
+    }
+    lastAchSize.current = owned;
+  });
 
   // === Visibility audio ducking ===
   useEffect(() => {

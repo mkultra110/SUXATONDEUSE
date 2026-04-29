@@ -23,7 +23,7 @@ Statut implementation :
 - [ ] 11. Speed lines derriere robots tres rapides
 - [x] 12. Power Score halo SVG ring TopBar
 - [ ] 13. Neon trail couleur du tier sur le robot mowing
-- [ ] 14. Sparkles dores quand un robot atteint count milestone
+- [x] 14. Sparkles dores quand un robot atteint count milestone
 - [ ] 15. Halo solaire derriere le robot top-tier (rayons)
 - [x] 16. Particules confettis sur achievement unlock
 - [x] 17. Ondes concentriques sur tap (ripple)
@@ -51,7 +51,7 @@ Statut implementation :
 - [x] 39. Pollen qui flotte au printemps
 - [x] 40. Feuilles mortes qui tombent en automne
 - [ ] 41. Bourrasque de vent qui plie les fleurs
-- [ ] 42. Tonnerre + flash blanc sur orage rare
+- [x] 42. Tonnerre + flash blanc sur orage rare
 - [ ] 43. Goutte d'eau qui glisse de l'arrosoir
 - [ ] 44. Trail "mowed" qui pulse vert apres recolte (~1s)
 - [ ] 45. Pixel art animation : Pompon qui chasse une mouche
@@ -85,7 +85,7 @@ Statut implementation :
 - [ ] 73. Chouette sur la cheminee la nuit
 - [ ] 74. Faisan qui vole bas au-dessus du champ
 - [x] 75. Lapin qui traverse en zig-zag
-- [ ] 76. Effet "cinemascope" (bandes noires) sur cutscene
+- [x] 76. Effet "cinemascope" (bandes noires) sur cutscene
 - [ ] 77. Vignettage sur boss intro
 - [ ] 78. Tilt shift effect sur la map (focus center)
 - [ ] 79. Bokeh particles sur night theme
@@ -151,7 +151,7 @@ Statut implementation :
 - [x] 139. Ovni qui passe (1/1000 chance, easter egg)
 - [ ] 140. Lumiere d'OVNI qui aspire un robot brievement
 - [ ] 141. Trou noir effect au prestige cosmique
-- [ ] 142. Big bang particles sur 1er prestige
+- [x] 142. Big bang particles sur 1er prestige
 - [ ] 143. Echelle vers le ciel sur prestige final
 - [x] 144. Vague de chaleur dore sur level up
 - [ ] 145. Goutelettes d'eau sur l'ecran apres pluie
@@ -446,10 +446,10 @@ Statut implementation :
 - [ ] 425. Comparison day-by-day production
 - [ ] 426. Export CSV des stats
 - [x] 427. Notifications push web (offline reward ready)
-- [ ] 428. Daily reminder notification (config)
+- [x] 428. Daily reminder notification (config)
 - [ ] 429. Calendar event integration (optional)
-- [ ] 430. Boss available notification
-- [ ] 431. Achievement unlocked notification
+- [x] 430. Boss available notification
+- [x] 431. Achievement unlocked notification
 - [ ] 432. Pet rolled notification
 - [ ] 433. Skin unlocked notification
 - [ ] 434. Volume mute toggle quick (icon TopBar)

@@ -2476,6 +2476,75 @@ button[role='tab']:focus-visible {
   pointer-events: none;
 }
 
+/* === Sparkles milestone shop card (idee #14) === */
+.shop-card-sparkle::before,
+.shop-card-sparkle::after {
+  content: '';
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: radial-gradient(#FFE680, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 3;
+  animation: sparkle-twinkle 1.6s ease-in-out infinite;
+}
+.shop-card-sparkle::before { top: 6px; right: 6px; animation-delay: 0s; }
+.shop-card-sparkle::after { bottom: 6px; left: 6px; animation-delay: 0.8s; }
+
+/* === Cinemascope letterbox cutscene (idee #76) === */
+.cinemascope-active::before,
+.cinemascope-active::after {
+  content: '';
+  position: fixed;
+  left: 0;
+  right: 0;
+  height: 12vh;
+  background: black;
+  z-index: 1900;
+  pointer-events: none;
+  animation: cinemascope-slide 800ms ease-out forwards;
+}
+.cinemascope-active::before { top: 0; transform: translateY(-100%); }
+.cinemascope-active::after { bottom: 0; transform: translateY(100%); }
+@keyframes cinemascope-slide {
+  to { transform: translateY(0); }
+}
+
+/* === Tonnerre orage (idee #42) === */
+@keyframes thunder-flash {
+  0% { background: white; opacity: 0; }
+  5% { opacity: 0.85; }
+  15% { opacity: 0.2; }
+  25% { opacity: 0.7; }
+  100% { opacity: 0; }
+}
+.thunder-flash {
+  position: fixed;
+  inset: 0;
+  z-index: 1700;
+  pointer-events: none;
+  animation: thunder-flash 700ms ease-out forwards;
+}
+
+/* === Big bang prestige #142 === */
+@keyframes bigbang-burst {
+  0% { transform: translate(-50%, -50%) scale(0); opacity: 1; }
+  100% { transform: translate(-50%, -50%) scale(20); opacity: 0; }
+}
+.bigbang-ring {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: radial-gradient(circle, white, #FFD921 30%, transparent 70%);
+  z-index: 1800;
+  pointer-events: none;
+  animation: bigbang-burst 1.5s ease-out forwards;
+}
+
 /* Level-up celebration : banner drop centre avec rebond + glow. */
 @keyframes levelup-drop {
   0% {
