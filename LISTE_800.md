@@ -98,7 +98,7 @@ Statut implementation :
 - [x] 86. Sapin de Noel decore (Decembre)
 - [x] 87. Bouquet de muguet le 1er mai
 - [x] 88. Confetti rain au passage d'annee (1er janvier)
-- [ ] 89. Pluie de petales rose sur 1er avril
+- [x] 89. Pluie de petales rose sur 1er avril
 - [ ] 90. Petit bonhomme de neige derriere une parcelle
 - [ ] 91. Slime particles vert sur theme champignon
 - [ ] 92. Particles ondulantes (heat shimmer) cactus
@@ -119,7 +119,7 @@ Statut implementation :
 - [ ] 107. Replay 3s du dernier kill (mini cutscene)
 - [ ] 108. Trail dore "marche du roi" sur top robot
 - [x] 109. Pluie de pieces d'or sur prestige
-- [ ] 110. Ascension cosmique sur prestige final
+- [x] 110. Ascension cosmique sur prestige final
 - [x] 111. Banner descend du haut sur achievement
 - [ ] 112. Polaroid drop avec rotation aleatoire sur capture
 - [ ] 113. Timeline horizontale en bas avec milestones passes
@@ -152,7 +152,7 @@ Statut implementation :
 - [ ] 140. Lumiere d'OVNI qui aspire un robot brievement
 - [ ] 141. Trou noir effect au prestige cosmique
 - [x] 142. Big bang particles sur 1er prestige
-- [ ] 143. Echelle vers le ciel sur prestige final
+- [x] 143. Echelle vers le ciel sur prestige final
 - [x] 144. Vague de chaleur dore sur level up
 - [ ] 145. Goutelettes d'eau sur l'ecran apres pluie
 - [ ] 146. Ecran qui s'embue puis se nettoie (lent)

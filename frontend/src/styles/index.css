@@ -2545,6 +2545,36 @@ button[role='tab']:focus-visible {
   animation: bigbang-burst 1.5s ease-out forwards;
 }
 
+/* === Ascension cosmique prestige final (idees #110 #143) === */
+@keyframes ascension-rise {
+  0% { transform: translateY(0) scale(1); opacity: 1; }
+  60% { transform: translateY(-50vh) scale(0.7); opacity: 0.8; }
+  100% { transform: translateY(-110vh) scale(0.2); opacity: 0; }
+}
+.ascension-overlay {
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 0%, rgba(245, 196, 67, 0.4) 70%, white 100%);
+  z-index: 1850;
+  pointer-events: none;
+  animation: ascension-rise 3s ease-out forwards;
+}
+
+/* === Pluie petales 1er avril (idee #89) === */
+@keyframes april-petal-fall {
+  0% { transform: translate(0, -20px) rotate(0deg); opacity: 0; }
+  10% { opacity: 0.9; }
+  100% { transform: translate(40px, 110vh) rotate(720deg); opacity: 0; }
+}
+
+/* === Hat collection robots (idee #103) === */
+.farm-hat {
+  position: absolute;
+  font-size: 14px;
+  filter: drop-shadow(1px 1px 0 var(--color-wood-5));
+  pointer-events: none;
+}
+
 /* Level-up celebration : banner drop centre avec rebond + glow. */
 @keyframes levelup-drop {
   0% {

@@ -29,6 +29,15 @@ export function HolidayDecor() {
   if (m === 1 && d === 14) items.push({ emoji: '💝', label: 'Saint-Valentin', key: 'valentine' });
   // Paques (approximation : 1er dimanche d'avril).
   if (m === 3 && d <= 7 && now.getDay() === 0) items.push({ emoji: '🐰', label: 'Paques', key: 'easter' });
+  // 1er avril.
+  if (m === 3 && d === 1) {
+    items.push({ emoji: '🐟', label: 'Poisson d\'avril', key: 'fish' });
+    items.push({ emoji: '🌸', label: 'Pluie de petales', key: 'april-petal' });
+  }
+  // Saint-Patrick (17 mars).
+  if (m === 2 && d === 17) items.push({ emoji: '🍀', label: 'Saint-Patrick', key: 'patrick' });
+  // Mardi-gras (approximation premier mardi de fevrier).
+  if (m === 1 && d <= 14 && now.getDay() === 2) items.push({ emoji: '🎭', label: 'Mardi gras', key: 'mardigras' });
 
   if (items.length === 0) return null;
 
