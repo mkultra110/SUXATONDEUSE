@@ -695,6 +695,23 @@ export function NotebookIcon({ size = 24, className, style, title }: IconProps) 
   );
 }
 
+// Croix rouge pour items destructifs (deconnexion).
+export function CrossIcon({ size = 16, className, style, title }: IconProps) {
+  return (
+    <svg viewBox="0 0 16 16" shapeRendering="crispEdges" className={className} style={pixelStyle(size, style)} role={title ? 'img' : undefined} aria-label={title}>
+      <rect x="2" y="2" width="2" height="2" fill="#d54c4c" />
+      <rect x="12" y="2" width="2" height="2" fill="#d54c4c" />
+      <rect x="4" y="4" width="2" height="2" fill="#d54c4c" />
+      <rect x="10" y="4" width="2" height="2" fill="#d54c4c" />
+      <rect x="6" y="6" width="4" height="4" fill="#d54c4c" />
+      <rect x="4" y="10" width="2" height="2" fill="#d54c4c" />
+      <rect x="10" y="10" width="2" height="2" fill="#d54c4c" />
+      <rect x="2" y="12" width="2" height="2" fill="#d54c4c" />
+      <rect x="12" y="12" width="2" height="2" fill="#d54c4c" />
+    </svg>
+  );
+}
+
 // Pompon le chat : chat tigre orange-blanc qui dort, vu de profil (24×12).
 // Easter egg cozy a placer sur le toit de la maison.
 export function PomponIcon({ size = 32, className, style, title }: IconProps) {
