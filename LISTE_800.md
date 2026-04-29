@@ -518,7 +518,7 @@ Statut implementation :
 - [ ] 494. Upgrade "Daily quest reroll free"
 - [ ] 495. Upgrade "Login bonus 2x"
 - [ ] 496. Upgrade "Tax exemption" -10% costs
-- [ ] 497. 100+ achievements vs ~30 actuels
+- [x] 497. 100+ achievements vs ~30 actuels
 - [ ] 498. Achievement "Tap 1000x"
 - [ ] 499. Achievement "Compose 10 robots premium"
 - [ ] 500. Achievement "Photo 50 maps polaroid"

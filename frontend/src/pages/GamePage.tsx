@@ -47,6 +47,7 @@ import { CoinRain } from '../components/hud/CoinRain.js';
 import { AchievementBanner } from '../components/hud/AchievementBanner.js';
 import { PerformanceWatcher } from '../components/hud/PerformanceWatcher.js';
 import { AscensionCosmique } from '../components/hud/AscensionCosmique.js';
+import { AchievementGrid } from '../components/hud/AchievementGrid.js';
 import { useGameSession } from '../hooks/useGameSession.js';
 import { useAudio } from '../hooks/useAudio.js';
 import { useResponsive } from '../hooks/useResponsive.js';
@@ -336,6 +337,7 @@ export function GamePage() {
       <AchievementBanner />
       <PerformanceWatcher />
       <AscensionCosmique />
+      <AchievementGrid />
       <ActivityFAB onClick={() => setMarcelLogOpen(true)} notificationCount={0} />
       {marcelLogOpen && <MarcelLog onClose={() => setMarcelLogOpen(false)} />}
     </div>

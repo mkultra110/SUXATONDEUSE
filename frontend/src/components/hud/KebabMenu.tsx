@@ -33,6 +33,7 @@ export function KebabMenu({ onClose }: KebabMenuProps) {
   const setStatsHebdoOpen = useUIStore((s) => s.setStatsHebdoOpen);
   const setBestiaryOpen = useUIStore((s) => s.setBestiaryOpen);
   const setDailyChallengeOpen = useUIStore((s) => s.setDailyChallengeOpen);
+  const setAchievementGridOpen = useUIStore((s) => s.setAchievementGridOpen);
   const navigate = useNavigate();
   const { logout } = useAuth();
   const ref = useRef<HTMLDivElement>(null);
@@ -136,6 +137,14 @@ export function KebabMenu({ onClose }: KebabMenuProps) {
               label="Bestiaire"
               onClick={() => {
                 setBestiaryOpen(true);
+                setOpen(false);
+              }}
+            />
+            <MenuItem
+              icon={<TrophyIcon size={18} />}
+              label="Trophées"
+              onClick={() => {
+                setAchievementGridOpen(true);
                 setOpen(false);
               }}
             />
