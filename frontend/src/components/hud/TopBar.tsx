@@ -10,6 +10,7 @@ import { WeatherBadge } from './WeatherBadge.js';
 import { AudioControls } from './AudioControls.js';
 import { KebabMenu } from './KebabMenu.js';
 import { FuelIcon, SeedIcon, RobotLogo, StarIcon } from '../icons/PixelIcon.js';
+import { computePlayerLevel, progressionTier, TIER_GLOW } from '../../utils/playerLevel.js';
 import { formatBig } from '../../utils/format.js';
 
 const SECONDS_PER_GAME_DAY = 60;
@@ -18,8 +19,12 @@ export function TopBar() {
   const { user } = useAuth();
   const gems = useGameStore((s) => s.gems);
   const prestigePoints = useGameStore((s) => s.prestigePoints);
+  const totalCash = useGameStore((s) => s.totalCashEarned);
   const playTime = useGameStore((s) => s.playTimeSeconds);
   const dayNumber = Math.floor(playTime / SECONDS_PER_GAME_DAY) + 1;
+  const level = computePlayerLevel(totalCash);
+  const tier = progressionTier(level);
+  const tierGlow = TIER_GLOW[tier];
 
   return (
     <header
@@ -34,7 +39,7 @@ export function TopBar() {
       }}
     >
       {/* LevelBadge - cercle dore 40x40 avec etoile + numero (mock niveau = playerLevel) */}
-      <LevelBadge dayNumber={dayNumber} username={user?.username ?? ''} />
+      <LevelBadge level={level} username={user?.username ?? ''} tierGlow={tierGlow} />
 
       {/* Day pill compact */}
       <Pill title={`Jour ${dayNumber}`}>
@@ -103,9 +108,8 @@ function Pill({ children, title }: { children: React.ReactNode; title?: string }
 }
 
 // LevelBadge cercle dore 40x40 avec robot logo + halo subtil.
-function LevelBadge({ dayNumber, username }: { dayNumber: number; username: string }) {
-  // Niveau player = jour / 5 (rule simple, ajustable plus tard).
-  const level = Math.max(1, Math.floor(dayNumber / 5) + 1);
+// Niveau calcule depuis totalCashEarned (progression logarithmique).
+function LevelBadge({ level, username, tierGlow }: { level: number; username: string; tierGlow: string }) {
   return (
     <div
       title={`Niveau ${level}${username ? ` · ${username}` : ''}`}
@@ -120,7 +124,7 @@ function LevelBadge({ dayNumber, username }: { dayNumber: number; username: stri
         justifyContent: 'center',
         position: 'relative',
         flexShrink: 0,
-        boxShadow: 'inset 0 -2px 0 #a87a1f, 0 2px 0 var(--color-wood-5), 0 0 12px rgba(245, 196, 67, 0.5)',
+        boxShadow: `inset 0 -2px 0 #a87a1f, 0 2px 0 var(--color-wood-5), 0 0 12px rgba(245, 196, 67, 0.5), 0 0 24px ${tierGlow}`,
       }}
     >
       <RobotLogo size={26} />

@@ -757,6 +757,88 @@
   scroll-snap-align: start;
 }
 
+/* Map progress (signature progression) : barre en haut-droite avec
+   "MAP N · X% tondu" pour rendre la progression visible. */
+.farm-map-progress {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 20;
+  background: var(--color-wood-5);
+  border: 2px solid var(--color-wood-4);
+  padding: 4px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 100px;
+  box-shadow: 0 2px 0 var(--color-wood-5), inset 0 -1px 0 rgba(0, 0, 0, 0.3);
+}
+.farm-map-progress-label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: var(--font-button);
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--color-paper-1);
+  letter-spacing: 0.1em;
+}
+.farm-map-progress-bar {
+  height: 4px;
+  background: var(--color-wood-3);
+  border: 1px solid #3A1F08;
+  overflow: hidden;
+  position: relative;
+}
+.farm-map-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--color-grass-3), var(--color-grass-5));
+  box-shadow: 0 0 6px rgba(143, 191, 79, 0.6);
+  transition: width 600ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Map transition : fade-out / fade-in plein-ecran avec texte central. */
+.farm-map-transition {
+  position: absolute;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  background: rgba(0, 0, 0, 0.85);
+}
+.farm-map-transition-fade-out {
+  animation: map-fade-out 600ms ease-in forwards;
+}
+.farm-map-transition-fade-in {
+  animation: map-fade-in 600ms ease-out forwards;
+}
+@keyframes map-fade-out {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+@keyframes map-fade-in {
+  0% { opacity: 1; }
+  100% { opacity: 0; }
+}
+.farm-map-transition-text {
+  text-align: center;
+  animation: map-text-pop 600ms cubic-bezier(0.34, 1.56, 0.64, 1) backwards;
+}
+@keyframes map-text-pop {
+  0% { transform: scale(0.6); opacity: 0; }
+  70% { transform: scale(1.15); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* Special date banner drop animation */
+@keyframes special-banner-drop {
+  0% { transform: translate(-50%, -100%); opacity: 0; }
+  60% { transform: translate(-50%, 8px); opacity: 1; }
+  100% { transform: translate(-50%, 0); opacity: 1; }
+}
+
 /* FABs flottants RCT-Touch (Carnet de Marcel + Retour) */
 .farm-fab {
   width: 56px;

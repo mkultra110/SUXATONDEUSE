@@ -36,7 +36,9 @@ const ROBOT_SCALE = 2;
 const TICK_MS = 80;
 const ROBOT_SPEED = 0.05; // tuiles par tick
 const MOW_TICKS = 10; // ~800ms d'anim mow
-const REGROW_MS = 8000;
+const REGROW_MS_BASE = 8000;
+// Timer de transition map (ms).
+const MAP_TRANSITION_MS = 1200;
 
 interface BladeParticle {
   id: number;
@@ -177,8 +179,8 @@ function bfsPath(
   return path;
 }
 
-// Liste initiale des tuiles d'herbe haute depuis FARM_MAP.
-function initialTallGrass(): Set<string> {
+// Liste initiale des tuiles d'herbe haute depuis FARM_MAP (cartes de base).
+function baseTallGrass(): Set<string> {
   const set = new Set<string>();
   FARM_MAP.forEach((row, y) => {
     [...row].forEach((ch, x) => {
@@ -186,6 +188,45 @@ function initialTallGrass(): Set<string> {
     });
   });
   return set;
+}
+
+// Genere une carte d'herbe haute pour un niveau de map donne.
+// Plus le niveau est haut, plus il y a de tuiles a tondre. Le prestige
+// ajoute des tuiles supplementaires (difficulte croissante).
+function generateMap(mapLevel: number, prestigeLevel: number): Set<string> {
+  const base = baseTallGrass();
+  // Cellules disponibles (non-bloquees, pas deja en tall grass).
+  const free: Array<[number, number]> = [];
+  for (let y = 0; y < ROWS; y++) {
+    for (let x = 0; x < COLS; x++) {
+      if (!isBlocked(x, y) && !base.has(`${x},${y}`)) {
+        free.push([x, y]);
+      }
+    }
+  }
+  // Combien de tuiles supplementaires ? Map 1 = 0 extra, map 5 = 12 extra,
+  // map 10 = 22 extra, etc. Cap a free.length pour ne pas deborder.
+  // Prestige multiplie la densite : x1.0 a P0, x1.5 a P3, x2.0 a P6+.
+  const prestigeMul = 1 + Math.min(1, prestigeLevel / 6);
+  const extraCount = Math.min(free.length, Math.round((mapLevel - 1) * 2.5 * prestigeMul));
+  // Shuffle deterministic (seed = mapLevel * 31 + prestigeLevel) pour que
+  // chaque map soit reproductible mais visuellement differente.
+  const seed = mapLevel * 31 + prestigeLevel * 7;
+  function rng(i: number) {
+    const x = Math.sin(seed + i * 1.7) * 10000;
+    return x - Math.floor(x);
+  }
+  const shuffled = [...free];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(rng(i) * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j]!, shuffled[i]!];
+  }
+  const result = new Set(base);
+  for (let i = 0; i < extraCount; i++) {
+    const tile = shuffled[i];
+    if (tile) result.add(`${tile[0]},${tile[1]}`);
+  }
+  return result;
 }
 
 function pickRandomFreeTile(): { x: number; y: number } {
@@ -254,8 +295,54 @@ export function AnimatedGarden() {
   const [coins, setCoins] = useState<CoinParticle[]>([]);
   const [shake, setShake] = useState(false);
   const [zoom, setZoom] = useState(1);
-  const [tallGrass, setTallGrass] = useState<Set<string>>(initialTallGrass);
+  // Niveau de map courant : chaque fois qu'on a tondu toute l'herbe haute,
+  // on incremente +1 et on regenere une map plus difficile.
+  const prestigeLevel = useGameStore((s) => s.prestigeLevel);
+  const [mapLevel, setMapLevel] = useState(1);
+  const [tallGrass, setTallGrass] = useState<Set<string>>(() => generateMap(1, 0));
   const [cutGrass, setCutGrass] = useState<Set<string>>(new Set());
+  const [mapInitialCount, setMapInitialCount] = useState<number>(() => generateMap(1, 0).size);
+  const [mapTransition, setMapTransition] = useState<null | 'fade-out' | 'fade-in'>(null);
+
+  // Detecte la completion : quand tallGrass est vide ET il y a eu des tuiles
+  // initiales, on declenche la transition vers la map suivante.
+  useEffect(() => {
+    if (tallGrass.size > 0 || mapTransition !== null || mapInitialCount === 0) return;
+    // Map nettoyee : on transitionne.
+    setMapTransition('fade-out');
+    const t1 = setTimeout(() => {
+      setMapLevel((lvl) => {
+        const next = lvl + 1;
+        const newMap = generateMap(next, prestigeLevel);
+        setTallGrass(newMap);
+        setCutGrass(new Set());
+        setMapInitialCount(newMap.size);
+        return next;
+      });
+      setMapTransition('fade-in');
+      // Audio fanfare.
+      audio.playPurchase();
+    }, MAP_TRANSITION_MS / 2);
+    const t2 = setTimeout(() => {
+      setMapTransition(null);
+    }, MAP_TRANSITION_MS);
+    return () => {
+      clearTimeout(t1);
+      clearTimeout(t2);
+    };
+  }, [tallGrass, mapTransition, mapInitialCount, prestigeLevel]);
+
+  // Quand prestige change : reset map a 1 + regenere.
+  useEffect(() => {
+    const fresh = generateMap(1, prestigeLevel);
+    setMapLevel(1);
+    setTallGrass(fresh);
+    setCutGrass(new Set());
+    setMapInitialCount(fresh.size);
+  }, [prestigeLevel]);
+
+  const tilesMowed = mapInitialCount - tallGrass.size;
+  const mapPercent = mapInitialCount > 0 ? Math.round((tilesMowed / mapInitialCount) * 100) : 100;
   const [robots, setRobots] = useState<RobotEntity[]>([]);
   const [bursts, setBursts] = useState<Array<{ id: number; tileX: number; tileY: number; t0: number }>>([]);
   const [floatingNums, setFloatingNums] = useState<Array<{ id: number; x: number; y: number; n: number; vx: number }>>([]);
@@ -357,7 +444,10 @@ export function AnimatedGarden() {
                   return n;
                 });
                 // Programme la repousse : cut → tall apres delai.
-                const regrow = REGROW_MS + Math.random() * 2000;
+                // Difficulty croissante : a chaque prestige le regrow speed
+                // accelere de 12% (cap a 50% du base apres 6 prestiges).
+                const regrowMul = Math.max(0.5, 1 - prestigeLevel * 0.12);
+                const regrow = REGROW_MS_BASE * regrowMul + Math.random() * 2000;
                 setTimeout(() => {
                   setCutGrass((s) => {
                     if (!s.has(key)) return s;
@@ -865,6 +955,44 @@ export function AnimatedGarden() {
           <div className="farm-prod-indicator">
             <IconGear size={12} />
             <span style={{ marginLeft: 4 }}>Auto-tonte</span>
+          </div>
+        )}
+
+        {/* Progress map : "Map N · X% tondu" en haut-droite */}
+        <div className="farm-map-progress">
+          <div className="farm-map-progress-label">
+            <span style={{ color: 'var(--color-accent-gold)' }}>MAP {mapLevel}</span>
+            <span className="numeric" style={{ marginLeft: 6 }}>{mapPercent}%</span>
+          </div>
+          <div className="farm-map-progress-bar">
+            <div
+              className="farm-map-progress-fill"
+              style={{ width: `${mapPercent}%` }}
+            />
+          </div>
+        </div>
+
+        {/* Map transition overlay (fade flash) */}
+        {mapTransition && (
+          <div className={`farm-map-transition farm-map-transition-${mapTransition}`}>
+            {mapTransition === 'fade-in' && (
+              <div className="farm-map-transition-text">
+                <div style={{ fontSize: 13, letterSpacing: '0.15em', color: 'var(--color-paper-3)' }}>
+                  NOUVELLE PARCELLE
+                </div>
+                <div
+                  className="numeric"
+                  style={{
+                    fontSize: 36,
+                    fontWeight: 700,
+                    color: 'var(--color-accent-gold)',
+                    textShadow: '2px 2px 0 var(--color-wood-5)',
+                  }}
+                >
+                  MAP {mapLevel}
+                </div>
+              </div>
+            )}
           </div>
         )}
 
