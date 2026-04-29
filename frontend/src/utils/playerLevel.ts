@@ -86,3 +86,64 @@ export const TIER_GLOW: Record<ProgressionTier, string> = {
   lush: 'rgba(245, 196, 67, 0.35)',
   legendary: 'rgba(245, 196, 67, 0.55)',
 };
+
+// Rangs cottagecore visibles dans la TopBar (signature progression).
+export interface RankInfo {
+  title: string;
+  color: string;
+  minLevel: number;
+}
+
+export const RANKS: ReadonlyArray<RankInfo> = [
+  { title: 'Débutant', color: '#A37C4F', minLevel: 1 },
+  { title: 'Apprenti', color: '#8FBF4F', minLevel: 5 },
+  { title: 'Fermier', color: '#6BA53A', minLevel: 10 },
+  { title: 'Vétéran', color: '#4A8A2E', minLevel: 25 },
+  { title: 'Maître', color: '#FFD921', minLevel: 50 },
+  { title: 'Légendaire', color: '#F5C443', minLevel: 75 },
+  { title: 'Mythique', color: '#A855F7', minLevel: 100 },
+  { title: 'Divin', color: '#FFFFFF', minLevel: 150 },
+];
+
+export function rankForLevel(level: number): RankInfo {
+  let current = RANKS[0]!;
+  for (const r of RANKS) {
+    if (level >= r.minLevel) current = r;
+    else break;
+  }
+  return current;
+}
+
+export function nextRankAt(level: number): RankInfo | null {
+  for (const r of RANKS) {
+    if (level < r.minLevel) return r;
+  }
+  return null;
+}
+
+// Bordure shine pour les shop cards selon le count owned d'un robot.
+export type RobotShine = 'none' | 'bronze' | 'silver' | 'gold' | 'diamond';
+
+export function shineForCount(count: number): RobotShine {
+  if (count >= 50) return 'diamond';
+  if (count >= 25) return 'gold';
+  if (count >= 10) return 'silver';
+  if (count >= 5) return 'bronze';
+  return 'none';
+}
+
+export const SHINE_COLOR: Record<RobotShine, string> = {
+  none: 'transparent',
+  bronze: '#A57144',
+  silver: '#B8C4D0',
+  gold: '#FFD921',
+  diamond: '#A8D8EE',
+};
+
+export const SHINE_GLOW: Record<RobotShine, string> = {
+  none: 'transparent',
+  bronze: 'rgba(165, 113, 68, 0.5)',
+  silver: 'rgba(184, 196, 208, 0.6)',
+  gold: 'rgba(255, 217, 33, 0.7)',
+  diamond: 'rgba(168, 216, 238, 0.8)',
+};

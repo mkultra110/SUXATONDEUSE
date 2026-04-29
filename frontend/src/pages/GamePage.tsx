@@ -18,6 +18,7 @@ import { MarcelLog } from '../components/hud/MarcelLog.js';
 import { DesktopSidebar } from '../components/hud/DesktopSidebar.js';
 import { RightStatsPanel } from '../components/hud/RightStatsPanel.js';
 import { SpecialDateBanner } from '../components/hud/SpecialDateBanner.js';
+import { LevelUpCelebration } from '../components/hud/LevelUpCelebration.js';
 import { useGameSession } from '../hooks/useGameSession.js';
 import { useAudio } from '../hooks/useAudio.js';
 import { useResponsive } from '../hooks/useResponsive.js';
@@ -278,6 +279,7 @@ export function GamePage() {
       <AchievementToast />
       <MemeGiselePopup />
       <SpecialDateBanner />
+      <LevelUpCelebration />
       <ActivityFAB onClick={() => setMarcelLogOpen(true)} notificationCount={0} />
       {marcelLogOpen && <MarcelLog onClose={() => setMarcelLogOpen(false)} />}
     </div>

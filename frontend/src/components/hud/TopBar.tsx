@@ -10,7 +10,14 @@ import { WeatherBadge } from './WeatherBadge.js';
 import { AudioControls } from './AudioControls.js';
 import { KebabMenu } from './KebabMenu.js';
 import { FuelIcon, SeedIcon, RobotLogo, StarIcon } from '../icons/PixelIcon.js';
-import { computePlayerLevel, progressionTier, TIER_GLOW } from '../../utils/playerLevel.js';
+import {
+  computePlayerLevel,
+  progressionTier,
+  TIER_GLOW,
+  rankForLevel,
+  nextRankAt,
+  xpRatioInLevel,
+} from '../../utils/playerLevel.js';
 import { AnimatedNumber } from './AnimatedNumber.js';
 
 const SECONDS_PER_GAME_DAY = 60;
@@ -25,6 +32,9 @@ export function TopBar() {
   const level = computePlayerLevel(totalCash);
   const tier = progressionTier(level);
   const tierGlow = TIER_GLOW[tier];
+  const rank = rankForLevel(level);
+  const nextRank = nextRankAt(level);
+  const xpRatio = xpRatioInLevel(totalCash, level);
 
   return (
     <header
@@ -40,6 +50,16 @@ export function TopBar() {
     >
       {/* LevelBadge - cercle dore 40x40 avec etoile + numero (mock niveau = playerLevel) */}
       <LevelBadge level={level} username={user?.username ?? ''} tierGlow={tierGlow} />
+
+      {/* Rank title + XP bar mini - signature progression visible. */}
+      <RankAndXp
+        rankTitle={rank.title}
+        rankColor={rank.color}
+        xpRatio={xpRatio}
+        nextRankTitle={nextRank?.title ?? null}
+        nextRankAtLevel={nextRank?.minLevel ?? null}
+        currentLevel={level}
+      />
 
       {/* Day pill compact */}
       <Pill title={`Jour ${dayNumber}`}>
@@ -101,6 +121,56 @@ function Pill({ children, title }: { children: React.ReactNode; title?: string }
       }}
     >
       {children}
+    </div>
+  );
+}
+
+// RankAndXp : titre de rang colore + barre XP mini sous le titre.
+// Affiche aussi 'Lv N -> M' pour signaler le prochain palier de rang.
+function RankAndXp({
+  rankTitle,
+  rankColor,
+  xpRatio,
+  nextRankTitle,
+  nextRankAtLevel,
+  currentLevel,
+}: {
+  rankTitle: string;
+  rankColor: string;
+  xpRatio: number;
+  nextRankTitle: string | null;
+  nextRankAtLevel: number | null;
+  currentLevel: number;
+}) {
+  const pct = Math.min(100, Math.max(0, Math.round(xpRatio * 100)));
+  const tooltip = nextRankTitle
+    ? `Rang : ${rankTitle} · Prochain : ${nextRankTitle} (Lv ${nextRankAtLevel}) · ${pct}% du niveau ${currentLevel + 1}`
+    : `Rang : ${rankTitle} · ${pct}% du niveau ${currentLevel + 1}`;
+  return (
+    <div
+      title={tooltip}
+      className="flex flex-col gap-0.5 flex-shrink-0"
+      style={{ minWidth: 0 }}
+    >
+      <span
+        style={{
+          fontFamily: 'var(--font-button)',
+          fontSize: 10,
+          fontWeight: 700,
+          color: rankColor,
+          letterSpacing: '0.12em',
+          textTransform: 'uppercase',
+          lineHeight: 1,
+          textShadow: '1px 1px 0 var(--color-wood-5)',
+          whiteSpace: 'nowrap',
+        }}
+      >
+        {rankTitle}
+      </span>
+      <div className="xp-bar-track" aria-label={`XP ${pct}%`} role="progressbar" aria-valuenow={pct} aria-valuemin={0} aria-valuemax={100}>
+        <div className="xp-bar-fill" style={{ width: `${pct}%` }} />
+        {pct > 4 && pct < 96 && <div className="xp-bar-shimmer" />}
+      </div>
     </div>
   );
 }

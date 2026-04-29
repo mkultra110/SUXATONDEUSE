@@ -4,11 +4,22 @@
 // succes count + cycle jour/saison.
 
 import { useTranslation } from 'react-i18next';
-import { ROBOT_TIERS, PLOT_DEFINITIONS, ACHIEVEMENTS } from '@robomow/shared';
+import {
+  ROBOT_TIERS,
+  PLOT_DEFINITIONS,
+  ACHIEVEMENTS,
+  totalProductionMultiplier,
+  totalPetBonus,
+  combinedMultiplier,
+} from '@robomow/shared';
 import { useGameStore } from '../../stores/gameStore.js';
 import { formatBig } from '../../utils/format.js';
-import { CoinIcon, IconBlade, NavMapIcon, RobotLogo, TrophyIcon } from '../icons/PixelIcon.js';
+import { CoinIcon, IconBlade, NavMapIcon, RobotLogo, TrophyIcon, StarIcon } from '../icons/PixelIcon.js';
 import { useResponsive } from '../../hooks/useResponsive.js';
+import {
+  computePlayerLevel,
+  rankForLevel,
+} from '../../utils/playerLevel.js';
 
 const SECONDS_PER_GAME_DAY = 60;
 
@@ -20,10 +31,28 @@ export function RightStatsPanel() {
   const totalCashEarned = useGameStore((s) => s.totalCashEarned);
   const totalGrass = useGameStore((s) => s.totalGrassMowed);
   const holdings = useGameStore((s) => s.holdings);
+  const upgrades = useGameStore((s) => s.upgrades);
+  const petsEquipped = useGameStore((s) => s.petsEquipped);
+  const prestigeMultiplierCache = useGameStore((s) => s.prestigeMultiplierCache);
   const plotsUnlocked = useGameStore((s) => s.plotsUnlocked);
   const achievementsUnlocked = useGameStore((s) => s.achievementsUnlocked);
   const playTime = useGameStore((s) => s.playTimeSeconds);
   const dayNumber = Math.floor(playTime / SECONDS_PER_GAME_DAY) + 1;
+  const playerLevel = computePlayerLevel(totalCashEarned);
+  const rank = rankForLevel(playerLevel);
+
+  // Stack des multiplicateurs visibles : permet au joueur de SAVOIR
+  // d'ou vient sa puissance (ameliorations / prestige / parcelles / pets / meteo).
+  const upgradeMult = totalProductionMultiplier(upgrades);
+  const prestigeMult = prestigeMultiplierCache;
+  const petsMult = 1 + totalPetBonus(petsEquipped).productionBonus;
+  const weatherMult = combinedMultiplier(new Date());
+  let plotsMult = 0;
+  for (const plot of PLOT_DEFINITIONS) {
+    if (plotsUnlocked[plot.type]) plotsMult += plot.globalMultiplier;
+  }
+  if (plotsMult === 0) plotsMult = 1;
+  const powerScore = upgradeMult * prestigeMult * petsMult * weatherMult * plotsMult;
 
   // Visible uniquement sur desktop large (≥1280px).
   if (breakpoint !== 'desktop') return null;
@@ -119,6 +148,22 @@ export function RightStatsPanel() {
         )}
       </div>
 
+      {/* Power Score : signature progression. Stack toutes les sources de
+          multiplication pour que le joueur VOIT d'ou vient sa force. */}
+      <PowerStack
+        powerScore={powerScore}
+        rankTitle={rank.title}
+        rankColor={rank.color}
+        playerLevel={playerLevel}
+        rows={[
+          { label: 'Améliorations', value: upgradeMult, color: 'var(--color-metal-2)' },
+          { label: 'Prestige', value: prestigeMult, color: 'var(--color-accent-purple)' },
+          { label: 'Parcelles', value: plotsMult, color: 'var(--color-grass-5)' },
+          { label: 'Animaux', value: petsMult, color: 'var(--color-accent-fuel)' },
+          { label: 'Météo', value: weatherMult, color: 'var(--color-water-2)' },
+        ]}
+      />
+
       {/* Parcelle active */}
       {activePlot && (
         <StatRow
@@ -189,6 +234,155 @@ export function RightStatsPanel() {
         </p>
       </div>
     </aside>
+  );
+}
+
+interface PowerStackRow {
+  label: string;
+  value: number;
+  color: string;
+}
+
+function PowerStack({
+  powerScore,
+  rankTitle,
+  rankColor,
+  playerLevel,
+  rows,
+}: {
+  powerScore: number;
+  rankTitle: string;
+  rankColor: string;
+  playerLevel: number;
+  rows: ReadonlyArray<PowerStackRow>;
+}) {
+  // Format score : 1.2x / 14x / 256x / 1.2K x ...
+  const formatMult = (n: number): string => {
+    if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1)}M`;
+    if (n >= 1_000) return `${(n / 1_000).toFixed(1)}K`;
+    if (n >= 100) return n.toFixed(0);
+    if (n >= 10) return n.toFixed(1);
+    return n.toFixed(2);
+  };
+  // Largeur barre relative au max pour comparer visuellement les sources.
+  const maxRow = Math.max(...rows.map((r) => Math.max(0.0001, Math.log2(Math.max(1, r.value) + 1))));
+  return (
+    <div
+      className="panel-9"
+      style={{
+        padding: 12,
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 8,
+        position: 'relative',
+      }}
+    >
+      <span className="nail-bl" />
+      <span className="nail-br" />
+      <header className="flex items-center justify-between">
+        <span
+          style={{
+            fontFamily: 'var(--font-button)',
+            fontSize: 9,
+            color: 'var(--color-text-muted)',
+            letterSpacing: '0.12em',
+            textTransform: 'uppercase',
+          }}
+        >
+          Puissance totale
+        </span>
+        <span
+          className="flex items-center gap-1"
+          style={{
+            fontFamily: 'var(--font-button)',
+            fontSize: 9,
+            color: rankColor,
+            letterSpacing: '0.1em',
+            textTransform: 'uppercase',
+          }}
+          title={`Rang : ${rankTitle} · Niveau ${playerLevel}`}
+        >
+          <StarIcon size={11} />
+          {rankTitle}
+        </span>
+      </header>
+      <div className="flex items-baseline gap-2">
+        <span
+          className="numeric"
+          style={{
+            fontSize: 26,
+            fontWeight: 700,
+            color: rankColor,
+            textShadow: '2px 2px 0 var(--color-wood-5)',
+            lineHeight: 1,
+          }}
+        >
+          ×{formatMult(powerScore)}
+        </span>
+        <span
+          style={{
+            fontFamily: 'var(--font-body)',
+            fontSize: 11,
+            color: 'var(--color-text-muted)',
+          }}
+        >
+          de production
+        </span>
+      </div>
+      <div className="flex flex-col gap-1.5" style={{ marginTop: 2 }}>
+        {rows.map((row) => {
+          const pct = Math.min(100, Math.max(2, (Math.log2(Math.max(1, row.value) + 1) / maxRow) * 100));
+          return (
+            <div key={row.label} className="flex items-center gap-2">
+              <span
+                style={{
+                  flex: '0 0 80px',
+                  fontFamily: 'var(--font-body)',
+                  fontSize: 11,
+                  color: 'var(--color-text-body)',
+                }}
+              >
+                {row.label}
+              </span>
+              <div
+                style={{
+                  flex: 1,
+                  position: 'relative',
+                  height: 8,
+                  background: 'var(--color-wood-3)',
+                  border: '1px solid var(--color-wood-5)',
+                  borderRadius: 4,
+                  overflow: 'hidden',
+                }}
+              >
+                <div
+                  style={{
+                    position: 'absolute',
+                    inset: 0,
+                    width: `${pct}%`,
+                    background: row.color,
+                    boxShadow: 'inset 0 1px 0 rgba(255, 255, 255, 0.4)',
+                    transition: 'width 600ms cubic-bezier(0.22, 1, 0.36, 1)',
+                  }}
+                />
+              </div>
+              <span
+                className="numeric"
+                style={{
+                  flex: '0 0 48px',
+                  fontSize: 11,
+                  color: row.color,
+                  fontWeight: 700,
+                  textAlign: 'right',
+                }}
+              >
+                ×{formatMult(row.value)}
+              </span>
+            </div>
+          );
+        })}
+      </div>
+    </div>
   );
 }
 

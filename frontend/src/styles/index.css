@@ -1745,3 +1745,70 @@ button[role='tab']:focus-visible {
   pointer-events: none;
   box-shadow: 0 2px 0 var(--color-wood-5);
 }
+
+/* Level-up celebration : banner drop centre avec rebond + glow. */
+@keyframes levelup-drop {
+  0% {
+    opacity: 0;
+    transform: translateY(-80px) scale(0.6);
+  }
+  60% {
+    opacity: 1;
+    transform: translateY(0) scale(1.08);
+  }
+  80% {
+    transform: translateY(0) scale(0.96);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Shine border pour les shop cards quand un robot atteint un palier
+   d'evolution (5 / 10 / 25 / 50 owned). Halo qui pulse legerement. */
+@keyframes shop-shine-pulse {
+  0%, 100% {
+    box-shadow: 0 0 8px var(--shine-color), inset 0 0 8px var(--shine-color);
+  }
+  50% {
+    box-shadow: 0 0 16px var(--shine-color), inset 0 0 12px var(--shine-color);
+  }
+}
+.shop-card-shine {
+  border-color: var(--shine-color) !important;
+  animation: shop-shine-pulse 2.4s ease-in-out infinite;
+}
+
+/* XP bar mini : remplissage anime quand le ratio change. */
+.xp-bar-track {
+  position: relative;
+  width: 56px;
+  height: 6px;
+  background: var(--color-wood-3);
+  border: 1px solid var(--color-wood-5);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.xp-bar-fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  background: linear-gradient(90deg, var(--color-grass-4), var(--color-accent-gold));
+  transition: width 600ms cubic-bezier(0.22, 1, 0.36, 1);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+.xp-bar-shimmer {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.4) 50%,
+    transparent 100%
+  );
+  animation: xp-shimmer 2.8s linear infinite;
+}
+@keyframes xp-shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}

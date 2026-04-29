@@ -17,6 +17,7 @@ import { useResponsive } from '../../hooks/useResponsive.js';
 import { formatBig } from '../../game/engine/bigNumber.js';
 import { ATLAS_URL, ATLAS_SIZE } from '../garden/Sprite.js';
 import { audio } from '../../services/audio.js';
+import { shineForCount, SHINE_COLOR, SHINE_GLOW, type RobotShine } from '../../utils/playerLevel.js';
 import {
   CoinIcon,
   NavShopIcon,
@@ -154,12 +155,14 @@ export function ShopPanel() {
                   : affordableBulk
                     ? desiredAmount
                     : 0;
+              const shine = shineForCount(owned);
               return (
                 <ShopCard
                   key={type}
                   affordable={affordableSingle && buyableNow > 0}
                   badge={owned > 0 ? `×${owned}` : null}
-                  art={<RobotArt tier={tier.index} />}
+                  shine={shine}
+                  art={<RobotArt tier={tier.index} shine={shine} />}
                   name={t(`robotNicknames.${type}`, tier.name)}
                   rate={
                     buyableNow > 1
@@ -312,6 +315,7 @@ interface ShopCardProps {
   affordable: boolean;
   locked?: boolean;
   badge?: string | null;
+  shine?: RobotShine;
   art: React.ReactNode;
   name: string;
   rate: string;
@@ -319,7 +323,7 @@ interface ShopCardProps {
   onClick: () => void;
 }
 
-function ShopCard({ affordable, locked, badge, art, name, rate, cost, onClick }: ShopCardProps) {
+function ShopCard({ affordable, locked, badge, shine, art, name, rate, cost, onClick }: ShopCardProps) {
   const [wiggle, setWiggle] = useState(false);
   function handleClickWiggle() {
     if (affordable) {
@@ -328,9 +332,14 @@ function ShopCard({ affordable, locked, badge, art, name, rate, cost, onClick }:
     }
     onClick();
   }
+  const hasShine = shine && shine !== 'none';
+  // Css var consommee par .shop-card-shine pour la couleur du halo.
+  const shineStyle = hasShine
+    ? ({ ['--shine-color' as string]: SHINE_GLOW[shine!] } as React.CSSProperties)
+    : undefined;
   return (
     <div
-      className={`panel-9 ${wiggle ? 'card-wiggle' : ''}`}
+      className={`panel-9 ${wiggle ? 'card-wiggle' : ''} ${hasShine ? 'shop-card-shine' : ''}`}
       onClick={handleClickWiggle}
       style={{
         padding: 10,
@@ -342,6 +351,7 @@ function ShopCard({ affordable, locked, badge, art, name, rate, cost, onClick }:
         cursor: affordable ? 'pointer' : 'not-allowed',
         opacity: locked ? 0.6 : 1,
         filter: locked ? 'grayscale(0.5)' : undefined,
+        ...shineStyle,
       }}
     >
       <span className="nail-bl" />
@@ -432,25 +442,29 @@ function ShopCard({ affordable, locked, badge, art, name, rate, cost, onClick }:
   );
 }
 
-function RobotArt({ tier }: { tier: number }) {
+function RobotArt({ tier, shine = 'none' }: { tier: number; shine?: RobotShine }) {
   const SCALE = 2;
   const ROBOT_W = 24;
   const sx = 12 * ROBOT_W; // col 12 = idle frame (row A)
   const sy = tier * 48;
   const [aw, ah] = ATLAS_SIZE.robots;
+  const hasShine = shine !== 'none';
   return (
     <div
       style={{
         width: 64,
         height: 64,
         background: 'var(--color-paper-2)',
-        border: '2px solid var(--color-wood-5)',
+        border: hasShine ? `2px solid ${SHINE_COLOR[shine]}` : '2px solid var(--color-wood-5)',
         borderRadius: 4,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        boxShadow: 'inset 0 -2px 0 var(--color-wood-3), 0 2px 0 var(--color-wood-5)',
+        boxShadow: hasShine
+          ? `inset 0 -2px 0 var(--color-wood-3), 0 2px 0 var(--color-wood-5), 0 0 12px ${SHINE_GLOW[shine]}`
+          : 'inset 0 -2px 0 var(--color-wood-3), 0 2px 0 var(--color-wood-5)',
         overflow: 'hidden',
+        position: 'relative',
       }}
     >
       <div
@@ -464,6 +478,29 @@ function RobotArt({ tier }: { tier: number }) {
           imageRendering: 'pixelated',
         }}
       />
+      {hasShine && (
+        <span
+          style={{
+            position: 'absolute',
+            top: 2,
+            left: 2,
+            background: SHINE_COLOR[shine],
+            color: '#1a1a1a',
+            fontFamily: 'var(--font-button)',
+            fontSize: 8,
+            padding: '1px 4px',
+            borderRadius: 2,
+            letterSpacing: '0.08em',
+            textTransform: 'uppercase',
+            fontWeight: 700,
+            lineHeight: 1,
+            border: '1px solid rgba(0,0,0,0.4)',
+            textShadow: '0 1px 0 rgba(255,255,255,0.5)',
+          }}
+        >
+          {shine}
+        </span>
+      )}
     </div>
   );
 }
