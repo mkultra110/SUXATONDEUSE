@@ -410,19 +410,28 @@ export function AnimatedGarden() {
   const idRef = useRef(0);
 
   // Resize observer pour scale.
+  // Le zoom de base s'adapte au container width, mais aussi a la
+  // progression : plus de plots unlocked = scale plus genereux (jardin
+  // qui s'agrandit visuellement).
+  const plotsUnlocked = useGameStore((s) => s.plotsUnlocked);
+  const plotsCount = Object.values(plotsUnlocked).filter(Boolean).length;
+  // Scale boost : 1.0 a 1 plot, 1.4 a 10 plots (lineaire).
+  const plotScaleBoost = 1 + Math.min(0.4, (plotsCount - 1) * 0.044);
   useEffect(() => {
     if (!wrapperRef.current) return;
     const el = wrapperRef.current;
     const native = COLS * TILE;
     const update = () => {
       const w = el.clientWidth;
-      setZoom(Math.min(1.2, Math.max(0.4, w / native)));
+      // Container max-width × plotScaleBoost = scale final cap a 1.6.
+      const containerScale = w / native;
+      setZoom(Math.min(1.6, Math.max(0.4, containerScale * plotScaleBoost)));
     };
     update();
     const ro = new ResizeObserver(update);
     ro.observe(el);
     return () => ro.disconnect();
-  }, []);
+  }, [plotScaleBoost]);
 
   // Synchronise les robots avec les types possedes (1 par type owned > 0).
   useEffect(() => {
@@ -886,6 +895,12 @@ export function AnimatedGarden() {
         {butterflies.map((b, i) => (
           <Butterfly key={i} x={b.x} y={b.y} delay={b.delay} variant={b.variant} />
         ))}
+
+        {/* Pierres decoratives (walkable, pas de collision). 3 positions
+            fixes pour ne pas casser la lisibilite. */}
+        <TileSprite x={1} y={2} sprite={TERRAIN.ROCK_SMALL} />
+        <TileSprite x={5} y={5} sprite={TERRAIN.ROCK_SMALL} />
+        <TileSprite x={9} y={7} sprite={TERRAIN.ROCK_SMALL} />
 
         {/* Fleurs supplementaires bonus (scale avec player level). */}
         {bonusFlowers.map((f, i) => (

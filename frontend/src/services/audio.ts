@@ -270,11 +270,93 @@ class AudioService {
     if (!this.musicEl) return;
     this.musicEl.play().catch(() => {
       // Browsers exigent souvent un user gesture avant de jouer.
+      // Si l'audio file n'est pas dispo (404), fallback sur le synth pad.
+      this.startSynthAmbient();
     });
+    // Verifie apres 500ms si ca a echoue silencieusement (404), bascule synth.
+    setTimeout(() => {
+      if (this.musicEl && this.musicEl.paused && !this.musicEl.duration) {
+        this.startSynthAmbient();
+      }
+    }, 500);
   }
 
   stopMusic() {
     if (this.musicEl) this.musicEl.pause();
+    this.stopSynthAmbient();
+  }
+
+  // === MUSIQUE AMBIANTE SYNTH (FALLBACK SI PAS DE FICHIER MP3) ===
+  // Generee via Web Audio API : pad cozy en C lydien (Do-Re-Mi-Fa#-Sol-La-Si)
+  // avec progression d'accords doux et pulse de bass subtile.
+  // Loop permanent, volume bas, evoque les jeux cottagecore.
+  private synthAmbientNodes: { osc: OscillatorNode; gain: GainNode }[] = [];
+  private synthAmbientLoopTimer: ReturnType<typeof setInterval> | null = null;
+
+  private startSynthAmbient() {
+    const ctx = this.ensureCtx();
+    if (!ctx || !this.musicGain) return;
+    if (this.synthAmbientLoopTimer) return; // Deja en cours.
+
+    // Progression d'accords cozy en Do majeur :
+    // C - Am - F - G (loop). 4 mesures de 4 secondes = 16s loop.
+    const chords: number[][] = [
+      [261.63, 329.63, 392.0], // C major (Do-Mi-Sol)
+      [220.0, 261.63, 329.63], // A minor (La-Do-Mi)
+      [174.61, 220.0, 261.63], // F major (Fa-La-Do)
+      [196.0, 246.94, 293.66], // G major (Sol-Si-Re)
+    ];
+    const measureDur = 4;
+    let chordIdx = 0;
+
+    const playChord = () => {
+      if (!ctx || !this.musicGain) return;
+      const now = ctx.currentTime;
+      const chord = chords[chordIdx % chords.length]!;
+      // 3 oscillators triangle (pad doux), fade in/out.
+      const newNodes: { osc: OscillatorNode; gain: GainNode }[] = [];
+      chord.forEach((freq, i) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.value = freq;
+        // Octave +1 sur la 3eme note pour une couleur lydienne ouverte.
+        if (i === 2) osc.frequency.value = freq * 2;
+        gain.gain.setValueAtTime(0, now);
+        // Volume tres bas (musique d'ambiance, pas un solo).
+        gain.gain.linearRampToValueAtTime(0.04, now + 1.0);
+        gain.gain.linearRampToValueAtTime(0.03, now + measureDur - 0.5);
+        gain.gain.linearRampToValueAtTime(0, now + measureDur);
+        osc.connect(gain);
+        gain.connect(this.musicGain!);
+        osc.start(now);
+        osc.stop(now + measureDur + 0.1);
+        newNodes.push({ osc, gain });
+      });
+      // Cleanup ancien chord apres 200ms.
+      const old = this.synthAmbientNodes;
+      this.synthAmbientNodes = newNodes;
+      setTimeout(() => {
+        old.forEach(({ osc, gain }) => {
+          try { osc.stop(); osc.disconnect(); gain.disconnect(); } catch { /* ignore */ }
+        });
+      }, 200);
+      chordIdx++;
+    };
+
+    playChord();
+    this.synthAmbientLoopTimer = setInterval(playChord, measureDur * 1000);
+  }
+
+  private stopSynthAmbient() {
+    if (this.synthAmbientLoopTimer) {
+      clearInterval(this.synthAmbientLoopTimer);
+      this.synthAmbientLoopTimer = null;
+    }
+    this.synthAmbientNodes.forEach(({ osc, gain }) => {
+      try { osc.stop(); osc.disconnect(); gain.disconnect(); } catch { /* ignore */ }
+    });
+    this.synthAmbientNodes = [];
   }
 }
 
