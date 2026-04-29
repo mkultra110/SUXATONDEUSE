@@ -14,6 +14,7 @@ import {
   TIER_FLOWERS_COUNT,
 } from '../utils/playerLevel.js';
 import { themeForMapLevel } from '../utils/mapThemes.js';
+import { bossForMapLevel, type BossDef } from '../utils/bossMaps.js';
 import { audio } from '../services/audio.js';
 import { LadybugIcon, LanternIcon, PomponIcon, ScarecrowIcon, CoinIcon, IconGear, MailboxIcon, CocotteIcon } from './icons/PixelIcon.js';
 import { SpeechBubble } from './hud/SpeechBubble.js';
@@ -200,9 +201,49 @@ function baseTallGrass(): Set<string> {
 // Genere une carte d'herbe haute pour un niveau de map donne.
 // Plus le niveau est haut, plus il y a de tuiles a tondre. Le prestige
 // ajoute des tuiles supplementaires (difficulte croissante).
+//
+// Cas special : boss levels (multiples de 10). On genere une map
+// "vierge" avec uniquement des tuiles autour du boss central + N
+// tuiles correspondant aux HP du boss.
 function generateMap(mapLevel: number, prestigeLevel: number): Set<string> {
+  const boss = bossForMapLevel(mapLevel);
+  if (boss) {
+    // Boss level : map vierge (pas de FARM_MAP base), uniquement les
+    // tuiles autour du boss au centre. Le boss occupe une zone 2x2 au
+    // milieu (cols 6-7, rows 3-4).
+    const result = new Set<string>();
+    const free: Array<[number, number]> = [];
+    for (let y = 0; y < ROWS; y++) {
+      for (let x = 0; x < COLS; x++) {
+        if (isBlocked(x, y)) continue;
+        // Skip la zone occupee par le boss (centre 2x2).
+        const isBossTile = x >= 6 && x <= 7 && y >= 3 && y <= 4;
+        if (isBossTile) continue;
+        free.push([x, y]);
+      }
+    }
+    // Le nb de tuiles = HP boss, scaled par prestige (cap a free.length).
+    const prestigeMul = 1 + Math.min(1, prestigeLevel / 6);
+    const tileCount = Math.min(free.length, Math.round(boss.hp * prestigeMul));
+    // Seed determinee par mapLevel + prestige.
+    const seed = mapLevel * 31 + prestigeLevel * 7;
+    function rng(i: number) {
+      const x = Math.sin(seed + i * 1.7) * 10000;
+      return x - Math.floor(x);
+    }
+    const shuffled = [...free];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(rng(i) * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j]!, shuffled[i]!];
+    }
+    for (let i = 0; i < tileCount; i++) {
+      const tile = shuffled[i];
+      if (tile) result.add(`${tile[0]},${tile[1]}`);
+    }
+    return result;
+  }
+  // Map normale.
   const base = baseTallGrass();
-  // Cellules disponibles (non-bloquees, pas deja en tall grass).
   const free: Array<[number, number]> = [];
   for (let y = 0; y < ROWS; y++) {
     for (let x = 0; x < COLS; x++) {
@@ -211,13 +252,8 @@ function generateMap(mapLevel: number, prestigeLevel: number): Set<string> {
       }
     }
   }
-  // Combien de tuiles supplementaires ? Map 1 = 0 extra, map 5 = 12 extra,
-  // map 10 = 22 extra, etc. Cap a free.length pour ne pas deborder.
-  // Prestige multiplie la densite : x1.0 a P0, x1.5 a P3, x2.0 a P6+.
   const prestigeMul = 1 + Math.min(1, prestigeLevel / 6);
   const extraCount = Math.min(free.length, Math.round((mapLevel - 1) * 2.5 * prestigeMul));
-  // Shuffle deterministic (seed = mapLevel * 31 + prestigeLevel) pour que
-  // chaque map soit reproductible mais visuellement differente.
   const seed = mapLevel * 31 + prestigeLevel * 7;
   function rng(i: number) {
     const x = Math.sin(seed + i * 1.7) * 10000;
@@ -353,6 +389,8 @@ export function AnimatedGarden() {
 
   // Theme courant : palette + particules + ambiance changent par paliers.
   const mapTheme = useMemo(() => themeForMapLevel(mapLevel), [mapLevel]);
+  // Boss courant (si mapLevel multiple de 10).
+  const currentBoss: BossDef | null = useMemo(() => bossForMapLevel(mapLevel), [mapLevel]);
 
   // Decor density scale avec le player level (signature progression).
   // Plus le joueur monte en niveau, plus le jardin gagne en richesse :
@@ -902,6 +940,14 @@ export function AnimatedGarden() {
         <TileSprite x={5} y={5} sprite={TERRAIN.ROCK_SMALL} />
         <TileSprite x={9} y={7} sprite={TERRAIN.ROCK_SMALL} />
 
+        {/* Boss : sprite central avec halo + barre HP au-dessus. */}
+        {currentBoss && (
+          <BossSprite
+            boss={currentBoss}
+            hpRatio={tallGrass.size / Math.max(1, mapInitialCount)}
+          />
+        )}
+
         {/* Fleurs supplementaires bonus (scale avec player level). */}
         {bonusFlowers.map((f, i) => (
           <BonusFlower key={i} x={f.x} y={f.y} variant={f.variant} />
@@ -1289,6 +1335,196 @@ function CropRow({ x, y, count, colorIdx }: { x: number; y: number; count: numbe
         </div>
       ))}
     </>
+  );
+}
+
+// BossSprite : creature centrale au boss level (mapLevel multiple de 10).
+// Affichee au centre du jardin avec halo de couleur theme + barre HP
+// au-dessus + label nom + tagline. Le HP descend a chaque tuile coupee.
+function BossSprite({ boss, hpRatio }: { boss: BossDef; hpRatio: number }) {
+  const sizePx = 96;
+  // Centre boss : tile (6.5, 3.5) ≈ x=312px, y=168px en native.
+  const left = 6.5 * TILE - sizePx / 2;
+  const top = 3.5 * TILE - sizePx / 2;
+  return (
+    <>
+      {/* Halo derriere */}
+      <div
+        style={{
+          position: 'absolute',
+          left: left - 32,
+          top: top - 32,
+          width: sizePx + 64,
+          height: sizePx + 64,
+          background: `radial-gradient(circle, ${boss.color}80 0%, ${boss.color}30 40%, transparent 70%)`,
+          zIndex: 5,
+          pointerEvents: 'none',
+          animation: 'boss-halo-pulse 2s ease-in-out infinite',
+        }}
+      />
+      {/* Sprite (placeholder pixelart selon le kind) */}
+      <div
+        style={{
+          position: 'absolute',
+          left,
+          top,
+          width: sizePx,
+          height: sizePx,
+          zIndex: 6,
+          pointerEvents: 'none',
+          animation: 'boss-bob 2.6s ease-in-out infinite',
+        }}
+      >
+        <svg viewBox="0 0 16 16" shapeRendering="crispEdges" style={{ width: '100%', height: '100%', imageRendering: 'pixelated' }}>
+          <BossArt kind={boss.kind} color={boss.color} />
+        </svg>
+      </div>
+      {/* Barre HP + label au-dessus */}
+      <div
+        style={{
+          position: 'absolute',
+          left: left - 30,
+          top: top - 36,
+          width: sizePx + 60,
+          zIndex: 7,
+          pointerEvents: 'none',
+          textAlign: 'center',
+        }}
+      >
+        <div
+          style={{
+            fontFamily: 'var(--font-button)',
+            fontSize: 9,
+            color: boss.color,
+            letterSpacing: '0.15em',
+            textTransform: 'uppercase',
+            textShadow: '1px 1px 0 var(--color-wood-5)',
+          }}
+        >
+          BOSS
+        </div>
+        <div
+          style={{
+            fontFamily: 'var(--font-title)',
+            fontSize: 13,
+            color: 'var(--color-paper-1)',
+            fontWeight: 700,
+            textShadow: '1px 1px 0 var(--color-wood-5)',
+            marginTop: 1,
+          }}
+        >
+          {boss.name}
+        </div>
+        <div
+          style={{
+            height: 6,
+            background: 'var(--color-wood-5)',
+            border: '1px solid var(--color-wood-3)',
+            marginTop: 3,
+            overflow: 'hidden',
+          }}
+        >
+          <div
+            style={{
+              height: '100%',
+              width: `${hpRatio * 100}%`,
+              background: `linear-gradient(90deg, ${boss.color}, var(--color-accent-red))`,
+              boxShadow: `0 0 4px ${boss.color}`,
+              transition: 'width 400ms cubic-bezier(0.34, 1.56, 0.64, 1)',
+            }}
+          />
+        </div>
+      </div>
+    </>
+  );
+}
+
+// BossArt : 5 dessins pixel art pour les 5 boss types.
+function BossArt({ kind, color }: { kind: string; color: string }) {
+  if (kind === 'tournesol-geant') {
+    return (
+      <g>
+        {/* Tige */}
+        <rect x="7" y="9" width="2" height="6" fill="#4a8a2e" />
+        {/* Feuilles */}
+        <rect x="5" y="11" width="2" height="2" fill="#6ba53a" />
+        <rect x="9" y="12" width="2" height="2" fill="#6ba53a" />
+        {/* Petales */}
+        <rect x="3" y="3" width="10" height="1" fill={color} />
+        <rect x="2" y="4" width="12" height="2" fill={color} />
+        <rect x="3" y="6" width="10" height="2" fill={color} />
+        <rect x="4" y="8" width="8" height="1" fill={color} />
+        {/* Coeur */}
+        <rect x="6" y="5" width="4" height="3" fill="#5C3A1F" />
+        <rect x="7" y="6" width="2" height="1" fill="#7A3B2E" />
+      </g>
+    );
+  }
+  if (kind === 'champignon-mauve') {
+    return (
+      <g>
+        {/* Pied */}
+        <rect x="6" y="9" width="4" height="6" fill="#FFF8DC" />
+        <rect x="5" y="14" width="6" height="1" fill="#C9B380" />
+        {/* Chapeau */}
+        <rect x="3" y="3" width="10" height="2" fill={color} />
+        <rect x="2" y="5" width="12" height="3" fill={color} />
+        <rect x="3" y="8" width="10" height="1" fill="#6B3710" />
+        {/* Pois blancs */}
+        <rect x="4" y="4" width="2" height="2" fill="#FFF8DC" />
+        <rect x="9" y="3" width="2" height="2" fill="#FFF8DC" />
+        <rect x="6" y="6" width="2" height="2" fill="#FFF8DC" />
+      </g>
+    );
+  }
+  if (kind === 'cactus-titan') {
+    return (
+      <g>
+        {/* Corps */}
+        <rect x="6" y="3" width="4" height="12" fill={color} />
+        <rect x="4" y="8" width="2" height="4" fill={color} />
+        <rect x="10" y="6" width="2" height="5" fill={color} />
+        {/* Pics */}
+        <rect x="5" y="4" width="1" height="1" fill="#FFFFFF" />
+        <rect x="10" y="5" width="1" height="1" fill="#FFFFFF" />
+        <rect x="7" y="9" width="1" height="1" fill="#FFFFFF" />
+        <rect x="6" y="12" width="1" height="1" fill="#FFFFFF" />
+        {/* Fleur jaune top */}
+        <rect x="6" y="2" width="4" height="2" fill="#FFD921" />
+      </g>
+    );
+  }
+  if (kind === 'arbre-ancien') {
+    return (
+      <g>
+        {/* Tronc */}
+        <rect x="6" y="9" width="4" height="6" fill={color} />
+        <rect x="5" y="13" width="6" height="2" fill="#3A1F08" />
+        {/* Foliage */}
+        <rect x="3" y="3" width="10" height="2" fill="#1d4a18" />
+        <rect x="2" y="5" width="12" height="3" fill="#2f6b22" />
+        <rect x="4" y="8" width="8" height="1" fill="#1d4a18" />
+        <rect x="5" y="6" width="2" height="1" fill="#4a8a2e" />
+        <rect x="9" y="5" width="2" height="1" fill="#4a8a2e" />
+        {/* Yeux */}
+        <rect x="7" y="11" width="1" height="1" fill="#FFD921" />
+        <rect x="9" y="11" width="1" height="1" fill="#FFD921" />
+      </g>
+    );
+  }
+  // cristal-pur
+  return (
+    <g>
+      <rect x="7" y="2" width="2" height="2" fill="#FFFFFF" />
+      <rect x="5" y="4" width="6" height="2" fill={color} />
+      <rect x="3" y="6" width="10" height="3" fill={color} />
+      <rect x="4" y="9" width="8" height="3" fill={color} />
+      <rect x="5" y="12" width="6" height="2" fill={color} />
+      <rect x="7" y="14" width="2" height="1" fill="#FFFFFF" />
+      {/* Highlights */}
+      <rect x="5" y="5" width="2" height="1" fill="#FFFFFF" />
+      <rect x="6" y="7" width="2" height="2" fill="#FFFFFF" />
+    </g>
   );
 }
 
