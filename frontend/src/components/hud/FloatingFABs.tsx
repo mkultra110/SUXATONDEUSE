@@ -30,8 +30,10 @@ export function ActivityFAB({ notificationCount = 0, onClick, visible = true }: 
       className="farm-fab farm-fab-pulse"
       style={{
         position: 'fixed',
+        // Au-dessus de la bottom tab bar mobile (84px = 72px nav + 12px gap),
+        // ou en bas direct sur tablet/desktop ou il n'y a pas de tab bar.
         left: 'calc(env(safe-area-inset-left, 0px) + 12px)',
-        bottom: 'calc(env(safe-area-inset-bottom, 0px) + 12px)',
+        bottom: 'calc(env(safe-area-inset-bottom, 0px) + 84px)',
         zIndex: 850,
       }}
     >
@@ -68,7 +70,7 @@ export function BackFAB({ onClick, visible }: BackFABProps) {
       style={{
         position: 'fixed',
         right: 'calc(env(safe-area-inset-right, 0px) + 12px)',
-        bottom: 'calc(env(safe-area-inset-bottom, 0px) + 12px)',
+        bottom: 'calc(env(safe-area-inset-bottom, 0px) + 84px)',
         zIndex: 850,
       }}
     >

@@ -23,13 +23,14 @@ export function TopBar() {
 
   return (
     <header
-      className="flex w-full items-center gap-2 px-3 py-2 flex-nowrap overflow-x-auto"
+      className="flex w-full items-center gap-1.5 px-2 py-1.5 flex-nowrap overflow-x-auto"
       style={{
         background: 'var(--color-wood-5)',
         borderBottom: '2px solid var(--color-accent-gold)',
         boxShadow: 'inset 0 -3px 0 var(--color-wood-4), 0 4px 12px rgba(0,0,0,0.3)',
-        minHeight: 56,
+        minHeight: 52,
         scrollbarWidth: 'none',
+        flexShrink: 0,
       }}
     >
       {/* LevelBadge - cercle dore 40x40 avec etoile + numero (mock niveau = playerLevel) */}

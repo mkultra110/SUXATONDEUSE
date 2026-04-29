@@ -34,19 +34,19 @@ export function MarcelLog({ onClose }: Props) {
         style={{
           position: 'relative',
           background: 'var(--color-paper-1)',
-          // Pages quadrillees (bleu pale Seyes-style)
           backgroundImage:
             'linear-gradient(var(--color-water-1) 1px, transparent 1px), linear-gradient(90deg, var(--color-water-1) 1px, transparent 1px)',
           backgroundSize: '100% 28px, 28px 100%',
           backgroundPosition: '0 60px, 0 0',
           border: '4px solid var(--color-wood-5)',
-          padding: 24,
+          padding: 'clamp(14px, 4vw, 24px)',
           maxWidth: 480,
           width: '100%',
-          maxHeight: '85vh',
+          maxHeight: '90dvh',
           overflowY: 'auto',
           cursor: 'default',
           boxShadow: '0 8px 0 var(--color-wood-5), 0 16px 32px rgba(0,0,0,0.5)',
+          WebkitOverflowScrolling: 'touch',
         }}
       >
         {/* Spirale cahier en haut */}

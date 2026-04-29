@@ -148,68 +148,110 @@ export function GamePage() {
     );
   }
 
+  // Sur mobile : layout VERTICAL (TopBar / Garden / Panel) + tab bar STICKY en bas.
+  // Sur tablet/desktop : layout HORIZONTAL (Sidebar / Garden / Panel).
+  const isMobile = breakpoint === 'mobile';
+
   return (
     <div
-      className="flex min-h-screen flex-col gap-2 p-2"
+      className="flex flex-col"
       style={{
+        height: '100dvh',
+        width: '100vw',
+        overflow: 'hidden',
         background:
           'linear-gradient(180deg, var(--color-sky-morning) 0%, var(--color-paper-2) 30%, var(--color-paper-2) 100%)',
+        paddingTop: 'env(safe-area-inset-top, 0px)',
       }}
     >
       <TopBar />
-      <main className="flex flex-1 flex-row items-stretch gap-3 min-h-0">
-        {/* Sidebar gauche : visible >=768px (tablet expanded a 240px en >=1280px) */}
-        {useSidebar && <DesktopSidebar />}
 
-        {/* Zone centrale jardin */}
-        <div className="flex flex-col items-center gap-2 flex-1 min-w-0">
-          <div className="farm-frame-wrap">
-            <span className="frame-rivet-bl" />
-            <span className="frame-rivet-br" />
-            <AnimatedGarden />
+      {isMobile ? (
+        // ======== LAYOUT MOBILE 375x667 ========
+        <>
+          <main
+            className="flex flex-col gap-2 flex-1 min-h-0 overflow-y-auto"
+            style={{
+              padding: '8px 8px 80px',
+              paddingBottom: 'calc(72px + env(safe-area-inset-bottom, 0px))',
+              WebkitOverflowScrolling: 'touch',
+            }}
+          >
+            {/* Jardin compact (frame retire pour gagner de la place) */}
+            <div className="flex justify-center">
+              <AnimatedGarden />
+            </div>
+            {/* Panel actif sous le jardin */}
+            <div className="flex flex-col gap-2">
+              {activeTab === 'shop' && <ShopPanel />}
+              {activeTab === 'plots' && <PlotsPanel />}
+              {activeTab === 'daily' && <DailyPanel />}
+              {activeTab === 'collection' && <CollectionPanel />}
+              {activeTab === 'progress' && <ProgresPanel />}
+            </div>
+          </main>
+
+          {/* Bottom tab bar STICKY (vraie nav mobile RCT/Stardew) */}
+          <nav
+            role="tablist"
+            aria-label="Navigation principale"
+            onKeyDown={handleTabKeydown}
+            className="grid grid-cols-5"
+            style={{
+              position: 'fixed',
+              bottom: 0,
+              left: 0,
+              right: 0,
+              zIndex: 800,
+              gap: 4,
+              padding: 6,
+              paddingBottom: 'calc(6px + env(safe-area-inset-bottom, 0px))',
+              background: 'var(--color-wood-5)',
+              borderTop: '3px solid var(--color-accent-gold)',
+              boxShadow: '0 -4px 12px rgba(0, 0, 0, 0.4)',
+            }}
+          >
+            {TABS.map((tab) => (
+              <button
+                key={tab.key}
+                role="tab"
+                aria-selected={activeTab === tab.key}
+                tabIndex={activeTab === tab.key ? 0 : -1}
+                onClick={() => {
+                  if (typeof navigator !== 'undefined' && 'vibrate' in navigator) {
+                    try { navigator.vibrate(8); } catch { /* ignore */ }
+                  }
+                  setActiveTab(tab.key);
+                }}
+                className={`pixel-tab ${activeTab === tab.key ? 'pixel-tab-active' : ''}`}
+                style={{ minHeight: 56, minWidth: 0, padding: '6px 2px' }}
+              >
+                <TabIcon tabKey={tab.key} />
+                <span style={{ fontSize: 9 }}>{t(`tabs.${tab.key}`)}</span>
+              </button>
+            ))}
+          </nav>
+        </>
+      ) : (
+        // ======== LAYOUT TABLET / DESKTOP ========
+        <main className="flex flex-1 flex-row items-stretch gap-3 min-h-0 p-2">
+          {useSidebar && <DesktopSidebar />}
+          <div className="flex flex-col items-center gap-2 flex-1 min-w-0">
+            <div className="farm-frame-wrap">
+              <span className="frame-rivet-bl" />
+              <span className="frame-rivet-br" />
+              <AnimatedGarden />
+            </div>
           </div>
-        </div>
-
-        {/* Panel droit : tabs+content sur mobile, content seul sur md+ (tabs dans sidebar) */}
-        <div className="flex flex-col gap-2 w-full max-w-sm flex-shrink-0">
-          {!useSidebar && (
-            <nav
-              role="tablist"
-              aria-label="Navigation principale"
-              className="grid grid-cols-5 gap-1.5"
-              onKeyDown={handleTabKeydown}
-            >
-              {TABS.map((tab) => (
-                <button
-                  key={tab.key}
-                  role="tab"
-                  aria-selected={activeTab === tab.key}
-                  tabIndex={activeTab === tab.key ? 0 : -1}
-                  onClick={() => {
-                    if (typeof navigator !== 'undefined' && 'vibrate' in navigator) {
-                      try {
-                        navigator.vibrate(8);
-                      } catch {
-                        /* ignore */
-                      }
-                    }
-                    setActiveTab(tab.key);
-                  }}
-                  className={`pixel-tab ${activeTab === tab.key ? 'pixel-tab-active' : ''}`}
-                >
-                  <TabIcon tabKey={tab.key} />
-                  <span>{t(`tabs.${tab.key}`)}</span>
-                </button>
-              ))}
-            </nav>
-          )}
-          {activeTab === 'shop' && <ShopPanel />}
-          {activeTab === 'plots' && <PlotsPanel />}
-          {activeTab === 'daily' && <DailyPanel />}
-          {activeTab === 'collection' && <CollectionPanel />}
-          {activeTab === 'progress' && <ProgresPanel />}
-        </div>
-      </main>
+          <div className="flex flex-col gap-2 w-full max-w-sm flex-shrink-0">
+            {activeTab === 'shop' && <ShopPanel />}
+            {activeTab === 'plots' && <PlotsPanel />}
+            {activeTab === 'daily' && <DailyPanel />}
+            {activeTab === 'collection' && <CollectionPanel />}
+            {activeTab === 'progress' && <ProgresPanel />}
+          </div>
+        </main>
+      )}
 
       {session.offlineReward && (
         <OfflineRewardModal
