@@ -16,11 +16,14 @@ import { MemeGiselePopup } from '../components/hud/MemeGiselePopup.js';
 import { ActivityFAB } from '../components/hud/FloatingFABs.js';
 import { MarcelLog } from '../components/hud/MarcelLog.js';
 import { DesktopSidebar } from '../components/hud/DesktopSidebar.js';
+import { RightStatsPanel } from '../components/hud/RightStatsPanel.js';
 import { useGameSession } from '../hooks/useGameSession.js';
 import { useAudio } from '../hooks/useAudio.js';
 import { useResponsive } from '../hooks/useResponsive.js';
+import { useKonamiCode } from '../hooks/useKonamiCode.js';
 import { useUIStore } from '../stores/uiStore.js';
 import { ATLAS_URL, ATLAS_SIZE } from '../components/garden/Sprite.js';
+import { useState } from 'react';
 
 // 5 onglets max selon iOS HIG / Material 3 / NN/g.
 type TabKey = 'shop' | 'plots' | 'daily' | 'collection' | 'progress';
@@ -77,6 +80,12 @@ export function GamePage() {
   const setMarcelLogOpen = useUIStore((s) => s.setMarcelLogOpen);
   const breakpoint = useResponsive();
   const useSidebar = breakpoint === 'tablet' || breakpoint === 'desktop';
+  // Konami code easter egg : ↑↑↓↓←→←→BA -> mode sepia 30s.
+  const [sepiaMode, setSepiaMode] = useState(false);
+  useKonamiCode(() => {
+    setSepiaMode(true);
+    setTimeout(() => setSepiaMode(false), 30_000);
+  });
 
   // Navigation clavier desktop : fleche gauche/droite parcourt les tabs.
   // (a11y : tabs interchangeables sans souris).
@@ -162,6 +171,9 @@ export function GamePage() {
         background:
           'linear-gradient(180deg, var(--color-sky-morning) 0%, var(--color-paper-2) 30%, var(--color-paper-2) 100%)',
         paddingTop: 'env(safe-area-inset-top, 0px)',
+        // Konami easter egg : mode sepia 30s.
+        filter: sepiaMode ? 'sepia(0.85) saturate(1.2)' : undefined,
+        transition: 'filter 800ms ease-out',
       }}
     >
       <TopBar />
@@ -243,13 +255,15 @@ export function GamePage() {
               <AnimatedGarden />
             </div>
           </div>
-          <div className="flex flex-col gap-2 w-full max-w-sm flex-shrink-0">
+          <div className="flex flex-col gap-2 w-full max-w-sm flex-shrink-0 overflow-y-auto">
             {activeTab === 'shop' && <ShopPanel />}
             {activeTab === 'plots' && <PlotsPanel />}
             {activeTab === 'daily' && <DailyPanel />}
             {activeTab === 'collection' && <CollectionPanel />}
             {activeTab === 'progress' && <ProgresPanel />}
           </div>
+          {/* Sidebar droite : visible >=1280px (desktop large). */}
+          <RightStatsPanel />
         </main>
       )}
 
