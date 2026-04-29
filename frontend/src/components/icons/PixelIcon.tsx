@@ -695,6 +695,21 @@ export function NotebookIcon({ size = 24, className, style, title }: IconProps) 
   );
 }
 
+// Fleche gauche pour boutons retour (BackFAB).
+export function ArrowLeftIcon({ size = 16, className, style, title }: IconProps) {
+  return (
+    <svg viewBox="0 0 16 16" shapeRendering="crispEdges" className={className} style={pixelStyle(size, style)} role={title ? 'img' : undefined} aria-label={title}>
+      <rect x="2" y="7" width="10" height="2" fill="#FFF8DC" />
+      <rect x="3" y="6" width="2" height="1" fill="#FFF8DC" />
+      <rect x="3" y="9" width="2" height="1" fill="#FFF8DC" />
+      <rect x="4" y="5" width="2" height="1" fill="#FFF8DC" />
+      <rect x="4" y="10" width="2" height="1" fill="#FFF8DC" />
+      <rect x="5" y="4" width="2" height="1" fill="#FFF8DC" />
+      <rect x="5" y="11" width="2" height="1" fill="#FFF8DC" />
+    </svg>
+  );
+}
+
 // Croix rouge pour items destructifs (deconnexion).
 export function CrossIcon({ size = 16, className, style, title }: IconProps) {
   return (

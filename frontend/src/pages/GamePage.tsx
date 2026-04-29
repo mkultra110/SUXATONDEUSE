@@ -2,7 +2,6 @@
 // 5 onglets : Boutique / Parcelles / Quêtes / Collection / Progrès
 // (où Progrès groupe Prestige+Succès+Stats via SegmentedControl interne).
 
-import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { TopBar } from '../components/hud/TopBar.js';
 import { ShopPanel } from '../components/hud/ShopPanel.js';
@@ -14,8 +13,11 @@ import { OfflineRewardModal } from '../components/modals/OfflineRewardModal.js';
 import { AnimatedGarden } from '../components/AnimatedGarden.js';
 import { AchievementToast } from '../components/hud/AchievementToast.js';
 import { MemeGiselePopup } from '../components/hud/MemeGiselePopup.js';
+import { ActivityFAB } from '../components/hud/FloatingFABs.js';
+import { MarcelLog } from '../components/hud/MarcelLog.js';
 import { useGameSession } from '../hooks/useGameSession.js';
 import { useAudio } from '../hooks/useAudio.js';
+import { useUIStore } from '../stores/uiStore.js';
 import { ATLAS_URL, ATLAS_SIZE } from '../components/garden/Sprite.js';
 
 // 5 onglets max selon iOS HIG / Material 3 / NN/g.
@@ -65,7 +67,28 @@ export function GamePage() {
   const session = useGameSession();
   // Bootstrap audio (charge ambient.mp3 si present, demarre apres user gesture).
   useAudio();
-  const [activeTab, setActiveTab] = useState<TabKey>('shop');
+  // Tab actif persiste entre sessions via uiStore.
+  const activeTab = useUIStore((s) => s.activeTab) as TabKey;
+  const setActiveTabPersist = useUIStore((s) => s.setActiveTab);
+  const setActiveTab = (tab: TabKey) => setActiveTabPersist(tab);
+  const marcelLogOpen = useUIStore((s) => s.marcelLogOpen);
+  const setMarcelLogOpen = useUIStore((s) => s.setMarcelLogOpen);
+
+  // Navigation clavier desktop : fleche gauche/droite parcourt les tabs.
+  // (a11y : tabs interchangeables sans souris).
+  const handleTabKeydown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    const idx = TABS.findIndex((tt) => tt.key === activeTab);
+    if (idx < 0) return;
+    if (e.key === 'ArrowRight') {
+      e.preventDefault();
+      const next = TABS[(idx + 1) % TABS.length]?.key;
+      if (next) setActiveTab(next);
+    } else if (e.key === 'ArrowLeft') {
+      e.preventDefault();
+      const prev = TABS[(idx - 1 + TABS.length) % TABS.length]?.key;
+      if (prev) setActiveTab(prev);
+    }
+  };
 
   if (session.isLoading) {
     const phaseLabels: Record<string, string> = {
@@ -143,13 +166,24 @@ export function GamePage() {
             role="tablist"
             aria-label="Navigation principale"
             className="grid grid-cols-5 gap-1.5"
+            onKeyDown={handleTabKeydown}
           >
             {TABS.map((tab) => (
               <button
                 key={tab.key}
                 role="tab"
                 aria-selected={activeTab === tab.key}
-                onClick={() => setActiveTab(tab.key)}
+                tabIndex={activeTab === tab.key ? 0 : -1}
+                onClick={() => {
+                  if (typeof navigator !== 'undefined' && 'vibrate' in navigator) {
+                    try {
+                      navigator.vibrate(8);
+                    } catch {
+                      /* ignore */
+                    }
+                  }
+                  setActiveTab(tab.key);
+                }}
                 className={`pixel-tab ${activeTab === tab.key ? 'pixel-tab-active' : ''}`}
               >
                 <TabIcon tabKey={tab.key} />
@@ -174,6 +208,8 @@ export function GamePage() {
       )}
       <AchievementToast />
       <MemeGiselePopup />
+      <ActivityFAB onClick={() => setMarcelLogOpen(true)} notificationCount={0} />
+      {marcelLogOpen && <MarcelLog onClose={() => setMarcelLogOpen(false)} />}
     </div>
   );
 }

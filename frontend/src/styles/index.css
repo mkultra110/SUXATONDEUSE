@@ -731,6 +731,131 @@
 .farm-frame-wrap > .frame-rivet-bl { bottom: 4px; left: 4px; }
 .farm-frame-wrap > .frame-rivet-br { bottom: 4px; right: 4px; }
 
+/* FABs flottants RCT-Touch (Carnet de Marcel + Retour) */
+.farm-fab {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  background: var(--color-wood-5);
+  border: 3px solid var(--color-accent-gold);
+  box-shadow:
+    inset 0 -2px 0 rgba(0, 0, 0, 0.3),
+    inset 0 2px 0 rgba(255, 255, 255, 0.15),
+    0 4px 0 rgba(0, 0, 0, 0.4),
+    0 8px 16px rgba(0, 0, 0, 0.4);
+  transition: transform 100ms ease-out, box-shadow 100ms ease-out;
+  position: relative;
+  -webkit-tap-highlight-color: transparent;
+}
+.farm-fab:active {
+  transform: translateY(2px);
+  box-shadow:
+    inset 0 -2px 0 rgba(0, 0, 0, 0.3),
+    0 2px 0 rgba(0, 0, 0, 0.4),
+    0 4px 8px rgba(0, 0, 0, 0.3);
+}
+.farm-fab:hover {
+  transform: translateY(-1px);
+}
+.farm-fab-back {
+  border-color: var(--color-accent-red);
+  background: #7a2a2a;
+  animation: fab-slide-in 250ms cubic-bezier(0.34, 1.56, 0.64, 1) backwards;
+}
+@keyframes fab-slide-in {
+  0% { transform: translateX(80px); opacity: 0; }
+  100% { transform: translateX(0); opacity: 1; }
+}
+.farm-fab-pulse {
+  animation: fab-pulse 5s ease-in-out infinite;
+}
+@keyframes fab-pulse {
+  0%, 90%, 100% {
+    box-shadow:
+      inset 0 -2px 0 rgba(0, 0, 0, 0.3),
+      inset 0 2px 0 rgba(255, 255, 255, 0.15),
+      0 4px 0 rgba(0, 0, 0, 0.4),
+      0 8px 16px rgba(0, 0, 0, 0.4);
+  }
+  95% {
+    box-shadow:
+      inset 0 -2px 0 rgba(0, 0, 0, 0.3),
+      inset 0 2px 0 rgba(255, 255, 255, 0.15),
+      0 4px 0 rgba(0, 0, 0, 0.4),
+      0 8px 24px rgba(245, 196, 67, 0.6);
+  }
+}
+.farm-fab-badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 5px;
+  background: var(--color-accent-red);
+  color: var(--color-paper-1);
+  font-family: var(--font-button);
+  font-size: 10px;
+  font-weight: 700;
+  border: 2px solid var(--color-wood-5);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  letter-spacing: 0;
+  box-shadow: 0 2px 0 var(--color-wood-5);
+  animation: badge-bounce 1.6s ease-in-out infinite;
+}
+@keyframes badge-bounce {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.12); }
+}
+
+/* Animation pixel-pop sur les tabs au switch (steps 4 = pixel-art way). */
+@keyframes pixel-pop {
+  0%   { transform: scale(1) translateY(0); }
+  25%  { transform: scale(1.08) translateY(-1px); }
+  50%  { transform: scale(1.15) translateY(-2px); }
+  75%  { transform: scale(1.04) translateY(-1px); }
+  100% { transform: scale(1) translateY(0); }
+}
+.pixel-tab-active {
+  animation: pixel-pop 240ms steps(4, end);
+}
+
+/* Focus-visible pour navigation clavier desktop (accessibilité WCAG 2.2). */
+.pixel-btn:focus-visible,
+.pixel-tab:focus-visible,
+.farm-fab:focus-visible,
+button[role='tab']:focus-visible {
+  outline: 3px solid var(--color-accent-gold);
+  outline-offset: 2px;
+  z-index: 1;
+}
+
+/* prefers-reduced-motion : desactive toutes les animations decoratives. */
+@media (prefers-reduced-motion: reduce) {
+  .farm-fab-pulse,
+  .farm-fab-back,
+  .farm-fab-badge,
+  .pixel-tab-active,
+  .farm-pompon,
+  .farm-ladybug,
+  .farm-lantern,
+  .farm-cocotte,
+  .icon-coin-spin,
+  .icon-fuel-tangue,
+  .icon-seed-pulse,
+  .farm-cloud,
+  .garden-sun {
+    animation: none !important;
+  }
+}
+
 /* Boite aux lettres rouge : drapeau lateral qui se leve quand clique. */
 .farm-mailbox .mailbox-flag {
   transform: rotate(0deg);
