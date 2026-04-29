@@ -23,6 +23,8 @@ export function KebabMenu({ onClose }: KebabMenuProps) {
   const [confirmLogout, setConfirmLogout] = useState(false);
   const setPolaroidAlbumOpen = useUIStore((s) => s.setPolaroidAlbumOpen);
   const setStatsHebdoOpen = useUIStore((s) => s.setStatsHebdoOpen);
+  const setBestiaryOpen = useUIStore((s) => s.setBestiaryOpen);
+  const setDailyChallengeOpen = useUIStore((s) => s.setDailyChallengeOpen);
   const navigate = useNavigate();
   const { logout } = useAuth();
   const ref = useRef<HTMLDivElement>(null);
@@ -118,6 +120,22 @@ export function KebabMenu({ onClose }: KebabMenuProps) {
               label="Bilan"
               onClick={() => {
                 setStatsHebdoOpen(true);
+                setOpen(false);
+              }}
+            />
+            <MenuItem
+              icon={<TrophyIcon size={18} />}
+              label="Bestiaire"
+              onClick={() => {
+                setBestiaryOpen(true);
+                setOpen(false);
+              }}
+            />
+            <MenuItem
+              icon={<StarIcon size={18} />}
+              label="Defi du jour"
+              onClick={() => {
+                setDailyChallengeOpen(true);
                 setOpen(false);
               }}
             />

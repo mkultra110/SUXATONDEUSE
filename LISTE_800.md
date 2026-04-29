@@ -28,7 +28,7 @@ Statut implementation :
 - [x] 16. Particules confettis sur achievement unlock
 - [x] 17. Ondes concentriques sur tap (ripple)
 - [x] 18. Petits coeurs roses au-dessus des robots heureux
-- [ ] 19. Bulles de pensee occasionnelles sur les robots
+- [x] 19. Bulles de pensee occasionnelles sur les robots
 - [ ] 20. Trainee lumineuse path BFS visible 200ms apres robot
 - [ ] 21. Effet de fumee de cheminee plus dense l'hiver
 - [ ] 22. Plumes qui tombent autour des cocottes
@@ -36,7 +36,7 @@ Statut implementation :
 - [ ] 24. Brouillard matinal qui se dissipe au lever du jour
 - [x] 25. Insectes nocturnes lumineux (lucioles) la nuit
 - [x] 26. Etoiles filantes occasionnelles dans le ciel nocturne
-- [ ] 27. Arc-en-ciel apres pluie (1% chance)
+- [x] 27. Arc-en-ciel apres pluie (1% chance)
 - [ ] 28. Aurore boreale sur theme cristal
 - [ ] 29. Effet de chaleur (heat haze) sur theme volcanique
 - [ ] 30. Flocons cumules au sol sur theme hiver
@@ -55,8 +55,8 @@ Statut implementation :
 - [ ] 43. Goutte d'eau qui glisse de l'arrosoir
 - [ ] 44. Trail "mowed" qui pulse vert apres recolte (~1s)
 - [ ] 45. Pixel art animation : Pompon qui chasse une mouche
-- [ ] 46. Souris qui traverse l'ecran rapidement (rare)
-- [ ] 47. Helicoptere de Marcel qui passe en arriere-plan
+- [x] 46. Souris qui traverse l'ecran rapidement (rare)
+- [x] 47. Helicoptere de Marcel qui passe en arriere-plan
 - [ ] 48. Marcel qui fait coucou par la fenetre
 - [ ] 49. Lumiere qui s'allume / s'eteint dans la maison
 - [ ] 50. Cheminee qui crache des etincelles sur Noel
@@ -106,7 +106,7 @@ Statut implementation :
 - [ ] 94. Halo blanc tres pur theme cristal
 - [ ] 95. Etoiles cosmiques theme final
 - [ ] 96. Galaxie en arriere-plan theme legendaire
-- [ ] 97. Robot qui clignote dore quand boost actif
+- [x] 97. Robot qui clignote dore quand boost actif
 - [ ] 98. Effet wireframe sur upgrade laboratoire
 - [ ] 99. Glow vert pour drop critique (5x)
 - [ ] 100. Outline jaune sur robot selectionne
@@ -148,7 +148,7 @@ Statut implementation :
 - [ ] 136. Charrue tiree par cheval invisible (anim)
 - [ ] 137. Drone livreur qui depose un colis (rare)
 - [ ] 138. Tracteur de Marcel qui traverse 1x/jour
-- [ ] 139. Ovni qui passe (1/1000 chance, easter egg)
+- [x] 139. Ovni qui passe (1/1000 chance, easter egg)
 - [ ] 140. Lumiere d'OVNI qui aspire un robot brievement
 - [ ] 141. Trou noir effect au prestige cosmique
 - [ ] 142. Big bang particles sur 1er prestige
@@ -245,7 +245,7 @@ Statut implementation :
 - [ ] 230. Boss "souffle empoisonne" zone toxique
 - [ ] 231. Recompense unique par boss : skin / pet / chapeau
 - [ ] 232. Recompense seasonal sur boss event
-- [ ] 233. Bestiaire (Cabinet) qui collectionne tous les boss
+- [x] 233. Bestiaire (Cabinet) qui collectionne tous les boss
 - [ ] 234. Re-fight boss option (training mode)
 - [ ] 235. Boss rush mode (chain 5 boss)
 - [ ] 236. Difficulte boss : Normal / Hard / Mythique
@@ -383,7 +383,7 @@ Statut implementation :
 - [x] 362. Long-press = buy max
 - [ ] 363. Auto-prestige toggle
 - [ ] 364. Auto-equip best pet
-- [ ] 365. Auto-claim daily login reward
+- [x] 365. Auto-claim daily login reward
 - [x] 366. Auto-claim achievements
 - [ ] 367. Notification cloches toolbar (rouge sur claim disponible)
 - [ ] 368. Drag-to-reorder upgrades favorites
@@ -441,7 +441,7 @@ Statut implementation :
 - [ ] 420. Auto-target boss tile
 - [ ] 421. Visual indicator de la prochaine map
 - [ ] 422. Heatmap zones les plus tondues
-- [ ] 423. Stats live "tu fais combien par minute" (sticker)
+- [x] 423. Stats live "tu fais combien par minute" (sticker)
 - [ ] 424. Historique production (graph 24h)
 - [ ] 425. Comparison day-by-day production
 - [ ] 426. Export CSV des stats
@@ -602,8 +602,8 @@ Statut implementation :
 - [ ] 578. Mode "Sandbox" cheats unlocked
 - [ ] 579. Mode "Photo mode" UI off
 - [ ] 580. Mode "Random" tout aleatoire
-- [ ] 581. Mode "Daily challenge" map fixe
-- [ ] 582. Mode "Weekly challenge" recompense or
+- [x] 581. Mode "Daily challenge" map fixe
+- [x] 582. Mode "Weekly challenge" recompense or
 - [ ] 583. Mode "Boss rush"
 - [ ] 584. Mode "Survival" vagues d'ennemis
 - [ ] 585. Mode "Tycoon" vrai gestion stocks

@@ -191,6 +191,14 @@ export function RightStatsPanel() {
         accent="var(--color-accent-gold)"
       />
 
+      {/* Cash par minute (idee #423) */}
+      <StatRow
+        icon={<CoinIcon size={20} />}
+        label="Cash par minute"
+        value={formatBig(cashPerSecond.mul(60))}
+        accent="var(--color-grass-5)"
+      />
+
       {/* Herbe coupee */}
       <StatRow
         icon={<IconBlade size={20} />}

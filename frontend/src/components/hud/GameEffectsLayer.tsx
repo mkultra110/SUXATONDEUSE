@@ -212,6 +212,15 @@ export function GameEffectsLayer() {
     return () => clearInterval(interval);
   }, []);
 
+  // === Auto-claim daily login reward (idee #365) ===
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const state = useGameStore.getState();
+      state.claimLoginReward();
+    }, 5000);
+    return () => clearInterval(interval);
+  }, []);
+
   // === Auto-claim achievements (idee #366) ===
   // Reclame automatiquement les achievements unlock mais pas claim apres
   // 1er prestige (sinon premier joueur rate pas la sensation manuelle).

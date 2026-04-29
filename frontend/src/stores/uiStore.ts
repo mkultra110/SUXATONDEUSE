@@ -23,6 +23,8 @@ interface UIState {
   statsHebdoOpen: boolean;
   // Achievement grid ouverte.
   achievementGridOpen: boolean;
+  bestiaryOpen: boolean;
+  dailyChallengeOpen: boolean;
   // Date du dernier polaroid auto-capture (ISO).
   lastPolaroidISODate: string | null;
   // Last-seen save anniversary day (pour ne donner le cadeau qu'une fois).
@@ -37,6 +39,8 @@ interface UIState {
   setPolaroidAlbumOpen: (b: boolean) => void;
   setStatsHebdoOpen: (b: boolean) => void;
   setAchievementGridOpen: (b: boolean) => void;
+  setBestiaryOpen: (b: boolean) => void;
+  setDailyChallengeOpen: (b: boolean) => void;
   setLastPolaroidISODate: (d: string) => void;
   setLastAnniversaryDay: (d: number) => void;
 }
@@ -54,6 +58,8 @@ export const useUIStore = create<UIState>()(
       polaroidAlbumOpen: false,
       statsHebdoOpen: false,
       achievementGridOpen: false,
+      bestiaryOpen: false,
+      dailyChallengeOpen: false,
       lastPolaroidISODate: null,
       lastAnniversaryDay: 0,
       setActiveTab: (tab) => set({ activeTab: tab }),
@@ -66,6 +72,8 @@ export const useUIStore = create<UIState>()(
       setPolaroidAlbumOpen: (b) => set({ polaroidAlbumOpen: b }),
       setStatsHebdoOpen: (b) => set({ statsHebdoOpen: b }),
       setAchievementGridOpen: (b) => set({ achievementGridOpen: b }),
+      setBestiaryOpen: (b) => set({ bestiaryOpen: b }),
+      setDailyChallengeOpen: (b) => set({ dailyChallengeOpen: b }),
       setLastPolaroidISODate: (d) => set({ lastPolaroidISODate: d }),
       setLastAnniversaryDay: (d) => set({ lastAnniversaryDay: d }),
     }),
