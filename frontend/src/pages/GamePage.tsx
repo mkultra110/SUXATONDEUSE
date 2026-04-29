@@ -15,8 +15,10 @@ import { AchievementToast } from '../components/hud/AchievementToast.js';
 import { MemeGiselePopup } from '../components/hud/MemeGiselePopup.js';
 import { ActivityFAB } from '../components/hud/FloatingFABs.js';
 import { MarcelLog } from '../components/hud/MarcelLog.js';
+import { DesktopSidebar } from '../components/hud/DesktopSidebar.js';
 import { useGameSession } from '../hooks/useGameSession.js';
 import { useAudio } from '../hooks/useAudio.js';
+import { useResponsive } from '../hooks/useResponsive.js';
 import { useUIStore } from '../stores/uiStore.js';
 import { ATLAS_URL, ATLAS_SIZE } from '../components/garden/Sprite.js';
 
@@ -73,6 +75,8 @@ export function GamePage() {
   const setActiveTab = (tab: TabKey) => setActiveTabPersist(tab);
   const marcelLogOpen = useUIStore((s) => s.marcelLogOpen);
   const setMarcelLogOpen = useUIStore((s) => s.setMarcelLogOpen);
+  const breakpoint = useResponsive();
+  const useSidebar = breakpoint === 'tablet' || breakpoint === 'desktop';
 
   // Navigation clavier desktop : fleche gauche/droite parcourt les tabs.
   // (a11y : tabs interchangeables sans souris).
@@ -153,44 +157,52 @@ export function GamePage() {
       }}
     >
       <TopBar />
-      <main className="flex flex-1 flex-col items-center gap-3 lg:flex-row lg:items-start lg:justify-center lg:gap-6">
-        <div className="flex flex-col items-center gap-2 flex-1 w-full">
+      <main className="flex flex-1 flex-row items-stretch gap-3 min-h-0">
+        {/* Sidebar gauche : visible >=768px (tablet expanded a 240px en >=1280px) */}
+        {useSidebar && <DesktopSidebar />}
+
+        {/* Zone centrale jardin */}
+        <div className="flex flex-col items-center gap-2 flex-1 min-w-0">
           <div className="farm-frame-wrap">
             <span className="frame-rivet-bl" />
             <span className="frame-rivet-br" />
             <AnimatedGarden />
           </div>
         </div>
-        <div className="flex flex-col gap-2 w-full max-w-sm">
-          <nav
-            role="tablist"
-            aria-label="Navigation principale"
-            className="grid grid-cols-5 gap-1.5"
-            onKeyDown={handleTabKeydown}
-          >
-            {TABS.map((tab) => (
-              <button
-                key={tab.key}
-                role="tab"
-                aria-selected={activeTab === tab.key}
-                tabIndex={activeTab === tab.key ? 0 : -1}
-                onClick={() => {
-                  if (typeof navigator !== 'undefined' && 'vibrate' in navigator) {
-                    try {
-                      navigator.vibrate(8);
-                    } catch {
-                      /* ignore */
+
+        {/* Panel droit : tabs+content sur mobile, content seul sur md+ (tabs dans sidebar) */}
+        <div className="flex flex-col gap-2 w-full max-w-sm flex-shrink-0">
+          {!useSidebar && (
+            <nav
+              role="tablist"
+              aria-label="Navigation principale"
+              className="grid grid-cols-5 gap-1.5"
+              onKeyDown={handleTabKeydown}
+            >
+              {TABS.map((tab) => (
+                <button
+                  key={tab.key}
+                  role="tab"
+                  aria-selected={activeTab === tab.key}
+                  tabIndex={activeTab === tab.key ? 0 : -1}
+                  onClick={() => {
+                    if (typeof navigator !== 'undefined' && 'vibrate' in navigator) {
+                      try {
+                        navigator.vibrate(8);
+                      } catch {
+                        /* ignore */
+                      }
                     }
-                  }
-                  setActiveTab(tab.key);
-                }}
-                className={`pixel-tab ${activeTab === tab.key ? 'pixel-tab-active' : ''}`}
-              >
-                <TabIcon tabKey={tab.key} />
-                <span>{t(`tabs.${tab.key}`)}</span>
-              </button>
-            ))}
-          </nav>
+                    setActiveTab(tab.key);
+                  }}
+                  className={`pixel-tab ${activeTab === tab.key ? 'pixel-tab-active' : ''}`}
+                >
+                  <TabIcon tabKey={tab.key} />
+                  <span>{t(`tabs.${tab.key}`)}</span>
+                </button>
+              ))}
+            </nav>
+          )}
           {activeTab === 'shop' && <ShopPanel />}
           {activeTab === 'plots' && <PlotsPanel />}
           {activeTab === 'daily' && <DailyPanel />}
