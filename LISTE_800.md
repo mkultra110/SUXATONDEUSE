@@ -126,9 +126,9 @@ Statut implementation :
 - [ ] 114. Mini-carte des parcelles (overview)
 - [x] 115. Compteur d'heure de jeu "100h" badge
 - [ ] 116. Particles cuivrees sur clic ressources
-- [ ] 117. Hover effect glow sur shop cards
-- [ ] 118. Press effect (depress) sur tap card
-- [ ] 119. Long-press circle progress visible
+- [x] 117. Hover effect glow sur shop cards
+- [x] 118. Press effect (depress) sur tap card
+- [x] 119. Long-press circle progress visible
 - [ ] 120. Drag and drop indicateur visuel
 - [ ] 121. Snap to grid avec ligne pointillee
 - [x] 122. Curseur custom pixel art sur desktop
@@ -408,13 +408,13 @@ Statut implementation :
 - [ ] 387. Bio player (140 chars max)
 - [ ] 388. Photo profil custom (upload local)
 - [ ] 389. Status player ("au lit" / "tonde a fond")
-- [ ] 390. Auto-save toutes les 30s
-- [ ] 391. Save manuel (button)
+- [x] 390. Auto-save toutes les 30s
+- [x] 391. Save manuel (button)
 - [ ] 392. Cloud sync optionnel (auth requis)
-- [ ] 393. Export save JSON (download)
-- [ ] 394. Import save JSON
-- [ ] 395. Reset progress button (avec confirm)
-- [ ] 396. Clear cache button (settings)
+- [x] 393. Export save JSON (download)
+- [x] 394. Import save JSON
+- [x] 395. Reset progress button (avec confirm)
+- [x] 396. Clear cache button (settings)
 - [ ] 397. Multi-save slots (3 slots)
 - [ ] 398. Switch save slot at runtime
 - [ ] 399. Cloud backup auto chaque jour
@@ -707,7 +707,7 @@ Statut implementation :
 - [ ] 677. Easter egg : tap 666 fois robot = fumee
 - [ ] 678. Easter egg : 4eme prestige = oeuf
 - [ ] 679. Easter egg : tap LICELL = clear bug
-- [ ] 680. Easter egg : URL ?dev = panel debug
+- [x] 680. Easter egg : URL ?dev = panel debug
 - [ ] 681. Reference film "Le Pere Noel est une ordure"
 - [ ] 682. Reference "Les Bronzes font du ski"
 - [ ] 683. Reference Asterix
@@ -826,8 +826,8 @@ Statut implementation :
 - [ ] 790. Feature flags pour rollout progressif
 - [ ] 791. Hot reload des balance configs
 - [ ] 792. Backend simulation pour balance
-- [ ] 793. Outils dev pour spawn boss / cash
-- [ ] 794. Console cheat code (dev only)
+- [x] 793. Outils dev pour spawn boss / cash
+- [x] 794. Console cheat code (dev only)
 - [ ] 795. Crash reporter (Sentry-like)
 - [ ] 796. Performance monitoring
 - [ ] 797. Uptime monitor public

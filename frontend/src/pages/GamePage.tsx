@@ -39,6 +39,7 @@ import { Bestiary } from '../components/hud/Bestiary.js';
 import { DailyChallenge } from '../components/hud/DailyChallenge.js';
 import { SkyHourGradient } from '../components/hud/SkyHourGradient.js';
 import { HolidayDecor } from '../components/hud/HolidayDecor.js';
+import { DevPanel } from '../components/hud/DevPanel.js';
 import { useGameSession } from '../hooks/useGameSession.js';
 import { useAudio } from '../hooks/useAudio.js';
 import { useResponsive } from '../hooks/useResponsive.js';
@@ -320,6 +321,7 @@ export function GamePage() {
       <DailyChallenge />
       <SkyHourGradient />
       <HolidayDecor />
+      <DevPanel />
       <ActivityFAB onClick={() => setMarcelLogOpen(true)} notificationCount={0} />
       {marcelLogOpen && <MarcelLog onClose={() => setMarcelLogOpen(false)} />}
     </div>

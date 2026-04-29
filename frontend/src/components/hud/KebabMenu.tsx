@@ -9,6 +9,7 @@ import { useUIStore } from '../../stores/uiStore.js';
 import { ConfirmDialog } from './ConfirmDialog.js';
 import { MarcelLog } from './MarcelLog.js';
 import { SettingsPanel } from './SettingsPanel.js';
+import { SaveExport } from './SaveExport.js';
 import { NotebookIcon, IconGear, StarIcon, HeartIcon, CrossIcon, NavCollectionIcon, TrophyIcon } from '../icons/PixelIcon.js';
 
 interface KebabMenuProps {
@@ -20,6 +21,7 @@ export function KebabMenu({ onClose }: KebabMenuProps) {
   const [marcelOpen, setMarcelOpen] = useState(false);
   const [aboutOpen, setAboutOpen] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const [saveOpen, setSaveOpen] = useState(false);
   const [confirmLogout, setConfirmLogout] = useState(false);
   const setPolaroidAlbumOpen = useUIStore((s) => s.setPolaroidAlbumOpen);
   const setStatsHebdoOpen = useUIStore((s) => s.setStatsHebdoOpen);
@@ -140,6 +142,14 @@ export function KebabMenu({ onClose }: KebabMenuProps) {
               }}
             />
             <MenuItem
+              icon={<NotebookIcon size={18} />}
+              label="Sauvegarde"
+              onClick={() => {
+                setSaveOpen(true);
+                setOpen(false);
+              }}
+            />
+            <MenuItem
               icon={<StarIcon size={18} />}
               label="Crédits"
               onClick={() => {
@@ -168,6 +178,7 @@ export function KebabMenu({ onClose }: KebabMenuProps) {
       {marcelOpen && <MarcelLog onClose={() => setMarcelOpen(false)} />}
       {aboutOpen && <AboutDialog onClose={() => setAboutOpen(false)} />}
       <SettingsPanel open={settingsOpen} onClose={() => setSettingsOpen(false)} />
+      <SaveExport open={saveOpen} onClose={() => setSaveOpen(false)} />
 
       <ConfirmDialog
         open={confirmLogout}

@@ -2332,6 +2332,64 @@ button[role='tab']:focus-visible {
   margin: 0;
 }
 
+/* === Hover glow shop cards (idee #117) === */
+.panel-9:not(.shop-card-shine):hover {
+  box-shadow: 0 0 0 2px var(--color-accent-gold), 0 4px 12px rgba(245, 196, 67, 0.4);
+  transform: translateY(-1px);
+  transition: all 120ms ease-out;
+}
+/* === Press effect (idee #118) === */
+.panel-9:active {
+  transform: translateY(1px) scale(0.98);
+  transition: all 80ms ease-out;
+}
+
+/* === Long-press progress circle (idee #119) === */
+@keyframes longpress-fill {
+  from { stroke-dashoffset: 100; }
+  to { stroke-dashoffset: 0; }
+}
+.longpress-ring {
+  position: absolute;
+  inset: -4px;
+  pointer-events: none;
+  z-index: 5;
+}
+.longpress-ring circle {
+  fill: none;
+  stroke: var(--color-accent-gold);
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-dasharray: 100;
+  animation: longpress-fill 500ms linear forwards;
+  filter: drop-shadow(0 0 4px var(--color-accent-gold));
+}
+
+/* === Save indicator toast === */
+.save-toast {
+  position: fixed;
+  bottom: 80px;
+  right: 12px;
+  padding: 6px 12px;
+  background: var(--color-grass-5);
+  color: var(--color-paper-1);
+  font-family: var(--font-button);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  z-index: 1500;
+  border: 2px solid var(--color-wood-5);
+  pointer-events: none;
+  opacity: 0;
+  animation: save-toast-anim 2s ease-out forwards;
+  box-shadow: 0 2px 0 var(--color-wood-5);
+}
+@keyframes save-toast-anim {
+  0% { opacity: 0; transform: translateY(20px); }
+  20%, 80% { opacity: 1; transform: translateY(0); }
+  100% { opacity: 0; transform: translateY(-10px); }
+}
+
 /* Level-up celebration : banner drop centre avec rebond + glow. */
 @keyframes levelup-drop {
   0% {
