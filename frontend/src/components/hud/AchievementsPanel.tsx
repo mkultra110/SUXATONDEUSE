@@ -136,7 +136,7 @@ export function AchievementsPanel() {
                   type="button"
                   onClick={() => claimAchievement(ach.key)}
                   className="pixel-btn pixel-btn-gold"
-                  style={{ minHeight: 'auto', fontSize: 11, padding: '6px 10px', flexShrink: 0 }}
+                  style={{ minHeight: 36, fontSize: 11, padding: '8px 10px', flexShrink: 0 }}
                 >
                   {t('achievements.claim')}
                 </button>

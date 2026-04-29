@@ -385,7 +385,7 @@ function ShopCard({ affordable, locked, badge, art, name, rate, cost, onClick }:
           color: cost === null ? 'var(--color-paper-1)' : affordable ? 'var(--color-paper-1)' : 'var(--color-text-muted)',
           border: '2px solid var(--color-wood-5)',
           borderRadius: 5,
-          padding: '5px 10px',
+          padding: '8px 10px',
           fontFamily: 'var(--font-title)',
           fontWeight: 600,
           fontSize: 13,
@@ -395,6 +395,7 @@ function ShopCard({ affordable, locked, badge, art, name, rate, cost, onClick }:
           gap: 4,
           boxShadow: affordable ? '0 3px 0 var(--color-grass-7)' : '0 3px 0 var(--color-wood-3)',
           minWidth: 80,
+          minHeight: 40,
           justifyContent: 'center',
         }}
       >

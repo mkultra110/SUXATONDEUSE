@@ -169,7 +169,7 @@ export function MarcelLog({ onClose }: Props) {
             disabled={pageIdx === 0}
             onClick={() => setPageIdx((p) => Math.max(0, p - 1))}
             className="pixel-btn pixel-btn-wood"
-            style={{ minHeight: 'auto', fontSize: 11, padding: '6px 12px', opacity: pageIdx === 0 ? 0.5 : 1 }}
+            style={{ minHeight: 36, fontSize: 11, padding: '8px 12px', opacity: pageIdx === 0 ? 0.5 : 1 }}
           >
             ‹ Précédente
           </button>
@@ -187,7 +187,7 @@ export function MarcelLog({ onClose }: Props) {
             disabled={pageIdx === MARCEL_LOG.length - 1}
             onClick={() => setPageIdx((p) => Math.min(MARCEL_LOG.length - 1, p + 1))}
             className="pixel-btn pixel-btn-wood"
-            style={{ minHeight: 'auto', fontSize: 11, padding: '6px 12px', opacity: pageIdx === MARCEL_LOG.length - 1 ? 0.5 : 1 }}
+            style={{ minHeight: 36, fontSize: 11, padding: '8px 12px', opacity: pageIdx === MARCEL_LOG.length - 1 ? 0.5 : 1 }}
           >
             Suivante ›
           </button>

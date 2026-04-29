@@ -182,7 +182,7 @@ export function DailyPanel() {
                     type="button"
                     onClick={() => claimDailyQuest(q.key)}
                     className="pixel-btn pixel-btn-gold"
-                    style={{ width: '100%', marginTop: 8, minHeight: 'auto', fontSize: 11, padding: '6px 10px' }}
+                    style={{ width: '100%', marginTop: 8, minHeight: 36, fontSize: 11, padding: '8px 10px' }}
                   >
                     {t('daily.claim')}
                   </button>
