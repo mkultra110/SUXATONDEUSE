@@ -37,6 +37,8 @@ import { RobotThoughts } from '../components/hud/RobotThoughts.js';
 import { RandomCameos } from '../components/hud/RandomCameos.js';
 import { Bestiary } from '../components/hud/Bestiary.js';
 import { DailyChallenge } from '../components/hud/DailyChallenge.js';
+import { SkyHourGradient } from '../components/hud/SkyHourGradient.js';
+import { HolidayDecor } from '../components/hud/HolidayDecor.js';
 import { useGameSession } from '../hooks/useGameSession.js';
 import { useAudio } from '../hooks/useAudio.js';
 import { useResponsive } from '../hooks/useResponsive.js';
@@ -316,6 +318,8 @@ export function GamePage() {
       <RandomCameos />
       <Bestiary />
       <DailyChallenge />
+      <SkyHourGradient />
+      <HolidayDecor />
       <ActivityFAB onClick={() => setMarcelLogOpen(true)} notificationCount={0} />
       {marcelLogOpen && <MarcelLog onClose={() => setMarcelLogOpen(false)} />}
     </div>

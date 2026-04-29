@@ -59,7 +59,7 @@ Statut implementation :
 - [x] 47. Helicoptere de Marcel qui passe en arriere-plan
 - [ ] 48. Marcel qui fait coucou par la fenetre
 - [ ] 49. Lumiere qui s'allume / s'eteint dans la maison
-- [ ] 50. Cheminee qui crache des etincelles sur Noel
+- [x] 50. Cheminee qui crache des etincelles sur Noel
 - [ ] 51. Toile d'araignee animee sur Halloween
 - [ ] 52. Lampions qui se balancent dans le vent
 - [ ] 53. Drapeau francais sur le mat le 14 juillet
@@ -69,8 +69,8 @@ Statut implementation :
 - [ ] 57. Trainee de poussiere derriere robot rapide
 - [ ] 58. Eclair statique sur clic robot
 - [x] 59. Anneau d'XP qui se remplit autour du LevelBadge
-- [ ] 60. Gradient sky qui change selon l'heure locale
-- [ ] 61. Lever / coucher de soleil 90s smooth
+- [x] 60. Gradient sky qui change selon l'heure locale
+- [x] 61. Lever / coucher de soleil 90s smooth
 - [ ] 62. Couleur des oiseaux qui volent change selon l'heure
 - [ ] 63. Volee d'oiseaux declenchee au boss kill
 - [ ] 64. Bruleur de feuilles fumant en automne
@@ -93,11 +93,11 @@ Statut implementation :
 - [ ] 81. Snow accumulation graduelle sur le toit
 - [ ] 82. Glace sur la fontaine quand froid
 - [ ] 83. Bonhomme de neige decoratif l'hiver
-- [ ] 84. Bouquet de fleurs qui apparait au printemps
-- [ ] 85. Citrouille de Halloween qui s'allume
-- [ ] 86. Sapin de Noel decore (Decembre)
-- [ ] 87. Bouquet de muguet le 1er mai
-- [ ] 88. Confetti rain au passage d'annee (1er janvier)
+- [x] 84. Bouquet de fleurs qui apparait au printemps
+- [x] 85. Citrouille de Halloween qui s'allume
+- [x] 86. Sapin de Noel decore (Decembre)
+- [x] 87. Bouquet de muguet le 1er mai
+- [x] 88. Confetti rain au passage d'annee (1er janvier)
 - [ ] 89. Pluie de petales rose sur 1er avril
 - [ ] 90. Petit bonhomme de neige derriere une parcelle
 - [ ] 91. Slime particles vert sur theme champignon
@@ -153,7 +153,7 @@ Statut implementation :
 - [ ] 141. Trou noir effect au prestige cosmique
 - [ ] 142. Big bang particles sur 1er prestige
 - [ ] 143. Echelle vers le ciel sur prestige final
-- [ ] 144. Vague de chaleur dore sur level up
+- [x] 144. Vague de chaleur dore sur level up
 - [ ] 145. Goutelettes d'eau sur l'ecran apres pluie
 - [ ] 146. Ecran qui s'embue puis se nettoie (lent)
 - [ ] 147. Lensflare sur soleil

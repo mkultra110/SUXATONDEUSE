@@ -44,6 +44,9 @@ export function LevelUpCelebration() {
   if (!pop) return null;
 
   return (
+    <>
+      {/* Vague de chaleur dore radiale (idee #144) */}
+      <div className="heatwave-ring" />
     <div
       style={{
         position: 'fixed',
@@ -107,5 +110,6 @@ export function LevelUpCelebration() {
         </div>
       </div>
     </div>
+    </>
   );
 }
