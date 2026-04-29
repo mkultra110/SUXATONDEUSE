@@ -2,11 +2,17 @@
 // l'herbe : un robot par type possede, ciblage des tuiles d'herbe haute,
 // animation mow, repousse apres delai.
 
-import { useEffect, useRef, useState, type CSSProperties } from 'react';
+import { useEffect, useMemo, useRef, useState, type CSSProperties } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { RobotType } from '@robomow/shared';
 import { weatherForHour } from '@robomow/shared';
 import { useGameStore } from '../stores/gameStore.js';
+import {
+  computePlayerLevel,
+  progressionTier,
+  TIER_BUTTERFLIES,
+  TIER_FLOWERS_COUNT,
+} from '../utils/playerLevel.js';
 import { audio } from '../services/audio.js';
 import { LadybugIcon, LanternIcon, PomponIcon, ScarecrowIcon, CoinIcon, IconGear, MailboxIcon, CocotteIcon } from './icons/PixelIcon.js';
 import { SpeechBubble } from './hud/SpeechBubble.js';
@@ -343,6 +349,44 @@ export function AnimatedGarden() {
 
   const tilesMowed = mapInitialCount - tallGrass.size;
   const mapPercent = mapInitialCount > 0 ? Math.round((tilesMowed / mapInitialCount) * 100) : 100;
+
+  // Decor density scale avec le player level (signature progression).
+  // Plus le joueur monte en niveau, plus le jardin gagne en richesse :
+  // butterflies, fleurs bonus, lanternes, etc.
+  const totalCash = useGameStore((s) => s.totalCashEarned);
+  const playerLevel = computePlayerLevel(totalCash);
+  const tier = progressionTier(playerLevel);
+  const butterflyCount = TIER_BUTTERFLIES[tier];
+  const flowerCount = TIER_FLOWERS_COUNT[tier];
+  // Genere les positions des papillons (deterministe par level).
+  const butterflies = useMemo(() => {
+    const variants: Array<'PINK' | 'YELLOW' | 'BLUE'> = ['PINK', 'YELLOW', 'BLUE'];
+    return Array.from({ length: butterflyCount }).map((_, i) => {
+      const r1 = ((i * 73 + 17) % 100) / 100;
+      const r2 = ((i * 41 + 31) % 100) / 100;
+      const r3 = (i * 19) % 3;
+      return {
+        x: 1 + r1 * (COLS - 2),
+        y: 0.5 + r2 * (ROWS - 2),
+        delay: (i * 0.7) % 4,
+        variant: variants[r3] ?? 'PINK',
+      };
+    });
+  }, [butterflyCount]);
+  // Genere les positions de fleurs bonus (sur les bords, deterministe).
+  const bonusFlowers = useMemo(() => {
+    const variants: Array<'red' | 'yellow' | 'blue'> = ['red', 'yellow', 'blue'];
+    return Array.from({ length: flowerCount }).map((_, i) => {
+      // Distribue le long du bord bas + bord haut.
+      const r1 = ((i * 53 + 11) % 100) / 100;
+      const onBottom = i % 2 === 0;
+      return {
+        x: r1 * (COLS - 1),
+        y: onBottom ? ROWS - 1 + ((i % 3) * 0.1) : 0.05 + ((i % 3) * 0.1),
+        variant: variants[i % 3] ?? 'red',
+      };
+    });
+  }, [flowerCount]);
   const [robots, setRobots] = useState<RobotEntity[]>([]);
   const [bursts, setBursts] = useState<Array<{ id: number; tileX: number; tileY: number; t0: number }>>([]);
   const [floatingNums, setFloatingNums] = useState<Array<{ id: number; x: number; y: number; n: number; vx: number }>>([]);
@@ -834,10 +878,15 @@ export function AnimatedGarden() {
           </span>
         ))}
 
-        {/* Papillons */}
-        <Butterfly x={6.5} y={1.5} delay={0} variant="PINK" />
-        <Butterfly x={4} y={5.5} delay={1.2} variant="YELLOW" />
-        <Butterfly x={11} y={2.5} delay={2.5} variant="BLUE" />
+        {/* Papillons : nombre scale avec player level (signature progression). */}
+        {butterflies.map((b, i) => (
+          <Butterfly key={i} x={b.x} y={b.y} delay={b.delay} variant={b.variant} />
+        ))}
+
+        {/* Fleurs supplementaires bonus (scale avec player level). */}
+        {bonusFlowers.map((f, i) => (
+          <BonusFlower key={i} x={f.x} y={f.y} variant={f.variant} />
+        ))}
 
         {/* Easter egg cozy : coccinelle qui marche tres lentement (Margaux Lefevre signature). */}
         <div
@@ -1176,6 +1225,31 @@ function CropRow({ x, y, count, colorIdx }: { x: number; y: number; count: numbe
         </div>
       ))}
     </>
+  );
+}
+
+// BonusFlower : petite fleur 16x16 placee sur les bords pour signaler la
+// progression du joueur. Plus le niveau est haut, plus il y en a.
+function BonusFlower({ x, y, variant }: { x: number; y: number; variant: 'red' | 'yellow' | 'blue' }) {
+  const flowerSprite =
+    variant === 'red' ? TERRAIN.FLOWER_RED :
+    variant === 'yellow' ? TERRAIN.FLOWER_YELLOW :
+    TERRAIN.FLOWER_BLUE;
+  return (
+    <div
+      style={{
+        position: 'absolute',
+        left: x * TILE,
+        top: y * TILE,
+        zIndex: 4,
+        animation: `bonus-flower-sway ${2 + (x + y) % 3}s ease-in-out infinite`,
+        animationDelay: `${(x * 0.3) % 2}s`,
+        transformOrigin: '50% 100%',
+        pointerEvents: 'none',
+      }}
+    >
+      <Sprite atlas="terrain" {...flowerSprite} scale={SCALE} />
+    </div>
   );
 }
 

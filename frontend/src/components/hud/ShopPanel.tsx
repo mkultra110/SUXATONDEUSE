@@ -11,7 +11,7 @@ import {
   UPGRADE_DEFINITIONS,
   type UpgradeKey,
 } from '@robomow/shared';
-import { useGameStore, nextRobotCost, nextUpgradeCost, bulkRobotCost, maxAffordableRobots } from '../../stores/gameStore.js';
+import { useGameStore, nextRobotCost, nextUpgradeCost, bulkRobotCost, maxAffordableRobots, sumUpgradeCosts, maxAffordableUpgradeLevels } from '../../stores/gameStore.js';
 import { useUIStore } from '../../stores/uiStore.js';
 import { useResponsive } from '../../hooks/useResponsive.js';
 import { formatBig } from '../../game/engine/bigNumber.js';
@@ -189,14 +189,30 @@ export function ShopPanel() {
               const level: number = upgrades[def.key as UpgradeKey] ?? 0;
               const locked = def.unlockPrestigeLevel > prestigeLevel;
               const maxed = level >= def.maxLevel;
-              const cost = nextUpgradeCost(def.key, level);
-              const affordable = !locked && !maxed && cash.gte(cost);
+              // Multi-buy aussi sur les upgrades : on calcule combien de
+              // niveaux on peut monter d'un coup selon le bulk size.
+              const desiredLvls =
+                bulk === 'max'
+                  ? Math.max(1, maxAffordableUpgradeLevels(def.key, level, cash, def.maxLevel))
+                  : Math.min(bulk, def.maxLevel - level);
+              const totalUpgradeCost =
+                desiredLvls === 1 || desiredLvls === 0
+                  ? nextUpgradeCost(def.key, level)
+                  : sumUpgradeCosts(def.key, level, desiredLvls);
+              const affordableSingle = !locked && !maxed && cash.gte(nextUpgradeCost(def.key, level));
+              const affordableBulk = !locked && !maxed && cash.gte(totalUpgradeCost);
+              const buyableNow =
+                bulk === 'max'
+                  ? maxAffordableUpgradeLevels(def.key, level, cash, def.maxLevel)
+                  : affordableBulk
+                    ? desiredLvls
+                    : 0;
               return (
                 <ShopCard
                   key={def.key}
-                  affordable={affordable}
+                  affordable={affordableSingle && buyableNow > 0}
                   locked={locked}
-                  badge={`niv. ${level}`}
+                  badge={`niv. ${level}${maxed ? '' : `/${def.maxLevel}`}`}
                   art={<UpgradeArt upgradeKey={def.key} />}
                   name={def.name}
                   rate={
@@ -204,13 +220,17 @@ export function ShopPanel() {
                       ? `Prestige ${def.unlockPrestigeLevel} requis`
                       : maxed
                         ? 'NIVEAU MAX'
-                        : def.description
+                        : buyableNow > 1
+                          ? `+${buyableNow} niveaux`
+                          : def.description
                   }
-                  cost={maxed ? null : cost}
+                  cost={maxed ? null : buyableNow > 0 ? totalUpgradeCost : nextUpgradeCost(def.key, level)}
                   onClick={() => {
-                    if (affordable) {
+                    if (buyableNow > 0) {
                       audio.playPurchase();
-                      buyUpgrade(def.key);
+                      for (let i = 0; i < buyableNow; i++) {
+                        buyUpgrade(def.key);
+                      }
                     } else {
                       audio.playError();
                     }

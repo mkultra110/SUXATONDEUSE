@@ -11,7 +11,7 @@ import { AudioControls } from './AudioControls.js';
 import { KebabMenu } from './KebabMenu.js';
 import { FuelIcon, SeedIcon, RobotLogo, StarIcon } from '../icons/PixelIcon.js';
 import { computePlayerLevel, progressionTier, TIER_GLOW } from '../../utils/playerLevel.js';
-import { formatBig } from '../../utils/format.js';
+import { AnimatedNumber } from './AnimatedNumber.js';
 
 const SECONDS_PER_GAME_DAY = 60;
 
@@ -64,23 +64,21 @@ export function TopBar() {
         <span className="icon-fuel-tangue" style={{ display: 'inline-flex' }}>
           <FuelIcon size={14} />
         </span>
-        <span
+        <AnimatedNumber
+          value={Number(gems)}
           className="numeric"
           style={{ fontSize: 13, color: 'var(--color-accent-fuel)', lineHeight: 1 }}
-        >
-          {formatBig(gems)}
-        </span>
+        />
       </Pill>
       <Pill title="Graines de Printemps">
         <span className="icon-seed-pulse" style={{ display: 'inline-flex' }}>
           <SeedIcon size={14} />
         </span>
-        <span
+        <AnimatedNumber
+          value={Number(prestigePoints.toString())}
           className="numeric"
           style={{ fontSize: 13, color: 'var(--color-accent-purple)', lineHeight: 1 }}
-        >
-          {formatBig(prestigePoints)}
-        </span>
+        />
       </Pill>
 
       <AudioControls />

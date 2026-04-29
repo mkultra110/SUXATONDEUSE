@@ -832,6 +832,12 @@
   100% { transform: scale(1); opacity: 1; }
 }
 
+/* Bonus flowers sway leger pour les fleurs ajoutees par player level. */
+@keyframes bonus-flower-sway {
+  0%, 100% { transform: rotate(-3deg); }
+  50% { transform: rotate(3deg); }
+}
+
 /* Special date banner drop animation */
 @keyframes special-banner-drop {
   0% { transform: translate(-50%, -100%); opacity: 0; }

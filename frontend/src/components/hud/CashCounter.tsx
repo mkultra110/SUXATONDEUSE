@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useGameStore } from '../../stores/gameStore.js';
 import { formatBig } from '../../game/engine/bigNumber.js';
 import { CoinIcon } from '../icons/PixelIcon.js';
+import { AnimatedNumber } from './AnimatedNumber.js';
 
 export function CashCounter() {
   const cash = useGameStore((s) => s.cash);
@@ -33,15 +34,14 @@ export function CashCounter() {
     >
       <div className="flex items-center gap-1.5">
         <span className="icon-coin-spin"><CoinIcon size={16} /></span>
-        <span
+        <AnimatedNumber
+          value={Number(cash.toString())}
           className="numeric text-sm"
           style={{
             color: 'var(--color-accent-gold)',
             textShadow: '1px 1px 0 var(--color-text-title)',
           }}
-        >
-          {formatBig(cash)}
-        </span>
+        />
       </div>
       <div
         className="numeric leading-none mt-0.5"

@@ -239,6 +239,38 @@ export function nextUpgradeCost(key: UpgradeKey, level: number): Decimal {
   return new Decimal(cost.toString());
 }
 
+// Cumul des couts pour acheter `count` niveaux successifs.
+export function sumUpgradeCosts(key: UpgradeKey, currentLevel: number, count: number): Decimal {
+  const def = getUpgrade(key);
+  let total = new Decimal(0);
+  for (let i = 0; i < count; i++) {
+    const c = generatorCost(def.baseCost, def.costGrowth, currentLevel + i);
+    total = total.add(new Decimal(c.toString()));
+  }
+  return total;
+}
+
+// Combien de niveaux on peut s'offrir avec son cash actuel (cap maxLevel).
+export function maxAffordableUpgradeLevels(
+  key: UpgradeKey,
+  currentLevel: number,
+  cash: Decimal,
+  maxLevel: number,
+): number {
+  const def = getUpgrade(key);
+  let remaining = cash;
+  let count = 0;
+  while (currentLevel + count < maxLevel && count < 9999) {
+    const c = new Decimal(
+      generatorCost(def.baseCost, def.costGrowth, currentLevel + count).toString(),
+    );
+    if (remaining.lt(c)) break;
+    remaining = remaining.sub(c);
+    count++;
+  }
+  return count;
+}
+
 export function plotUnlockCost(type: PlotType): Decimal {
   return new Decimal(getPlot(type).unlockCost.toString());
 }
