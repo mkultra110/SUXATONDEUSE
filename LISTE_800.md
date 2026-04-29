@@ -211,17 +211,17 @@ Statut implementation :
 - [ ] 196. Boss "Epouvantail Maudit" : se libere et marche
 - [ ] 197. Boss "Tracteur Rouille" : phase mecha
 - [ ] 198. Boss "Robot Beta" : version originale buguee
-- [ ] 199. Boss "Robot Anti-Robot" : tonde tes propres robots
-- [ ] 200. Boss "Pelouse Sentiente" : la map elle-meme
+- [x] 199. Boss "Robot Anti-Robot" : tonde tes propres robots
+- [x] 200. Boss "Pelouse Sentiente" : la map elle-meme
 - [ ] 201. Mini-boss "Frelon Asiatique" toutes les 5 maps
 - [ ] 202. Mini-boss "Doryphore" sur theme orage
 - [ ] 203. Mini-boss "Pucerons Cumules" essaim
 - [ ] 204. Mini-boss "Limaces" duo
 - [ ] 205. Mini-boss "Souris des Champs" tres rapide
-- [ ] 206. Boss recurrent "Voisin Robert" 1/100 maps
+- [x] 206. Boss recurrent "Voisin Robert" 1/100 maps
 - [ ] 207. Boss recurrent "Inspecteur des Impots" 1/200 maps
 - [ ] 208. Boss recurrent "Loup Solitaire" l'hiver uniquement
-- [ ] 209. Boss recurrent "Loup-Garou" pleine lune
+- [x] 209. Boss recurrent "Loup-Garou" pleine lune
 - [ ] 210. Boss "Diable de Tasmanie" qui spawn alea
 - [x] 211. Boss "Krampus" en decembre
 - [ ] 212. Boss "Pere Fouettard" en decembre
@@ -403,9 +403,9 @@ Statut implementation :
 - [ ] 382. Bulk buy avec confirmation modal
 - [ ] 383. Mass-sell robots (rebooter cycle)
 - [ ] 384. Renommer robots individuels (cosmetique)
-- [ ] 385. Renommer la ferme (header)
-- [ ] 386. Avatar player customisable (10 styles)
-- [ ] 387. Bio player (140 chars max)
+- [x] 385. Renommer la ferme (header)
+- [x] 386. Avatar player customisable (10 styles)
+- [x] 387. Bio player (140 chars max)
 - [ ] 388. Photo profil custom (upload local)
 - [ ] 389. Status player ("au lit" / "tonde a fond")
 - [x] 390. Auto-save toutes les 30s
@@ -468,7 +468,7 @@ Statut implementation :
 - [x] 447. Help center / FAQ in-app
 - [x] 448. Contact us form
 - [x] 449. Rate the app prompt (apres 7 jours)
-- [ ] 450. Share progress sur reseaux (X / Discord)
+- [x] 450. Share progress sur reseaux (X / Discord)
 
 ## E. Contenu / Progression (451-600)
 
@@ -762,7 +762,7 @@ Statut implementation :
 - [ ] 729. Followers / following system
 - [ ] 730. News feed activity de friends
 - [ ] 731. Discord integration (presence)
-- [ ] 732. X/Twitter integration (post score)
+- [x] 732. X/Twitter integration (post score)
 - [ ] 733. Reddit integration (sub officiel)
 - [ ] 734. Achievement badges sur profil
 - [ ] 735. Verified badge pour devs

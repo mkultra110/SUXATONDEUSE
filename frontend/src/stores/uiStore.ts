@@ -29,6 +29,8 @@ interface UIState {
   lastPolaroidISODate: string | null;
   // Last-seen save anniversary day (pour ne donner le cadeau qu'une fois).
   lastAnniversaryDay: number;
+  farmName: string;
+  playerEmoji: string;
   setActiveTab: (tab: AppTabKey) => void;
   setProgresTab: (tab: ProgresSubTab) => void;
   setShopTab: (tab: ShopSubTab) => void;
@@ -43,6 +45,8 @@ interface UIState {
   setDailyChallengeOpen: (b: boolean) => void;
   setLastPolaroidISODate: (d: string) => void;
   setLastAnniversaryDay: (d: number) => void;
+  setFarmName: (s: string) => void;
+  setPlayerEmoji: (s: string) => void;
 }
 
 export const useUIStore = create<UIState>()(
@@ -62,6 +66,8 @@ export const useUIStore = create<UIState>()(
       dailyChallengeOpen: false,
       lastPolaroidISODate: null,
       lastAnniversaryDay: 0,
+      farmName: 'La Ferme des Tournesols',
+      playerEmoji: '👨‍🌾',
       setActiveTab: (tab) => set({ activeTab: tab }),
       setProgresTab: (tab) => set({ progresTab: tab }),
       setShopTab: (tab) => set({ shopTab: tab }),
@@ -76,6 +82,8 @@ export const useUIStore = create<UIState>()(
       setDailyChallengeOpen: (b) => set({ dailyChallengeOpen: b }),
       setLastPolaroidISODate: (d) => set({ lastPolaroidISODate: d }),
       setLastAnniversaryDay: (d) => set({ lastAnniversaryDay: d }),
+      setFarmName: (s) => set({ farmName: s.slice(0, 50) }),
+      setPlayerEmoji: (s) => set({ playerEmoji: s.slice(0, 4) }),
     }),
     {
       name: 'suxa-ui',
@@ -87,6 +95,8 @@ export const useUIStore = create<UIState>()(
         autoBuyEnabled: state.autoBuyEnabled,
         lastPolaroidISODate: state.lastPolaroidISODate,
         lastAnniversaryDay: state.lastAnniversaryDay,
+        farmName: state.farmName,
+        playerEmoji: state.playerEmoji,
       }),
     },
   ),

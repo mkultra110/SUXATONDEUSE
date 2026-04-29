@@ -16,7 +16,11 @@ export type BossKind =
   | 'citrouille-mere'
   | 'krampus'
   | 'tournesol-mutant'
-  | 'arbre-foudre';
+  | 'arbre-foudre'
+  | 'robot-anti'
+  | 'pelouse-sentiente'
+  | 'loup-garou'
+  | 'voisin-robert';
 
 export interface BossDef {
   kind: BossKind;
@@ -118,6 +122,34 @@ export const BOSSES: ReadonlyArray<BossDef> = [
     hp: 6500,
     tagline: 'Touché par mille éclairs, il en redemande.',
     color: '#A855F7',
+  },
+  {
+    kind: 'robot-anti',
+    name: 'Robot Anti-Robot',
+    hp: 9000,
+    tagline: 'Version corrompue du robot beta. Connais tous tes points faibles.',
+    color: '#1a1a1a',
+  },
+  {
+    kind: 'pelouse-sentiente',
+    name: 'Pelouse Sentiente',
+    hp: 12_000,
+    tagline: 'La map elle-meme. Elle ne pardonnera pas.',
+    color: '#6BA53A',
+  },
+  {
+    kind: 'loup-garou',
+    name: 'Loup-Garou des Bocages',
+    hp: 15_000,
+    tagline: 'Sort uniquement les nuits de pleine lune.',
+    color: '#5C3A1F',
+  },
+  {
+    kind: 'voisin-robert',
+    name: 'Voisin Robert (engagé)',
+    hp: 20_000,
+    tagline: 'Il vient se plaindre du bruit. Tres fortement.',
+    color: '#A22A06',
   },
 ];
 

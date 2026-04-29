@@ -11,6 +11,8 @@ import { MarcelLog } from './MarcelLog.js';
 import { SettingsPanel } from './SettingsPanel.js';
 import { SaveExport } from './SaveExport.js';
 import { LegalModal, type LegalKind } from './LegalModals.js';
+import { ProfileEditor } from './ProfileEditor.js';
+import { ShareProgress } from './ShareProgress.js';
 import { NotebookIcon, IconGear, StarIcon, HeartIcon, CrossIcon, NavCollectionIcon, TrophyIcon } from '../icons/PixelIcon.js';
 
 interface KebabMenuProps {
@@ -24,6 +26,8 @@ export function KebabMenu({ onClose }: KebabMenuProps) {
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [saveOpen, setSaveOpen] = useState(false);
   const [legalKind, setLegalKind] = useState<LegalKind | null>(null);
+  const [profileOpen, setProfileOpen] = useState(false);
+  const [shareOpen, setShareOpen] = useState(false);
   const [confirmLogout, setConfirmLogout] = useState(false);
   const setPolaroidAlbumOpen = useUIStore((s) => s.setPolaroidAlbumOpen);
   const setStatsHebdoOpen = useUIStore((s) => s.setStatsHebdoOpen);
@@ -152,6 +156,16 @@ export function KebabMenu({ onClose }: KebabMenuProps) {
               }}
             />
             <MenuItem
+              icon={<HeartIcon size={18} />}
+              label="Profil"
+              onClick={() => { setProfileOpen(true); setOpen(false); }}
+            />
+            <MenuItem
+              icon={<StarIcon size={18} />}
+              label="Partager"
+              onClick={() => { setShareOpen(true); setOpen(false); }}
+            />
+            <MenuItem
               icon={<NotebookIcon size={18} />}
               label="Aide & FAQ"
               onClick={() => { setLegalKind('help'); setOpen(false); }}
@@ -202,6 +216,8 @@ export function KebabMenu({ onClose }: KebabMenuProps) {
       <SettingsPanel open={settingsOpen} onClose={() => setSettingsOpen(false)} />
       <SaveExport open={saveOpen} onClose={() => setSaveOpen(false)} />
       <LegalModal kind={legalKind} onClose={() => setLegalKind(null)} />
+      <ProfileEditor open={profileOpen} onClose={() => setProfileOpen(false)} />
+      <ShareProgress open={shareOpen} onClose={() => setShareOpen(false)} />
 
       <ConfirmDialog
         open={confirmLogout}

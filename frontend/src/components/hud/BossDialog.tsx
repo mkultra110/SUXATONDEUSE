@@ -57,6 +57,22 @@ const BOSS_QUOTES: Record<string, string[]> = {
     '« Mille foudres m\'ont rendu plus fort. Mille. »',
     '« Je suis plus electrique que le voisin. »',
   ],
+  'robot-anti': [
+    '« Je suis ta version corrompue. »',
+    '« 01001000 01001001 - bonjour, en binaire. »',
+  ],
+  'pelouse-sentiente': [
+    '« Tu m\'as tonde une fois de trop. »',
+    '« Chaque tuile est mon doigt. »',
+  ],
+  'loup-garou': [
+    '« Awooooo ! La pleine lune m\'appelle. »',
+    '« J\'etais Marcel le voisin... avant. »',
+  ],
+  'voisin-robert': [
+    '« Vous faites trop de bruit avec vos robots ! »',
+    '« Je vais appeler la mairie ! »',
+  ],
 };
 
 export function BossDialog({ boss, onDismiss }: { boss: BossDef; onDismiss: () => void }) {
