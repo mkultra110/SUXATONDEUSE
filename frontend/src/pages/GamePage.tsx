@@ -27,6 +27,12 @@ import { QuickHotkeys } from '../components/hud/QuickHotkeys.js';
 import { L42Secret } from '../components/hud/L42Secret.js';
 import { AchievementConfetti } from '../components/hud/AchievementConfetti.js';
 import { Fireflies } from '../components/hud/Fireflies.js';
+import { ShootingStar } from '../components/hud/ShootingStar.js';
+import { SeasonalParticles } from '../components/hud/SeasonalParticles.js';
+import { HourBadge } from '../components/hud/HourBadge.js';
+import { FpsCounter } from '../components/hud/FpsCounter.js';
+import { RatePrompt } from '../components/hud/RatePrompt.js';
+import { HappyHearts } from '../components/hud/HappyHearts.js';
 import { useGameSession } from '../hooks/useGameSession.js';
 import { useAudio } from '../hooks/useAudio.js';
 import { useResponsive } from '../hooks/useResponsive.js';
@@ -296,6 +302,12 @@ export function GamePage() {
       <L42Secret />
       <AchievementConfetti />
       <Fireflies />
+      <ShootingStar />
+      <SeasonalParticles />
+      <HappyHearts />
+      <HourBadge />
+      <FpsCounter />
+      <RatePrompt />
       <ActivityFAB onClick={() => setMarcelLogOpen(true)} notificationCount={0} />
       {marcelLogOpen && <MarcelLog onClose={() => setMarcelLogOpen(false)} />}
     </div>

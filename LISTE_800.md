@@ -27,7 +27,7 @@ Statut implementation :
 - [ ] 15. Halo solaire derriere le robot top-tier (rayons)
 - [x] 16. Particules confettis sur achievement unlock
 - [x] 17. Ondes concentriques sur tap (ripple)
-- [ ] 18. Petits coeurs roses au-dessus des robots heureux
+- [x] 18. Petits coeurs roses au-dessus des robots heureux
 - [ ] 19. Bulles de pensee occasionnelles sur les robots
 - [ ] 20. Trainee lumineuse path BFS visible 200ms apres robot
 - [ ] 21. Effet de fumee de cheminee plus dense l'hiver
@@ -35,7 +35,7 @@ Statut implementation :
 - [ ] 23. Reflet du soleil sur les flaques d'eau (scintillation)
 - [ ] 24. Brouillard matinal qui se dissipe au lever du jour
 - [x] 25. Insectes nocturnes lumineux (lucioles) la nuit
-- [ ] 26. Etoiles filantes occasionnelles dans le ciel nocturne
+- [x] 26. Etoiles filantes occasionnelles dans le ciel nocturne
 - [ ] 27. Arc-en-ciel apres pluie (1% chance)
 - [ ] 28. Aurore boreale sur theme cristal
 - [ ] 29. Effet de chaleur (heat haze) sur theme volcanique
@@ -48,8 +48,8 @@ Statut implementation :
 - [ ] 36. Particules de sciure quand un robot ramasse une branche
 - [ ] 37. Petites pierres qui roulent quand robot passe dessus
 - [ ] 38. Bulles d'air sur la fontaine
-- [ ] 39. Pollen qui flotte au printemps
-- [ ] 40. Feuilles mortes qui tombent en automne
+- [x] 39. Pollen qui flotte au printemps
+- [x] 40. Feuilles mortes qui tombent en automne
 - [ ] 41. Bourrasque de vent qui plie les fleurs
 - [ ] 42. Tonnerre + flash blanc sur orage rare
 - [ ] 43. Goutte d'eau qui glisse de l'arrosoir
@@ -124,14 +124,14 @@ Statut implementation :
 - [ ] 112. Polaroid drop avec rotation aleatoire sur capture
 - [ ] 113. Timeline horizontale en bas avec milestones passes
 - [ ] 114. Mini-carte des parcelles (overview)
-- [ ] 115. Compteur d'heure de jeu "100h" badge
+- [x] 115. Compteur d'heure de jeu "100h" badge
 - [ ] 116. Particles cuivrees sur clic ressources
 - [ ] 117. Hover effect glow sur shop cards
 - [ ] 118. Press effect (depress) sur tap card
 - [ ] 119. Long-press circle progress visible
 - [ ] 120. Drag and drop indicateur visuel
 - [ ] 121. Snap to grid avec ligne pointillee
-- [ ] 122. Curseur custom pixel art sur desktop
+- [x] 122. Curseur custom pixel art sur desktop
 - [ ] 123. Curseur change selon contexte (achete, lock, drag)
 - [ ] 124. Animation "spawned" sur nouveau robot achete
 - [ ] 125. Robot qui se regarde dans le miroir (puddle)
@@ -384,7 +384,7 @@ Statut implementation :
 - [ ] 363. Auto-prestige toggle
 - [ ] 364. Auto-equip best pet
 - [ ] 365. Auto-claim daily login reward
-- [ ] 366. Auto-claim achievements
+- [x] 366. Auto-claim achievements
 - [ ] 367. Notification cloches toolbar (rouge sur claim disponible)
 - [ ] 368. Drag-to-reorder upgrades favorites
 - [ ] 369. Drag-to-reorder bottom tabs
@@ -459,7 +459,7 @@ Statut implementation :
 - [ ] 438. Reduce motion on low battery
 - [ ] 439. Performance mode auto on low FPS
 - [ ] 440. Quality presets (potato/low/med/high/ultra)
-- [ ] 441. FPS counter optionnel
+- [x] 441. FPS counter optionnel
 - [ ] 442. Memory usage display (advanced)
 - [ ] 443. Error reporting opt-in
 - [ ] 444. Telemetry opt-in / opt-out clear
@@ -467,7 +467,7 @@ Statut implementation :
 - [ ] 446. Terms of service modal
 - [ ] 447. Help center / FAQ in-app
 - [ ] 448. Contact us form
-- [ ] 449. Rate the app prompt (apres 7 jours)
+- [x] 449. Rate the app prompt (apres 7 jours)
 - [ ] 450. Share progress sur reseaux (X / Discord)
 
 ## E. Contenu / Progression (451-600)

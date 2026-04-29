@@ -10,9 +10,11 @@ export function SettingsPanel({ open, onClose }: { open: boolean; onClose: () =>
   const enableShake = useEffectsStore((s) => s.enableShake);
   const enableVibration = useEffectsStore((s) => s.enableVibration);
   const enableParticles = useEffectsStore((s) => s.enableParticles);
+  const enablePixelCursor = useEffectsStore((s) => s.enablePixelCursor);
   const setEnableShake = useEffectsStore((s) => s.setEnableShake);
   const setEnableVibration = useEffectsStore((s) => s.setEnableVibration);
   const setEnableParticles = useEffectsStore((s) => s.setEnableParticles);
+  const setEnablePixelCursor = useEffectsStore((s) => s.setEnablePixelCursor);
   const autoBuyEnabled = useUIStore((s) => s.autoBuyEnabled);
   const setAutoBuyEnabled = useUIStore((s) => s.setAutoBuyEnabled);
   const totalPrestiges = useGameStore((s) => s.totalPrestiges);
@@ -67,6 +69,7 @@ export function SettingsPanel({ open, onClose }: { open: boolean; onClose: () =>
         <ToggleRow label="Tremblement écran" hint="Effets de shake sur gros gains" value={enableShake} onChange={setEnableShake} />
         <ToggleRow label="Vibration" hint="Tap, level up, boss" value={enableVibration} onChange={setEnableVibration} />
         <ToggleRow label="Particules" hint="Papillons, pétales, fleurs" value={enableParticles} onChange={setEnableParticles} />
+        <ToggleRow label="Curseur pixel art" hint="Style retro avec fleche en bois" value={enablePixelCursor} onChange={setEnablePixelCursor} />
         <ToggleRow
           label="Auto-achat"
           hint={totalPrestiges > 0 ? "Achete le moins cher dispo / 2s" : "Débloqué après 1er prestige"}

@@ -38,6 +38,13 @@ export function GameEffectsLayer() {
   const markMemeShown = useEffectsStore((s) => s.markMemeShown);
   const bossKills = useEffectsStore((s) => s.bossKills);
   const enableShake = useEffectsStore((s) => s.enableShake);
+  const enablePixelCursor = useEffectsStore((s) => s.enablePixelCursor);
+
+  // Pixel cursor (idee #122) -> body class.
+  useEffect(() => {
+    if (enablePixelCursor) document.body.classList.add('cursor-pixel');
+    else document.body.classList.remove('cursor-pixel');
+  }, [enablePixelCursor]);
 
   // === Threshold pulse ===
   const [pulseActive, setPulseActive] = useState(false);
@@ -204,6 +211,27 @@ export function GameEffectsLayer() {
     const interval = setInterval(maybeStart, 30_000);
     return () => clearInterval(interval);
   }, []);
+
+  // === Auto-claim achievements (idee #366) ===
+  // Reclame automatiquement les achievements unlock mais pas claim apres
+  // 1er prestige (sinon premier joueur rate pas la sensation manuelle).
+  useEffect(() => {
+    if (totalPrestiges < 1) return;
+    const interval = setInterval(() => {
+      const state = useGameStore.getState();
+      const unclaimed: string[] = [];
+      for (const key of state.achievementsUnlocked) {
+        if (key.endsWith(':claimed')) continue;
+        if (!state.achievementsUnlocked.has(`${key}:claimed`)) {
+          unclaimed.push(key);
+        }
+      }
+      for (const k of unclaimed) {
+        state.claimAchievement(k);
+      }
+    }, 3000);
+    return () => clearInterval(interval);
+  }, [totalPrestiges]);
 
   // === Heartbeat sub-bass quand un upgrade est quasi-affordable (95%+) ===
   useEffect(() => {

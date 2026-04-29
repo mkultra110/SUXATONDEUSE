@@ -61,6 +61,7 @@ interface EffectsState {
   enableShake: boolean;
   enableVibration: boolean;
   enableParticles: boolean;
+  enablePixelCursor: boolean;
   // Actions.
   triggerShake: (intensity: number, durationMs: number) => void;
   triggerChromatic: (durationMs: number) => void;
@@ -82,6 +83,7 @@ interface EffectsState {
   setEnableShake: (b: boolean) => void;
   setEnableVibration: (b: boolean) => void;
   setEnableParticles: (b: boolean) => void;
+  setEnablePixelCursor: (b: boolean) => void;
 }
 
 let nextId = 1;
@@ -106,6 +108,7 @@ export const useEffectsStore = create<EffectsState>()(
       enableShake: true,
       enableVibration: true,
       enableParticles: true,
+      enablePixelCursor: false,
 
       triggerShake: (intensity, durationMs) => {
         set({
@@ -187,6 +190,7 @@ export const useEffectsStore = create<EffectsState>()(
         set({ enableVibration: b });
       },
       setEnableParticles: (b) => set({ enableParticles: b }),
+      setEnablePixelCursor: (b) => set({ enablePixelCursor: b }),
     }),
     {
       name: 'suxa-effects',
@@ -199,6 +203,7 @@ export const useEffectsStore = create<EffectsState>()(
         enableShake: state.enableShake,
         enableVibration: state.enableVibration,
         enableParticles: state.enableParticles,
+        enablePixelCursor: state.enablePixelCursor,
       }),
       // Restaure les Sets a partir des arrays serialises.
       merge: (persisted, current) => {
@@ -211,6 +216,7 @@ export const useEffectsStore = create<EffectsState>()(
           enableShake: boolean;
           enableVibration: boolean;
           enableParticles: boolean;
+          enablePixelCursor: boolean;
         }>;
         return {
           ...current,
@@ -222,6 +228,7 @@ export const useEffectsStore = create<EffectsState>()(
           enableShake: p.enableShake ?? current.enableShake,
           enableVibration: p.enableVibration ?? current.enableVibration,
           enableParticles: p.enableParticles ?? current.enableParticles,
+          enablePixelCursor: p.enablePixelCursor ?? current.enablePixelCursor,
         };
       },
     },

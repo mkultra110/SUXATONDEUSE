@@ -2075,6 +2075,182 @@ button[role='tab']:focus-visible {
   z-index: 15;
 }
 
+/* === Sparkles dorees milestone (idee #14) === */
+@keyframes sparkle-twinkle {
+  0%, 100% { opacity: 0; transform: scale(0); }
+  50% { opacity: 1; transform: scale(1); }
+}
+.sparkle {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  pointer-events: none;
+  background: radial-gradient(circle, #FFE680, transparent 70%);
+  animation: sparkle-twinkle 1.4s ease-in-out infinite;
+}
+
+/* === Coeur rose robots heureux (idee #18) === */
+@keyframes heart-rise {
+  0% { opacity: 0; transform: translate(-50%, 0) scale(0.4); }
+  20% { opacity: 1; transform: translate(-50%, -8px) scale(1); }
+  100% { opacity: 0; transform: translate(-50%, -32px) scale(0.8); }
+}
+.happy-heart {
+  position: absolute;
+  font-size: 14px;
+  color: #FF8FA3;
+  pointer-events: none;
+  animation: heart-rise 1.6s ease-out forwards;
+  text-shadow: 0 0 4px rgba(255, 143, 163, 0.8);
+}
+
+/* === Etoile filante (idee #26) === */
+@keyframes shooting-star {
+  0% { transform: translate(0, 0) rotate(-25deg); opacity: 0; }
+  10% { opacity: 1; }
+  100% { transform: translate(120vw, 60vh) rotate(-25deg); opacity: 0; }
+}
+.shooting-star {
+  position: fixed;
+  top: -10px;
+  left: -100px;
+  width: 100px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #FFE680, white);
+  box-shadow: 0 0 8px white, 0 0 16px #FFE680;
+  z-index: 60;
+  pointer-events: none;
+  animation: shooting-star 1.4s linear forwards;
+}
+
+/* === Arc-en-ciel apres pluie (idee #27) === */
+@keyframes rainbow-fade {
+  0% { opacity: 0; }
+  20% { opacity: 0.7; }
+  80% { opacity: 0.7; }
+  100% { opacity: 0; }
+}
+.rainbow-arc {
+  position: fixed;
+  top: 12%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60vw;
+  height: 30vw;
+  max-height: 240px;
+  z-index: 40;
+  pointer-events: none;
+  border: 12px solid;
+  border-image: linear-gradient(180deg, #FF6B6B, #FFA500, #FFD921, #8FBF4F, #4A96A8, #5C5CFF, #A855F7) 1;
+  border-bottom: none;
+  border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+  animation: rainbow-fade 12s ease-in-out forwards;
+}
+
+/* === Curseur custom pixel art (idee #122) === */
+.cursor-pixel,
+.cursor-pixel * {
+  cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><polygon points="2,2 2,16 6,12 9,18 12,16 9,10 14,10" fill="%23F5C443" stroke="%235C3A1F" stroke-width="1.5"/></svg>') 2 2, auto;
+}
+
+/* === Hour counter badge (idee #115) === */
+.hour-badge {
+  position: fixed;
+  bottom: 96px;
+  right: 12px;
+  z-index: 600;
+  padding: 4px 10px;
+  background: var(--color-paper-1);
+  border: 2px solid var(--color-wood-5);
+  font-family: var(--font-button);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: var(--color-text-muted);
+  pointer-events: none;
+  text-transform: uppercase;
+  box-shadow: 0 2px 0 var(--color-wood-5);
+}
+
+/* === FPS counter (idee #441) === */
+.fps-counter {
+  position: fixed;
+  top: 56px;
+  right: 12px;
+  z-index: 700;
+  padding: 4px 8px;
+  background: rgba(0,0,0,0.6);
+  color: #8FBF4F;
+  font-family: monospace;
+  font-size: 11px;
+  pointer-events: none;
+  border-radius: 3px;
+}
+
+/* === Glow vert drop critique 5x (idee #99) === */
+@keyframes crit-glow {
+  0% { transform: scale(0.5); opacity: 0; box-shadow: 0 0 0 #8FBF4F; }
+  30% { transform: scale(1.2); opacity: 1; box-shadow: 0 0 24px #8FBF4F, 0 0 48px #6BA53A; }
+  100% { transform: scale(1.6); opacity: 0; box-shadow: 0 0 0 #8FBF4F; }
+}
+.crit-burst {
+  position: absolute;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: radial-gradient(#FFE680, transparent 60%);
+  pointer-events: none;
+  animation: crit-glow 0.8s ease-out forwards;
+}
+
+/* === Vague de chaleur dore level up (idee #144) === */
+@keyframes heatwave {
+  0% { transform: scale(0.5); opacity: 1; }
+  100% { transform: scale(4); opacity: 0; }
+}
+.heatwave-ring {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 200px;
+  height: 200px;
+  margin: -100px 0 0 -100px;
+  border-radius: 50%;
+  border: 4px solid #FFD921;
+  z-index: 1450;
+  pointer-events: none;
+  animation: heatwave 1.4s ease-out forwards;
+  box-shadow: 0 0 32px #FFD921, inset 0 0 32px #F5C443;
+}
+
+/* === Souris qui traverse rare (idee #46) === */
+@keyframes mouse-run {
+  0% { left: -40px; transform: translateY(0); }
+  100% { left: calc(100vw + 40px); transform: translateY(0); }
+}
+.tiny-mouse {
+  position: fixed;
+  bottom: 8px;
+  width: 18px;
+  height: 12px;
+  z-index: 30;
+  pointer-events: none;
+  animation: mouse-run 4s linear forwards;
+  font-size: 18px;
+}
+
+/* === Pollen / feuilles mortes (idees #39 #40) === */
+@keyframes drift-fall {
+  0% { transform: translate(0, -10px) rotate(0deg); opacity: 0; }
+  10% { opacity: 0.8; }
+  100% { transform: translate(60px, 100vh) rotate(360deg); opacity: 0; }
+}
+.drift-particle {
+  position: fixed;
+  pointer-events: none;
+  z-index: 40;
+  animation: drift-fall var(--drift-dur, 8s) linear infinite;
+}
+
 /* Level-up celebration : banner drop centre avec rebond + glow. */
 @keyframes levelup-drop {
   0% {
