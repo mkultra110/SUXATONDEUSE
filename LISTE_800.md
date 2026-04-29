@@ -60,9 +60,9 @@ Statut implementation :
 - [ ] 48. Marcel qui fait coucou par la fenetre
 - [ ] 49. Lumiere qui s'allume / s'eteint dans la maison
 - [x] 50. Cheminee qui crache des etincelles sur Noel
-- [ ] 51. Toile d'araignee animee sur Halloween
+- [x] 51. Toile d'araignee animee sur Halloween
 - [ ] 52. Lampions qui se balancent dans le vent
-- [ ] 53. Drapeau francais sur le mat le 14 juillet
+- [x] 53. Drapeau francais sur le mat le 14 juillet
 - [ ] 54. Coeur qui flotte au-dessus de Meme apres dialogue
 - [ ] 55. Robot avec chapeau de ferme aleatoire (5% spawn)
 - [ ] 56. Emojis flottants sur achievement (style Stardew)
@@ -76,7 +76,7 @@ Statut implementation :
 - [ ] 64. Bruleur de feuilles fumant en automne
 - [ ] 65. Champignons qui poussent apres pluie
 - [ ] 66. Marguerites qui s'ouvrent / se ferment selon heure
-- [ ] 67. Trefles a 4 feuilles caches (chance bonus si trouves)
+- [x] 67. Trefles a 4 feuilles caches (chance bonus si trouves)
 - [ ] 68. Coccinelle qui se pose et envole
 - [ ] 69. Crapaud qui saute (rare)
 - [x] 70. Herisson qui passe la nuit
@@ -118,9 +118,9 @@ Statut implementation :
 - [ ] 106. Zoom in sur la tuile finale du boss kill
 - [ ] 107. Replay 3s du dernier kill (mini cutscene)
 - [ ] 108. Trail dore "marche du roi" sur top robot
-- [ ] 109. Pluie de pieces d'or sur prestige
+- [x] 109. Pluie de pieces d'or sur prestige
 - [ ] 110. Ascension cosmique sur prestige final
-- [ ] 111. Banner descend du haut sur achievement
+- [x] 111. Banner descend du haut sur achievement
 - [ ] 112. Polaroid drop avec rotation aleatoire sur capture
 - [ ] 113. Timeline horizontale en bas avec milestones passes
 - [ ] 114. Mini-carte des parcelles (overview)
@@ -455,10 +455,10 @@ Statut implementation :
 - [ ] 434. Volume mute toggle quick (icon TopBar)
 - [ ] 435. Music volume slider TopBar quick
 - [ ] 436. SFX volume slider TopBar quick
-- [ ] 437. Mute on Sleep mode (battery saver)
-- [ ] 438. Reduce motion on low battery
-- [ ] 439. Performance mode auto on low FPS
-- [ ] 440. Quality presets (potato/low/med/high/ultra)
+- [x] 437. Mute on Sleep mode (battery saver)
+- [x] 438. Reduce motion on low battery
+- [x] 439. Performance mode auto on low FPS
+- [x] 440. Quality presets (potato/low/med/high/ultra)
 - [x] 441. FPS counter optionnel
 - [ ] 442. Memory usage display (advanced)
 - [ ] 443. Error reporting opt-in

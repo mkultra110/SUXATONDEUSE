@@ -2423,6 +2423,59 @@ button[role='tab']:focus-visible {
   animation: rabbit-zigzag 5s linear forwards;
 }
 
+/* === Trefle 4 feuilles cache (idee #67) === */
+@keyframes clover-spin {
+  0%, 100% { transform: rotate(-10deg); filter: drop-shadow(0 0 4px #6BA53A); }
+  50% { transform: rotate(10deg); filter: drop-shadow(0 0 12px #8FBF4F); }
+}
+.lucky-clover {
+  position: fixed;
+  z-index: 100;
+  font-size: 22px;
+  cursor: pointer;
+  background: transparent;
+  border: none;
+  padding: 0;
+  animation: clover-spin 1.6s ease-in-out infinite;
+}
+
+/* === Pluie de pieces prestige (idee #109) === */
+@keyframes coin-rain-fall {
+  0% { transform: translateY(-30px) rotate(0deg); opacity: 0; }
+  10% { opacity: 1; }
+  100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+}
+.coin-rain {
+  position: fixed;
+  font-size: 24px;
+  z-index: 1500;
+  pointer-events: none;
+  animation: coin-rain-fall var(--coin-dur, 3s) linear forwards;
+}
+
+/* === Banner achievement descend (idee #111) === */
+@keyframes ach-banner-drop {
+  0% { transform: translate(-50%, -100%); opacity: 0; }
+  20% { transform: translate(-50%, 0); opacity: 1; }
+  80% { transform: translate(-50%, 0); opacity: 1; }
+  100% { transform: translate(-50%, -100%); opacity: 0; }
+}
+.ach-banner {
+  position: fixed;
+  top: 80px;
+  left: 50%;
+  transform: translate(-50%, 0);
+  background: var(--color-paper-1);
+  border: 4px solid var(--color-accent-gold);
+  padding: 10px 20px;
+  z-index: 1450;
+  animation: ach-banner-drop 4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  box-shadow: 0 6px 16px rgba(245, 196, 67, 0.5);
+  max-width: 360px;
+  text-align: center;
+  pointer-events: none;
+}
+
 /* Level-up celebration : banner drop centre avec rebond + glow. */
 @keyframes levelup-drop {
   0% {

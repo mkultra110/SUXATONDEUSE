@@ -10,12 +10,19 @@ export function HolidayDecor() {
 
   // Decembre : sapin de Noel.
   if (m === 11) items.push({ emoji: '🎄', label: 'Joyeux Noel', key: 'tree' });
-  // Octobre derniere semaine : citrouille.
-  if (m === 9 && d >= 25) items.push({ emoji: '🎃', label: 'Halloween', key: 'pumpkin' });
+  // Octobre derniere semaine : citrouille + toile araignee.
+  if (m === 9 && d >= 25) {
+    items.push({ emoji: '🎃', label: 'Halloween', key: 'pumpkin' });
+    items.push({ emoji: '🕸️', label: 'Toile d\'araignee', key: 'cobweb' });
+    items.push({ emoji: '🦇', label: 'Chauve-souris', key: 'bat' });
+  }
   // 1er mai : muguet.
   if (m === 4 && d === 1) items.push({ emoji: '🌼', label: '1er mai', key: 'lily' });
   // 14 juillet : drapeau.
-  if (m === 6 && d === 14) items.push({ emoji: '🇫🇷', label: '14 juillet', key: 'flag' });
+  if (m === 6 && d === 14) {
+    items.push({ emoji: '🇫🇷', label: '14 juillet', key: 'flag' });
+    items.push({ emoji: '🎆', label: 'Feu d\'artifice', key: 'firework' });
+  }
   // 1er janvier : confettis.
   if (m === 0 && d === 1) items.push({ emoji: '🎉', label: 'Bonne annee !', key: 'newyear' });
   // Saint-Valentin.

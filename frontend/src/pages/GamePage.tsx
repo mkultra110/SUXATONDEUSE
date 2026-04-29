@@ -42,6 +42,10 @@ import { HolidayDecor } from '../components/hud/HolidayDecor.js';
 import { DevPanel } from '../components/hud/DevPanel.js';
 import { MoonHalo } from '../components/hud/MoonHalo.js';
 import { UsernameEasterEgg } from '../components/hud/UsernameEasterEgg.js';
+import { LuckyClover } from '../components/hud/LuckyClover.js';
+import { CoinRain } from '../components/hud/CoinRain.js';
+import { AchievementBanner } from '../components/hud/AchievementBanner.js';
+import { PerformanceWatcher } from '../components/hud/PerformanceWatcher.js';
 import { useGameSession } from '../hooks/useGameSession.js';
 import { useAudio } from '../hooks/useAudio.js';
 import { useResponsive } from '../hooks/useResponsive.js';
@@ -326,6 +330,10 @@ export function GamePage() {
       <DevPanel />
       <MoonHalo />
       <UsernameEasterEgg />
+      <LuckyClover />
+      <CoinRain />
+      <AchievementBanner />
+      <PerformanceWatcher />
       <ActivityFAB onClick={() => setMarcelLogOpen(true)} notificationCount={0} />
       {marcelLogOpen && <MarcelLog onClose={() => setMarcelLogOpen(false)} />}
     </div>
