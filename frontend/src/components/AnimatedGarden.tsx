@@ -743,6 +743,13 @@ export function AnimatedGarden() {
     const rect = e.currentTarget.getBoundingClientRect();
     const x = ((e.clientX - rect.left) / rect.width) * 100;
     const y = ((e.clientY - rect.top) / rect.height) * 100;
+    // Tap ripple visuel.
+    const ripple = document.createElement('span');
+    ripple.className = 'tap-ripple';
+    ripple.style.left = `${x}%`;
+    ripple.style.top = `${y}%`;
+    e.currentTarget.appendChild(ripple);
+    setTimeout(() => ripple.remove(), 700);
     const newBlades: BladeParticle[] = Array.from({ length: 10 }, () => {
       idRef.current += 1;
       return {

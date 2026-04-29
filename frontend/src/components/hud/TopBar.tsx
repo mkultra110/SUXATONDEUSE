@@ -49,7 +49,7 @@ export function TopBar() {
       }}
     >
       {/* LevelBadge - cercle dore 40x40 avec etoile + numero (mock niveau = playerLevel) */}
-      <LevelBadge level={level} username={user?.username ?? ''} tierGlow={tierGlow} />
+      <LevelBadge level={level} username={user?.username ?? ''} tierGlow={tierGlow} xpRatio={xpRatio} />
 
       {/* Rank title + XP bar mini - signature progression visible. */}
       <RankAndXp
@@ -177,13 +177,17 @@ function RankAndXp({
 
 // LevelBadge cercle dore 40x40 avec robot logo + halo subtil.
 // Niveau calcule depuis totalCashEarned (progression logarithmique).
-function LevelBadge({ level, username, tierGlow }: { level: number; username: string; tierGlow: string }) {
+function LevelBadge({ level, username, tierGlow, xpRatio }: { level: number; username: string; tierGlow: string; xpRatio: number }) {
+  // SVG ring radius / circumference.
+  const r = 22;
+  const c = 2 * Math.PI * r;
+  const offset = c * (1 - Math.min(1, Math.max(0, xpRatio)));
   return (
     <div
       title={`Niveau ${level}${username ? ` · ${username}` : ''}`}
       style={{
-        width: 44,
-        height: 44,
+        width: 48,
+        height: 48,
         background: 'radial-gradient(circle at 35% 30%, #fde08a, var(--color-accent-gold) 60%, #a87a1f)',
         border: '2px solid var(--color-wood-5)',
         borderRadius: '50%',
@@ -195,6 +199,22 @@ function LevelBadge({ level, username, tierGlow }: { level: number; username: st
         boxShadow: `inset 0 -2px 0 #a87a1f, 0 2px 0 var(--color-wood-5), 0 0 12px rgba(245, 196, 67, 0.5), 0 0 24px ${tierGlow}`,
       }}
     >
+      <svg
+        aria-hidden
+        viewBox="0 0 48 48"
+        style={{ position: 'absolute', inset: -2, width: 52, height: 52, pointerEvents: 'none' }}
+      >
+        <circle cx="24" cy="24" r={r} className="xp-ring-track" />
+        <circle
+          cx="24"
+          cy="24"
+          r={r}
+          className="xp-ring-fill"
+          strokeDasharray={c}
+          strokeDashoffset={offset}
+          transform="rotate(-90 24 24)"
+        />
+      </svg>
       <RobotLogo size={26} />
       <span
         style={{

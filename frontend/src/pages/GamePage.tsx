@@ -23,6 +23,10 @@ import { GameEffectsLayer } from '../components/hud/GameEffectsLayer.js';
 import { AnniversaryGift } from '../components/hud/AnniversaryGift.js';
 import { PolaroidAlbum } from '../components/hud/PolaroidAlbum.js';
 import { StatsHebdo } from '../components/hud/StatsHebdo.js';
+import { QuickHotkeys } from '../components/hud/QuickHotkeys.js';
+import { L42Secret } from '../components/hud/L42Secret.js';
+import { AchievementConfetti } from '../components/hud/AchievementConfetti.js';
+import { Fireflies } from '../components/hud/Fireflies.js';
 import { useGameSession } from '../hooks/useGameSession.js';
 import { useAudio } from '../hooks/useAudio.js';
 import { useResponsive } from '../hooks/useResponsive.js';
@@ -288,6 +292,10 @@ export function GamePage() {
       <AnniversaryGift />
       <PolaroidAlbum />
       <StatsHebdo />
+      <QuickHotkeys />
+      <L42Secret />
+      <AchievementConfetti />
+      <Fireflies />
       <ActivityFAB onClick={() => setMarcelLogOpen(true)} notificationCount={0} />
       {marcelLogOpen && <MarcelLog onClose={() => setMarcelLogOpen(false)} />}
     </div>

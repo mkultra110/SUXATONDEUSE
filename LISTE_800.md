@@ -25,8 +25,8 @@ Statut implementation :
 - [ ] 13. Neon trail couleur du tier sur le robot mowing
 - [ ] 14. Sparkles dores quand un robot atteint count milestone
 - [ ] 15. Halo solaire derriere le robot top-tier (rayons)
-- [ ] 16. Particules confettis sur achievement unlock
-- [ ] 17. Ondes concentriques sur tap (ripple)
+- [x] 16. Particules confettis sur achievement unlock
+- [x] 17. Ondes concentriques sur tap (ripple)
 - [ ] 18. Petits coeurs roses au-dessus des robots heureux
 - [ ] 19. Bulles de pensee occasionnelles sur les robots
 - [ ] 20. Trainee lumineuse path BFS visible 200ms apres robot
@@ -34,7 +34,7 @@ Statut implementation :
 - [ ] 22. Plumes qui tombent autour des cocottes
 - [ ] 23. Reflet du soleil sur les flaques d'eau (scintillation)
 - [ ] 24. Brouillard matinal qui se dissipe au lever du jour
-- [ ] 25. Insectes nocturnes lumineux (lucioles) la nuit
+- [x] 25. Insectes nocturnes lumineux (lucioles) la nuit
 - [ ] 26. Etoiles filantes occasionnelles dans le ciel nocturne
 - [ ] 27. Arc-en-ciel apres pluie (1% chance)
 - [ ] 28. Aurore boreale sur theme cristal
@@ -68,7 +68,7 @@ Statut implementation :
 - [ ] 56. Emojis flottants sur achievement (style Stardew)
 - [ ] 57. Trainee de poussiere derriere robot rapide
 - [ ] 58. Eclair statique sur clic robot
-- [ ] 59. Anneau d'XP qui se remplit autour du LevelBadge
+- [x] 59. Anneau d'XP qui se remplit autour du LevelBadge
 - [ ] 60. Gradient sky qui change selon l'heure locale
 - [ ] 61. Lever / coucher de soleil 90s smooth
 - [ ] 62. Couleur des oiseaux qui volent change selon l'heure
@@ -275,7 +275,7 @@ Statut implementation :
 - [ ] 257. Anti-aliasing pixel art (smart upscale)
 - [ ] 258. CRT scanline filter (toggle)
 - [ ] 259. Mode noir et blanc (toggle)
-- [ ] 260. Mode sepia retro (toggle)
+- [x] 260. Mode sepia retro (toggle)
 - [ ] 261. Mode haute saturation (toggle)
 - [ ] 262. Mode daltonien (toggle)
 - [ ] 263. Mode highcontrast (toggle)
@@ -294,7 +294,7 @@ Statut implementation :
 - [ ] 276. Largeur HUD slider (compact / large)
 - [ ] 277. Position HUD configurable
 - [ ] 278. Hide HUD lite mode (zen)
-- [ ] 279. Photo mode (cache HUD, F12)
+- [x] 279. Photo mode (cache HUD, F12)
 - [ ] 280. Screenshot button avec download PNG
 - [ ] 281. Animated GIF capture button
 - [ ] 282. Replay buffer 30s
@@ -392,8 +392,8 @@ Statut implementation :
 - [ ] 371. Shortcut clavier "B" pour buy max
 - [ ] 372. Shortcut "P" pour prestige preview
 - [ ] 373. Shortcut "M" pour mute
-- [ ] 374. Shortcut "Esc" ferme tous les modals
-- [ ] 375. Shortcut "?" affiche aide cheatsheet
+- [x] 374. Shortcut "Esc" ferme tous les modals
+- [x] 375. Shortcut "?" affiche aide cheatsheet
 - [ ] 376. Compact mode HUD (densite info)
 - [ ] 377. Couleur cash selon vitesse gain (vert plus brillant)
 - [ ] 378. Tooltip detaille sur hover (formules)
@@ -445,7 +445,7 @@ Statut implementation :
 - [ ] 424. Historique production (graph 24h)
 - [ ] 425. Comparison day-by-day production
 - [ ] 426. Export CSV des stats
-- [ ] 427. Notifications push web (offline reward ready)
+- [x] 427. Notifications push web (offline reward ready)
 - [ ] 428. Daily reminder notification (config)
 - [ ] 429. Calendar event integration (optional)
 - [ ] 430. Boss available notification
@@ -682,7 +682,7 @@ Statut implementation :
 - [x] 652. Dialogues Meme conditionnels (12)
 - [x] 653. Papillon dore rare 0.1% spawn
 - [x] 654. Pluie petales aleatoire
-- [ ] 655. Tournesol cache level 42 (H2G2)
+- [x] 655. Tournesol cache level 42 (H2G2)
 - [x] 656. Boss dialog avec quotes
 - [x] 657. Save anniversaire 7/14/30/...
 - [ ] 658. 100 dialogues Meme conditionnels (vs 12)
