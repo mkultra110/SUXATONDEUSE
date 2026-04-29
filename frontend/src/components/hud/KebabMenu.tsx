@@ -10,6 +10,7 @@ import { ConfirmDialog } from './ConfirmDialog.js';
 import { MarcelLog } from './MarcelLog.js';
 import { SettingsPanel } from './SettingsPanel.js';
 import { SaveExport } from './SaveExport.js';
+import { LegalModal, type LegalKind } from './LegalModals.js';
 import { NotebookIcon, IconGear, StarIcon, HeartIcon, CrossIcon, NavCollectionIcon, TrophyIcon } from '../icons/PixelIcon.js';
 
 interface KebabMenuProps {
@@ -22,6 +23,7 @@ export function KebabMenu({ onClose }: KebabMenuProps) {
   const [aboutOpen, setAboutOpen] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [saveOpen, setSaveOpen] = useState(false);
+  const [legalKind, setLegalKind] = useState<LegalKind | null>(null);
   const [confirmLogout, setConfirmLogout] = useState(false);
   const setPolaroidAlbumOpen = useUIStore((s) => s.setPolaroidAlbumOpen);
   const setStatsHebdoOpen = useUIStore((s) => s.setStatsHebdoOpen);
@@ -150,6 +152,26 @@ export function KebabMenu({ onClose }: KebabMenuProps) {
               }}
             />
             <MenuItem
+              icon={<NotebookIcon size={18} />}
+              label="Aide & FAQ"
+              onClick={() => { setLegalKind('help'); setOpen(false); }}
+            />
+            <MenuItem
+              icon={<NotebookIcon size={18} />}
+              label="Confidentialite"
+              onClick={() => { setLegalKind('privacy'); setOpen(false); }}
+            />
+            <MenuItem
+              icon={<NotebookIcon size={18} />}
+              label="Conditions d'utilisation"
+              onClick={() => { setLegalKind('terms'); setOpen(false); }}
+            />
+            <MenuItem
+              icon={<NotebookIcon size={18} />}
+              label="Contact"
+              onClick={() => { setLegalKind('contact'); setOpen(false); }}
+            />
+            <MenuItem
               icon={<StarIcon size={18} />}
               label="Crédits"
               onClick={() => {
@@ -179,6 +201,7 @@ export function KebabMenu({ onClose }: KebabMenuProps) {
       {aboutOpen && <AboutDialog onClose={() => setAboutOpen(false)} />}
       <SettingsPanel open={settingsOpen} onClose={() => setSettingsOpen(false)} />
       <SaveExport open={saveOpen} onClose={() => setSaveOpen(false)} />
+      <LegalModal kind={legalKind} onClose={() => setLegalKind(null)} />
 
       <ConfirmDialog
         open={confirmLogout}

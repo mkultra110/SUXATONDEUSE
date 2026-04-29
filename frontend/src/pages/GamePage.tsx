@@ -41,6 +41,7 @@ import { SkyHourGradient } from '../components/hud/SkyHourGradient.js';
 import { HolidayDecor } from '../components/hud/HolidayDecor.js';
 import { DevPanel } from '../components/hud/DevPanel.js';
 import { MoonHalo } from '../components/hud/MoonHalo.js';
+import { UsernameEasterEgg } from '../components/hud/UsernameEasterEgg.js';
 import { useGameSession } from '../hooks/useGameSession.js';
 import { useAudio } from '../hooks/useAudio.js';
 import { useResponsive } from '../hooks/useResponsive.js';
@@ -324,6 +325,7 @@ export function GamePage() {
       <HolidayDecor />
       <DevPanel />
       <MoonHalo />
+      <UsernameEasterEgg />
       <ActivityFAB onClick={() => setMarcelLogOpen(true)} notificationCount={0} />
       {marcelLogOpen && <MarcelLog onClose={() => setMarcelLogOpen(false)} />}
     </div>

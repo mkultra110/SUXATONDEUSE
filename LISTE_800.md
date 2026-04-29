@@ -463,10 +463,10 @@ Statut implementation :
 - [ ] 442. Memory usage display (advanced)
 - [ ] 443. Error reporting opt-in
 - [ ] 444. Telemetry opt-in / opt-out clear
-- [ ] 445. Privacy policy modal accessible
-- [ ] 446. Terms of service modal
-- [ ] 447. Help center / FAQ in-app
-- [ ] 448. Contact us form
+- [x] 445. Privacy policy modal accessible
+- [x] 446. Terms of service modal
+- [x] 447. Help center / FAQ in-app
+- [x] 448. Contact us form
 - [x] 449. Rate the app prompt (apres 7 jours)
 - [ ] 450. Share progress sur reseaux (X / Discord)
 
@@ -573,27 +573,27 @@ Statut implementation :
 - [ ] 549. Skin "Robot Noel renne"
 - [ ] 550. Skin "Robot Saint-Valentin coeur"
 - [ ] 551. 20+ themes maps vs 9 actuels
-- [ ] 552. Theme "Champ de lavande"
-- [ ] 553. Theme "Vignobles bourguignons"
+- [x] 552. Theme "Champ de lavande"
+- [x] 553. Theme "Vignobles bourguignons"
 - [ ] 554. Theme "Plage normande"
 - [ ] 555. Theme "Foret Vosges"
 - [ ] 556. Theme "Marais Poitevin"
 - [ ] 557. Theme "Mont Saint-Michel"
 - [ ] 558. Theme "Camargue rose"
-- [ ] 559. Theme "Provence olive"
+- [x] 559. Theme "Provence olive"
 - [ ] 560. Theme "Bretagne falaise"
-- [ ] 561. Theme "Alpes neige"
+- [x] 561. Theme "Alpes neige"
 - [ ] 562. Theme "Pyrenees vert"
-- [ ] 563. Theme "Volcan Auvergne"
+- [x] 563. Theme "Volcan Auvergne"
 - [ ] 564. Theme "Foret de chataigniers"
 - [ ] 565. Theme "Champ de tournesols infini"
 - [ ] 566. Theme "Ferme abandonnee"
 - [ ] 567. Theme "Mansion hantee"
 - [ ] 568. Theme "Sous l'eau (lac)"
 - [ ] 569. Theme "Sous-terrain (mine)"
-- [ ] 570. Theme "Lune"
-- [ ] 571. Theme "Mars"
-- [ ] 572. Theme "Black hole prestige final"
+- [x] 570. Theme "Lune"
+- [x] 571. Theme "Mars"
+- [x] 572. Theme "Black hole prestige final"
 - [ ] 573. Mode "Endless" sans boss
 - [ ] 574. Mode "Speed run" timer
 - [ ] 575. Mode "Pacifist" tap zero
@@ -702,8 +702,8 @@ Statut implementation :
 - [ ] 672. Easter egg : 1er avril = tout invertit
 - [ ] 673. Easter egg : 21 juin = soleil eternel
 - [ ] 674. Easter egg : 13eme = chat noir
-- [ ] 675. Easter egg : nom user "Marcel" = bonus
-- [ ] 676. Easter egg : nom user "Gisele" = bonus
+- [x] 675. Easter egg : nom user "Marcel" = bonus
+- [x] 676. Easter egg : nom user "Gisele" = bonus
 - [ ] 677. Easter egg : tap 666 fois robot = fumee
 - [ ] 678. Easter egg : 4eme prestige = oeuf
 - [ ] 679. Easter egg : tap LICELL = clear bug

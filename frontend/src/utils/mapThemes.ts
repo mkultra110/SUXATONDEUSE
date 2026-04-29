@@ -149,6 +149,98 @@ const THEMES: ReadonlyArray<{ from: number; theme: MapTheme }> = [
       frameGlow: 'rgba(155, 109, 196, 1)',
     },
   },
+  // === Themes etendus (idees #552 #553 #561 #563 #570 #571) ===
+  {
+    from: 200,
+    theme: {
+      name: 'Lavande de Provence',
+      description: 'Champs violets parfumés',
+      skyTint: 'rgba(167, 139, 250, 0.28)',
+      accentColor: '#A78BFA',
+      fogColor: 'rgba(167, 139, 250, 0.15)',
+      particleEffect: 'gold-sparkles',
+      particleDensity: 2,
+      frameGlow: 'rgba(167, 139, 250, 0.7)',
+    },
+  },
+  {
+    from: 250,
+    theme: {
+      name: 'Vignoble Bourgogne',
+      description: 'Grappes mûres au soleil',
+      skyTint: 'rgba(124, 58, 78, 0.28)',
+      accentColor: '#7C3A4E',
+      fogColor: 'rgba(124, 58, 78, 0.15)',
+      particleEffect: 'embers',
+      particleDensity: 1,
+      frameGlow: 'rgba(124, 58, 78, 0.7)',
+    },
+  },
+  {
+    from: 300,
+    theme: {
+      name: 'Alpes neigeuses',
+      description: 'Sommets éternels',
+      skyTint: 'rgba(229, 240, 250, 0.4)',
+      accentColor: '#E5F0FA',
+      fogColor: 'rgba(229, 240, 250, 0.2)',
+      particleEffect: 'snowflakes',
+      particleDensity: 3,
+      frameGlow: 'rgba(229, 240, 250, 0.8)',
+    },
+  },
+  {
+    from: 400,
+    theme: {
+      name: 'Volcan d\'Auvergne',
+      description: 'Terre rouge brûlante',
+      skyTint: 'rgba(239, 68, 68, 0.4)',
+      accentColor: '#EF4444',
+      fogColor: 'rgba(239, 68, 68, 0.18)',
+      particleEffect: 'embers',
+      particleDensity: 3,
+      frameGlow: 'rgba(239, 68, 68, 0.9)',
+    },
+  },
+  {
+    from: 500,
+    theme: {
+      name: 'Sous la Lune',
+      description: 'La ferme entre les cratères',
+      skyTint: 'rgba(0, 0, 30, 0.65)',
+      accentColor: '#C0C0E0',
+      fogColor: 'rgba(0, 0, 30, 0.3)',
+      particleEffect: 'fireflies',
+      particleDensity: 3,
+      frameGlow: 'rgba(192, 192, 224, 1)',
+    },
+  },
+  {
+    from: 750,
+    theme: {
+      name: 'Mars rouge',
+      description: 'La planète tonde',
+      skyTint: 'rgba(220, 38, 38, 0.5)',
+      accentColor: '#DC2626',
+      fogColor: 'rgba(220, 38, 38, 0.25)',
+      particleEffect: 'embers',
+      particleDensity: 2,
+      frameGlow: 'rgba(220, 38, 38, 1)',
+    },
+  },
+  {
+    from: 1000,
+    theme: {
+      name: 'Trou Noir',
+      description: 'Le prestige absolu',
+      skyTint: 'rgba(0, 0, 0, 0.85)',
+      accentColor: '#FFFFFF',
+      fogColor: 'rgba(255, 255, 255, 0.1)',
+      particleEffect: 'gold-sparkles',
+      particleDensity: 3,
+      frameGlow: 'rgba(255, 255, 255, 1)',
+    },
+  },
 ];
 
 export function themeForMapLevel(mapLevel: number): MapTheme {
