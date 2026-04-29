@@ -105,14 +105,18 @@ export function MemeGiselePopup() {
       onClick={() => setPopup(null)}
       style={{
         position: 'fixed',
-        bottom: 16,
-        left: 16,
+        // 96px = au-dessus de la bottom nav mobile (72px) + 24px de marge.
+        // Sur tablet/desktop il n'y a pas de bottom nav, mais cette marge
+        // reste cosmetiquement OK.
+        bottom: 'calc(96px + env(safe-area-inset-bottom, 0px))',
+        left: 'calc(env(safe-area-inset-left, 0px) + 12px)',
+        right: 'calc(env(safe-area-inset-right, 0px) + 12px)',
+        maxWidth: 340,
         zIndex: 900,
         cursor: 'pointer',
         opacity: popup.visible ? 1 : 0,
         transform: popup.visible ? 'translateX(0)' : 'translateX(-110%)',
         transition: 'transform 400ms cubic-bezier(0.34, 1.56, 0.64, 1), opacity 400ms ease-out',
-        maxWidth: 320,
       }}
     >
       <div

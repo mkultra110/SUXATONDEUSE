@@ -18,33 +18,48 @@ export function AuthPage() {
 
   return (
     <div
-      className="flex min-h-screen flex-col items-center justify-center gap-6 p-4"
+      className="flex flex-col items-center justify-center gap-4 px-4 py-6"
       style={{
+        minHeight: '100dvh',
         background:
           'linear-gradient(180deg, var(--color-sky-morning) 0%, var(--color-sky-noon) 40%, var(--color-grass-2) 70%, var(--color-grass-4) 100%)',
+        paddingTop: 'calc(env(safe-area-inset-top, 0px) + 24px)',
+        paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 24px)',
       }}
     >
       <header className="text-center flex flex-col items-center gap-2">
-        <RobotLogo size={64} />
+        <RobotLogo size={56} />
         <h1
           className="leading-none"
           style={{
             fontFamily: 'var(--font-title)',
-            fontSize: '40px',
+            fontSize: 'clamp(28px, 8vw, 40px)',
             color: 'var(--color-text-title)',
             textShadow: '2px 2px 0 var(--color-paper-1), 4px 4px 0 var(--color-wood-3)',
             letterSpacing: '0.02em',
           }}
         >
-          {t('app.title')}
+          La Ferme des Tournesols
         </h1>
         <p
-          className="mt-2"
+          className="meme"
           style={{
-            fontFamily: 'var(--font-body)',
-            fontSize: '16px',
+            fontSize: 'clamp(13px, 3.5vw, 16px)',
             color: 'var(--color-text-title)',
-            letterSpacing: '0.05em',
+            letterSpacing: '0.02em',
+            fontStyle: 'italic',
+            margin: 0,
+          }}
+        >
+          Fondée en 1962 par Mémé Gisèle
+        </p>
+        <p
+          className="meme"
+          style={{
+            fontSize: 'clamp(12px, 3vw, 14px)',
+            color: 'var(--color-text-body)',
+            margin: '8px 0 0',
+            maxWidth: 320,
           }}
         >
           {t('app.tagline')}

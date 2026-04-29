@@ -41,6 +41,8 @@ export default defineConfig(({ mode }) => {
             pixi: ['pixi.js', '@pixi/react'],
             react: ['react', 'react-dom', 'react-router-dom'],
             state: ['zustand', '@tanstack/react-query'],
+            i18n: ['i18next', 'react-i18next', 'i18next-browser-languagedetector'],
+            decimal: ['break_infinity.js'],
           },
         },
       },
