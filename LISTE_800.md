@@ -419,11 +419,11 @@ Statut implementation :
 - [ ] 398. Switch save slot at runtime
 - [ ] 399. Cloud backup auto chaque jour
 - [ ] 400. Restore from backup avec calendrier
-- [ ] 401. Localisation FR / EN / ES / DE / IT / JP / CN
+- [x] 401. Localisation FR / EN / ES / DE / IT / JP / CN
 - [ ] 402. RTL support pour AR / HE
-- [ ] 403. Detection auto langue navigateur
-- [ ] 404. Switch langue runtime (sans reload)
-- [ ] 405. Numbers : virgule FR, point EN, apostrophe CH
+- [x] 403. Detection auto langue navigateur
+- [x] 404. Switch langue runtime (sans reload)
+- [x] 405. Numbers : virgule FR, point EN, apostrophe CH
 - [ ] 406. Date format selon locale
 - [ ] 407. Currency symbol selon locale (€/£/$/¥)
 - [ ] 408. Mode "deux mains" UI gauche / droite
@@ -688,8 +688,8 @@ Statut implementation :
 - [ ] 658. 100 dialogues Meme conditionnels (vs 12)
 - [ ] 659. 20 dialogues Marcel apparitions
 - [ ] 660. 50 quotes carnet Marcel revelations lore
-- [ ] 661. Lore pere de Marcel (perdu en guerre)
-- [ ] 662. Lore origine ferme 1898
+- [x] 661. Lore pere de Marcel (perdu en guerre)
+- [x] 662. Lore origine ferme 1898
 - [ ] 663. Lore Pompon vient des chats du Marquis
 - [ ] 664. Lore puits hante (ne pas s'approcher trop)
 - [ ] 665. Lore arbre planté pour bapteme jumeau
@@ -721,13 +721,13 @@ Statut implementation :
 - [ ] 691. Citations cachees Voltaire / La Fontaine
 - [ ] 692. Citations Coluche en bas de page random
 - [ ] 693. Citations Devos / Bedos / Reno
-- [ ] 694. Recettes Memé en bas du carnet
-- [ ] 695. Histoire courte Memé / Marcel rencontre
-- [ ] 696. Lettre du fils de Marcel (jamais envoyee)
-- [ ] 697. Carte postale d'un cousin parisien
-- [ ] 698. Coupures de presse fictives (1962)
+- [x] 694. Recettes Memé en bas du carnet
+- [x] 695. Histoire courte Memé / Marcel rencontre
+- [x] 696. Lettre du fils de Marcel (jamais envoyee)
+- [x] 697. Carte postale d'un cousin parisien
+- [x] 698. Coupures de presse fictives (1962)
 - [ ] 699. Photo de famille polaroid 1967
-- [ ] 700. Album photos Memé jeune
+- [x] 700. Album photos Memé jeune
 
 ## H. Multijoueur / Social (701-750)
 
