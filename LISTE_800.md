@@ -1,0 +1,836 @@
+# LISTE_800 — La Ferme des Tournesols
+
+800 ideas pour ameliorer le jeu : visuels, boss, graphismes, confort, contenu,
+audio, easter eggs, social, economie. Numerotees pour cocher au fur et a mesure.
+
+Statut implementation :
+- [x] = fait
+- [~] = partiel
+- [ ] = TODO
+
+## A. Visuels & Effets (1-150)
+
+- [x] 1. Aura coloree autour des robots (par tier)
+- [x] 2. Trail de particules derriere robots en mouvement
+- [x] 3. Floating damage numbers sur recolte
+- [x] 4. Screen shake sur gros gains / boss kill
+- [x] 5. Chromatic aberration flash au level-up
+- [x] 6. Pulse glow TopBar sur palier cash
+- [x] 7. Tile background plus saturee par tier
+- [x] 8. Robots qui grandissent par paliers
+- [x] 9. Combo counter sur taps rapides
+- [x] 10. Sunflower bloom critique (1% chance)
+- [ ] 11. Speed lines derriere robots tres rapides
+- [x] 12. Power Score halo SVG ring TopBar
+- [ ] 13. Neon trail couleur du tier sur le robot mowing
+- [ ] 14. Sparkles dores quand un robot atteint count milestone
+- [ ] 15. Halo solaire derriere le robot top-tier (rayons)
+- [ ] 16. Particules confettis sur achievement unlock
+- [ ] 17. Ondes concentriques sur tap (ripple)
+- [ ] 18. Petits coeurs roses au-dessus des robots heureux
+- [ ] 19. Bulles de pensee occasionnelles sur les robots
+- [ ] 20. Trainee lumineuse path BFS visible 200ms apres robot
+- [ ] 21. Effet de fumee de cheminee plus dense l'hiver
+- [ ] 22. Plumes qui tombent autour des cocottes
+- [ ] 23. Reflet du soleil sur les flaques d'eau (scintillation)
+- [ ] 24. Brouillard matinal qui se dissipe au lever du jour
+- [ ] 25. Insectes nocturnes lumineux (lucioles) la nuit
+- [ ] 26. Etoiles filantes occasionnelles dans le ciel nocturne
+- [ ] 27. Arc-en-ciel apres pluie (1% chance)
+- [ ] 28. Aurore boreale sur theme cristal
+- [ ] 29. Effet de chaleur (heat haze) sur theme volcanique
+- [ ] 30. Flocons cumules au sol sur theme hiver
+- [ ] 31. Animation "bonjour" sur les pets equipes au login
+- [ ] 32. Yeux qui clignent sur les mascottes
+- [ ] 33. Robot qui sourit quand son owned est multiple de 10
+- [ ] 34. Ombre dynamique selon position du soleil/lune
+- [ ] 35. Reflexion miroir des robots sur sol mouille
+- [ ] 36. Particules de sciure quand un robot ramasse une branche
+- [ ] 37. Petites pierres qui roulent quand robot passe dessus
+- [ ] 38. Bulles d'air sur la fontaine
+- [ ] 39. Pollen qui flotte au printemps
+- [ ] 40. Feuilles mortes qui tombent en automne
+- [ ] 41. Bourrasque de vent qui plie les fleurs
+- [ ] 42. Tonnerre + flash blanc sur orage rare
+- [ ] 43. Goutte d'eau qui glisse de l'arrosoir
+- [ ] 44. Trail "mowed" qui pulse vert apres recolte (~1s)
+- [ ] 45. Pixel art animation : Pompon qui chasse une mouche
+- [ ] 46. Souris qui traverse l'ecran rapidement (rare)
+- [ ] 47. Helicoptere de Marcel qui passe en arriere-plan
+- [ ] 48. Marcel qui fait coucou par la fenetre
+- [ ] 49. Lumiere qui s'allume / s'eteint dans la maison
+- [ ] 50. Cheminee qui crache des etincelles sur Noel
+- [ ] 51. Toile d'araignee animee sur Halloween
+- [ ] 52. Lampions qui se balancent dans le vent
+- [ ] 53. Drapeau francais sur le mat le 14 juillet
+- [ ] 54. Coeur qui flotte au-dessus de Meme apres dialogue
+- [ ] 55. Robot avec chapeau de ferme aleatoire (5% spawn)
+- [ ] 56. Emojis flottants sur achievement (style Stardew)
+- [ ] 57. Trainee de poussiere derriere robot rapide
+- [ ] 58. Eclair statique sur clic robot
+- [ ] 59. Anneau d'XP qui se remplit autour du LevelBadge
+- [ ] 60. Gradient sky qui change selon l'heure locale
+- [ ] 61. Lever / coucher de soleil 90s smooth
+- [ ] 62. Couleur des oiseaux qui volent change selon l'heure
+- [ ] 63. Volee d'oiseaux declenchee au boss kill
+- [ ] 64. Bruleur de feuilles fumant en automne
+- [ ] 65. Champignons qui poussent apres pluie
+- [ ] 66. Marguerites qui s'ouvrent / se ferment selon heure
+- [ ] 67. Trefles a 4 feuilles caches (chance bonus si trouves)
+- [ ] 68. Coccinelle qui se pose et envole
+- [ ] 69. Crapaud qui saute (rare)
+- [ ] 70. Herisson qui passe la nuit
+- [ ] 71. Renard qui rode autour des cocottes
+- [ ] 72. Petit chat noir qui passe (Halloween)
+- [ ] 73. Chouette sur la cheminee la nuit
+- [ ] 74. Faisan qui vole bas au-dessus du champ
+- [ ] 75. Lapin qui traverse en zig-zag
+- [ ] 76. Effet "cinemascope" (bandes noires) sur cutscene
+- [ ] 77. Vignettage sur boss intro
+- [ ] 78. Tilt shift effect sur la map (focus center)
+- [ ] 79. Bokeh particles sur night theme
+- [ ] 80. Depth of field sur upgrade card hover
+- [ ] 81. Snow accumulation graduelle sur le toit
+- [ ] 82. Glace sur la fontaine quand froid
+- [ ] 83. Bonhomme de neige decoratif l'hiver
+- [ ] 84. Bouquet de fleurs qui apparait au printemps
+- [ ] 85. Citrouille de Halloween qui s'allume
+- [ ] 86. Sapin de Noel decore (Decembre)
+- [ ] 87. Bouquet de muguet le 1er mai
+- [ ] 88. Confetti rain au passage d'annee (1er janvier)
+- [ ] 89. Pluie de petales rose sur 1er avril
+- [ ] 90. Petit bonhomme de neige derriere une parcelle
+- [ ] 91. Slime particles vert sur theme champignon
+- [ ] 92. Particles ondulantes (heat shimmer) cactus
+- [ ] 93. Geyser cristallin theme arbre ancien
+- [ ] 94. Halo blanc tres pur theme cristal
+- [ ] 95. Etoiles cosmiques theme final
+- [ ] 96. Galaxie en arriere-plan theme legendaire
+- [ ] 97. Robot qui clignote dore quand boost actif
+- [ ] 98. Effet wireframe sur upgrade laboratoire
+- [ ] 99. Glow vert pour drop critique (5x)
+- [ ] 100. Outline jaune sur robot selectionne
+- [ ] 101. Skin holographique pour robot legendaire
+- [ ] 102. Boucle d'oreille dore sur Pompon (cosmetique)
+- [ ] 103. Hat collection pour les robots (chapeau, casquette, beret)
+- [ ] 104. Animation "victoire" 360deg sur boss kill
+- [ ] 105. Effet de slow-motion sur kill final boss
+- [ ] 106. Zoom in sur la tuile finale du boss kill
+- [ ] 107. Replay 3s du dernier kill (mini cutscene)
+- [ ] 108. Trail dore "marche du roi" sur top robot
+- [ ] 109. Pluie de pieces d'or sur prestige
+- [ ] 110. Ascension cosmique sur prestige final
+- [ ] 111. Banner descend du haut sur achievement
+- [ ] 112. Polaroid drop avec rotation aleatoire sur capture
+- [ ] 113. Timeline horizontale en bas avec milestones passes
+- [ ] 114. Mini-carte des parcelles (overview)
+- [ ] 115. Compteur d'heure de jeu "100h" badge
+- [ ] 116. Particles cuivrees sur clic ressources
+- [ ] 117. Hover effect glow sur shop cards
+- [ ] 118. Press effect (depress) sur tap card
+- [ ] 119. Long-press circle progress visible
+- [ ] 120. Drag and drop indicateur visuel
+- [ ] 121. Snap to grid avec ligne pointillee
+- [ ] 122. Curseur custom pixel art sur desktop
+- [ ] 123. Curseur change selon contexte (achete, lock, drag)
+- [ ] 124. Animation "spawned" sur nouveau robot achete
+- [ ] 125. Robot qui se regarde dans le miroir (puddle)
+- [ ] 126. Nuages qui projettent ombre sur le sol
+- [ ] 127. Reflet de la lune dans la fontaine la nuit
+- [ ] 128. Vapeur qui sort du nez des cocottes l'hiver
+- [ ] 129. Trace de pas dans la neige
+- [ ] 130. Boue collee aux roues du robot apres pluie
+- [ ] 131. Goutte d'huile qui s'echappe sous le robot vieux
+- [ ] 132. Etincelles electriques sur robot endommage (combat)
+- [ ] 133. Courant d'air qui souleve les feuilles
+- [ ] 134. Toile de jute sur tas de foin
+- [ ] 135. Brouette qui passe automatiquement
+- [ ] 136. Charrue tiree par cheval invisible (anim)
+- [ ] 137. Drone livreur qui depose un colis (rare)
+- [ ] 138. Tracteur de Marcel qui traverse 1x/jour
+- [ ] 139. Ovni qui passe (1/1000 chance, easter egg)
+- [ ] 140. Lumiere d'OVNI qui aspire un robot brievement
+- [ ] 141. Trou noir effect au prestige cosmique
+- [ ] 142. Big bang particles sur 1er prestige
+- [ ] 143. Echelle vers le ciel sur prestige final
+- [ ] 144. Vague de chaleur dore sur level up
+- [ ] 145. Goutelettes d'eau sur l'ecran apres pluie
+- [ ] 146. Ecran qui s'embue puis se nettoie (lent)
+- [ ] 147. Lensflare sur soleil
+- [ ] 148. God rays a travers les nuages
+- [ ] 149. Halo lunaire la nuit
+- [ ] 150. Aurora dance lente theme legendaire
+
+## B. Boss & Ennemis (151-250)
+
+- [x] 151. Boss tous les 10 niveaux (5 cycles)
+- [ ] 152. Boss "Taupe Geante" : se cache et reapparait, HP regen
+- [ ] 153. Boss "Corbeau Noir" : vole, immune aux robots terrestres
+- [ ] 154. Boss "Raton Laveur" : vole les pieces (debuff)
+- [ ] 155. Boss "Sanglier" : charge en ligne droite, casse des tuiles
+- [ ] 156. Boss "Loup-Garou" : se transforme la nuit
+- [ ] 157. Boss "Sorciere du Bocage" : invoque des minions
+- [ ] 158. Boss "Vampire des Vignes" : aspire la production
+- [ ] 159. Boss "Fantome de Marcel" : phase qui change apres 50% HP
+- [ ] 160. Boss "Limace Royale" : laisse une trainee toxique
+- [ ] 161. Boss "Mille-Pattes" : segments individuels a tondre
+- [ ] 162. Boss "Maman Frelon" : invoque des essaims
+- [ ] 163. Boss "Mante Religieuse" : deux phases (priere / attaque)
+- [ ] 164. Boss "Crapaud Geant" : avale et regurgite tuiles
+- [ ] 165. Boss "Couleuvre" : mouvement onduluant rapide
+- [ ] 166. Boss "Hibou Sage" : pose des enigmes a resoudre
+- [ ] 167. Boss "Renard Voleur" : derobe un upgrade temporairement
+- [ ] 168. Boss "Lapin Pirate" : multiplicite (clone toutes les 30s)
+- [ ] 169. Boss "Herisson Spinning" : roule et casse rangees
+- [ ] 170. Boss "Putois" : zone empoisonnee pendant 60s
+- [ ] 171. Boss "Belette" : vol rapide et furtif
+- [ ] 172. Boss "Taupe Cyborg" : armure robotique
+- [ ] 173. Boss "Limace Monstre" : grossit a chaque coup
+- [ ] 174. Boss "Asticot Geant" : creuse des trous-pieges
+- [ ] 175. Boss "Tournesol Mutant" : tire des graines explosives
+- [ ] 176. Boss "Chataigne Volante" : pluie de chataignes piquantes
+- [ ] 177. Boss "Pomme Vehicule" : roule avec inertie
+- [ ] 178. Boss "Citrouille Halloween" : crachoir de feu
+- [ ] 179. Boss "Sapin Vivant" : projettes ses pommes de pin
+- [ ] 180. Boss "Bambou Imperial" : pousse vite et bloque
+- [ ] 181. Boss "Liane Etrangleuse" : enserre des tuiles
+- [ ] 182. Boss "Fougere Prehistorique" : petrifie les robots
+- [ ] 183. Boss "Mauve Hypnotique" : confond les directions
+- [ ] 184. Boss "Lavande Endormante" : ralentit les robots
+- [ ] 185. Boss "Ortie Brulante" : zone DPS
+- [ ] 186. Boss "Trefle Magique" : invoque clones aleatoires
+- [ ] 187. Boss "Pissenlit King" : disperse mille graines
+- [ ] 188. Boss "Coquelicot Sanglant" : pleure en sang
+- [ ] 189. Boss "Glycine Royale" : invocation de papillons hostiles
+- [ ] 190. Boss "Buisson Ardent" : rebondit
+- [ ] 191. Boss "Mousse Geante" : absorbe et craque tuiles
+- [ ] 192. Boss "Algue Mauvaise" : surfe sur l'humidite
+- [ ] 193. Boss "Rocher Eveille" : pierre qui se reveille (immobile mais HP enorme)
+- [ ] 194. Boss "Statue de Marcel" : enragee par profanation
+- [ ] 195. Boss "Vieille Charrette" : maledit, hante
+- [ ] 196. Boss "Epouvantail Maudit" : se libere et marche
+- [ ] 197. Boss "Tracteur Rouille" : phase mecha
+- [ ] 198. Boss "Robot Beta" : version originale buguee
+- [ ] 199. Boss "Robot Anti-Robot" : tonde tes propres robots
+- [ ] 200. Boss "Pelouse Sentiente" : la map elle-meme
+- [ ] 201. Mini-boss "Frelon Asiatique" toutes les 5 maps
+- [ ] 202. Mini-boss "Doryphore" sur theme orage
+- [ ] 203. Mini-boss "Pucerons Cumules" essaim
+- [ ] 204. Mini-boss "Limaces" duo
+- [ ] 205. Mini-boss "Souris des Champs" tres rapide
+- [ ] 206. Boss recurrent "Voisin Robert" 1/100 maps
+- [ ] 207. Boss recurrent "Inspecteur des Impots" 1/200 maps
+- [ ] 208. Boss recurrent "Loup Solitaire" l'hiver uniquement
+- [ ] 209. Boss recurrent "Loup-Garou" pleine lune
+- [ ] 210. Boss "Diable de Tasmanie" qui spawn alea
+- [ ] 211. Boss "Krampus" en decembre
+- [ ] 212. Boss "Pere Fouettard" en decembre
+- [ ] 213. Boss "Lapin de Paques Demoniac" en avril
+- [ ] 214. Boss "Citrouille Mere" Halloween
+- [ ] 215. Boss "Cupidon Maudit" Saint-Valentin
+- [ ] 216. Boss "Renard du Bocage" 1/300 maps
+- [ ] 217. Boss "Putain de Bourdon" easter egg
+- [ ] 218. Phase boss "transformation" cinematique
+- [ ] 219. Phase boss "enrage" sous 20% HP
+- [ ] 220. Phase boss "appel a l'aide" invoque minions
+- [ ] 221. Boss avec barre HP segmentee (3 phases visibles)
+- [ ] 222. Boss avec shield qui doit etre casse avant degats
+- [ ] 223. Boss qui esquive 30% des coups (chance miss)
+- [ ] 224. Boss qui contre-attaque (degat reflechi)
+- [ ] 225. Boss qui regenerere si laisse 10s sans coup
+- [ ] 226. Boss avec adds qui spawn
+- [ ] 227. Boss qui change de zone (saut tuile)
+- [ ] 228. Boss "souffle de glace" qui gele zone
+- [ ] 229. Boss "souffle de feu" qui brule zone
+- [ ] 230. Boss "souffle empoisonne" zone toxique
+- [ ] 231. Recompense unique par boss : skin / pet / chapeau
+- [ ] 232. Recompense seasonal sur boss event
+- [ ] 233. Bestiaire (Cabinet) qui collectionne tous les boss
+- [ ] 234. Re-fight boss option (training mode)
+- [ ] 235. Boss rush mode (chain 5 boss)
+- [ ] 236. Difficulte boss : Normal / Hard / Mythique
+- [ ] 237. Mythique boss avec mecanique speciale
+- [ ] 238. Boss tutoriel pour expliquer les mecaniques
+- [ ] 239. Boss avec dialogue mid-fight (scripted)
+- [ ] 240. Boss qui interagit avec Meme Gisele
+- [ ] 241. Boss raid : 1 boss tres tough par mois
+- [ ] 242. Leaderboard kills boss par joueur
+- [ ] 243. Achievement par boss vaincu (50 boss = badge or)
+- [ ] 244. Boss avec faiblesse elementaire (feu/eau/vegetal)
+- [ ] 245. Robots avec affinite elementaire (combo)
+- [ ] 246. Boss avec timer (kill avant 60s = bonus)
+- [ ] 247. Boss avec score (degats par seconde notes)
+- [ ] 248. Boss qui parle francais avec accent (audio)
+- [ ] 249. Boss qui rage-quit (1% chance) = win gratuit
+- [ ] 250. Boss qui devient ami si tu le bats sans degat (rare)
+
+## C. Ameliorations Graphiques (251-350)
+
+- [ ] 251. Migration vers PixiJS v8 (plus de FPS)
+- [ ] 252. Sprite atlas haute densite 512x512
+- [ ] 253. Animations sprites Aseprite-style
+- [ ] 254. Layered parallax background (3 couches)
+- [ ] 255. Foreground decoratif (clotures, pancarte)
+- [ ] 256. Cielobjet 360deg (skybox)
+- [ ] 257. Anti-aliasing pixel art (smart upscale)
+- [ ] 258. CRT scanline filter (toggle)
+- [ ] 259. Mode noir et blanc (toggle)
+- [ ] 260. Mode sepia retro (toggle)
+- [ ] 261. Mode haute saturation (toggle)
+- [ ] 262. Mode daltonien (toggle)
+- [ ] 263. Mode highcontrast (toggle)
+- [ ] 264. Mode reduce motion (toggle)
+- [ ] 265. Outline rendering pour identifier les types
+- [ ] 266. Smart camera (zoom action automatique)
+- [ ] 267. Screenshake configurable (0-100%)
+- [ ] 268. Particle quality (low/med/high)
+- [ ] 269. Shadow quality toggle
+- [ ] 270. Texture filtering (nearest / bilinear)
+- [ ] 271. Resolution scaling (50/75/100/125%)
+- [ ] 272. Custom palette swap (theme couleur)
+- [ ] 273. Skin theme HUD (cottage / industriel / steampunk)
+- [ ] 274. Police custom selectable
+- [ ] 275. UI scale slider (80-150%)
+- [ ] 276. Largeur HUD slider (compact / large)
+- [ ] 277. Position HUD configurable
+- [ ] 278. Hide HUD lite mode (zen)
+- [ ] 279. Photo mode (cache HUD, F12)
+- [ ] 280. Screenshot button avec download PNG
+- [ ] 281. Animated GIF capture button
+- [ ] 282. Replay buffer 30s
+- [ ] 283. Time-lapse video export
+- [ ] 284. Preset themes save/load
+- [ ] 285. Custom CSS injection (advanced)
+- [ ] 286. Devtools overlay FPS / particle count
+- [ ] 287. Debug grid overlay
+- [ ] 288. Sprite hitbox overlay
+- [ ] 289. Path BFS overlay (debug)
+- [ ] 290. Heatmap des tuiles tondues
+- [ ] 291. Animated emojis pour reactions
+- [ ] 292. Smiley dynamique sur le robot (humeur)
+- [ ] 293. Yeux qui suivent la souris (parallax)
+- [ ] 294. Tete qui se tourne vers la cible
+- [ ] 295. Stretch & squash animation framework
+- [ ] 296. Bezier easing variety (cubic, elastic, back)
+- [ ] 297. Cinematic letterbox toggle
+- [ ] 298. Cinematic camera shake on impact
+- [ ] 299. Slow-motion toggle (50% speed visuel)
+- [ ] 300. Bullet time on critical hit (1 sec)
+- [ ] 301. Anneau d'impact onde de choc
+- [ ] 302. Effet flou radial sur boss kill
+- [ ] 303. Effet zoom in/out rythmique sur combo
+- [ ] 304. Particles GPU computed (offload CPU)
+- [ ] 305. Refactoring CSS variables couleurs (8 themes)
+- [ ] 306. Logo animation au load (pixel build)
+- [ ] 307. Loading bar plein bonbon (steam-like)
+- [ ] 308. Loading hint screen avec tip aleatoire
+- [ ] 309. Loading mini-game (clic-clic micro-jeu)
+- [ ] 310. Splash screen animated logo 2s
+- [ ] 311. Tutorial overlay step-by-step guide
+- [ ] 312. Mascotte qui pointe les UI elements
+- [ ] 313. Halo highlight quand UI element relevant
+- [ ] 314. Spotlight tutoriel qui dim everything else
+- [ ] 315. Premier boot wizard (avatar / nom / locale)
+- [ ] 316. Cutscene intro 30s avec lore
+- [ ] 317. Cutscene outro a chaque map cleared
+- [ ] 318. Cutscene boss intro (3s)
+- [ ] 319. Cutscene boss outro (5s victoire)
+- [ ] 320. Cutscene prestige (deja en place : enrich)
+- [ ] 321. Subtle camera sway pendant idle
+- [ ] 322. Pulsation subtile UI cards (vivant)
+- [ ] 323. Hover state plus visible (lift + shadow)
+- [ ] 324. Press feedback (scale 0.95)
+- [ ] 325. Disabled state visuel clair (gris + cursor)
+- [ ] 326. Loading state per-button (spinner)
+- [ ] 327. Toast notifications animees stack
+- [ ] 328. Modal de confirmation amusante (Meme dialogue)
+- [ ] 329. Snackbar success / error / info
+- [ ] 330. Progress bar style mosaique (carrelage)
+- [ ] 331. Custom checkbox (case en bois)
+- [ ] 332. Custom radio (etiquette colle)
+- [ ] 333. Custom slider (semer une graine)
+- [ ] 334. Custom select (carnet a feuille)
+- [ ] 335. Custom tooltip (post-it)
+- [ ] 336. Custom badge (medaille)
+- [ ] 337. Custom modal frame (bois sculpte)
+- [ ] 338. Custom card frame (cadre photo)
+- [ ] 339. Custom navbar style barriere ferme
+- [ ] 340. Custom footer style petit bois
+- [ ] 341. Custom scroll thumb (corde)
+- [ ] 342. Custom focus ring (faisceau dore)
+- [ ] 343. Custom select arrow (fleche en bois)
+- [ ] 344. Custom error icon (croix bois)
+- [ ] 345. Custom success icon (coche or)
+- [ ] 346. Animation chargement de feuille de chene
+- [ ] 347. Lottie animations (alternative aux GIF)
+- [ ] 348. SVG animations native (smaller bundle)
+- [ ] 349. Optimisation atlas (TexturePacker)
+- [ ] 350. Lazy load des assets non-critiques
+
+## D. Confort de Jeu / QoL (351-450)
+
+- [x] 351. Boutons x1/x10/x100/xMax shop
+- [x] 352. Auto-buy "cheapest affordable" apres 1er prestige
+- [x] 353. Prestige preview tooltip live
+- [x] 354. Offline earnings summary
+- [x] 355. Formatage Cookie Clicker AA/AB
+- [ ] 356. Sticky panel shop mobile header
+- [ ] 357. Tap multiplier visuel cooldown
+- [x] 358. ETA upgrade "12s" affiche
+- [ ] 359. Pin/favoris upgrades scroll-into-view
+- [~] 360. Undo last purchase 5s window
+- [x] 361. Recherche/filtre shop "achetable"
+- [x] 362. Long-press = buy max
+- [ ] 363. Auto-prestige toggle
+- [ ] 364. Auto-equip best pet
+- [ ] 365. Auto-claim daily login reward
+- [ ] 366. Auto-claim achievements
+- [ ] 367. Notification cloches toolbar (rouge sur claim disponible)
+- [ ] 368. Drag-to-reorder upgrades favorites
+- [ ] 369. Drag-to-reorder bottom tabs
+- [ ] 370. Custom keybindings configurables
+- [ ] 371. Shortcut clavier "B" pour buy max
+- [ ] 372. Shortcut "P" pour prestige preview
+- [ ] 373. Shortcut "M" pour mute
+- [ ] 374. Shortcut "Esc" ferme tous les modals
+- [ ] 375. Shortcut "?" affiche aide cheatsheet
+- [ ] 376. Compact mode HUD (densite info)
+- [ ] 377. Couleur cash selon vitesse gain (vert plus brillant)
+- [ ] 378. Tooltip detaille sur hover (formules)
+- [ ] 379. "Compare upgrade" panel side-by-side
+- [ ] 380. Preview de l'upgrade avec/sans
+- [ ] 381. Recap en bas du shop "tu vas gagner +X/s"
+- [ ] 382. Bulk buy avec confirmation modal
+- [ ] 383. Mass-sell robots (rebooter cycle)
+- [ ] 384. Renommer robots individuels (cosmetique)
+- [ ] 385. Renommer la ferme (header)
+- [ ] 386. Avatar player customisable (10 styles)
+- [ ] 387. Bio player (140 chars max)
+- [ ] 388. Photo profil custom (upload local)
+- [ ] 389. Status player ("au lit" / "tonde a fond")
+- [ ] 390. Auto-save toutes les 30s
+- [ ] 391. Save manuel (button)
+- [ ] 392. Cloud sync optionnel (auth requis)
+- [ ] 393. Export save JSON (download)
+- [ ] 394. Import save JSON
+- [ ] 395. Reset progress button (avec confirm)
+- [ ] 396. Clear cache button (settings)
+- [ ] 397. Multi-save slots (3 slots)
+- [ ] 398. Switch save slot at runtime
+- [ ] 399. Cloud backup auto chaque jour
+- [ ] 400. Restore from backup avec calendrier
+- [ ] 401. Localisation FR / EN / ES / DE / IT / JP / CN
+- [ ] 402. RTL support pour AR / HE
+- [ ] 403. Detection auto langue navigateur
+- [ ] 404. Switch langue runtime (sans reload)
+- [ ] 405. Numbers : virgule FR, point EN, apostrophe CH
+- [ ] 406. Date format selon locale
+- [ ] 407. Currency symbol selon locale (€/£/$/¥)
+- [ ] 408. Mode "deux mains" UI gauche / droite
+- [ ] 409. Mode portrait / paysage (rotation auto)
+- [ ] 410. Detection orientation mobile change layout
+- [ ] 411. Pull-to-refresh sur panel (mobile)
+- [ ] 412. Swipe horizontale entre tabs (mobile)
+- [ ] 413. Swipe verticale ferme modal
+- [ ] 414. Geste "long-press" buy max partout
+- [ ] 415. Geste "double-tap" pour zoom ferme
+- [ ] 416. Pinch-to-zoom sur la map
+- [ ] 417. Mini map overview (bouton)
+- [ ] 418. Smart click priorise tuiles a fort rendement
+- [ ] 419. Highlights tuiles riches (couleur sur hover)
+- [ ] 420. Auto-target boss tile
+- [ ] 421. Visual indicator de la prochaine map
+- [ ] 422. Heatmap zones les plus tondues
+- [ ] 423. Stats live "tu fais combien par minute" (sticker)
+- [ ] 424. Historique production (graph 24h)
+- [ ] 425. Comparison day-by-day production
+- [ ] 426. Export CSV des stats
+- [ ] 427. Notifications push web (offline reward ready)
+- [ ] 428. Daily reminder notification (config)
+- [ ] 429. Calendar event integration (optional)
+- [ ] 430. Boss available notification
+- [ ] 431. Achievement unlocked notification
+- [ ] 432. Pet rolled notification
+- [ ] 433. Skin unlocked notification
+- [ ] 434. Volume mute toggle quick (icon TopBar)
+- [ ] 435. Music volume slider TopBar quick
+- [ ] 436. SFX volume slider TopBar quick
+- [ ] 437. Mute on Sleep mode (battery saver)
+- [ ] 438. Reduce motion on low battery
+- [ ] 439. Performance mode auto on low FPS
+- [ ] 440. Quality presets (potato/low/med/high/ultra)
+- [ ] 441. FPS counter optionnel
+- [ ] 442. Memory usage display (advanced)
+- [ ] 443. Error reporting opt-in
+- [ ] 444. Telemetry opt-in / opt-out clear
+- [ ] 445. Privacy policy modal accessible
+- [ ] 446. Terms of service modal
+- [ ] 447. Help center / FAQ in-app
+- [ ] 448. Contact us form
+- [ ] 449. Rate the app prompt (apres 7 jours)
+- [ ] 450. Share progress sur reseaux (X / Discord)
+
+## E. Contenu / Progression (451-600)
+
+- [ ] 451. 30 robots tiers au lieu de 9 actuels
+- [ ] 452. Robot specialiste herbe haute (bonus)
+- [ ] 453. Robot specialiste mauvaises herbes
+- [ ] 454. Robot drone aerien (vole, pas bloque)
+- [ ] 455. Robot taupier (creuse souterrains)
+- [ ] 456. Robot semoir (replante derriere lui)
+- [ ] 457. Robot scientifique (recherche tech)
+- [ ] 458. Robot cuisinier (cuisine recompenses)
+- [ ] 459. Robot DJ (boost ambient music gain)
+- [ ] 460. Robot photographe (rempli album auto)
+- [ ] 461. Robot historien (lit Carnet Marcel)
+- [ ] 462. Robot meteo (donne previsions)
+- [ ] 463. Robot pirate (chercher tresors)
+- [ ] 464. Robot fantome (immune obstacles)
+- [ ] 465. Robot ninja (vitesse 3x)
+- [ ] 466. Robot dragon (tirer feu)
+- [ ] 467. Robot magicien (sort aleatoire)
+- [ ] 468. Robot medecin (regenere autres)
+- [ ] 469. Robot armurier (boost degats)
+- [ ] 470. Robot voyageur (visite parcelles bloquees)
+- [ ] 471. Robot maitre (forme apprentis)
+- [ ] 472. Robot patriote (boost le 14 juillet)
+- [ ] 473. Robot ange (vole et regenere)
+- [ ] 474. Robot demon (boost mais cher)
+- [ ] 475. Robot yeti (theme glace)
+- [ ] 476. Robot cosmonaute (theme cosmique)
+- [ ] 477. Robot dinosaure (theme prehistorique)
+- [ ] 478. Robot ninja (theme japon)
+- [ ] 479. Robot samurai (theme japon)
+- [ ] 480. Robot pharaon (theme egypte)
+- [ ] 481. 50 upgrade tiers (vs ~10 actuels)
+- [ ] 482. Upgrade "Speed" (vitesse robots)
+- [ ] 483. Upgrade "Crit chance" (drop critique)
+- [ ] 484. Upgrade "Crit damage" (multiplicateur crit)
+- [ ] 485. Upgrade "Combo" (cooldown combo)
+- [ ] 486. Upgrade "Tap power" (manualTap +1)
+- [ ] 487. Upgrade "Offline gain" (bonus offline)
+- [ ] 488. Upgrade "Pet slot" (max pets eq)
+- [ ] 489. Upgrade "Plot slot" (parcelles bonus)
+- [ ] 490. Upgrade "Boss damage" (DPS vs boss)
+- [ ] 491. Upgrade "Boss reward" (cash bonus)
+- [ ] 492. Upgrade "Auto-buy speed"
+- [ ] 493. Upgrade "Pet rarity" (chance epic+)
+- [ ] 494. Upgrade "Daily quest reroll free"
+- [ ] 495. Upgrade "Login bonus 2x"
+- [ ] 496. Upgrade "Tax exemption" -10% costs
+- [ ] 497. 100+ achievements vs ~30 actuels
+- [ ] 498. Achievement "Tap 1000x"
+- [ ] 499. Achievement "Compose 10 robots premium"
+- [ ] 500. Achievement "Photo 50 maps polaroid"
+- [ ] 501. Achievement "Boss kill 10/25/50/100"
+- [ ] 502. Achievement "Prestige 1/5/10/25/100"
+- [ ] 503. Achievement "Cash 1B/1T/1Qa/1Qi/AA"
+- [ ] 504. Achievement "Login streak 7/30/100/365"
+- [ ] 505. Achievement "Petal rain x10"
+- [ ] 506. Achievement "Golden butterfly x5"
+- [ ] 507. Achievement "Anniversaire 365 jours"
+- [ ] 508. Achievement "Easter egg L42"
+- [ ] 509. Achievement "Pet legendaire collection complete"
+- [ ] 510. Achievement "Skins collection complete"
+- [ ] 511. Achievement "Konami code"
+- [ ] 512. Achievement "Marcel log 100% read"
+- [ ] 513. 50+ pets vs 10 actuels
+- [ ] 514. Pet "Mouton de Marcel"
+- [ ] 515. Pet "Pompon le chat"
+- [ ] 516. Pet "Cocotte Caramel"
+- [ ] 517. Pet "Lapin Felix"
+- [ ] 518. Pet "Cygne Royal"
+- [ ] 519. Pet "Renard Roux"
+- [ ] 520. Pet "Hibou Grand-Duc"
+- [ ] 521. Pet "Coccinelle Lucky"
+- [ ] 522. Pet "Abeille Maya"
+- [ ] 523. Pet "Papillon Doré (debloque sur 5 captures)
+- [ ] 524. Pet "Loup Solitaire"
+- [ ] 525. Pet "Cerf Royal"
+- [ ] 526. Pet "Bouquet de Mémé" (objet)
+- [ ] 527. Pet "Champignon Magique"
+- [ ] 528. Pet "Carpe Koi"
+- [ ] 529. Pet "Hérisson Pico"
+- [ ] 530. Pet "Sanglier Petit"
+- [ ] 531. Pet "Lama Doux"
+- [ ] 532. Pet "Cheval Marengo"
+- [ ] 533. 100+ skins robot vs 5 actuels
+- [ ] 534. Skin "Robot d'Or" (legendaire)
+- [ ] 535. Skin "Robot Diamant" (top tier)
+- [ ] 536. Skin "Robot Pirate" (chapeau / bandeau)
+- [ ] 537. Skin "Robot Cowboy"
+- [ ] 538. Skin "Robot Chef"
+- [ ] 539. Skin "Robot Fermier en salopette"
+- [ ] 540. Skin "Robot en pyjama"
+- [ ] 541. Skin "Robot avec lunettes"
+- [ ] 542. Skin "Robot avec chapeau de paille"
+- [ ] 543. Skin "Robot a moustache"
+- [ ] 544. Skin "Robot tenue de gala"
+- [ ] 545. Skin "Robot deguise en cocotte"
+- [ ] 546. Skin "Robot bicolore"
+- [ ] 547. Skin "Robot LED disco"
+- [ ] 548. Skin "Robot Halloween squelette"
+- [ ] 549. Skin "Robot Noel renne"
+- [ ] 550. Skin "Robot Saint-Valentin coeur"
+- [ ] 551. 20+ themes maps vs 9 actuels
+- [ ] 552. Theme "Champ de lavande"
+- [ ] 553. Theme "Vignobles bourguignons"
+- [ ] 554. Theme "Plage normande"
+- [ ] 555. Theme "Foret Vosges"
+- [ ] 556. Theme "Marais Poitevin"
+- [ ] 557. Theme "Mont Saint-Michel"
+- [ ] 558. Theme "Camargue rose"
+- [ ] 559. Theme "Provence olive"
+- [ ] 560. Theme "Bretagne falaise"
+- [ ] 561. Theme "Alpes neige"
+- [ ] 562. Theme "Pyrenees vert"
+- [ ] 563. Theme "Volcan Auvergne"
+- [ ] 564. Theme "Foret de chataigniers"
+- [ ] 565. Theme "Champ de tournesols infini"
+- [ ] 566. Theme "Ferme abandonnee"
+- [ ] 567. Theme "Mansion hantee"
+- [ ] 568. Theme "Sous l'eau (lac)"
+- [ ] 569. Theme "Sous-terrain (mine)"
+- [ ] 570. Theme "Lune"
+- [ ] 571. Theme "Mars"
+- [ ] 572. Theme "Black hole prestige final"
+- [ ] 573. Mode "Endless" sans boss
+- [ ] 574. Mode "Speed run" timer
+- [ ] 575. Mode "Pacifist" tap zero
+- [ ] 576. Mode "No prestige" challenge
+- [ ] 577. Mode "Hardcore" perma-death
+- [ ] 578. Mode "Sandbox" cheats unlocked
+- [ ] 579. Mode "Photo mode" UI off
+- [ ] 580. Mode "Random" tout aleatoire
+- [ ] 581. Mode "Daily challenge" map fixe
+- [ ] 582. Mode "Weekly challenge" recompense or
+- [ ] 583. Mode "Boss rush"
+- [ ] 584. Mode "Survival" vagues d'ennemis
+- [ ] 585. Mode "Tycoon" vrai gestion stocks
+- [ ] 586. Quete narrative principale (10 chapitres)
+- [ ] 587. Side-quests Marcel (10)
+- [ ] 588. Side-quests voisin Robert (5)
+- [ ] 589. Side-quests Pere fouettard
+- [ ] 590. Quete "Trouve Marcel" (mystere)
+- [ ] 591. Quete "Sauve la ferme" (boss final)
+- [ ] 592. Quete "Cinq cles cachees"
+- [ ] 593. Quete "Recupere les recettes de Memé"
+- [ ] 594. Quete "Decoration de la ferme"
+- [ ] 595. Quete "Eleveur de cocottes 100"
+- [ ] 596. Quete "Botaniste 50 plantes"
+- [ ] 597. Saisons (4) qui changent visuels et bonus
+- [ ] 598. Calendrier in-game avec evenements
+- [ ] 599. Nouvel an Chinois mini-event
+- [ ] 600. Coupe du monde football mini-event
+
+## F. Audio (601-650)
+
+- [x] 601. CHA-CHING escalant pitch combo
+- [x] 602. Vibration API patterns
+- [x] 603. Boss kill audio boom + clap + trumpet
+- [x] 604. XP tick sonore 10%
+- [x] 605. Mute on visibilitychange
+- [x] 606. Heartbeat upgrade quasi-affordable
+- [x] 607. Rank up carillon 5 notes
+- [x] 608. Rare audio (papillon dore)
+- [ ] 609. Vraie musique mp3 ambient (5 pistes)
+- [ ] 610. Crossfade entre pistes selon biome
+- [ ] 611. Voice over Meme Gisele (samples FR)
+- [ ] 612. Voice over Marcel grognements
+- [ ] 613. Voice over boss intro
+- [ ] 614. Voice over achievement unlock
+- [ ] 615. Bruitage tracteur en arriere
+- [ ] 616. Bruitage caquetage cocottes
+- [ ] 617. Bruitage moutons
+- [ ] 618. Bruitage chien aboiement
+- [ ] 619. Bruitage cloche d'eglise (heures)
+- [ ] 620. Bruitage horloge tic-tac (suspense)
+- [ ] 621. Wind howl sur theme alpe
+- [ ] 622. Vagues sur theme plage
+- [ ] 623. Cigales sur theme provence
+- [ ] 624. Loup hurle sur theme nuit
+- [ ] 625. Hibou hou-hou sur theme nuit
+- [ ] 626. Grillons sur theme nuit
+- [ ] 627. Pluie sur theme orage
+- [ ] 628. Tonnerre sur orage rare
+- [ ] 629. Cloche tracteur passage Marcel
+- [ ] 630. Whistle de la cocotte minute (cuisine)
+- [ ] 631. Sound de poulailler quand cocotte produit
+- [ ] 632. Audio "click" ASMR-like sur shop
+- [ ] 633. Audio "page" tournee dans Carnet Marcel
+- [ ] 634. Audio "ouverture" porte de la maison
+- [ ] 635. Audio "fermeture" porte
+- [ ] 636. Audio "feu" creptement cheminee
+- [ ] 637. Audio "feu" plus fort en hiver
+- [ ] 638. Audio "spring" oiseaux qui chantent
+- [ ] 639. Audio "summer" cigales
+- [ ] 640. Audio "autumn" feuilles qui crissent
+- [ ] 641. Audio "winter" silence + craquement
+- [ ] 642. Audio "victory" fanfare 8s sur boss kill
+- [ ] 643. Audio "defeat" musique triste si boss s'echappe
+- [ ] 644. Spatial audio (2D position) optionnel
+- [ ] 645. Reverb sur cave / chateau
+- [ ] 646. Audio sting sur level up rapide
+- [ ] 647. Audio "ding" notification offline ready
+- [ ] 648. Audio compose : track unique selon humeur
+- [ ] 649. Easter egg audio (1/1000 le coq qui rate)
+- [ ] 650. Audio chant de Memé apres prestige (rare)
+
+## G. Easter Eggs / Dialogues / Lore (651-700)
+
+- [x] 651. Konami code mode disco
+- [x] 652. Dialogues Meme conditionnels (12)
+- [x] 653. Papillon dore rare 0.1% spawn
+- [x] 654. Pluie petales aleatoire
+- [ ] 655. Tournesol cache level 42 (H2G2)
+- [x] 656. Boss dialog avec quotes
+- [x] 657. Save anniversaire 7/14/30/...
+- [ ] 658. 100 dialogues Meme conditionnels (vs 12)
+- [ ] 659. 20 dialogues Marcel apparitions
+- [ ] 660. 50 quotes carnet Marcel revelations lore
+- [ ] 661. Lore pere de Marcel (perdu en guerre)
+- [ ] 662. Lore origine ferme 1898
+- [ ] 663. Lore Pompon vient des chats du Marquis
+- [ ] 664. Lore puits hante (ne pas s'approcher trop)
+- [ ] 665. Lore arbre planté pour bapteme jumeau
+- [ ] 666. Lore lampions Marcel et Memé jeunes
+- [ ] 667. Easter egg : tap 100x sur Memé = secret
+- [ ] 668. Easter egg : tap 50x sur Pompon = roule
+- [ ] 669. Easter egg : tap puits = piece
+- [ ] 670. Easter egg : tap chouette = hibou hou-hou
+- [ ] 671. Easter egg : 31/12 minuit = compte a rebours
+- [ ] 672. Easter egg : 1er avril = tout invertit
+- [ ] 673. Easter egg : 21 juin = soleil eternel
+- [ ] 674. Easter egg : 13eme = chat noir
+- [ ] 675. Easter egg : nom user "Marcel" = bonus
+- [ ] 676. Easter egg : nom user "Gisele" = bonus
+- [ ] 677. Easter egg : tap 666 fois robot = fumee
+- [ ] 678. Easter egg : 4eme prestige = oeuf
+- [ ] 679. Easter egg : tap LICELL = clear bug
+- [ ] 680. Easter egg : URL ?dev = panel debug
+- [ ] 681. Reference film "Le Pere Noel est une ordure"
+- [ ] 682. Reference "Les Bronzes font du ski"
+- [ ] 683. Reference Asterix
+- [ ] 684. Reference Tintin
+- [ ] 685. Reference Stardew Valley
+- [ ] 686. Reference Cookie Clicker
+- [ ] 687. Reference Animal Crossing
+- [ ] 688. Reference Don't Starve
+- [ ] 689. Reference Hollow Knight (insecte)
+- [ ] 690. Reference Zelda (rupee dore)
+- [ ] 691. Citations cachees Voltaire / La Fontaine
+- [ ] 692. Citations Coluche en bas de page random
+- [ ] 693. Citations Devos / Bedos / Reno
+- [ ] 694. Recettes Memé en bas du carnet
+- [ ] 695. Histoire courte Memé / Marcel rencontre
+- [ ] 696. Lettre du fils de Marcel (jamais envoyee)
+- [ ] 697. Carte postale d'un cousin parisien
+- [ ] 698. Coupures de presse fictives (1962)
+- [ ] 699. Photo de famille polaroid 1967
+- [ ] 700. Album photos Memé jeune
+
+## H. Multijoueur / Social (701-750)
+
+- [ ] 701. Leaderboard global (cash gagné)
+- [ ] 702. Leaderboard hebdomadaire (reset lundi)
+- [ ] 703. Leaderboard amis only
+- [ ] 704. Leaderboard saisonnier
+- [ ] 705. Profile public (URL share)
+- [ ] 706. Voir la ferme d'un ami (read-only)
+- [ ] 707. Visite avec emote (saluer)
+- [ ] 708. Liker la ferme d'un ami
+- [ ] 709. Comment / livre d'or sur ferme
+- [ ] 710. Echange de cadeaux (1 par jour)
+- [ ] 711. Boutique communautaire (echange)
+- [ ] 712. Guildes (max 20 membres)
+- [ ] 713. Guilde chat (modere)
+- [ ] 714. Quetes guilde hebdo
+- [ ] 715. Recompenses guilde (banniere, embleme)
+- [ ] 716. Tournoi mondial mensuel
+- [ ] 717. Co-op boss (4 joueurs)
+- [ ] 718. PvP boss leaderboard
+- [ ] 719. Trade pets (1 contre 1)
+- [ ] 720. Trade skins (1 contre 1)
+- [ ] 721. Markeplace (vente skins prestigeux)
+- [ ] 722. Gift skin a un ami
+- [ ] 723. Mentor system (dirige newbie)
+- [ ] 724. Recompense parrain quand filleul prestige
+- [ ] 725. Wave d'envoi pet (visiter friends)
+- [ ] 726. Photo wall public (polaroids partages)
+- [ ] 727. Concours photo polaroid mensuel
+- [ ] 728. Voting plus belle ferme
+- [ ] 729. Followers / following system
+- [ ] 730. News feed activity de friends
+- [ ] 731. Discord integration (presence)
+- [ ] 732. X/Twitter integration (post score)
+- [ ] 733. Reddit integration (sub officiel)
+- [ ] 734. Achievement badges sur profil
+- [ ] 735. Verified badge pour devs
+- [ ] 736. Badge "fondateur" pour early access
+- [ ] 737. Badge "beta tester"
+- [ ] 738. Badge "saison 1" / "saison 2" etc
+- [ ] 739. Title display ("Légendaire" sur profil)
+- [ ] 740. Ferme banner customisable (image)
+- [ ] 741. Theme visiteur garde votre theme
+- [ ] 742. Photobooth a 2 (visiteur + host)
+- [ ] 743. Mini-jeu coop "ramasser pommes"
+- [ ] 744. Mini-jeu PvP "course tracteur"
+- [ ] 745. Chat global (modere)
+- [ ] 746. Chat regional (FR / EN)
+- [ ] 747. Emotes globales (5 base + premium)
+- [ ] 748. Stickers / emotes custom
+- [ ] 749. Spectator mode top players
+- [ ] 750. Tournament bracket UI
+
+## I. Economie / Monetisation (751-800)
+
+- [ ] 751. Shop premium (cosmetique only, pas P2W)
+- [ ] 752. Battle Pass saisonnier (free + premium)
+- [ ] 753. Coffres aleatoires (cosmetique only)
+- [ ] 754. Currency premium "Etoiles" (achat real money)
+- [ ] 755. Echange Etoiles vers skin / pet
+- [ ] 756. Bundle de demarrage (intro pack)
+- [ ] 757. Bundle saisonnier
+- [ ] 758. Bundle anniversaire fonateur
+- [ ] 759. Abonnement mensuel (small bonuses)
+- [ ] 760. Abonnement annuel (gros bonus + skin exclusif)
+- [ ] 761. Pub recompensee (pas obligatoire) +50% offline
+- [ ] 762. Pub video pour double daily reward
+- [ ] 763. Pub interstitiel apres N events (limite 2/h)
+- [ ] 764. Pub natives (banner discret)
+- [ ] 765. Achat dune monnaie : pack 5€ / 10€ / 20€
+- [ ] 766. Promotion 50% off temporaire
+- [ ] 767. Soldes saisonniers
+- [ ] 768. Black friday deals
+- [ ] 769. Gift card pour amis
+- [ ] 770. Refund policy claire
+- [ ] 771. Parental controls (montant max / mois)
+- [ ] 772. Account verification (email)
+- [ ] 773. 2FA optionnel
+- [ ] 774. Auth Google / Apple / Discord
+- [ ] 775. Login sans mot de passe (magic link)
+- [ ] 776. Compte invite vs compte enregistre
+- [ ] 777. Migration save invite vers compte
+- [ ] 778. Gestion d'avatar / pseudo unique
+- [ ] 779. Detection cheating (ban si replay imp)
+- [ ] 780. Anti-bot (captcha sur moments suspects)
+- [ ] 781. Rate limit API (anti-spam)
+- [ ] 782. Audit log des achats
+- [ ] 783. Audit log des dons
+- [ ] 784. Politique anti-toxic chat
+- [ ] 785. Mute / block players
+- [ ] 786. Report abuse button
+- [ ] 787. Panel moderation (admin only)
+- [ ] 788. Stats globales du jeu (admin)
+- [ ] 789. A/B testing infra
+- [ ] 790. Feature flags pour rollout progressif
+- [ ] 791. Hot reload des balance configs
+- [ ] 792. Backend simulation pour balance
+- [ ] 793. Outils dev pour spawn boss / cash
+- [ ] 794. Console cheat code (dev only)
+- [ ] 795. Crash reporter (Sentry-like)
+- [ ] 796. Performance monitoring
+- [ ] 797. Uptime monitor public
+- [ ] 798. Status page operations
+- [ ] 799. Roadmap publique (Trello-like)
+- [ ] 800. Forum / discord communautaire officiel
