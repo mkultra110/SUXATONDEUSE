@@ -20,6 +20,7 @@ import {
   computePlayerLevel,
   rankForLevel,
 } from '../../utils/playerLevel.js';
+import { MiniMapOverview } from './MiniMapOverview.js';
 
 const SECONDS_PER_GAME_DAY = 60;
 
@@ -214,6 +215,23 @@ export function RightStatsPanel() {
         value={`${ownedAchievements} / ${ACHIEVEMENTS.length}`}
         accent="var(--color-accent-gold)"
       />
+
+      {/* Mini-carte parcelles (idee #114) */}
+      <div>
+        <div
+          style={{
+            fontFamily: 'var(--font-button)',
+            fontSize: 9,
+            color: 'var(--color-text-muted)',
+            textTransform: 'uppercase',
+            letterSpacing: '0.1em',
+            marginBottom: 4,
+          }}
+        >
+          Parcelles
+        </div>
+        <MiniMapOverview />
+      </div>
 
       {/* Footer : citation rotative Memé */}
       <div

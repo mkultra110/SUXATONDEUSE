@@ -20,11 +20,11 @@ Statut implementation :
 - [x] 8. Robots qui grandissent par paliers
 - [x] 9. Combo counter sur taps rapides
 - [x] 10. Sunflower bloom critique (1% chance)
-- [ ] 11. Speed lines derriere robots tres rapides
+- [x] 11. Speed lines derriere robots tres rapides
 - [x] 12. Power Score halo SVG ring TopBar
 - [ ] 13. Neon trail couleur du tier sur le robot mowing
 - [x] 14. Sparkles dores quand un robot atteint count milestone
-- [ ] 15. Halo solaire derriere le robot top-tier (rayons)
+- [x] 15. Halo solaire derriere le robot top-tier (rayons)
 - [x] 16. Particules confettis sur achievement unlock
 - [x] 17. Ondes concentriques sur tap (ripple)
 - [x] 18. Petits coeurs roses au-dessus des robots heureux
@@ -37,8 +37,8 @@ Statut implementation :
 - [x] 25. Insectes nocturnes lumineux (lucioles) la nuit
 - [x] 26. Etoiles filantes occasionnelles dans le ciel nocturne
 - [x] 27. Arc-en-ciel apres pluie (1% chance)
-- [ ] 28. Aurore boreale sur theme cristal
-- [ ] 29. Effet de chaleur (heat haze) sur theme volcanique
+- [x] 28. Aurore boreale sur theme cristal
+- [x] 29. Effet de chaleur (heat haze) sur theme volcanique
 - [ ] 30. Flocons cumules au sol sur theme hiver
 - [ ] 31. Animation "bonjour" sur les pets equipes au login
 - [ ] 32. Yeux qui clignent sur les mascottes
@@ -103,9 +103,9 @@ Statut implementation :
 - [ ] 91. Slime particles vert sur theme champignon
 - [ ] 92. Particles ondulantes (heat shimmer) cactus
 - [ ] 93. Geyser cristallin theme arbre ancien
-- [ ] 94. Halo blanc tres pur theme cristal
+- [x] 94. Halo blanc tres pur theme cristal
 - [ ] 95. Etoiles cosmiques theme final
-- [ ] 96. Galaxie en arriere-plan theme legendaire
+- [x] 96. Galaxie en arriere-plan theme legendaire
 - [x] 97. Robot qui clignote dore quand boost actif
 - [ ] 98. Effet wireframe sur upgrade laboratoire
 - [ ] 99. Glow vert pour drop critique (5x)
@@ -123,7 +123,7 @@ Statut implementation :
 - [x] 111. Banner descend du haut sur achievement
 - [ ] 112. Polaroid drop avec rotation aleatoire sur capture
 - [ ] 113. Timeline horizontale en bas avec milestones passes
-- [ ] 114. Mini-carte des parcelles (overview)
+- [x] 114. Mini-carte des parcelles (overview)
 - [x] 115. Compteur d'heure de jeu "100h" badge
 - [ ] 116. Particles cuivrees sur clic ressources
 - [x] 117. Hover effect glow sur shop cards
@@ -690,18 +690,18 @@ Statut implementation :
 - [ ] 660. 50 quotes carnet Marcel revelations lore
 - [x] 661. Lore pere de Marcel (perdu en guerre)
 - [x] 662. Lore origine ferme 1898
-- [ ] 663. Lore Pompon vient des chats du Marquis
-- [ ] 664. Lore puits hante (ne pas s'approcher trop)
-- [ ] 665. Lore arbre planté pour bapteme jumeau
-- [ ] 666. Lore lampions Marcel et Memé jeunes
+- [x] 663. Lore Pompon vient des chats du Marquis
+- [x] 664. Lore puits hante (ne pas s'approcher trop)
+- [x] 665. Lore arbre planté pour bapteme jumeau
+- [x] 666. Lore lampions Marcel et Memé jeunes
 - [ ] 667. Easter egg : tap 100x sur Memé = secret
 - [ ] 668. Easter egg : tap 50x sur Pompon = roule
 - [ ] 669. Easter egg : tap puits = piece
 - [ ] 670. Easter egg : tap chouette = hibou hou-hou
 - [x] 671. Easter egg : 31/12 minuit = compte a rebours
-- [ ] 672. Easter egg : 1er avril = tout invertit
-- [ ] 673. Easter egg : 21 juin = soleil eternel
-- [ ] 674. Easter egg : 13eme = chat noir
+- [x] 672. Easter egg : 1er avril = tout invertit
+- [x] 673. Easter egg : 21 juin = soleil eternel
+- [x] 674. Easter egg : 13eme = chat noir
 - [x] 675. Easter egg : nom user "Marcel" = bonus
 - [x] 676. Easter egg : nom user "Gisele" = bonus
 - [ ] 677. Easter egg : tap 666 fois robot = fumee

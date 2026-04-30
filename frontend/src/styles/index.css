@@ -2432,6 +2432,85 @@ button[role='tab']:focus-visible {
   animation: heart-meme-rise 2s ease-out forwards;
 }
 
+/* === 1er avril : monde a l'envers (idee #672) === */
+.april-fools {
+  transform: rotate(180deg);
+  transition: transform 800ms ease-out;
+}
+
+/* === 21 juin solstice : halo solaire permanent (idee #673) === */
+.summer-solstice header {
+  box-shadow: inset 0 -3px 0 var(--color-wood-4), 0 0 32px rgba(255, 217, 33, 0.6);
+}
+
+/* === Vendredi 13 : tout sombre (idee #674) === */
+.friday-13 {
+  filter: contrast(1.15) brightness(0.92) saturate(1.1);
+}
+
+/* === Speed lines pour high cps (idee #11) === */
+.speed-lines-overlay::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(90deg, transparent 0, transparent 32px, rgba(255,255,255,0.18) 32px, rgba(255,255,255,0.18) 33px);
+  animation: speed-lines-slide 0.4s linear infinite;
+  pointer-events: none;
+  z-index: 4;
+}
+
+/* === Halo solaire top robot (idee #15) === */
+@keyframes solar-halo-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+.solar-halo {
+  position: absolute;
+  inset: -8px;
+  pointer-events: none;
+  background: conic-gradient(from 0deg, transparent 0deg, rgba(255, 217, 33, 0.4) 30deg, transparent 60deg, transparent 360deg);
+  border-radius: 50%;
+  animation: solar-halo-spin 3s linear infinite;
+}
+
+/* === Mini-carte parcelles (idee #114) === */
+.mini-map-overview {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 3px;
+  padding: 6px;
+  background: var(--color-paper-2);
+  border: 2px solid var(--color-wood-5);
+}
+.mini-map-tile {
+  aspect-ratio: 1;
+  border-radius: 2px;
+  border: 1px solid var(--color-wood-5);
+  font-size: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* === Theme specific overlays === */
+.theme-cristal-halo::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 50%, rgba(255,255,255,0.18), transparent 60%);
+  pointer-events: none;
+  z-index: 6;
+}
+.theme-volcanique-shimmer::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 80%, rgba(230, 126, 34, 0.18), transparent 50%);
+  pointer-events: none;
+  z-index: 6;
+  animation: pulse 2s ease-in-out infinite;
+}
+
 /* === Halo lunaire (idee #149) === */
 .moon-halo {
   position: fixed;

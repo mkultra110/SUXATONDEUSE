@@ -94,6 +94,76 @@ export const MEME_DIALOGUES: ReadonlyArray<MemeDialogue> = [
     oneShot: true,
     when: (c) => c.playTimeSeconds >= 3600 && !c.shownIds.has('play-1h'),
   },
+  // === Lore additionnel (idees #663-666) ===
+  {
+    id: 'lore-pompon',
+    text: 'Pompon vient des chats du Marquis de Tournelys. Lignee royale, mon petit.',
+    oneShot: true,
+    when: (c) => c.totalRobots >= 50 && !c.shownIds.has('lore-pompon'),
+  },
+  {
+    id: 'lore-puits',
+    text: 'Le puits derriere la grange... ne t\'en approche pas la nuit. Marcel jurait y avoir vu des choses.',
+    oneShot: true,
+    when: (c) => c.totalPrestiges >= 2 && !c.shownIds.has('lore-puits'),
+  },
+  {
+    id: 'lore-arbre',
+    text: 'L\'arbre central a ete plante pour le bapteme des jumeaux Augustin et Augustine, en 1959.',
+    oneShot: true,
+    when: (c) => c.totalRobots >= 25 && !c.shownIds.has('lore-arbre'),
+  },
+  {
+    id: 'lore-lampions',
+    text: 'Les lampions ? Marcel et moi, on les a accroches le soir de notre premier bal de village.',
+    oneShot: true,
+    when: (c) => c.totalCash >= 10_000_000 && !c.shownIds.has('lore-lampions'),
+  },
+  {
+    id: 'lore-pere-marcel',
+    text: 'Le pere de Marcel n\'est jamais revenu de la guerre. Sa photo veille toujours sur le manteau de cheminee.',
+    oneShot: true,
+    when: (c) => c.totalPrestiges >= 5 && !c.shownIds.has('lore-pere-marcel'),
+  },
+  {
+    id: 'play-3h',
+    text: 'Trois heures non-stop ? Ouf, prends une pause. Le pain attend.',
+    oneShot: true,
+    when: (c) => c.playTimeSeconds >= 10_800 && !c.shownIds.has('play-3h'),
+  },
+  {
+    id: 'play-10h',
+    text: 'Dix heures cumulees ! Tu vas etre meilleur fermier que mon arriere-grand-pere.',
+    oneShot: true,
+    when: (c) => c.playTimeSeconds >= 36_000 && !c.shownIds.has('play-10h'),
+  },
+  {
+    id: 'thousand-robots',
+    text: 'Mille robots ?! Marcel rigole : "ca va couter une fortune en huile de tournesol".',
+    oneShot: true,
+    when: (c) => c.totalRobots >= 1000 && !c.shownIds.has('thousand-robots'),
+  },
+  {
+    id: 'billion-cash',
+    text: 'Un milliard de pieces ! Le banquier va vouloir t\'inviter a diner.',
+    oneShot: true,
+    when: (c) => c.totalCash >= 1e9 && !c.shownIds.has('billion-cash'),
+  },
+  {
+    id: 'midday',
+    text: 'Midi sonne, viens manger. La soupe va refroidir.',
+    when: (c) => c.hourLocal === 12,
+  },
+  {
+    id: 'evening',
+    text: 'Le ciel rosit. C\'est l\'heure des bisous a Pompon.',
+    when: (c) => c.hourLocal >= 18 && c.hourLocal < 20,
+  },
+  {
+    id: 'monday',
+    text: 'Lundi matin, le coq Bebert m\'a reveillee. Bonne semaine !',
+    when: (c) => new Date().getDay() === 1 && c.hourLocal >= 6 && c.hourLocal < 10,
+  },
 ];
 
 export function pickDialogue(ctx: DialogueContext): MemeDialogue | null {
