@@ -53,7 +53,7 @@ Statut implementation :
 - [ ] 41. Bourrasque de vent qui plie les fleurs
 - [x] 42. Tonnerre + flash blanc sur orage rare
 - [ ] 43. Goutte d'eau qui glisse de l'arrosoir
-- [ ] 44. Trail "mowed" qui pulse vert apres recolte (~1s)
+- [x] 44. Trail "mowed" qui pulse vert apres recolte (~1s)
 - [ ] 45. Pixel art animation : Pompon qui chasse une mouche
 - [x] 46. Souris qui traverse l'ecran rapidement (rare)
 - [x] 47. Helicoptere de Marcel qui passe en arriere-plan
@@ -65,7 +65,7 @@ Statut implementation :
 - [x] 53. Drapeau francais sur le mat le 14 juillet
 - [ ] 54. Coeur qui flotte au-dessus de Meme apres dialogue
 - [ ] 55. Robot avec chapeau de ferme aleatoire (5% spawn)
-- [ ] 56. Emojis flottants sur achievement (style Stardew)
+- [x] 56. Emojis flottants sur achievement (style Stardew)
 - [ ] 57. Trainee de poussiere derriere robot rapide
 - [ ] 58. Eclair statique sur clic robot
 - [x] 59. Anneau d'XP qui se remplit autour du LevelBadge
@@ -154,10 +154,10 @@ Statut implementation :
 - [x] 142. Big bang particles sur 1er prestige
 - [x] 143. Echelle vers le ciel sur prestige final
 - [x] 144. Vague de chaleur dore sur level up
-- [ ] 145. Goutelettes d'eau sur l'ecran apres pluie
-- [ ] 146. Ecran qui s'embue puis se nettoie (lent)
-- [ ] 147. Lensflare sur soleil
-- [ ] 148. God rays a travers les nuages
+- [x] 145. Goutelettes d'eau sur l'ecran apres pluie
+- [x] 146. Ecran qui s'embue puis se nettoie (lent)
+- [x] 147. Lensflare sur soleil
+- [x] 148. God rays a travers les nuages
 - [x] 149. Halo lunaire la nuit
 - [ ] 150. Aurora dance lente theme legendaire
 
