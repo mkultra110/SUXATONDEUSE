@@ -4,7 +4,7 @@
 import { useEffect, useState } from 'react';
 import { useEffectsStore } from '../../stores/effectsStore.js';
 
-type CameoKind = 'mouse' | 'helico' | 'ufo' | 'drone' | 'rabbit' | 'fox' | 'hedgehog';
+type CameoKind = 'mouse' | 'helico' | 'ufo' | 'drone' | 'rabbit' | 'fox' | 'hedgehog' | 'ladybug' | 'frog' | 'cat' | 'owl' | 'pheasant' | 'butterfly' | 'snail' | 'bee';
 
 interface Cameo {
   id: number;
@@ -15,11 +15,19 @@ interface Cameo {
 const CAMEO_PROBA: Record<CameoKind, number> = {
   mouse: 0.04,
   helico: 0.02,
-  ufo: 0.005, // tres rare easter egg #139
+  ufo: 0.005,
   drone: 0.01,
   rabbit: 0.03,
   fox: 0.015,
   hedgehog: 0.015,
+  ladybug: 0.04,
+  frog: 0.025,
+  cat: 0.02,
+  owl: 0.02,
+  pheasant: 0.015,
+  butterfly: 0.05,
+  snail: 0.03,
+  bee: 0.04,
 };
 
 const CAMEO_EMOJI: Record<CameoKind, string> = {
@@ -30,6 +38,14 @@ const CAMEO_EMOJI: Record<CameoKind, string> = {
   rabbit: '🐰',
   fox: '🦊',
   hedgehog: '🦔',
+  ladybug: '🐞',
+  frog: '🐸',
+  cat: '🐈‍⬛',
+  owl: '🦉',
+  pheasant: '🦃',
+  butterfly: '🦋',
+  snail: '🐌',
+  bee: '🐝',
 };
 
 export function RandomCameos() {

@@ -72,18 +72,18 @@ Statut implementation :
 - [x] 60. Gradient sky qui change selon l'heure locale
 - [x] 61. Lever / coucher de soleil 90s smooth
 - [ ] 62. Couleur des oiseaux qui volent change selon l'heure
-- [ ] 63. Volee d'oiseaux declenchee au boss kill
+- [x] 63. Volee d'oiseaux declenchee au boss kill
 - [ ] 64. Bruleur de feuilles fumant en automne
 - [ ] 65. Champignons qui poussent apres pluie
 - [ ] 66. Marguerites qui s'ouvrent / se ferment selon heure
 - [x] 67. Trefles a 4 feuilles caches (chance bonus si trouves)
-- [ ] 68. Coccinelle qui se pose et envole
-- [ ] 69. Crapaud qui saute (rare)
+- [x] 68. Coccinelle qui se pose et envole
+- [x] 69. Crapaud qui saute (rare)
 - [x] 70. Herisson qui passe la nuit
 - [x] 71. Renard qui rode autour des cocottes
-- [ ] 72. Petit chat noir qui passe (Halloween)
-- [ ] 73. Chouette sur la cheminee la nuit
-- [ ] 74. Faisan qui vole bas au-dessus du champ
+- [x] 72. Petit chat noir qui passe (Halloween)
+- [x] 73. Chouette sur la cheminee la nuit
+- [x] 74. Faisan qui vole bas au-dessus du champ
 - [x] 75. Lapin qui traverse en zig-zag
 - [x] 76. Effet "cinemascope" (bandes noires) sur cutscene
 - [ ] 77. Vignettage sur boss intro
