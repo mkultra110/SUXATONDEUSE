@@ -2390,6 +2390,48 @@ button[role='tab']:focus-visible {
   100% { opacity: 0; transform: translateY(-10px); }
 }
 
+/* === Lampions sway (idee #52) === */
+@keyframes lantern-sway {
+  0%, 100% { transform: rotate(-4deg); }
+  50% { transform: rotate(4deg); }
+}
+.holiday-decor-sway {
+  animation: lantern-sway 2.4s ease-in-out infinite;
+  transform-origin: top center;
+}
+
+/* === Bonhomme de neige hiver (idee #83 #90) === */
+@keyframes snowman-bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-2px); }
+}
+.snowman-decor {
+  position: fixed;
+  bottom: 80px;
+  left: 16px;
+  font-size: 36px;
+  z-index: 50;
+  filter: drop-shadow(2px 2px 0 rgba(0,0,0,0.3));
+  animation: snowman-bob 3s ease-in-out infinite;
+  pointer-events: none;
+}
+
+/* === Coeur Meme apres dialogue (idee #54) === */
+@keyframes heart-meme-rise {
+  0% { opacity: 0; transform: translate(-50%, 0); }
+  20% { opacity: 1; transform: translate(-50%, -10px); }
+  100% { opacity: 0; transform: translate(-50%, -40px); }
+}
+.heart-meme {
+  position: fixed;
+  bottom: 220px;
+  left: 60px;
+  font-size: 22px;
+  z-index: 901;
+  pointer-events: none;
+  animation: heart-meme-rise 2s ease-out forwards;
+}
+
 /* === Halo lunaire (idee #149) === */
 .moon-halo {
   position: fixed;

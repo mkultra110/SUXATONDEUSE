@@ -49,6 +49,7 @@ import { PerformanceWatcher } from '../components/hud/PerformanceWatcher.js';
 import { AscensionCosmique } from '../components/hud/AscensionCosmique.js';
 import { AchievementGrid } from '../components/hud/AchievementGrid.js';
 import { BossKillFlight } from '../components/hud/BossKillFlight.js';
+import { NewYearCountdown } from '../components/hud/NewYearCountdown.js';
 import { useGameSession } from '../hooks/useGameSession.js';
 import { useAudio } from '../hooks/useAudio.js';
 import { useResponsive } from '../hooks/useResponsive.js';
@@ -340,6 +341,7 @@ export function GamePage() {
       <AscensionCosmique />
       <AchievementGrid />
       <BossKillFlight />
+      <NewYearCountdown />
       <ActivityFAB onClick={() => setMarcelLogOpen(true)} notificationCount={0} />
       {marcelLogOpen && <MarcelLog onClose={() => setMarcelLogOpen(false)} />}
     </div>

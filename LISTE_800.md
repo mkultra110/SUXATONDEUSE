@@ -61,7 +61,7 @@ Statut implementation :
 - [ ] 49. Lumiere qui s'allume / s'eteint dans la maison
 - [x] 50. Cheminee qui crache des etincelles sur Noel
 - [x] 51. Toile d'araignee animee sur Halloween
-- [ ] 52. Lampions qui se balancent dans le vent
+- [x] 52. Lampions qui se balancent dans le vent
 - [x] 53. Drapeau francais sur le mat le 14 juillet
 - [ ] 54. Coeur qui flotte au-dessus de Meme apres dialogue
 - [ ] 55. Robot avec chapeau de ferme aleatoire (5% spawn)
@@ -92,14 +92,14 @@ Statut implementation :
 - [ ] 80. Depth of field sur upgrade card hover
 - [ ] 81. Snow accumulation graduelle sur le toit
 - [ ] 82. Glace sur la fontaine quand froid
-- [ ] 83. Bonhomme de neige decoratif l'hiver
+- [x] 83. Bonhomme de neige decoratif l'hiver
 - [x] 84. Bouquet de fleurs qui apparait au printemps
 - [x] 85. Citrouille de Halloween qui s'allume
 - [x] 86. Sapin de Noel decore (Decembre)
 - [x] 87. Bouquet de muguet le 1er mai
 - [x] 88. Confetti rain au passage d'annee (1er janvier)
 - [x] 89. Pluie de petales rose sur 1er avril
-- [ ] 90. Petit bonhomme de neige derriere une parcelle
+- [x] 90. Petit bonhomme de neige derriere une parcelle
 - [ ] 91. Slime particles vert sur theme champignon
 - [ ] 92. Particles ondulantes (heat shimmer) cactus
 - [ ] 93. Geyser cristallin theme arbre ancien
@@ -673,7 +673,7 @@ Statut implementation :
 - [ ] 646. Audio sting sur level up rapide
 - [ ] 647. Audio "ding" notification offline ready
 - [ ] 648. Audio compose : track unique selon humeur
-- [ ] 649. Easter egg audio (1/1000 le coq qui rate)
+- [x] 649. Easter egg audio (1/1000 le coq qui rate)
 - [ ] 650. Audio chant de Memé apres prestige (rare)
 
 ## G. Easter Eggs / Dialogues / Lore (651-700)
@@ -698,7 +698,7 @@ Statut implementation :
 - [ ] 668. Easter egg : tap 50x sur Pompon = roule
 - [ ] 669. Easter egg : tap puits = piece
 - [ ] 670. Easter egg : tap chouette = hibou hou-hou
-- [ ] 671. Easter egg : 31/12 minuit = compte a rebours
+- [x] 671. Easter egg : 31/12 minuit = compte a rebours
 - [ ] 672. Easter egg : 1er avril = tout invertit
 - [ ] 673. Easter egg : 21 juin = soleil eternel
 - [ ] 674. Easter egg : 13eme = chat noir

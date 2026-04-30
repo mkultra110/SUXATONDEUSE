@@ -8,8 +8,14 @@ export function HolidayDecor() {
   const d = now.getDate();
   const items: { emoji: string; label: string; key: string }[] = [];
 
-  // Decembre : sapin de Noel.
-  if (m === 11) items.push({ emoji: '🎄', label: 'Joyeux Noel', key: 'tree' });
+  // Decembre : sapin de Noel + bonhomme de neige + lampion.
+  if (m === 11) {
+    items.push({ emoji: '🎄', label: 'Joyeux Noel', key: 'tree' });
+    items.push({ emoji: '☃️', label: 'Bonhomme de neige', key: 'snowman' });
+    items.push({ emoji: '🏮', label: 'Lampion suspendu', key: 'lantern' });
+  }
+  // Janvier-fevrier : neige residuelle.
+  if (m === 0 || m === 1) items.push({ emoji: '❄️', label: 'Givre', key: 'snowflake' });
   // Octobre derniere semaine : citrouille + toile araignee.
   if (m === 9 && d >= 25) {
     items.push({ emoji: '🎃', label: 'Halloween', key: 'pumpkin' });

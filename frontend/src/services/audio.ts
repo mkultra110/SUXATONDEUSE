@@ -371,6 +371,27 @@ class AudioService {
     });
   }
 
+  /** Coq qui rate son chant (easter egg, 1/1000). Pitch chaotique. */
+  playRoosterFail() {
+    const ctx = this.ensureCtx();
+    if (!ctx || !this.sfxGain) return;
+    const now = ctx.currentTime;
+    [400, 700, 350, 280].forEach((f, i) => {
+      const o = ctx.createOscillator();
+      const g = ctx.createGain();
+      o.type = 'sawtooth';
+      o.frequency.setValueAtTime(f, now + i * 0.18);
+      o.frequency.exponentialRampToValueAtTime(f * 0.5, now + i * 0.18 + 0.16);
+      g.gain.setValueAtTime(0, now + i * 0.18);
+      g.gain.linearRampToValueAtTime(0.15, now + i * 0.18 + 0.005);
+      g.gain.exponentialRampToValueAtTime(0.001, now + i * 0.18 + 0.18);
+      o.connect(g);
+      g.connect(this.sfxGain!);
+      o.start(now + i * 0.18);
+      o.stop(now + i * 0.18 + 0.2);
+    });
+  }
+
   /** Rare : papillon dore, bell aigu plus etoile. */
   playRare() {
     const ctx = this.ensureCtx();

@@ -261,6 +261,14 @@ export function GameEffectsLayer() {
     return () => clearInterval(interval);
   }, [totalPrestiges]);
 
+  // === Coq easter egg (idee #649) - 0.1% chance toutes les 5 minutes ===
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (Math.random() < 0.001) audio.playRoosterFail();
+    }, 300_000);
+    return () => clearInterval(interval);
+  }, []);
+
   // === Heartbeat sub-bass quand un upgrade est quasi-affordable (95%+) ===
   useEffect(() => {
     const interval = setInterval(() => {
