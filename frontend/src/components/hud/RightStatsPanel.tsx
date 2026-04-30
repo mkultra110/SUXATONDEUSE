@@ -21,6 +21,7 @@ import {
   rankForLevel,
 } from '../../utils/playerLevel.js';
 import { MiniMapOverview } from './MiniMapOverview.js';
+import { MilestoneTimeline } from './MilestoneTimeline.js';
 
 const SECONDS_PER_GAME_DAY = 60;
 
@@ -215,6 +216,9 @@ export function RightStatsPanel() {
         value={`${ownedAchievements} / ${ACHIEVEMENTS.length}`}
         accent="var(--color-accent-gold)"
       />
+
+      {/* Timeline milestones (idee #113) */}
+      <MilestoneTimeline />
 
       {/* Mini-carte parcelles (idee #114) */}
       <div>

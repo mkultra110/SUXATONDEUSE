@@ -122,7 +122,7 @@ Statut implementation :
 - [x] 110. Ascension cosmique sur prestige final
 - [x] 111. Banner descend du haut sur achievement
 - [ ] 112. Polaroid drop avec rotation aleatoire sur capture
-- [ ] 113. Timeline horizontale en bas avec milestones passes
+- [x] 113. Timeline horizontale en bas avec milestones passes
 - [x] 114. Mini-carte des parcelles (overview)
 - [x] 115. Compteur d'heure de jeu "100h" badge
 - [ ] 116. Particles cuivrees sur clic ressources
@@ -671,7 +671,7 @@ Statut implementation :
 - [ ] 644. Spatial audio (2D position) optionnel
 - [ ] 645. Reverb sur cave / chateau
 - [ ] 646. Audio sting sur level up rapide
-- [ ] 647. Audio "ding" notification offline ready
+- [x] 647. Audio "ding" notification offline ready
 - [ ] 648. Audio compose : track unique selon humeur
 - [x] 649. Easter egg audio (1/1000 le coq qui rate)
 - [ ] 650. Audio chant de Memé apres prestige (rare)

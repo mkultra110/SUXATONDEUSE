@@ -371,6 +371,26 @@ class AudioService {
     });
   }
 
+  /** Notification "ding" offline ready (idee #647) - 2 notes douces. */
+  playDing() {
+    const ctx = this.ensureCtx();
+    if (!ctx || !this.sfxGain) return;
+    const now = ctx.currentTime;
+    [880, 1175].forEach((f, i) => {
+      const o = ctx.createOscillator();
+      const g = ctx.createGain();
+      o.type = 'sine';
+      o.frequency.value = f;
+      g.gain.setValueAtTime(0, now + i * 0.12);
+      g.gain.linearRampToValueAtTime(0.18, now + i * 0.12 + 0.01);
+      g.gain.exponentialRampToValueAtTime(0.001, now + i * 0.12 + 0.4);
+      o.connect(g);
+      g.connect(this.sfxGain!);
+      o.start(now + i * 0.12);
+      o.stop(now + i * 0.12 + 0.45);
+    });
+  }
+
   /** Coq qui rate son chant (easter egg, 1/1000). Pitch chaotique. */
   playRoosterFail() {
     const ctx = this.ensureCtx();
