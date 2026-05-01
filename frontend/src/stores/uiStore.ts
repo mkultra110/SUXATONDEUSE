@@ -31,6 +31,7 @@ interface UIState {
   lastAnniversaryDay: number;
   farmName: string;
   playerEmoji: string;
+  gameMode: 'normal' | 'endless' | 'speedrun' | 'pacifist' | 'hardcore' | 'sandbox';
   setActiveTab: (tab: AppTabKey) => void;
   setProgresTab: (tab: ProgresSubTab) => void;
   setShopTab: (tab: ShopSubTab) => void;
@@ -47,6 +48,7 @@ interface UIState {
   setLastAnniversaryDay: (d: number) => void;
   setFarmName: (s: string) => void;
   setPlayerEmoji: (s: string) => void;
+  setGameMode: (m: 'normal' | 'endless' | 'speedrun' | 'pacifist' | 'hardcore' | 'sandbox') => void;
 }
 
 export const useUIStore = create<UIState>()(
@@ -68,6 +70,7 @@ export const useUIStore = create<UIState>()(
       lastAnniversaryDay: 0,
       farmName: 'La Ferme des Tournesols',
       playerEmoji: '👨‍🌾',
+      gameMode: 'normal',
       setActiveTab: (tab) => set({ activeTab: tab }),
       setProgresTab: (tab) => set({ progresTab: tab }),
       setShopTab: (tab) => set({ shopTab: tab }),
@@ -84,6 +87,7 @@ export const useUIStore = create<UIState>()(
       setLastAnniversaryDay: (d) => set({ lastAnniversaryDay: d }),
       setFarmName: (s) => set({ farmName: s.slice(0, 50) }),
       setPlayerEmoji: (s) => set({ playerEmoji: s.slice(0, 4) }),
+      setGameMode: (m) => set({ gameMode: m }),
     }),
     {
       name: 'suxa-ui',
@@ -97,6 +101,7 @@ export const useUIStore = create<UIState>()(
         lastAnniversaryDay: state.lastAnniversaryDay,
         farmName: state.farmName,
         playerEmoji: state.playerEmoji,
+        gameMode: state.gameMode,
       }),
     },
   ),

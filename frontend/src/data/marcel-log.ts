@@ -117,4 +117,55 @@ export const MARCEL_LOG: ReadonlyArray<MarcelEntry> = [
     title: 'Le tournesol caché',
     body: "Si tu vois un tournesol qui cligne dorement entre les rangs, c'est la réponse. Mémé jurait que ce tournesol-là, c'est l'âme de la ferme. La réponse à tout. Elle riait sans expliquer.",
   },
+  // === Lore additionnel ===
+  {
+    date: 'Souvenir · 1980',
+    title: 'Les premiers tracteurs',
+    body: "Le voisin Léopold a achete le premier tracteur du canton. On a tous fait la queue pour le voir. Mémé a dit : 'mon petit, ça remplacera jamais une bonne paire de bras'. Cinq ans plus tard, elle en a achete un.",
+  },
+  {
+    date: 'Recette · 1968',
+    title: 'Soupe de potiron de Mémé',
+    body: "Un potiron entier. Pomme de terre. Lardons. Bouillon de poule maison. Crème entière. 40 min. Servi dans un creuset en fonte. Mémé : 'le secret c'est le creuset, ça donne le goût de l'enfance'.",
+  },
+  {
+    date: 'Carte postale · 1985',
+    title: 'Du Père Noël (de Marcel)',
+    body: "Pompon nain a reçu une carte signée 'Père Noël'. C'était l'écriture de Marcel. Mémé a fait semblant de ne rien remarquer. Pompon a dormi dessus toute la nuit.",
+  },
+  {
+    date: 'Souvenir · 1988',
+    title: 'L\'incendie de la grange',
+    body: "Mai 1988. Foudre. La grange a flambé. Marcel et moi on a sauvé les bêtes une par une. La grange a été reconstruite par le village. C'est de là qu'est née la légende d'entraide du canton.",
+  },
+  {
+    date: 'Recette · 1993',
+    title: 'Crêpes de la Chandeleur',
+    body: "250g de farine. 4 œufs. 50cl de lait. Bière (pour la légèreté). Sucre vanillé. Pâte au repos 2h. Cuites au saindoux. Sur la 1ère : sucre. Sur la 2ème : confiture de tournesols.",
+  },
+  {
+    date: 'Souvenir · 1999',
+    title: 'L\'an 2000 et le bug',
+    body: "Tout le monde paniquait pour le bug de l'an 2000. Marcel a eu peur que son tracteur ne redémarre pas. À minuit, on était devant. Il a démarré. On a dansé.",
+  },
+  {
+    date: 'Lettre · 2003',
+    title: 'À l\'Inspecteur des Impôts',
+    body: "Monsieur l'Inspecteur, je vous écris pour contester l'amende relative à mon poulailler. Ce n'est pas un commerce. C'est juste qu'il y a beaucoup de poules. — Mémé Gisèle.",
+  },
+  {
+    date: 'Souvenir · 2010',
+    title: 'Le jardin de la ferme',
+    body: "On a tracé les premiers carrés du potager. Tomates Cœur-de-Bœuf, courgettes ronde de Nice, basilic Marseillais. Marcel a peint des étiquettes en bois. Les bêtes ont rongé une étiquette sur trois.",
+  },
+  {
+    date: 'Souvenir · 2018',
+    title: 'L\'arrivée du wifi',
+    body: "Le maire a installé la fibre au village. Mémé jurait qu'elle s'en passerait. Trois mois plus tard elle savait jouer aux mots fléchés en ligne. Elle a battu le voisin Robert 12 fois de suite.",
+  },
+  {
+    date: 'Recette · 2022',
+    title: 'Cake aux noix de Mémé',
+    body: "200g de farine. 150g de noix concassées. 3 œufs. 100g de beurre. 100g de sucre roux. 1cc de cannelle. Cuit en moule à cake. Pour goûter avec du thé. Mémé : 'c'est pas de la grande cuisine, c'est de la cuisine de mémé'.",
+  },
 ];

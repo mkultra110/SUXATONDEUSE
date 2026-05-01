@@ -214,6 +214,66 @@ export const MEME_DIALOGUES: ReadonlyArray<MemeDialogue> = [
     text: 'Va dormir mon petit. Demain on remet ca.',
     when: (c) => c.hourLocal >= 1 && c.hourLocal < 4,
   },
+  // === Plus de dialogues conditionnels (idees diverses) ===
+  {
+    id: 'goose-egg',
+    text: 'Marcel a vu une oie ce matin. Ca presage quelque chose, parait-il.',
+    oneShot: true,
+    when: (c) => c.totalRobots >= 200 && !c.shownIds.has('goose-egg'),
+  },
+  {
+    id: 'rainy-day',
+    text: 'Il pleut. Pompon n\'aime pas. Il s\'est cache derriere le poele.',
+    oneShot: true,
+    when: (c) => c.totalCash >= 5e6 && !c.shownIds.has('rainy-day'),
+  },
+  {
+    id: 'pigeon-fail',
+    text: 'Un pigeon est tombe dans la cheminee. Marcel l\'a sauve. Il s\'appelle maintenant Roger.',
+    oneShot: true,
+    when: (c) => c.totalRobots >= 75 && !c.shownIds.has('pigeon-fail'),
+  },
+  {
+    id: 'tractor-noise',
+    text: 'Le tracteur de Marcel a tousse trois fois ce matin. Mauvais signe pour la bobine.',
+    oneShot: true,
+    when: (c) => c.totalPrestiges >= 7 && !c.shownIds.has('tractor-noise'),
+  },
+  {
+    id: 'happy-pompon',
+    text: 'Pompon ronronne. C\'est rare. Profite.',
+    oneShot: true,
+    when: (c) => c.totalRobots >= 12 && !c.shownIds.has('happy-pompon'),
+  },
+  {
+    id: 'apple-pie',
+    text: 'J\'ai sorti une tarte aux pommes du four. L\'odeur passe a travers les robots.',
+    oneShot: true,
+    when: (c) => c.totalCash >= 25_000 && !c.shownIds.has('apple-pie'),
+  },
+  {
+    id: 'town-festival',
+    text: 'Il y a fete au village ce week-end. Marcel met sa veste neuve.',
+    oneShot: true,
+    when: (c) => new Date().getDay() >= 5 && c.totalRobots >= 40 && !c.shownIds.has('town-festival'),
+  },
+  {
+    id: 'dawn-mowing',
+    text: 'Tu tonds a l\'aube ? Le silence du matin est sacre, mon petit.',
+    when: (c) => c.hourLocal >= 5 && c.hourLocal < 7,
+  },
+  {
+    id: 'dejavu',
+    text: 'Tiens, j\'ai l\'impression de t\'avoir deja dit ca... Pompon dirait "deja-vu".',
+    oneShot: true,
+    when: (c) => c.totalPrestiges >= 10 && !c.shownIds.has('dejavu'),
+  },
+  {
+    id: 'forty-two',
+    text: 'Quarante-deux. C\'est la reponse a tout, parait-il. Mais quelle est la question ?',
+    oneShot: true,
+    when: (c) => c.playTimeSeconds >= 42 * 60 && !c.shownIds.has('forty-two'),
+  },
 ];
 
 export function pickDialogue(ctx: DialogueContext): MemeDialogue | null {
