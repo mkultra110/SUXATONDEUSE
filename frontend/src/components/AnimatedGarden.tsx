@@ -801,7 +801,9 @@ export function AnimatedGarden() {
       ref={wrapperRef}
       onClick={handleClick}
       onMouseMove={handleMouseMove}
-      className={`farm-scene tile-saturate-${tier} ${shake ? 'animate-shake' : ''}`}
+      className={`farm-scene tile-saturate-${tier} ${shake ? 'animate-shake' : ''} ${
+        Object.values(holdings).every((h) => h.owned === 0) ? 'tutorial-glow' : ''
+      }`}
       style={
         {
           width: '100%',
@@ -1586,6 +1588,15 @@ function Butterfly({ x, y, delay, variant }: { x: number; y: number; delay: numb
   );
 }
 
+// Mapping tier robot -> classe aura. tier 0 = Marcel, tier 8 = Genie.
+function auraClassForTier(tier: number): string {
+  if (tier >= 8) return 'robot-aura-diamond';
+  if (tier >= 6) return 'robot-aura-gold';
+  if (tier >= 4) return 'robot-aura-silver';
+  if (tier >= 2) return 'robot-aura-bronze';
+  return '';
+}
+
 function DynamicRobot({ robot, onTap }: { robot: RobotEntity; onTap?: (r: RobotEntity) => void }) {
   const tier = robot.tier;
   const rowY = robot.state === 'mowing' ? tier * 48 + 24 : (robot.dir === 'up' || robot.dir === 'down' ? tier * 48 : tier * 48 + 24);
@@ -1643,12 +1654,13 @@ function DynamicRobot({ robot, onTap }: { robot: RobotEntity; onTap?: (r: RobotE
         />
       )}
 
-      {/* Robot lui-meme. */}
+      {/* Robot lui-meme. Aura par tier visible. */}
       <div
         onClick={(e) => {
           e.stopPropagation();
           onTap?.(robot);
         }}
+        className={auraClassForTier(robot.tier)}
         style={{
           position: 'absolute',
           left,
@@ -1662,7 +1674,6 @@ function DynamicRobot({ robot, onTap }: { robot: RobotEntity; onTap?: (r: RobotE
           imageRendering: 'pixelated',
           zIndex: 10,
           transition: 'left 80ms linear, top 80ms linear',
-          filter: robot.state === 'mowing' ? 'drop-shadow(0 0 6px rgba(168,230,108,0.8))' : undefined,
           cursor: 'pointer',
           pointerEvents: 'auto',
         }}

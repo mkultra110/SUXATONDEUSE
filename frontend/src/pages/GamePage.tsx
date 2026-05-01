@@ -3,6 +3,7 @@
 // (où Progrès groupe Prestige+Succès+Stats via SegmentedControl interne).
 
 import { useTranslation } from 'react-i18next';
+import { lazy, Suspense } from 'react';
 import { TopBar } from '../components/hud/TopBar.js';
 import { ShopPanel } from '../components/hud/ShopPanel.js';
 import { PlotsPanel } from '../components/hud/PlotsPanel.js';
@@ -21,8 +22,6 @@ import { SpecialDateBanner } from '../components/hud/SpecialDateBanner.js';
 import { LevelUpCelebration } from '../components/hud/LevelUpCelebration.js';
 import { GameEffectsLayer } from '../components/hud/GameEffectsLayer.js';
 import { AnniversaryGift } from '../components/hud/AnniversaryGift.js';
-import { PolaroidAlbum } from '../components/hud/PolaroidAlbum.js';
-import { StatsHebdo } from '../components/hud/StatsHebdo.js';
 import { QuickHotkeys } from '../components/hud/QuickHotkeys.js';
 import { L42Secret } from '../components/hud/L42Secret.js';
 import { AchievementConfetti } from '../components/hud/AchievementConfetti.js';
@@ -33,10 +32,17 @@ import { HourBadge } from '../components/hud/HourBadge.js';
 import { FpsCounter } from '../components/hud/FpsCounter.js';
 import { RatePrompt } from '../components/hud/RatePrompt.js';
 import { HappyHearts } from '../components/hud/HappyHearts.js';
+
+// Lazy-load des modaux lourds : ils ne montent qu'au 1er ouverture.
+// Drop ~40-60 kB du bundle initial (Polaroid + Bestiaire + AchievementGrid +
+// StatsHebdo + LegalModal + ProfileEditor + ShareProgress + GameMode + DailyChallenge).
+const PolaroidAlbum = lazy(() => import('../components/hud/PolaroidAlbum.js').then(m => ({ default: m.PolaroidAlbum })));
+const StatsHebdo = lazy(() => import('../components/hud/StatsHebdo.js').then(m => ({ default: m.StatsHebdo })));
+const Bestiary = lazy(() => import('../components/hud/Bestiary.js').then(m => ({ default: m.Bestiary })));
+const DailyChallenge = lazy(() => import('../components/hud/DailyChallenge.js').then(m => ({ default: m.DailyChallenge })));
+const AchievementGrid = lazy(() => import('../components/hud/AchievementGrid.js').then(m => ({ default: m.AchievementGrid })));
 import { RobotThoughts } from '../components/hud/RobotThoughts.js';
 import { RandomCameos } from '../components/hud/RandomCameos.js';
-import { Bestiary } from '../components/hud/Bestiary.js';
-import { DailyChallenge } from '../components/hud/DailyChallenge.js';
 import { SkyHourGradient } from '../components/hud/SkyHourGradient.js';
 import { HolidayDecor } from '../components/hud/HolidayDecor.js';
 import { DevPanel } from '../components/hud/DevPanel.js';
@@ -47,7 +53,6 @@ import { CoinRain } from '../components/hud/CoinRain.js';
 import { AchievementBanner } from '../components/hud/AchievementBanner.js';
 import { PerformanceWatcher } from '../components/hud/PerformanceWatcher.js';
 import { AscensionCosmique } from '../components/hud/AscensionCosmique.js';
-import { AchievementGrid } from '../components/hud/AchievementGrid.js';
 import { BossKillFlight } from '../components/hud/BossKillFlight.js';
 import { NewYearCountdown } from '../components/hud/NewYearCountdown.js';
 import { SpecialDateEggs } from '../components/hud/SpecialDateEggs.js';
@@ -320,8 +325,13 @@ export function GamePage() {
       <LevelUpCelebration />
       <GameEffectsLayer />
       <AnniversaryGift />
-      <PolaroidAlbum />
-      <StatsHebdo />
+      <Suspense fallback={null}>
+        <PolaroidAlbum />
+        <StatsHebdo />
+        <Bestiary />
+        <DailyChallenge />
+        <AchievementGrid />
+      </Suspense>
       <QuickHotkeys />
       <L42Secret />
       <AchievementConfetti />
@@ -334,8 +344,6 @@ export function GamePage() {
       <RatePrompt />
       <RobotThoughts />
       <RandomCameos />
-      <Bestiary />
-      <DailyChallenge />
       <SkyHourGradient />
       <HolidayDecor />
       <DevPanel />
@@ -346,7 +354,6 @@ export function GamePage() {
       <AchievementBanner />
       <PerformanceWatcher />
       <AscensionCosmique />
-      <AchievementGrid />
       <BossKillFlight />
       <NewYearCountdown />
       <SpecialDateEggs />
