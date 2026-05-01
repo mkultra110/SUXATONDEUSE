@@ -30,7 +30,20 @@ export type BossKind =
   | 'pomme-vehicule'
   | 'crapaud-geant'
   | 'mille-pattes'
-  | 'maman-frelon';
+  | 'maman-frelon'
+  | 'sorciere-bocage'
+  | 'vampire-vignes'
+  | 'fantome-marcel'
+  | 'limace-royale'
+  | 'taupe-cyborg'
+  | 'asticot-geant'
+  | 'chataigne-volante'
+  | 'sapin-vivant'
+  | 'bambou-imperial'
+  | 'rocher-eveille'
+  | 'epouvantail-maudit'
+  | 'tracteur-rouille'
+  | 'pelouse-finale';
 
 export interface BossDef {
   kind: BossKind;
@@ -171,6 +184,19 @@ export const BOSSES: ReadonlyArray<BossDef> = [
   { kind: 'crapaud-geant', name: 'Crapaud Geant', hp: 220_000, tagline: 'Il avale et regurgite des tuiles. Charmant.', color: '#5C7C3A' },
   { kind: 'mille-pattes', name: 'Mille-Pattes', hp: 300_000, tagline: 'Mille pattes a tondre. Une par une.', color: '#A57144' },
   { kind: 'maman-frelon', name: 'Maman Frelon', hp: 420_000, tagline: 'Elle invoque ses petits. Beaucoup.', color: '#FFD921' },
+  { kind: 'sorciere-bocage', name: 'Sorciere du Bocage', hp: 600_000, tagline: 'Elle invoque des minions. Au pluriel.', color: '#9B6DC4' },
+  { kind: 'vampire-vignes', name: 'Vampire des Vignes', hp: 850_000, tagline: 'Aspire ta production cash. Plus fort.', color: '#7C3A4E' },
+  { kind: 'fantome-marcel', name: 'Fantome de Marcel', hp: 1_200_000, tagline: 'Marcel reviens... Il a 50% en phase 2.', color: '#A0A0B0' },
+  { kind: 'limace-royale', name: 'Limace Royale', hp: 1_700_000, tagline: 'Trainee toxique 60s.', color: '#6BA53A' },
+  { kind: 'taupe-cyborg', name: 'Taupe Cyborg', hp: 2_400_000, tagline: 'Armure robotique, vue x-ray.', color: '#5C3A1F' },
+  { kind: 'asticot-geant', name: 'Asticot Geant', hp: 3_400_000, tagline: 'Creuse des trous-pieges.', color: '#FFE680' },
+  { kind: 'chataigne-volante', name: 'Chataigne Volante', hp: 4_700_000, tagline: 'Pluie de chataignes piquantes.', color: '#A57144' },
+  { kind: 'sapin-vivant', name: 'Sapin Vivant', hp: 6_500_000, tagline: 'Projettes ses pommes de pin.', color: '#4A8A2E' },
+  { kind: 'bambou-imperial', name: 'Bambou Imperial', hp: 9_000_000, tagline: 'Pousse vite et bloque.', color: '#8FBF4F' },
+  { kind: 'rocher-eveille', name: 'Rocher Eveille', hp: 12_500_000, tagline: 'Pierre eveillee, immobile, tank pur.', color: '#6E7280' },
+  { kind: 'epouvantail-maudit', name: 'Epouvantail Maudit', hp: 17_000_000, tagline: 'Se libere et marche. Jamais bon.', color: '#A22A06' },
+  { kind: 'tracteur-rouille', name: 'Tracteur Rouille', hp: 23_000_000, tagline: 'Vieux mais tete dure. Phase mecha.', color: '#A57144' },
+  { kind: 'pelouse-finale', name: 'Pelouse Finale', hp: 100_000_000, tagline: 'La fin de toutes choses. La pelouse triomphe.', color: '#FFFFFF' },
 ];
 
 // Retourne le boss du niveau si c'est un boss level (multiple de 10),

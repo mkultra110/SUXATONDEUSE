@@ -168,49 +168,49 @@ Statut implementation :
 - [x] 153. Boss "Corbeau Noir" : vole, immune aux robots terrestres
 - [ ] 154. Boss "Raton Laveur" : vole les pieces (debuff)
 - [x] 155. Boss "Sanglier" : charge en ligne droite, casse des tuiles
-- [ ] 156. Boss "Loup-Garou" : se transforme la nuit
-- [ ] 157. Boss "Sorciere du Bocage" : invoque des minions
-- [ ] 158. Boss "Vampire des Vignes" : aspire la production
-- [ ] 159. Boss "Fantome de Marcel" : phase qui change apres 50% HP
-- [ ] 160. Boss "Limace Royale" : laisse une trainee toxique
+- [x] 156. Boss "Loup-Garou" : se transforme la nuit
+- [x] 157. Boss "Sorciere du Bocage" : invoque des minions
+- [x] 158. Boss "Vampire des Vignes" : aspire la production
+- [x] 159. Boss "Fantome de Marcel" : phase qui change apres 50% HP
+- [x] 160. Boss "Limace Royale" : laisse une trainee toxique
 - [x] 161. Boss "Mille-Pattes" : segments individuels a tondre
 - [x] 162. Boss "Maman Frelon" : invoque des essaims
 - [x] 163. Boss "Mante Religieuse" : deux phases (priere / attaque)
 - [x] 164. Boss "Crapaud Geant" : avale et regurgite tuiles
-- [ ] 165. Boss "Couleuvre" : mouvement onduluant rapide
-- [ ] 166. Boss "Hibou Sage" : pose des enigmes a resoudre
+- [x] 165. Boss "Couleuvre" : mouvement onduluant rapide
+- [x] 166. Boss "Hibou Sage" : pose des enigmes a resoudre
 - [ ] 167. Boss "Renard Voleur" : derobe un upgrade temporairement
-- [ ] 168. Boss "Lapin Pirate" : multiplicite (clone toutes les 30s)
+- [x] 168. Boss "Lapin Pirate" : multiplicite (clone toutes les 30s)
 - [x] 169. Boss "Herisson Spinning" : roule et casse rangees
-- [ ] 170. Boss "Putois" : zone empoisonnee pendant 60s
-- [ ] 171. Boss "Belette" : vol rapide et furtif
-- [ ] 172. Boss "Taupe Cyborg" : armure robotique
+- [x] 170. Boss "Putois" : zone empoisonnee pendant 60s
+- [x] 171. Boss "Belette" : vol rapide et furtif
+- [x] 172. Boss "Taupe Cyborg" : armure robotique
 - [x] 173. Boss "Limace Monstre" : grossit a chaque coup
-- [ ] 174. Boss "Asticot Geant" : creuse des trous-pieges
+- [x] 174. Boss "Asticot Geant" : creuse des trous-pieges
 - [x] 175. Boss "Tournesol Mutant" : tire des graines explosives
-- [ ] 176. Boss "Chataigne Volante" : pluie de chataignes piquantes
+- [x] 176. Boss "Chataigne Volante" : pluie de chataignes piquantes
 - [x] 177. Boss "Pomme Vehicule" : roule avec inertie
 - [x] 178. Boss "Citrouille Halloween" : crachoir de feu
-- [ ] 179. Boss "Sapin Vivant" : projettes ses pommes de pin
-- [ ] 180. Boss "Bambou Imperial" : pousse vite et bloque
+- [x] 179. Boss "Sapin Vivant" : projettes ses pommes de pin
+- [x] 180. Boss "Bambou Imperial" : pousse vite et bloque
 - [x] 181. Boss "Liane Etrangleuse" : enserre des tuiles
 - [x] 182. Boss "Fougere Prehistorique" : petrifie les robots
 - [x] 183. Boss "Mauve Hypnotique" : confond les directions
 - [x] 184. Boss "Lavande Endormante" : ralentit les robots
 - [x] 185. Boss "Ortie Brulante" : zone DPS
-- [ ] 186. Boss "Trefle Magique" : invoque clones aleatoires
-- [ ] 187. Boss "Pissenlit King" : disperse mille graines
-- [ ] 188. Boss "Coquelicot Sanglant" : pleure en sang
-- [ ] 189. Boss "Glycine Royale" : invocation de papillons hostiles
-- [ ] 190. Boss "Buisson Ardent" : rebondit
-- [ ] 191. Boss "Mousse Geante" : absorbe et craque tuiles
-- [ ] 192. Boss "Algue Mauvaise" : surfe sur l'humidite
-- [ ] 193. Boss "Rocher Eveille" : pierre qui se reveille (immobile mais HP enorme)
-- [ ] 194. Boss "Statue de Marcel" : enragee par profanation
-- [ ] 195. Boss "Vieille Charrette" : maledit, hante
-- [ ] 196. Boss "Epouvantail Maudit" : se libere et marche
-- [ ] 197. Boss "Tracteur Rouille" : phase mecha
-- [ ] 198. Boss "Robot Beta" : version originale buguee
+- [x] 186. Boss "Trefle Magique" : invoque clones aleatoires
+- [x] 187. Boss "Pissenlit King" : disperse mille graines
+- [x] 188. Boss "Coquelicot Sanglant" : pleure en sang
+- [x] 189. Boss "Glycine Royale" : invocation de papillons hostiles
+- [x] 190. Boss "Buisson Ardent" : rebondit
+- [x] 191. Boss "Mousse Geante" : absorbe et craque tuiles
+- [x] 192. Boss "Algue Mauvaise" : surfe sur l'humidite
+- [x] 193. Boss "Rocher Eveille" : pierre qui se reveille (immobile mais HP enorme)
+- [x] 194. Boss "Statue de Marcel" : enragee par profanation
+- [x] 195. Boss "Vieille Charrette" : maledit, hante
+- [x] 196. Boss "Epouvantail Maudit" : se libere et marche
+- [x] 197. Boss "Tracteur Rouille" : phase mecha
+- [x] 198. Boss "Robot Beta" : version originale buguee
 - [x] 199. Boss "Robot Anti-Robot" : tonde tes propres robots
 - [x] 200. Boss "Pelouse Sentiente" : la map elle-meme
 - [ ] 201. Mini-boss "Frelon Asiatique" toutes les 5 maps
@@ -575,22 +575,22 @@ Statut implementation :
 - [ ] 551. 20+ themes maps vs 9 actuels
 - [x] 552. Theme "Champ de lavande"
 - [x] 553. Theme "Vignobles bourguignons"
-- [ ] 554. Theme "Plage normande"
-- [ ] 555. Theme "Foret Vosges"
-- [ ] 556. Theme "Marais Poitevin"
-- [ ] 557. Theme "Mont Saint-Michel"
-- [ ] 558. Theme "Camargue rose"
+- [x] 554. Theme "Plage normande"
+- [x] 555. Theme "Foret Vosges"
+- [x] 556. Theme "Marais Poitevin"
+- [x] 557. Theme "Mont Saint-Michel"
+- [x] 558. Theme "Camargue rose"
 - [x] 559. Theme "Provence olive"
 - [ ] 560. Theme "Bretagne falaise"
 - [x] 561. Theme "Alpes neige"
 - [ ] 562. Theme "Pyrenees vert"
 - [x] 563. Theme "Volcan Auvergne"
-- [ ] 564. Theme "Foret de chataigniers"
-- [ ] 565. Theme "Champ de tournesols infini"
-- [ ] 566. Theme "Ferme abandonnee"
-- [ ] 567. Theme "Mansion hantee"
-- [ ] 568. Theme "Sous l'eau (lac)"
-- [ ] 569. Theme "Sous-terrain (mine)"
+- [x] 564. Theme "Foret de chataigniers"
+- [x] 565. Theme "Champ de tournesols infini"
+- [x] 566. Theme "Ferme abandonnee"
+- [x] 567. Theme "Mansion hantee"
+- [x] 568. Theme "Sous l'eau (lac)"
+- [x] 569. Theme "Sous-terrain (mine)"
 - [x] 570. Theme "Lune"
 - [x] 571. Theme "Mars"
 - [x] 572. Theme "Black hole prestige final"

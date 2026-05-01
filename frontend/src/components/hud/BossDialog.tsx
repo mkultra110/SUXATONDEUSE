@@ -83,6 +83,19 @@ const BOSS_QUOTES: Record<string, string[]> = {
   'crapaud-geant': ['« Glouglou. *recrache une tuile* »', '« Mes papilles sont des aimants. »'],
   'mille-pattes': ['« Mille pattes, mille problemes. »', '« Compte-les si tu peux. »'],
   'maman-frelon': ['« Mes petits ont faim ! »', '« BzzzzzzZZZ ! »'],
+  'sorciere-bocage': ['« Abracadabra... ah, ca marche pas comme ca. »', '« Mes minions, attaquez ! »'],
+  'vampire-vignes': ['« Tes pieces, donne-moi tes pieces ! »', '« Je sens le vin. C\'est bon. »'],
+  'fantome-marcel': ['« Booouh... non, c\'est moi, Marcel. »', '« Phase 2, ouvre l\'oeil. »'],
+  'limace-royale': ['« Slurp, je laisse une trainee. Royale. »', '« Tu peux pas comprendre, t\'es pas une limace. »'],
+  'taupe-cyborg': ['« Optique laser active. Detection ennemie. »', '« 01010100 01000001 01010101 01010000 01000101 »'],
+  'asticot-geant': ['« Je creuse des trous. Et puis je creuse. »', '« Tomber dans un trou, ca apprend la vie. »'],
+  'chataigne-volante': ['« Bzzz, pic-pic, gare a tes yeux. »', '« Mes piquants n\'ont pas demerite. »'],
+  'sapin-vivant': ['« Je suis l\'esprit de la foret de Vosges. »', '« Pommes de pin. Lancees. Maintenant. »'],
+  'bambou-imperial': ['« Je pousse de 30 cm par jour. Tu suis ? »', '« Mes barres bloquent ton chemin. »'],
+  'rocher-eveille': ['« ... »', '« Mille ans de sommeil. Tu m\'as reveille. »'],
+  'epouvantail-maudit': ['« Je devais effrayer les corbeaux... maintenant je marche. »', '« Mon chapeau est plein de souris. »'],
+  'tracteur-rouille': ['« VROOOM ! KOFKOF ! VROOOM ! »', '« Marcel m\'a oublie en 1973. Il paiera. »'],
+  'pelouse-finale': ['« La fin de toutes choses. La pelouse a gagne. »', '« Tu m\'as tonde un milliard de fois. C\'est mon tour. »'],
 };
 
 export function BossDialog({ boss, onDismiss }: { boss: BossDef; onDismiss: () => void }) {
