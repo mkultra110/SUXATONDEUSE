@@ -13,6 +13,7 @@ import { ROBOT_TIERS, UPGRADE_DEFINITIONS, type RobotType, type UpgradeKey } fro
 import { pickDialogue, type DialogueContext } from '../../utils/memeDialogues.js';
 import { computePlayerLevel, rankForLevel } from '../../utils/playerLevel.js';
 import { notify, requestNotificationPermission } from '../../utils/notifications.js';
+import { useToastStore } from './ToastStack.js';
 import { GoldenButterfly } from './GoldenButterfly.js';
 import { PetalRain } from './PetalRain.js';
 import { ComboCounter } from './ComboCounter.js';
@@ -305,8 +306,18 @@ export function GameEffectsLayer() {
       haptic.rankUp();
       useEffectsStore.getState().triggerShake(0.6, 400);
       useEffectsStore.getState().triggerChromatic(300);
+      useToastStore.getState().push(`Nouveau rang : ${newRank} !`, 'gold', 4000);
     }
   }, [totalCash]);
+
+  // === Boss kill toast ===
+  const lastBossKillsRef = useRef(bossKills);
+  useEffect(() => {
+    if (bossKills > lastBossKillsRef.current && lastBossKillsRef.current > 0) {
+      useToastStore.getState().push(`Boss vaincu ! Total : ${bossKills}`, 'success', 3500);
+    }
+    lastBossKillsRef.current = bossKills;
+  }, [bossKills]);
 
   // Cash unused mais maintient la subscription cash store.
   void cash;

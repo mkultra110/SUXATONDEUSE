@@ -239,6 +239,11 @@ export function ShopPanel() {
                       audio.playError();
                     }
                   }}
+                  onLongPress={() => {
+                    // Long-press = bulk max immediately (research idee #19).
+                    setBulk('max');
+                    useToastStore.getState().push('Mode achat MAX active', 'gold', 1500);
+                  }}
                 />
               );
             })}
