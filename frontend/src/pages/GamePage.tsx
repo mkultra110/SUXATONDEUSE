@@ -60,6 +60,7 @@ import { SunFlares } from '../components/hud/SunFlares.js';
 import { AmbientLayer } from '../components/hud/AmbientLayer.js';
 import { ToastStack } from '../components/hud/ToastStack.js';
 import { NextMilestoneBanner } from '../components/hud/NextMilestoneBanner.js';
+import { OnboardingTutorial } from '../components/hud/OnboardingTutorial.js';
 import { useGameSession } from '../hooks/useGameSession.js';
 import { useAudio } from '../hooks/useAudio.js';
 import { useResponsive } from '../hooks/useResponsive.js';
@@ -362,6 +363,7 @@ export function GamePage() {
       <SunFlares />
       <AmbientLayer />
       <ToastStack />
+      <OnboardingTutorial />
       {/* FarmNameDisplay retire : empietait sur la map en mobile. */}
       <ActivityFAB onClick={() => setMarcelLogOpen(true)} notificationCount={0} />
       {marcelLogOpen && <MarcelLog onClose={() => setMarcelLogOpen(false)} />}

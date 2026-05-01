@@ -1,19 +1,28 @@
 // AchievementGrid : modal full-screen grid 6-col des achievements
 // (idees #27 #497). Reuse ACHIEVEMENTS du shared package.
 
+import { useState } from 'react';
 import { ACHIEVEMENTS } from '@robomow/shared';
 import { useGameStore } from '../../stores/gameStore.js';
 import { useUIStore } from '../../stores/uiStore.js';
 import { CrossIcon, TrophyIcon } from '../icons/PixelIcon.js';
 
+type Filter = 'all' | 'owned' | 'locked';
+
 export function AchievementGrid() {
   const open = useUIStore((s) => s.achievementGridOpen);
   const setOpen = useUIStore((s) => s.setAchievementGridOpen);
   const unlocked = useGameStore((s) => s.achievementsUnlocked);
+  const [filter, setFilter] = useState<Filter>('all');
 
   if (!open) return null;
 
   const ownedCount = Array.from(unlocked).filter((k) => !k.endsWith(':claimed')).length;
+  const filteredAchievements = ACHIEVEMENTS.filter((ach) => {
+    if (filter === 'owned') return unlocked.has(ach.key);
+    if (filter === 'locked') return !unlocked.has(ach.key);
+    return true;
+  });
 
   return (
     <div
@@ -49,6 +58,39 @@ export function AchievementGrid() {
           </button>
         </header>
 
+        {/* Filter chips */}
+        <div style={{ display: 'flex', gap: 6, marginBottom: 12, flexWrap: 'wrap' }}>
+          {(['all', 'owned', 'locked'] as const).map((f) => (
+            <button
+              key={f}
+              type="button"
+              onClick={() => setFilter(f)}
+              style={{
+                padding: '4px 12px',
+                background: filter === f ? 'var(--color-accent-gold)' : 'var(--color-paper-2)',
+                border: '2px solid var(--color-wood-5)',
+                borderRadius: 9999,
+                fontFamily: 'var(--font-button)',
+                fontSize: 10,
+                letterSpacing: '0.1em',
+                textTransform: 'uppercase',
+                cursor: 'pointer',
+                color: filter === f ? 'var(--color-wood-5)' : 'var(--color-text-muted)',
+                fontWeight: filter === f ? 700 : 500,
+              }}
+            >
+              {f === 'all' ? `Tous · ${ACHIEVEMENTS.length}` : f === 'owned' ? `Obtenus · ${ownedCount}` : `Verrouillés · ${ACHIEVEMENTS.length - ownedCount}`}
+            </button>
+          ))}
+        </div>
+
+        {filteredAchievements.length === 0 && (
+          <div className="empty-state">
+            <span style={{ fontSize: 32 }}>🏆</span>
+            « Aucun trophée dans cette categorie. »
+          </div>
+        )}
+
         <div
           style={{
             display: 'grid',
@@ -56,7 +98,7 @@ export function AchievementGrid() {
             gap: 10,
           }}
         >
-          {ACHIEVEMENTS.map((ach) => {
+          {filteredAchievements.map((ach) => {
             const isUnlocked = unlocked.has(ach.key);
             const hidden = ach.hidden && !isUnlocked;
             return (
