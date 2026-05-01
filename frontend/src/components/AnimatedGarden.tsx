@@ -463,9 +463,11 @@ export function AnimatedGarden() {
     const native = COLS * TILE;
     const update = () => {
       const w = el.clientWidth;
-      // Container max-width × plotScaleBoost = scale final cap a 1.6.
+      // Container max-width × plotScaleBoost = scale final.
+      // Cap eleve a 3.0 pour exploiter les ecrans desktop large
+      // (sprites pixel art : aucune perte de qualite a 3x).
       const containerScale = w / native;
-      setZoom(Math.min(1.6, Math.max(0.4, containerScale * plotScaleBoost)));
+      setZoom(Math.min(3.0, Math.max(0.4, containerScale * plotScaleBoost)));
     };
     update();
     const ro = new ResizeObserver(update);
@@ -807,7 +809,8 @@ export function AnimatedGarden() {
       style={
         {
           width: '100%',
-          maxWidth: COLS * TILE,
+          // Cap a 3x sur desktop large (pixel art reste net).
+          maxWidth: COLS * TILE * 3,
           height: ROWS * TILE * zoom,
         } as CSSProperties
       }

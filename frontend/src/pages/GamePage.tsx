@@ -296,14 +296,45 @@ export function GamePage() {
         // ======== LAYOUT TABLET / DESKTOP ========
         <main className="flex flex-1 flex-row items-stretch gap-3 min-h-0 p-2">
           {useSidebar && <DesktopSidebar />}
-          <div className="flex flex-col items-center gap-2 flex-1 min-w-0">
-            <div className="farm-frame-wrap">
+          <div
+            className="flex flex-col items-center justify-start gap-2 flex-1 min-w-0 overflow-y-auto"
+          >
+            <div className="farm-frame-wrap" style={{ width: '100%' }}>
               <span className="frame-rivet-bl" />
               <span className="frame-rivet-br" />
               <AnimatedGarden />
             </div>
+            {/* Sous le jardin : carnet Marcel avec dialogue rotatif Meme.
+                Comble la zone vide qui restait sur desktop large. */}
+            <div
+              style={{
+                width: '100%',
+                maxWidth: 880,
+                marginTop: 12,
+                padding: 16,
+                background: 'var(--color-paper-1)',
+                border: '3px solid var(--color-wood-5)',
+                boxShadow: '0 4px 0 var(--color-wood-5)',
+                fontFamily: 'var(--font-meme)',
+                fontStyle: 'italic',
+                color: 'var(--color-text-body)',
+                fontSize: 14,
+                lineHeight: 1.5,
+                textAlign: 'center',
+              }}
+            >
+              <p style={{ margin: 0 }}>
+                « La ferme grandit chaque jour un peu plus. Marcel est fier. »
+              </p>
+              <p style={{ fontSize: 11, color: 'var(--color-text-muted)', marginTop: 6 }}>
+                — Mémé Gisèle
+              </p>
+            </div>
           </div>
-          <div className="flex flex-col gap-2 w-full max-w-sm flex-shrink-0 overflow-y-auto">
+          <div
+            className="flex flex-col gap-2 w-full flex-shrink-0 overflow-y-auto"
+            style={{ maxWidth: 'min(28rem, 30vw)' }}
+          >
             {activeTab === 'shop' && <ShopPanel />}
             {activeTab === 'plots' && <PlotsPanel />}
             {activeTab === 'daily' && <DailyPanel />}
