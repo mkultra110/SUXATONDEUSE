@@ -61,6 +61,7 @@ import { AmbientLayer } from '../components/hud/AmbientLayer.js';
 import { ToastStack } from '../components/hud/ToastStack.js';
 import { NextMilestoneBanner } from '../components/hud/NextMilestoneBanner.js';
 import { OnboardingTutorial } from '../components/hud/OnboardingTutorial.js';
+import { MilestoneTimeline } from '../components/hud/MilestoneTimeline.js';
 import { useGameSession } from '../hooks/useGameSession.js';
 import { useAudio } from '../hooks/useAudio.js';
 import { useResponsive } from '../hooks/useResponsive.js';
@@ -304,31 +305,10 @@ export function GamePage() {
               <span className="frame-rivet-br" />
               <AnimatedGarden />
             </div>
-            {/* Sous le jardin : carnet Marcel avec dialogue rotatif Meme.
+            {/* Sous le jardin : MilestoneTimeline pleine largeur + citation Meme.
                 Comble la zone vide qui restait sur desktop large. */}
-            <div
-              style={{
-                width: '100%',
-                maxWidth: 880,
-                marginTop: 12,
-                padding: 16,
-                background: 'var(--color-paper-1)',
-                border: '3px solid var(--color-wood-5)',
-                boxShadow: '0 4px 0 var(--color-wood-5)',
-                fontFamily: 'var(--font-meme)',
-                fontStyle: 'italic',
-                color: 'var(--color-text-body)',
-                fontSize: 14,
-                lineHeight: 1.5,
-                textAlign: 'center',
-              }}
-            >
-              <p style={{ margin: 0 }}>
-                « La ferme grandit chaque jour un peu plus. Marcel est fier. »
-              </p>
-              <p style={{ fontSize: 11, color: 'var(--color-text-muted)', marginTop: 6 }}>
-                — Mémé Gisèle
-              </p>
+            <div style={{ width: '100%', maxWidth: 880, marginTop: 12 }}>
+              <MilestoneTimeline />
             </div>
           </div>
           <div
