@@ -2508,6 +2508,36 @@ body {
 }
 .income-pulse { animation: income-pulse 1s ease-in-out; }
 
+/* === Toast slide-up (toast feedback) === */
+@keyframes toast-slide-up {
+  0% { transform: translateY(20px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+
+/* === First-tap tutorial glow === */
+@keyframes tutorial-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(245, 196, 67, 0.7); }
+  50% { box-shadow: 0 0 0 24px rgba(245, 196, 67, 0); }
+}
+.tutorial-glow {
+  animation: tutorial-pulse 1.6s ease-in-out infinite;
+  border-radius: 8px;
+}
+
+/* === Empty state cottagecore === */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 24px;
+  text-align: center;
+  color: var(--color-text-muted);
+  font-family: var(--font-meme);
+  font-style: italic;
+  font-size: 14px;
+}
+
 /* === A11Y prefers-reduced-motion : disable les anims les plus agressives === */
 @media (prefers-reduced-motion: reduce) {
   .ascension-overlay,

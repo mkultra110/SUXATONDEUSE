@@ -20,6 +20,7 @@ import { audio } from '../../services/audio.js';
 import { shineForCount, SHINE_COLOR, SHINE_GLOW, type RobotShine } from '../../utils/playerLevel.js';
 import { useEffectsStore } from '../../stores/effectsStore.js';
 import { formatEta } from '../../utils/eta.js';
+import { useToastStore } from './ToastStack.js';
 import {
   CoinIcon,
   NavShopIcon,
@@ -161,23 +162,31 @@ export function ShopPanel() {
 
       {/* Body scrollable */}
       <div className="overflow-y-auto pr-1" style={{ maxHeight: 'calc(80vh - 120px)' }}>
-        {tab === 'robots' && (
-          <div className={breakpoint === 'mobile' ? 'shop-carousel' : 'grid grid-cols-2 gap-2.5'}>
-            {visibleTiers
-              .filter((type) => {
-                if (!search) return true;
-                const q = search.toLowerCase();
-                if (q === 'achetable' || q === 'available') {
-                  return cash.gte(nextRobotCost(holdings, type));
-                }
-                const tierDef = ROBOT_TIERS.find((tt) => tt.type === type);
-                if (!tierDef) return false;
-                return (
-                  tierDef.name.toLowerCase().includes(q) ||
-                  type.toLowerCase().includes(q)
-                );
-              })
-              .map((type) => {
+        {tab === 'robots' && (() => {
+          const filtered = visibleTiers.filter((type) => {
+            if (!search) return true;
+            const q = search.toLowerCase();
+            if (q === 'achetable' || q === 'available') {
+              return cash.gte(nextRobotCost(holdings, type));
+            }
+            const tierDef = ROBOT_TIERS.find((tt) => tt.type === type);
+            if (!tierDef) return false;
+            return (
+              tierDef.name.toLowerCase().includes(q) ||
+              type.toLowerCase().includes(q)
+            );
+          });
+          if (filtered.length === 0) {
+            return (
+              <div className="empty-state">
+                <span style={{ fontSize: 32 }}>🌻</span>
+                « Mémé n'a pas trouvé de robot pour "{search}". »
+              </div>
+            );
+          }
+          return (
+            <div className={breakpoint === 'mobile' ? 'shop-carousel' : 'grid grid-cols-2 gap-2.5'}>
+            {filtered.map((type) => {
               const tier = ROBOT_TIERS.find((tt) => tt.type === type);
               if (!tier) return null;
               const owned = holdings[type].owned;
@@ -221,6 +230,11 @@ export function ShopPanel() {
                       for (let i = 0; i < buyableNow; i++) {
                         buyRobot(type);
                       }
+                      const niceName = t(`robotNicknames.${type}`, tier.name);
+                      useToastStore.getState().push(
+                        buyableNow === 1 ? `${niceName} +1` : `${niceName} ×${buyableNow}`,
+                        'success',
+                      );
                     } else {
                       audio.playError();
                     }
@@ -228,8 +242,9 @@ export function ShopPanel() {
                 />
               );
             })}
-          </div>
-        )}
+            </div>
+          );
+        })()}
 
         {tab === 'upgrades' && (
           <div className={breakpoint === 'mobile' ? 'shop-carousel' : 'grid grid-cols-2 gap-2.5'}>
@@ -287,6 +302,10 @@ export function ShopPanel() {
                       for (let i = 0; i < buyableNow; i++) {
                         buyUpgrade(def.key);
                       }
+                      useToastStore.getState().push(
+                        buyableNow === 1 ? `${def.name} +1 niveau` : `${def.name} +${buyableNow} niveaux`,
+                        'gold',
+                      );
                     } else {
                       audio.playError();
                     }

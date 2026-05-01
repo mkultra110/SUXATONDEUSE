@@ -53,6 +53,7 @@ import { NewYearCountdown } from '../components/hud/NewYearCountdown.js';
 import { SpecialDateEggs } from '../components/hud/SpecialDateEggs.js';
 import { SunFlares } from '../components/hud/SunFlares.js';
 import { AmbientLayer } from '../components/hud/AmbientLayer.js';
+import { ToastStack } from '../components/hud/ToastStack.js';
 import { useGameSession } from '../hooks/useGameSession.js';
 import { useAudio } from '../hooks/useAudio.js';
 import { useResponsive } from '../hooks/useResponsive.js';
@@ -351,6 +352,7 @@ export function GamePage() {
       <SpecialDateEggs />
       <SunFlares />
       <AmbientLayer />
+      <ToastStack />
       {/* FarmNameDisplay retire : empietait sur la map en mobile. */}
       <ActivityFAB onClick={() => setMarcelLogOpen(true)} notificationCount={0} />
       {marcelLogOpen && <MarcelLog onClose={() => setMarcelLogOpen(false)} />}
