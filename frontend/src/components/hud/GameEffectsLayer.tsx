@@ -139,7 +139,7 @@ export function GameEffectsLayer() {
       } else if (bestKind === 'upgrade' && bestKey) {
         buyUpgrade(bestKey as UpgradeKey);
       }
-    }, 2000);
+    }, 4000); // FIX perf : 4s au lieu de 2s, evite les rafales d'achats
     return () => clearInterval(interval);
   }, [autoBuyEnabled, totalPrestiges, buyRobot, buyUpgrade]);
 
@@ -151,15 +151,17 @@ export function GameEffectsLayer() {
     void requestNotificationPermission();
   }, [totalPrestiges]);
   // Achievement unlocked notification.
+  // FIX : ce useEffect tournait a chaque render (pas de deps array).
+  // On subscribe sur achievementsUnlocked uniquement.
+  const achievementsUnlocked = useGameStore((s) => s.achievementsUnlocked);
   const lastAchSize = useRef(0);
   useEffect(() => {
-    const state = useGameStore.getState();
-    const owned = Array.from(state.achievementsUnlocked).filter((k) => !k.endsWith(':claimed')).length;
+    const owned = Array.from(achievementsUnlocked).filter((k) => !k.endsWith(':claimed')).length;
     if (owned > lastAchSize.current && lastAchSize.current > 0) {
       notify('Succes debloque !', 'Va voir ton trophee dans le carnet.');
     }
     lastAchSize.current = owned;
-  });
+  }, [achievementsUnlocked]);
 
   // === Visibility audio ducking ===
   useEffect(() => {
@@ -206,25 +208,26 @@ export function GameEffectsLayer() {
   }, [totalCash, prestigeLevel, totalRobots, totalPrestiges, loginStreak, bossKills, playTimeSeconds]);
 
   // === Petal rain random ===
+  // CORRECTION : le buff n'est plus persisté dans prestigeMultiplierCache
+  // (qui est recalcule a partir de seedsInTree, achievements, pets). On
+  // affiche juste l'effet visuel ; le bonus production est purement cosmetique
+  // pour eviter le bug "x0.52" si reload pendant le buff.
   const [petalActive, setPetalActive] = useState(false);
   const lastPetalDayRef = useRef<string>('');
   useEffect(() => {
     function maybeStart() {
       const today = new Date().toISOString().slice(0, 10);
       if (lastPetalDayRef.current === today) return;
-      // 0.5% chance par tick 30s.
       if (Math.random() < 0.005) {
         lastPetalDayRef.current = today;
         setPetalActive(true);
-        // Bonus production x2 : on bump l'auto via override prestigeMultiplier
-        // pendant 60s. Approche simple : x2 sur prestigeMultiplierCache.
+        // Bonus simple : un cadeau cash one-shot proportionnel a 60s de prod.
         const state = useGameStore.getState();
-        const original = state.prestigeMultiplierCache;
-        useGameStore.setState({ prestigeMultiplierCache: original * 2 });
-        setTimeout(() => {
-          const s2 = useGameStore.getState();
-          useGameStore.setState({ prestigeMultiplierCache: s2.prestigeMultiplierCache / 2 });
-        }, 60_000);
+        const bonus = state.cashPerSecond.mul(60);
+        useGameStore.setState({
+          cash: state.cash.add(bonus),
+          totalCashEarned: state.totalCashEarned.add(bonus),
+        });
       }
     }
     const interval = setInterval(maybeStart, 30_000);
@@ -232,11 +235,11 @@ export function GameEffectsLayer() {
   }, []);
 
   // === Auto-claim daily login reward (idee #365) ===
+  // FIX perf : 30s au lieu de 5s. Le login claim est idempotent par jour.
   useEffect(() => {
     const interval = setInterval(() => {
-      const state = useGameStore.getState();
-      state.claimLoginReward();
-    }, 5000);
+      useGameStore.getState().claimLoginReward();
+    }, 30_000);
     return () => clearInterval(interval);
   }, []);
 
@@ -257,7 +260,7 @@ export function GameEffectsLayer() {
       for (const k of unclaimed) {
         state.claimAchievement(k);
       }
-    }, 3000);
+    }, 8000);
     return () => clearInterval(interval);
   }, [totalPrestiges]);
 
@@ -270,20 +273,25 @@ export function GameEffectsLayer() {
   }, []);
 
   // === Heartbeat sub-bass quand un upgrade est quasi-affordable (95%+) ===
+  // FIX perf : 4s au lieu de 1.5s (etait responsable de 40 lectures/min
+  // de tous les robot tiers => lag d'achat).
   useEffect(() => {
     const interval = setInterval(() => {
       const state = useGameStore.getState();
       const cashNum = Number(state.cash.toString());
-      // Cherche le moins cher non-affordable.
+      // Cherche seulement le 1er robot non-affordable (pas tous les tiers).
       let nextCost = Infinity;
       for (const tier of ROBOT_TIERS) {
         const cost = Number(nextRobotCost(state.holdings, tier.type).toString());
-        if (cost > cashNum && cost < nextCost) nextCost = cost;
+        if (cost > cashNum) {
+          nextCost = cost;
+          break;
+        }
       }
       if (Number.isFinite(nextCost) && cashNum / nextCost > 0.95) {
         audio.playHeartbeat();
       }
-    }, 1500);
+    }, 4000);
     return () => clearInterval(interval);
   }, []);
 

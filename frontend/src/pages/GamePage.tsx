@@ -53,7 +53,6 @@ import { NewYearCountdown } from '../components/hud/NewYearCountdown.js';
 import { SpecialDateEggs } from '../components/hud/SpecialDateEggs.js';
 import { SunFlares } from '../components/hud/SunFlares.js';
 import { AmbientLayer } from '../components/hud/AmbientLayer.js';
-import { FarmNameDisplay } from '../components/hud/FarmNameDisplay.js';
 import { useGameSession } from '../hooks/useGameSession.js';
 import { useAudio } from '../hooks/useAudio.js';
 import { useResponsive } from '../hooks/useResponsive.js';
@@ -221,8 +220,11 @@ export function GamePage() {
           <main
             className="flex flex-col gap-2 flex-1 min-h-0 overflow-y-auto"
             style={{
-              padding: '8px 8px 80px',
-              paddingBottom: 'calc(72px + env(safe-area-inset-bottom, 0px))',
+              padding: '8px 8px',
+              // Padding bottom = bottom-nav (72px) + FAB clearance (60px)
+              // + safe-area iOS. Evite que le FAB Marcel masque le bas de la
+              // shop card.
+              paddingBottom: 'calc(140px + env(safe-area-inset-bottom, 0px))',
               WebkitOverflowScrolling: 'touch',
             }}
           >
@@ -349,7 +351,7 @@ export function GamePage() {
       <SpecialDateEggs />
       <SunFlares />
       <AmbientLayer />
-      <FarmNameDisplay />
+      {/* FarmNameDisplay retire : empietait sur la map en mobile. */}
       <ActivityFAB onClick={() => setMarcelLogOpen(true)} notificationCount={0} />
       {marcelLogOpen && <MarcelLog onClose={() => setMarcelLogOpen(false)} />}
     </div>
