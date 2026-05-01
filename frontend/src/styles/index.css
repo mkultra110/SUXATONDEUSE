@@ -2432,6 +2432,13 @@ button[role='tab']:focus-visible {
   animation: heart-meme-rise 2s ease-out forwards;
 }
 
+/* === TopBar : cache pills non-essentielles sur mobile (<480px) === */
+@media (max-width: 480px) {
+  .topbar-hide-mobile {
+    display: none !important;
+  }
+}
+
 /* === A11Y prefers-reduced-motion : disable les anims les plus agressives === */
 @media (prefers-reduced-motion: reduce) {
   .ascension-overlay,

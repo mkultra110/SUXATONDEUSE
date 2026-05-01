@@ -61,8 +61,8 @@ export function TopBar() {
         currentLevel={level}
       />
 
-      {/* Day pill compact */}
-      <Pill title={`Jour ${dayNumber}`}>
+      {/* Day pill compact - cache sur tres petit ecran (<400px) */}
+      <Pill title={`Jour ${dayNumber}`} hideOnMobile>
         <StarIcon size={12} />
         <span
           className="numeric"
@@ -72,15 +72,17 @@ export function TopBar() {
         </span>
       </Pill>
 
-      {/* WeatherBadge */}
-      <WeatherBadge />
+      {/* WeatherBadge - cache sur mobile */}
+      <span className="topbar-hide-mobile">
+        <WeatherBadge />
+      </span>
 
       {/* Spacer pour pousser les currencies a droite si large ecran */}
       <div className="flex-1 min-w-0" />
 
       {/* Currencies (cash counter + fuel + seeds), avec format K/M/B */}
       <CashCounter />
-      <Pill title="Essence">
+      <Pill title="Essence" hideOnMobile>
         <span className="icon-fuel-tangue" style={{ display: 'inline-flex' }}>
           <FuelIcon size={14} />
         </span>
@@ -90,7 +92,7 @@ export function TopBar() {
           style={{ fontSize: 13, color: 'var(--color-accent-fuel)', lineHeight: 1 }}
         />
       </Pill>
-      <Pill title="Graines de Printemps">
+      <Pill title="Graines de Printemps" hideOnMobile>
         <span className="icon-seed-pulse" style={{ display: 'inline-flex' }}>
           <SeedIcon size={14} />
         </span>
@@ -101,18 +103,20 @@ export function TopBar() {
         />
       </Pill>
 
-      <AudioControls />
+      <span className="topbar-hide-mobile">
+        <AudioControls />
+      </span>
       <KebabMenu />
     </header>
   );
 }
 
 // Pill compacte pour currencies/info (40px de hauteur).
-function Pill({ children, title }: { children: React.ReactNode; title?: string }) {
+function Pill({ children, title, hideOnMobile }: { children: React.ReactNode; title?: string; hideOnMobile?: boolean }) {
   return (
     <div
       title={title}
-      className="flex items-center gap-1 px-2 py-1 flex-shrink-0"
+      className={`flex items-center gap-1 px-2 py-1 flex-shrink-0${hideOnMobile ? ' topbar-hide-mobile' : ''}`}
       style={{
         background: 'var(--color-wood-5)',
         border: '2px solid var(--color-wood-4)',
