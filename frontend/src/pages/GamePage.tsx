@@ -59,6 +59,7 @@ import { SpecialDateEggs } from '../components/hud/SpecialDateEggs.js';
 import { SunFlares } from '../components/hud/SunFlares.js';
 import { AmbientLayer } from '../components/hud/AmbientLayer.js';
 import { ToastStack } from '../components/hud/ToastStack.js';
+import { NextMilestoneBanner } from '../components/hud/NextMilestoneBanner.js';
 import { useGameSession } from '../hooks/useGameSession.js';
 import { useAudio } from '../hooks/useAudio.js';
 import { useResponsive } from '../hooks/useResponsive.js';
@@ -219,6 +220,7 @@ export function GamePage() {
       }}
     >
       <TopBar />
+      <NextMilestoneBanner />
 
       {isMobile ? (
         // ======== LAYOUT MOBILE 375x667 ========
