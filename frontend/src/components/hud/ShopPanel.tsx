@@ -75,34 +75,35 @@ export function ShopPanel() {
         </h2>
       </header>
 
-      {/* Filter chips arrondies (signature RCT-Touch : Junior/Family/Thrill).
-          Adaptees en : Robots / Ameliorations. Decorations a venir. */}
-      <div className="flex gap-2 px-1" role="tablist" aria-label="Categorie boutique">
-        <FilterChip active={tab === 'robots'} onClick={() => setTab('robots')} label="Robots" count={visibleTiers.length} />
-        <FilterChip active={tab === 'upgrades'} onClick={() => setTab('upgrades')} label={t('shop.upgrades')} count={UPGRADE_DEFINITIONS.length} />
-      </div>
+      {/* Sticky header : filter chips + recherche + bulk size restent visibles
+          quand on scroll les shop cards. Idee #356. */}
+      <div className="shop-sticky-header flex flex-col gap-2">
+        <div className="flex gap-2 px-1" role="tablist" aria-label="Categorie boutique">
+          <FilterChip active={tab === 'robots'} onClick={() => setTab('robots')} label="Robots" count={visibleTiers.length} />
+          <FilterChip active={tab === 'upgrades'} onClick={() => setTab('upgrades')} label={t('shop.upgrades')} count={UPGRADE_DEFINITIONS.length} />
+        </div>
 
-      {/* Recherche / filtre */}
-      <input
-        type="search"
-        placeholder="Rechercher…"
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-        style={{
-          padding: '6px 10px',
-          margin: '0 4px',
-          background: 'var(--color-paper-1)',
-          border: '2px solid var(--color-wood-5)',
-          borderRadius: 4,
-          fontFamily: 'var(--font-body)',
-          fontSize: 12,
-          color: 'var(--color-text-body)',
-          outline: 'none',
-        }}
-        aria-label="Rechercher dans la boutique"
-      />
-      {/* Bouton Undo (5s window) */}
-      <UndoButton />
+        <input
+          type="search"
+          placeholder="Rechercher…"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          style={{
+            padding: '8px 10px',
+            margin: '0 4px',
+            background: 'var(--color-paper-1)',
+            border: '2px solid var(--color-wood-5)',
+            borderRadius: 4,
+            fontFamily: 'var(--font-body)',
+            fontSize: 13,
+            color: 'var(--color-text-body)',
+            outline: 'none',
+            minHeight: 36,
+          }}
+          aria-label="Rechercher dans la boutique"
+        />
+        <UndoButton />
+      </div>
 
       {/* Selecteur multi-buy : x1 / x10 / x100 / xMax. Visible seulement
           dans l'onglet Robots (les upgrades sont level-by-level). */}
@@ -556,7 +557,7 @@ function ShopCard({ affordable, locked, badge, shine, eta, art, name, rate, cost
           color: cost === null ? 'var(--color-paper-1)' : affordable ? 'var(--color-paper-1)' : 'var(--color-text-muted)',
           border: '2px solid var(--color-wood-5)',
           borderRadius: 5,
-          padding: '8px 10px',
+          padding: '10px 12px',
           fontFamily: 'var(--font-title)',
           fontWeight: 600,
           fontSize: 13,
@@ -566,7 +567,7 @@ function ShopCard({ affordable, locked, badge, shine, eta, art, name, rate, cost
           gap: 4,
           boxShadow: affordable ? '0 3px 0 var(--color-grass-7)' : '0 3px 0 var(--color-wood-3)',
           minWidth: 80,
-          minHeight: 40,
+          minHeight: 44,
           justifyContent: 'center',
         }}
       >

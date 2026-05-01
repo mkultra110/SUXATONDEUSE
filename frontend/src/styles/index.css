@@ -741,9 +741,12 @@
   overflow-y: hidden;
   scroll-snap-type: x mandatory;
   -webkit-overflow-scrolling: touch;
+  scroll-padding-left: 8px;
   padding: 4px 4px 12px;
   scrollbar-width: thin;
   scrollbar-color: var(--color-wood-3) transparent;
+  /* iOS smooth-scroll. */
+  scroll-behavior: smooth;
 }
 .shop-carousel::-webkit-scrollbar { height: 6px; }
 .shop-carousel::-webkit-scrollbar-track { background: transparent; }
@@ -753,8 +756,31 @@
 }
 .shop-carousel > * {
   flex: 0 0 auto;
-  width: 140px;
-  scroll-snap-align: start;
+  width: 152px;
+  scroll-snap-align: center;
+  scroll-snap-stop: always;
+}
+
+/* Sticky shop sub-header (search + bulk size) === */
+.shop-sticky-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: var(--color-paper-2);
+  padding-top: 4px;
+  padding-bottom: 4px;
+  border-bottom: 2px solid var(--color-wood-4);
+  margin-bottom: 4px;
+  backdrop-filter: blur(4px);
+}
+
+/* Min tap target 44px Apple HIG / Material 3 === */
+.tap-target-44 {
+  min-width: 44px;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 /* Map progress (signature progression) : barre en haut-droite avec
@@ -2438,6 +2464,49 @@ button[role='tab']:focus-visible {
     display: none !important;
   }
 }
+
+/* === MOBILE UX POLISH 2025 (research findings) === */
+/* #1 touch-action manipulation : supprime delay 300ms + double-tap zoom. */
+button,
+.pixel-btn,
+.pixel-tab,
+[role='tab'],
+[role='button'] {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* #5 Block overscroll bounce iOS PWA. */
+body {
+  overscroll-behavior-y: none;
+}
+
+/* #3 Active state instant scale 96% en 80ms (perceptible feedback). */
+.pixel-btn:active,
+.pixel-tab:active,
+[role='button']:active {
+  transform: scale(0.96);
+  transition: transform 80ms ease-out;
+}
+
+/* #24 will-change sur les animations qui tournent toujours.
+   On le scope a `.always-animated` plutot que tout pour eviter explosion GPU. */
+.always-animated {
+  will-change: transform, opacity;
+}
+
+/* #13 Easing variable reutilisable. */
+:root {
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-soft: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* #30 Pulse 1s sur le robot quand il vient de tondre une tuile (heartbeat). */
+@keyframes income-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.03); }
+}
+.income-pulse { animation: income-pulse 1s ease-in-out; }
 
 /* === A11Y prefers-reduced-motion : disable les anims les plus agressives === */
 @media (prefers-reduced-motion: reduce) {
