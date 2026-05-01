@@ -2,7 +2,7 @@
 // Le defi est genere a partir de la date du jour : meme defi pour tous les
 // joueurs un meme jour. Recompense bonus en cash si valide.
 
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useUIStore } from '../../stores/uiStore.js';
 import { useGameStore } from '../../stores/gameStore.js';
 import { CrossIcon, CoinIcon, StarIcon } from '../icons/PixelIcon.js';
@@ -43,7 +43,8 @@ export function DailyChallenge() {
   const cash = useGameStore((s) => s.cash);
   const [claimed, setClaimed] = useState(false);
 
-  const challenge = challengeForDate(new Date());
+  // Memoise sur la date du jour (YYYY-MM-DD) pour rester stable par session.
+  const challenge = useMemo(() => challengeForDate(new Date()), []);
   const progress =
     challenge.kind === 'taps'
       ? dailyTaps

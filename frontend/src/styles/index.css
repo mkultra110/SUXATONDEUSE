@@ -2156,8 +2156,8 @@ button[role='tab']:focus-visible {
 /* === Hour counter badge (idee #115) === */
 .hour-badge {
   position: fixed;
-  bottom: 96px;
-  right: 12px;
+  bottom: calc(96px + env(safe-area-inset-bottom, 0px));
+  right: calc(12px + env(safe-area-inset-right, 0px));
   z-index: 600;
   padding: 4px 10px;
   background: var(--color-paper-1);
@@ -2174,8 +2174,8 @@ button[role='tab']:focus-visible {
 /* === FPS counter (idee #441) === */
 .fps-counter {
   position: fixed;
-  top: 56px;
-  right: 12px;
+  top: calc(64px + env(safe-area-inset-top, 0px));
+  left: calc(12px + env(safe-area-inset-left, 0px));
   z-index: 700;
   padding: 4px 8px;
   background: rgba(0,0,0,0.6);
@@ -2368,8 +2368,8 @@ button[role='tab']:focus-visible {
 /* === Save indicator toast === */
 .save-toast {
   position: fixed;
-  bottom: 80px;
-  right: 12px;
+  bottom: calc(80px + env(safe-area-inset-bottom, 0px));
+  right: calc(12px + env(safe-area-inset-right, 0px));
   padding: 6px 12px;
   background: var(--color-grass-5);
   color: var(--color-paper-1);
@@ -2430,6 +2430,54 @@ button[role='tab']:focus-visible {
   z-index: 901;
   pointer-events: none;
   animation: heart-meme-rise 2s ease-out forwards;
+}
+
+/* === A11Y prefers-reduced-motion : disable les anims les plus agressives === */
+@media (prefers-reduced-motion: reduce) {
+  .ascension-overlay,
+  .blackhole-overlay,
+  .heatwave-ring,
+  .bigbang-ring,
+  .l42-banner,
+  .ach-banner,
+  .firefly,
+  .shooting-star,
+  .happy-heart,
+  .thought-bubble,
+  .coin-rain,
+  .marcel-helico,
+  .tiny-mouse,
+  .rabbit-cameo,
+  .rainbow-arc,
+  .aurora-overlay,
+  .godrays-overlay,
+  .lensflare,
+  .clover-spin,
+  .moon-halo,
+  .cloud-shadow,
+  .morning-fog-overlay,
+  .skin-holo,
+  .copper-particle,
+  .copper-burst,
+  .king-trail,
+  .breath-puff,
+  .oil-drip,
+  .electric-spark,
+  .bokeh,
+  .slime-particle,
+  .float-emoji,
+  .robot-happy-mouth,
+  .pompon-chasing {
+    animation: none !important;
+    transition: none !important;
+  }
+  .farm-scene.boost-shimmer,
+  .farm-scene.tile-saturate-cozy,
+  .farm-scene.tile-saturate-bountiful,
+  .farm-scene.tile-saturate-lush,
+  .farm-scene.tile-saturate-legendary {
+    filter: none !important;
+  }
 }
 
 /* === 1er avril : monde a l'envers (idee #672) === */
@@ -2590,6 +2638,438 @@ button[role='tab']:focus-visible {
   animation: float-up 1.6s ease-out forwards;
 }
 
+/* ====================================================================
+   BATCH MASSIF EFFETS — idees #20-150 reste, #80-150 visuels
+   ==================================================================== */
+
+/* === Trainee path BFS robot (idee #20) === */
+@keyframes trail-fade {
+  from { opacity: 0.6; }
+  to { opacity: 0; }
+}
+.bfs-trail {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: radial-gradient(rgba(255,217,33,0.6), transparent);
+  pointer-events: none;
+  animation: trail-fade 200ms ease-out forwards;
+}
+
+/* === Fumee dense l'hiver (idee #21) === */
+.winter-smoke .house-smoke {
+  filter: blur(2px) opacity(0.95);
+  animation-duration: 1.4s !important;
+}
+
+/* === Plumes cocottes (idee #22) === */
+@keyframes feather-drift {
+  0% { transform: translate(0, 0) rotate(0deg); opacity: 1; }
+  100% { transform: translate(30px, 60px) rotate(180deg); opacity: 0; }
+}
+.feather-particle {
+  position: absolute;
+  font-size: 10px;
+  color: white;
+  pointer-events: none;
+  animation: feather-drift 2s ease-out forwards;
+}
+
+/* === Reflet flaque eau (idee #23) === */
+@keyframes puddle-shimmer {
+  0%, 100% { box-shadow: inset 0 0 8px rgba(168, 216, 238, 0.4); }
+  50% { box-shadow: inset 0 0 16px rgba(255, 255, 255, 0.6); }
+}
+.puddle { animation: puddle-shimmer 3s ease-in-out infinite; }
+
+/* === Brouillard matinal (idee #24) === */
+@keyframes morning-fog {
+  0% { opacity: 0.6; transform: translateX(-20px); }
+  50% { opacity: 0.4; }
+  100% { opacity: 0; transform: translateX(20px); }
+}
+.morning-fog-overlay {
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.5) 0%, transparent 60%);
+  z-index: 70;
+  pointer-events: none;
+  animation: morning-fog 30s ease-out forwards;
+}
+
+/* === Flocons cumules sol hiver (idee #30) === */
+.snow-accumulation::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 8px;
+  background: linear-gradient(180deg, transparent 0%, white 100%);
+  pointer-events: none;
+}
+
+/* === Yeux qui clignent mascottes (idee #32) === */
+@keyframes eye-blink {
+  0%, 90%, 100% { transform: scaleY(1); }
+  93%, 97% { transform: scaleY(0.1); }
+}
+.mascot-eyes { animation: eye-blink 4s infinite; transform-origin: center; }
+
+/* === Robot sourit milestone (idee #33) === */
+@keyframes robot-smile {
+  0%, 100% { transform: scaleY(1); }
+  50% { transform: scaleY(1.1); }
+}
+.robot-happy-mouth { animation: robot-smile 1.6s ease-in-out infinite; }
+
+/* === Ombre dynamique (idee #34) === */
+.dynamic-shadow {
+  filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.5));
+  transition: filter 60s linear;
+}
+
+/* === Bourrasque vent (idee #41) === */
+@keyframes wind-gust {
+  0%, 100% { transform: translateX(0) rotate(0deg); }
+  25% { transform: translateX(4px) rotate(8deg); }
+  50% { transform: translateX(-2px) rotate(-4deg); }
+  75% { transform: translateX(3px) rotate(6deg); }
+}
+.wind-blown { animation: wind-gust 0.8s ease-in-out 6; }
+
+/* === Goutte arrosoir (idee #43) === */
+@keyframes water-drop-fall {
+  0% { transform: translateY(0); opacity: 1; }
+  100% { transform: translateY(20px); opacity: 0; }
+}
+.water-drop {
+  position: absolute;
+  width: 4px;
+  height: 6px;
+  background: var(--color-water-2);
+  border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+  pointer-events: none;
+  animation: water-drop-fall 600ms linear infinite;
+}
+
+/* === Pixel anim Pompon mouche (idee #45) === */
+@keyframes pompon-chase {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(-8px); }
+}
+.pompon-chasing { animation: pompon-chase 0.4s ease-in-out infinite; }
+
+/* === Lumiere maison (idee #49) === */
+.house-window-lit {
+  background: radial-gradient(circle, #FFD921 0%, transparent 70%);
+  box-shadow: 0 0 8px rgba(255, 217, 33, 0.7);
+  transition: all 800ms ease-out;
+}
+
+/* === Coccinelle pose (idee #68 deja cameo) === */
+
+/* === Bokeh particles night (idee #79) === */
+@keyframes bokeh-float {
+  0%, 100% { opacity: 0.2; transform: translate(0, 0) scale(1); }
+  50% { opacity: 0.5; transform: translate(10px, -10px) scale(1.2); }
+}
+.bokeh {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: radial-gradient(rgba(255, 230, 128, 0.5), transparent);
+  filter: blur(3px);
+  pointer-events: none;
+  animation: bokeh-float 4s ease-in-out infinite;
+}
+
+/* === Snow accumulation toit (idee #81) === */
+.house-roof-snowy {
+  border-top: 4px solid white;
+  box-shadow: inset 0 6px 0 rgba(255, 255, 255, 0.8);
+}
+
+/* === Glace fontaine (idee #82) === */
+.fountain-frozen {
+  background: linear-gradient(135deg, #C4E8F5, #A8D8EE);
+  filter: brightness(1.15);
+}
+
+/* === Theme-specific particles (#91-95) === */
+@keyframes slime-bubble {
+  0%, 100% { transform: translateY(0) scale(1); opacity: 0.4; }
+  50% { transform: translateY(-12px) scale(1.3); opacity: 0.8; }
+}
+.slime-particle {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: radial-gradient(#9B6DC4, transparent);
+  pointer-events: none;
+  animation: slime-bubble 2s ease-in-out infinite;
+}
+@keyframes cactus-shimmer {
+  0%, 100% { background-position: 0% 0%; }
+  100% { background-position: 200% 0%; }
+}
+.cactus-heat::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(230, 126, 34, 0.15), transparent);
+  background-size: 200% 100%;
+  animation: cactus-shimmer 3s linear infinite;
+  pointer-events: none;
+}
+.geyser-crystal {
+  background: linear-gradient(180deg, rgba(168, 216, 238, 0.3), transparent);
+  animation: pulse 2s ease-in-out infinite;
+}
+.cosmic-stars {
+  background-image:
+    radial-gradient(circle at 10% 20%, white 1px, transparent 2px),
+    radial-gradient(circle at 30% 50%, white 1px, transparent 2px),
+    radial-gradient(circle at 60% 80%, white 1.5px, transparent 2.5px),
+    radial-gradient(circle at 80% 30%, white 1px, transparent 2px),
+    radial-gradient(circle at 90% 70%, white 1px, transparent 2px);
+  animation: pulse 4s ease-in-out infinite;
+}
+.galaxy-bg {
+  background: radial-gradient(ellipse at center, rgba(155, 109, 196, 0.2), transparent 60%),
+              radial-gradient(circle at 30% 30%, white 0.5px, transparent 1px),
+              radial-gradient(circle at 70% 60%, white 0.5px, transparent 1px);
+  background-size: 100% 100%, 200px 200px, 200px 200px;
+}
+
+/* === Crit drop 5x glow vert (idee #99) === */
+@keyframes crit-vert-glow {
+  0% { transform: scale(0.5); opacity: 0; box-shadow: 0 0 0 #8FBF4F; }
+  30% { transform: scale(1.2); opacity: 1; box-shadow: 0 0 24px #8FBF4F, 0 0 48px #6BA53A; }
+  100% { transform: scale(1.6); opacity: 0; box-shadow: 0 0 0 transparent; }
+}
+.crit-burst-green {
+  position: absolute;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: radial-gradient(#FFE680, transparent 60%);
+  pointer-events: none;
+  animation: crit-vert-glow 0.8s ease-out forwards;
+}
+
+/* === Outline jaune robot selectionne (idee #100) === */
+.robot-selected {
+  outline: 3px solid var(--color-accent-gold);
+  outline-offset: 2px;
+  box-shadow: 0 0 16px var(--color-accent-gold);
+}
+
+/* === Skin holographique legendaire (idee #101) === */
+@keyframes holo-shift {
+  0% { background-position: 0% 0%; }
+  100% { background-position: 200% 0%; }
+}
+.skin-holo {
+  background: linear-gradient(135deg, #FFD921, #F29BB8, #A8D8EE, #A855F7, #FFD921);
+  background-size: 400% 100%;
+  animation: holo-shift 4s linear infinite;
+  filter: hue-rotate(0deg);
+}
+
+/* === Trail dore "marche du roi" (idee #108) === */
+@keyframes king-trail {
+  from { opacity: 0.5; transform: scale(1); }
+  to { opacity: 0; transform: scale(2); }
+}
+.king-trail {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: radial-gradient(#FFD921, transparent);
+  pointer-events: none;
+  animation: king-trail 600ms ease-out forwards;
+}
+
+/* === Outline contexte curseur (idee #123) === */
+.cursor-help { cursor: help; }
+.cursor-grab { cursor: grab; }
+.cursor-grabbing { cursor: grabbing; }
+.cursor-not-allowed { cursor: not-allowed; }
+
+/* === Anim spawned nouveau robot (idee #124) === */
+@keyframes spawn-pop {
+  0% { transform: scale(0); opacity: 0; }
+  50% { transform: scale(1.4); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+.spawn-pop { animation: spawn-pop 600ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
+
+/* === Trace pas neige (idee #129) === */
+@keyframes footprint-fade {
+  0% { opacity: 0.6; }
+  100% { opacity: 0; }
+}
+.snow-footprint {
+  position: absolute;
+  width: 6px;
+  height: 8px;
+  background: rgba(180, 180, 200, 0.4);
+  border-radius: 60% 40% 50% 50%;
+  animation: footprint-fade 5s ease-out forwards;
+  pointer-events: none;
+}
+
+/* === Boue roues robot apres pluie (idee #130) === */
+.muddy-wheels {
+  filter: brightness(0.85) sepia(0.4);
+}
+
+/* === Particles cuivrees clic (idee #116) === */
+@keyframes copper-burst {
+  0% { transform: scale(0); opacity: 1; }
+  100% { transform: scale(2); opacity: 0; }
+}
+.copper-particle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: #B87333;
+  pointer-events: none;
+  animation: copper-burst 600ms ease-out forwards;
+}
+
+/* === Drag drop indicateur (idee #120) === */
+.drag-active {
+  outline: 2px dashed var(--color-accent-gold);
+  outline-offset: 4px;
+  background: rgba(245, 196, 67, 0.1);
+}
+
+/* === Snap to grid (idee #121) === */
+.grid-snap-overlay {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(245, 196, 67, 0.2) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(245, 196, 67, 0.2) 1px, transparent 1px);
+  background-size: 48px 48px;
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* === Animation victoire 360 (idee #104) === */
+@keyframes boss-victory-spin {
+  0% { transform: scale(1) rotate(0deg); }
+  50% { transform: scale(1.5) rotate(180deg); }
+  100% { transform: scale(1) rotate(360deg); }
+}
+.boss-victory-spin { animation: boss-victory-spin 1.2s ease-out forwards; }
+
+/* === Nuages ombre (idee #126) === */
+@keyframes cloud-shadow-drift {
+  0% { transform: translateX(-30%); }
+  100% { transform: translateX(130%); }
+}
+.cloud-shadow {
+  position: fixed;
+  top: 30vh;
+  width: 250px;
+  height: 80px;
+  background: radial-gradient(ellipse, rgba(0, 0, 0, 0.15), transparent 60%);
+  border-radius: 50%;
+  z-index: 10;
+  pointer-events: none;
+  animation: cloud-shadow-drift 30s linear infinite;
+}
+
+/* === Vapeur cocottes hiver (idee #128) === */
+@keyframes breath-puff {
+  0% { transform: translateY(0) scale(0.5); opacity: 0.8; }
+  100% { transform: translateY(-8px) scale(1.2); opacity: 0; }
+}
+.breath-puff {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.7);
+  pointer-events: none;
+  animation: breath-puff 1s ease-out forwards;
+}
+
+/* === Goutte huile robot vieux (idee #131) === */
+@keyframes oil-drip {
+  0% { opacity: 0; transform: translateY(0); }
+  20% { opacity: 1; }
+  100% { opacity: 0; transform: translateY(8px); }
+}
+.oil-drip {
+  position: absolute;
+  width: 3px;
+  height: 6px;
+  background: #2a1810;
+  border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+  animation: oil-drip 1.5s ease-out infinite;
+}
+
+/* === Etincelles electriques (idee #132) === */
+@keyframes electric-spark {
+  0%, 100% { opacity: 0; }
+  50% { opacity: 1; transform: scale(1.2); }
+}
+.electric-spark {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: white;
+  border-radius: 50%;
+  box-shadow: 0 0 6px #A8D8EE, 0 0 12px white;
+  animation: electric-spark 0.2s ease-in-out infinite;
+}
+
+/* === Trou noir prestige (idee #141) === */
+@keyframes blackhole-spin {
+  from { transform: rotate(0deg) scale(1); }
+  to { transform: rotate(720deg) scale(0); }
+}
+.blackhole-overlay {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 300px;
+  height: 300px;
+  margin: -150px 0 0 -150px;
+  border-radius: 50%;
+  background: radial-gradient(circle, black 0%, rgba(155, 109, 196, 0.5) 50%, transparent 70%);
+  z-index: 1850;
+  pointer-events: none;
+  animation: blackhole-spin 2s ease-in forwards;
+}
+
+/* === Aurora dance theme legendaire (idee #150) === */
+@keyframes aurora-dance {
+  0%, 100% { opacity: 0.3; transform: translateX(0%) skew(0deg); }
+  50% { opacity: 0.6; transform: translateX(10%) skew(-3deg); }
+}
+.aurora-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 30vh;
+  background: linear-gradient(180deg, rgba(126, 197, 197, 0.3), rgba(168, 216, 238, 0.2), transparent);
+  filter: blur(8px);
+  z-index: 25;
+  pointer-events: none;
+  animation: aurora-dance 6s ease-in-out infinite;
+}
+
 /* === Halo lunaire (idee #149) === */
 .moon-halo {
   position: fixed;
@@ -2662,7 +3142,7 @@ button[role='tab']:focus-visible {
 }
 .ach-banner {
   position: fixed;
-  top: 80px;
+  top: calc(110px + env(safe-area-inset-top, 0px));
   left: 50%;
   transform: translate(-50%, 0);
   background: var(--color-paper-1);

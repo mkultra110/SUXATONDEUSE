@@ -164,6 +164,56 @@ export const MEME_DIALOGUES: ReadonlyArray<MemeDialogue> = [
     text: 'Lundi matin, le coq Bebert m\'a reveillee. Bonne semaine !',
     when: (c) => new Date().getDay() === 1 && c.hourLocal >= 6 && c.hourLocal < 10,
   },
+  // === Citations en plus (idees #691 #692 #693) ===
+  {
+    id: 'cite-fontaine',
+    text: 'Comme disait Jean : "patience et longueur de temps font plus que force ni que rage".',
+    oneShot: true,
+    when: (c) => c.totalCash >= 50_000 && !c.shownIds.has('cite-fontaine'),
+  },
+  {
+    id: 'cite-coluche',
+    text: 'Coluche disait : "quand on est petit on aime tout, sauf ce qui est petit".',
+    oneShot: true,
+    when: (c) => c.totalRobots >= 5 && !c.shownIds.has('cite-coluche'),
+  },
+  {
+    id: 'cite-devos',
+    text: 'Devos jurait : "il faut des fous, il y aura toujours des fous a faire des choses faisables".',
+    oneShot: true,
+    when: (c) => c.totalPrestiges >= 3 && !c.shownIds.has('cite-devos'),
+  },
+  // === References (idees #685-690) ===
+  {
+    id: 'ref-stardew',
+    text: 'On dirait Stardew Valley. Marcel a meme commande un coffre en bois pour ranger les outils.',
+    oneShot: true,
+    when: (c) => c.totalRobots >= 15 && !c.shownIds.has('ref-stardew'),
+  },
+  {
+    id: 'ref-cookieclicker',
+    text: 'Mes biscuits aux noix ont du succes. Plus on en mange, plus on en veut.',
+    oneShot: true,
+    when: (c) => c.totalCash >= 1e6 && !c.shownIds.has('ref-cookieclicker'),
+  },
+  {
+    id: 'ref-zelda',
+    text: 'Quand tu trouves un trefle dore... ca rappelle un certain rupee.',
+    oneShot: true,
+    when: (c) => c.totalRobots >= 30 && !c.shownIds.has('ref-zelda'),
+  },
+  {
+    id: 'ref-asterix',
+    text: 'Mon arriere-arriere-grand-pere disait : "ils sont fous ces fermiers".',
+    oneShot: true,
+    when: (c) => c.totalPrestiges >= 1 && !c.shownIds.has('ref-asterix'),
+  },
+  // === Fin de session ===
+  {
+    id: 'goodbye-night',
+    text: 'Va dormir mon petit. Demain on remet ca.',
+    when: (c) => c.hourLocal >= 1 && c.hourLocal < 4,
+  },
 ];
 
 export function pickDialogue(ctx: DialogueContext): MemeDialogue | null {

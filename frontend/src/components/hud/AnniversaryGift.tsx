@@ -20,10 +20,6 @@ const ANNIVERSARY_TIERS: ReadonlyArray<{ days: number; label: string; cash: numb
   { days: 365, label: 'Une année', cash: 100_000_000_000, gems: 1000 },
 ];
 
-function daysSince(playTimeSeconds: number): number {
-  return Math.floor(playTimeSeconds / 86_400);
-}
-
 function tierForDay(d: number): typeof ANNIVERSARY_TIERS[number] | null {
   for (let i = ANNIVERSARY_TIERS.length - 1; i >= 0; i--) {
     const tier = ANNIVERSARY_TIERS[i]!;
@@ -39,9 +35,10 @@ export function AnniversaryGift() {
   const [open, setOpen] = useState(false);
   const [activeTier, setActiveTier] = useState<typeof ANNIVERSARY_TIERS[number] | null>(null);
 
+  // Recalcule UNIQUEMENT quand le palier "days" change, pas chaque seconde.
+  const dayCount = Math.floor(playTime / 86_400);
   useEffect(() => {
-    const d = daysSince(playTime);
-    const tier = tierForDay(d);
+    const tier = tierForDay(dayCount);
     if (tier && tier.days > lastDay) {
       setActiveTier(tier);
       setOpen(true);
@@ -49,7 +46,7 @@ export function AnniversaryGift() {
       haptic.rare();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [playTime]);
+  }, [dayCount]);
 
   function claim() {
     if (!activeTier) return;

@@ -73,6 +73,16 @@ const BOSS_QUOTES: Record<string, string[]> = {
     '« Vous faites trop de bruit avec vos robots ! »',
     '« Je vais appeler la mairie ! »',
   ],
+  'liane-etrangleuse': ['« Viens dans mes bras... »', '« Je serre par amour. »'],
+  'fougere-prehistorique': ['« Je suis ne avant ton ancetre. »', '« 4 millions d\'annees. »'],
+  'mauve-hypnotique': ['« Regarde dans mes yeux... pas dans mes yeux... »', '« Tu vas oublier... »'],
+  'lavande-endormante': ['« Une petite sieste ? »', '« Tres parfumee, je sais. »'],
+  'ortie-brulante': ['« Approche pour voir. »', '« Pas de gants, ho ho. »'],
+  'limace-monstre': ['« Plus tu tapes, plus je grossis. »', '« Slurp. »'],
+  'pomme-vehicule': ['« Vroum vroum... pousse-toi. »', '« Pas de freins ! »'],
+  'crapaud-geant': ['« Glouglou. *recrache une tuile* »', '« Mes papilles sont des aimants. »'],
+  'mille-pattes': ['« Mille pattes, mille problemes. »', '« Compte-les si tu peux. »'],
+  'maman-frelon': ['« Mes petits ont faim ! »', '« BzzzzzzZZZ ! »'],
 };
 
 export function BossDialog({ boss, onDismiss }: { boss: BossDef; onDismiss: () => void }) {

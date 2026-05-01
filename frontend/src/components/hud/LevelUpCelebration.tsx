@@ -27,15 +27,19 @@ export function LevelUpCelebration() {
       useEffectsStore.getState().triggerShake(0.4, 300);
       useEffectsStore.getState().triggerChromatic(220);
       // Si nouveau rang : 2eme audio bling + shake plus fort.
+      let rankTimer: ReturnType<typeof setTimeout> | null = null;
       if (rank.title !== previousRank.title) {
-        setTimeout(() => audio.playRankUp(), 200);
+        rankTimer = setTimeout(() => audio.playRankUp(), 200);
         useEffectsStore.getState().triggerShake(0.8, 500);
       }
       const t = setTimeout(() => {
         setPop((p) => (p && p.id === id ? null : p));
       }, 2500);
       lastLevelRef.current = level;
-      return () => clearTimeout(t);
+      return () => {
+        clearTimeout(t);
+        if (rankTimer) clearTimeout(rankTimer);
+      };
     }
     lastLevelRef.current = level;
     return undefined;

@@ -20,7 +20,17 @@ export type BossKind =
   | 'robot-anti'
   | 'pelouse-sentiente'
   | 'loup-garou'
-  | 'voisin-robert';
+  | 'voisin-robert'
+  | 'liane-etrangleuse'
+  | 'fougere-prehistorique'
+  | 'mauve-hypnotique'
+  | 'lavande-endormante'
+  | 'ortie-brulante'
+  | 'limace-monstre'
+  | 'pomme-vehicule'
+  | 'crapaud-geant'
+  | 'mille-pattes'
+  | 'maman-frelon';
 
 export interface BossDef {
   kind: BossKind;
@@ -151,6 +161,16 @@ export const BOSSES: ReadonlyArray<BossDef> = [
     tagline: 'Il vient se plaindre du bruit. Tres fortement.',
     color: '#A22A06',
   },
+  { kind: 'liane-etrangleuse', name: 'Liane Etrangleuse', hp: 28_000, tagline: 'Elle enserre, elle serre, elle etrangle.', color: '#3A6B2A' },
+  { kind: 'fougere-prehistorique', name: 'Fougere Prehistorique', hp: 36_000, tagline: 'Plus vieille que le crayon a papier.', color: '#4A8A2E' },
+  { kind: 'mauve-hypnotique', name: 'Mauve Hypnotique', hp: 50_000, tagline: 'Tu vas oublier pourquoi tu es ici.', color: '#A78BFA' },
+  { kind: 'lavande-endormante', name: 'Lavande Endormante', hp: 65_000, tagline: 'Tres parfumee. Trop, peut-etre.', color: '#C4B5FD' },
+  { kind: 'ortie-brulante', name: 'Ortie Brulante', hp: 85_000, tagline: 'Pas de gants ? Mauvaise idee.', color: '#6BA53A' },
+  { kind: 'limace-monstre', name: 'Limace Monstre', hp: 120_000, tagline: 'Elle grossit a chaque coup. Ne tape pas.', color: '#9B6DC4' },
+  { kind: 'pomme-vehicule', name: 'Pomme Vehicule', hp: 160_000, tagline: 'Roule avec inertie. Pousse, ca freine pas.', color: '#FF6B6B' },
+  { kind: 'crapaud-geant', name: 'Crapaud Geant', hp: 220_000, tagline: 'Il avale et regurgite des tuiles. Charmant.', color: '#5C7C3A' },
+  { kind: 'mille-pattes', name: 'Mille-Pattes', hp: 300_000, tagline: 'Mille pattes a tondre. Une par une.', color: '#A57144' },
+  { kind: 'maman-frelon', name: 'Maman Frelon', hp: 420_000, tagline: 'Elle invoque ses petits. Beaucoup.', color: '#FFD921' },
 ];
 
 // Retourne le boss du niveau si c'est un boss level (multiple de 10),

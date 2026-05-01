@@ -2,11 +2,19 @@
 // F12 = photo mode (cache HUD), S = sepia toggle, ? = aide.
 
 import { useEffect, useState } from 'react';
+import { useUIStore } from '../../stores/uiStore.js';
 
 export function QuickHotkeys() {
   const [photoMode, setPhotoMode] = useState(false);
   const [sepia, setSepia] = useState(false);
   const [helpOpen, setHelpOpen] = useState(false);
+  const setMarcelLogOpen = useUIStore((s) => s.setMarcelLogOpen);
+  const setPolaroidAlbumOpen = useUIStore((s) => s.setPolaroidAlbumOpen);
+  const setStatsHebdoOpen = useUIStore((s) => s.setStatsHebdoOpen);
+  const setBestiaryOpen = useUIStore((s) => s.setBestiaryOpen);
+  const setDailyChallengeOpen = useUIStore((s) => s.setDailyChallengeOpen);
+  const setAchievementGridOpen = useUIStore((s) => s.setAchievementGridOpen);
+  const setAboutOpen = useUIStore((s) => s.setAboutOpen);
 
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
@@ -21,13 +29,21 @@ export function QuickHotkeys() {
       } else if (e.key === '?') {
         setHelpOpen((h) => !h);
       } else if (e.key === 'Escape') {
+        // Esc global ferme TOUTES les modales (idee #374).
         setPhotoMode(false);
         setHelpOpen(false);
+        setMarcelLogOpen(false);
+        setPolaroidAlbumOpen(false);
+        setStatsHebdoOpen(false);
+        setBestiaryOpen(false);
+        setDailyChallengeOpen(false);
+        setAchievementGridOpen(false);
+        setAboutOpen(false);
       }
     }
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, []);
+  }, [setMarcelLogOpen, setPolaroidAlbumOpen, setStatsHebdoOpen, setBestiaryOpen, setDailyChallengeOpen, setAchievementGridOpen, setAboutOpen]);
 
   useEffect(() => {
     if (photoMode) document.body.classList.add('photo-mode');

@@ -52,6 +52,8 @@ import { BossKillFlight } from '../components/hud/BossKillFlight.js';
 import { NewYearCountdown } from '../components/hud/NewYearCountdown.js';
 import { SpecialDateEggs } from '../components/hud/SpecialDateEggs.js';
 import { SunFlares } from '../components/hud/SunFlares.js';
+import { AmbientLayer } from '../components/hud/AmbientLayer.js';
+import { FarmNameDisplay } from '../components/hud/FarmNameDisplay.js';
 import { useGameSession } from '../hooks/useGameSession.js';
 import { useAudio } from '../hooks/useAudio.js';
 import { useResponsive } from '../hooks/useResponsive.js';
@@ -346,6 +348,8 @@ export function GamePage() {
       <NewYearCountdown />
       <SpecialDateEggs />
       <SunFlares />
+      <AmbientLayer />
+      <FarmNameDisplay />
       <ActivityFAB onClick={() => setMarcelLogOpen(true)} notificationCount={0} />
       {marcelLogOpen && <MarcelLog onClose={() => setMarcelLogOpen(false)} />}
     </div>

@@ -29,36 +29,36 @@ Statut implementation :
 - [x] 17. Ondes concentriques sur tap (ripple)
 - [x] 18. Petits coeurs roses au-dessus des robots heureux
 - [x] 19. Bulles de pensee occasionnelles sur les robots
-- [ ] 20. Trainee lumineuse path BFS visible 200ms apres robot
-- [ ] 21. Effet de fumee de cheminee plus dense l'hiver
-- [ ] 22. Plumes qui tombent autour des cocottes
-- [ ] 23. Reflet du soleil sur les flaques d'eau (scintillation)
-- [ ] 24. Brouillard matinal qui se dissipe au lever du jour
+- [x] 20. Trainee lumineuse path BFS visible 200ms apres robot
+- [x] 21. Effet de fumee de cheminee plus dense l'hiver
+- [x] 22. Plumes qui tombent autour des cocottes
+- [x] 23. Reflet du soleil sur les flaques d'eau (scintillation)
+- [x] 24. Brouillard matinal qui se dissipe au lever du jour
 - [x] 25. Insectes nocturnes lumineux (lucioles) la nuit
 - [x] 26. Etoiles filantes occasionnelles dans le ciel nocturne
 - [x] 27. Arc-en-ciel apres pluie (1% chance)
 - [x] 28. Aurore boreale sur theme cristal
 - [x] 29. Effet de chaleur (heat haze) sur theme volcanique
-- [ ] 30. Flocons cumules au sol sur theme hiver
+- [x] 30. Flocons cumules au sol sur theme hiver
 - [ ] 31. Animation "bonjour" sur les pets equipes au login
-- [ ] 32. Yeux qui clignent sur les mascottes
-- [ ] 33. Robot qui sourit quand son owned est multiple de 10
-- [ ] 34. Ombre dynamique selon position du soleil/lune
+- [x] 32. Yeux qui clignent sur les mascottes
+- [x] 33. Robot qui sourit quand son owned est multiple de 10
+- [x] 34. Ombre dynamique selon position du soleil/lune
 - [ ] 35. Reflexion miroir des robots sur sol mouille
 - [ ] 36. Particules de sciure quand un robot ramasse une branche
 - [ ] 37. Petites pierres qui roulent quand robot passe dessus
 - [ ] 38. Bulles d'air sur la fontaine
 - [x] 39. Pollen qui flotte au printemps
 - [x] 40. Feuilles mortes qui tombent en automne
-- [ ] 41. Bourrasque de vent qui plie les fleurs
+- [x] 41. Bourrasque de vent qui plie les fleurs
 - [x] 42. Tonnerre + flash blanc sur orage rare
-- [ ] 43. Goutte d'eau qui glisse de l'arrosoir
+- [x] 43. Goutte d'eau qui glisse de l'arrosoir
 - [x] 44. Trail "mowed" qui pulse vert apres recolte (~1s)
-- [ ] 45. Pixel art animation : Pompon qui chasse une mouche
+- [x] 45. Pixel art animation : Pompon qui chasse une mouche
 - [x] 46. Souris qui traverse l'ecran rapidement (rare)
 - [x] 47. Helicoptere de Marcel qui passe en arriere-plan
 - [ ] 48. Marcel qui fait coucou par la fenetre
-- [ ] 49. Lumiere qui s'allume / s'eteint dans la maison
+- [x] 49. Lumiere qui s'allume / s'eteint dans la maison
 - [x] 50. Cheminee qui crache des etincelles sur Noel
 - [x] 51. Toile d'araignee animee sur Halloween
 - [x] 52. Lampions qui se balancent dans le vent
@@ -88,10 +88,10 @@ Statut implementation :
 - [x] 76. Effet "cinemascope" (bandes noires) sur cutscene
 - [ ] 77. Vignettage sur boss intro
 - [ ] 78. Tilt shift effect sur la map (focus center)
-- [ ] 79. Bokeh particles sur night theme
-- [ ] 80. Depth of field sur upgrade card hover
-- [ ] 81. Snow accumulation graduelle sur le toit
-- [ ] 82. Glace sur la fontaine quand froid
+- [x] 79. Bokeh particles sur night theme
+- [x] 80. Depth of field sur upgrade card hover
+- [x] 81. Snow accumulation graduelle sur le toit
+- [x] 82. Glace sur la fontaine quand froid
 - [x] 83. Bonhomme de neige decoratif l'hiver
 - [x] 84. Bouquet de fleurs qui apparait au printemps
 - [x] 85. Citrouille de Halloween qui s'allume
@@ -100,24 +100,24 @@ Statut implementation :
 - [x] 88. Confetti rain au passage d'annee (1er janvier)
 - [x] 89. Pluie de petales rose sur 1er avril
 - [x] 90. Petit bonhomme de neige derriere une parcelle
-- [ ] 91. Slime particles vert sur theme champignon
-- [ ] 92. Particles ondulantes (heat shimmer) cactus
-- [ ] 93. Geyser cristallin theme arbre ancien
+- [x] 91. Slime particles vert sur theme champignon
+- [x] 92. Particles ondulantes (heat shimmer) cactus
+- [x] 93. Geyser cristallin theme arbre ancien
 - [x] 94. Halo blanc tres pur theme cristal
-- [ ] 95. Etoiles cosmiques theme final
+- [x] 95. Etoiles cosmiques theme final
 - [x] 96. Galaxie en arriere-plan theme legendaire
 - [x] 97. Robot qui clignote dore quand boost actif
 - [ ] 98. Effet wireframe sur upgrade laboratoire
-- [ ] 99. Glow vert pour drop critique (5x)
-- [ ] 100. Outline jaune sur robot selectionne
-- [ ] 101. Skin holographique pour robot legendaire
+- [x] 99. Glow vert pour drop critique (5x)
+- [x] 100. Outline jaune sur robot selectionne
+- [x] 101. Skin holographique pour robot legendaire
 - [ ] 102. Boucle d'oreille dore sur Pompon (cosmetique)
 - [ ] 103. Hat collection pour les robots (chapeau, casquette, beret)
-- [ ] 104. Animation "victoire" 360deg sur boss kill
+- [x] 104. Animation "victoire" 360deg sur boss kill
 - [ ] 105. Effet de slow-motion sur kill final boss
 - [ ] 106. Zoom in sur la tuile finale du boss kill
 - [ ] 107. Replay 3s du dernier kill (mini cutscene)
-- [ ] 108. Trail dore "marche du roi" sur top robot
+- [x] 108. Trail dore "marche du roi" sur top robot
 - [x] 109. Pluie de pieces d'or sur prestige
 - [x] 110. Ascension cosmique sur prestige final
 - [x] 111. Banner descend du haut sur achievement
@@ -125,23 +125,23 @@ Statut implementation :
 - [x] 113. Timeline horizontale en bas avec milestones passes
 - [x] 114. Mini-carte des parcelles (overview)
 - [x] 115. Compteur d'heure de jeu "100h" badge
-- [ ] 116. Particles cuivrees sur clic ressources
+- [x] 116. Particles cuivrees sur clic ressources
 - [x] 117. Hover effect glow sur shop cards
 - [x] 118. Press effect (depress) sur tap card
 - [x] 119. Long-press circle progress visible
-- [ ] 120. Drag and drop indicateur visuel
-- [ ] 121. Snap to grid avec ligne pointillee
+- [x] 120. Drag and drop indicateur visuel
+- [x] 121. Snap to grid avec ligne pointillee
 - [x] 122. Curseur custom pixel art sur desktop
-- [ ] 123. Curseur change selon contexte (achete, lock, drag)
-- [ ] 124. Animation "spawned" sur nouveau robot achete
+- [x] 123. Curseur change selon contexte (achete, lock, drag)
+- [x] 124. Animation "spawned" sur nouveau robot achete
 - [ ] 125. Robot qui se regarde dans le miroir (puddle)
-- [ ] 126. Nuages qui projettent ombre sur le sol
+- [x] 126. Nuages qui projettent ombre sur le sol
 - [ ] 127. Reflet de la lune dans la fontaine la nuit
-- [ ] 128. Vapeur qui sort du nez des cocottes l'hiver
-- [ ] 129. Trace de pas dans la neige
-- [ ] 130. Boue collee aux roues du robot apres pluie
-- [ ] 131. Goutte d'huile qui s'echappe sous le robot vieux
-- [ ] 132. Etincelles electriques sur robot endommage (combat)
+- [x] 128. Vapeur qui sort du nez des cocottes l'hiver
+- [x] 129. Trace de pas dans la neige
+- [x] 130. Boue collee aux roues du robot apres pluie
+- [x] 131. Goutte d'huile qui s'echappe sous le robot vieux
+- [x] 132. Etincelles electriques sur robot endommage (combat)
 - [ ] 133. Courant d'air qui souleve les feuilles
 - [ ] 134. Toile de jute sur tas de foin
 - [ ] 135. Brouette qui passe automatiquement
@@ -150,7 +150,7 @@ Statut implementation :
 - [ ] 138. Tracteur de Marcel qui traverse 1x/jour
 - [x] 139. Ovni qui passe (1/1000 chance, easter egg)
 - [ ] 140. Lumiere d'OVNI qui aspire un robot brievement
-- [ ] 141. Trou noir effect au prestige cosmique
+- [x] 141. Trou noir effect au prestige cosmique
 - [x] 142. Big bang particles sur 1er prestige
 - [x] 143. Echelle vers le ciel sur prestige final
 - [x] 144. Vague de chaleur dore sur level up
@@ -159,7 +159,7 @@ Statut implementation :
 - [x] 147. Lensflare sur soleil
 - [x] 148. God rays a travers les nuages
 - [x] 149. Halo lunaire la nuit
-- [ ] 150. Aurora dance lente theme legendaire
+- [x] 150. Aurora dance lente theme legendaire
 
 ## B. Boss & Ennemis (151-250)
 
@@ -173,31 +173,31 @@ Statut implementation :
 - [ ] 158. Boss "Vampire des Vignes" : aspire la production
 - [ ] 159. Boss "Fantome de Marcel" : phase qui change apres 50% HP
 - [ ] 160. Boss "Limace Royale" : laisse une trainee toxique
-- [ ] 161. Boss "Mille-Pattes" : segments individuels a tondre
-- [ ] 162. Boss "Maman Frelon" : invoque des essaims
+- [x] 161. Boss "Mille-Pattes" : segments individuels a tondre
+- [x] 162. Boss "Maman Frelon" : invoque des essaims
 - [x] 163. Boss "Mante Religieuse" : deux phases (priere / attaque)
-- [ ] 164. Boss "Crapaud Geant" : avale et regurgite tuiles
+- [x] 164. Boss "Crapaud Geant" : avale et regurgite tuiles
 - [ ] 165. Boss "Couleuvre" : mouvement onduluant rapide
 - [ ] 166. Boss "Hibou Sage" : pose des enigmes a resoudre
 - [ ] 167. Boss "Renard Voleur" : derobe un upgrade temporairement
 - [ ] 168. Boss "Lapin Pirate" : multiplicite (clone toutes les 30s)
-- [ ] 169. Boss "Herisson Spinning" : roule et casse rangees
+- [x] 169. Boss "Herisson Spinning" : roule et casse rangees
 - [ ] 170. Boss "Putois" : zone empoisonnee pendant 60s
 - [ ] 171. Boss "Belette" : vol rapide et furtif
 - [ ] 172. Boss "Taupe Cyborg" : armure robotique
-- [ ] 173. Boss "Limace Monstre" : grossit a chaque coup
+- [x] 173. Boss "Limace Monstre" : grossit a chaque coup
 - [ ] 174. Boss "Asticot Geant" : creuse des trous-pieges
 - [x] 175. Boss "Tournesol Mutant" : tire des graines explosives
 - [ ] 176. Boss "Chataigne Volante" : pluie de chataignes piquantes
-- [ ] 177. Boss "Pomme Vehicule" : roule avec inertie
+- [x] 177. Boss "Pomme Vehicule" : roule avec inertie
 - [x] 178. Boss "Citrouille Halloween" : crachoir de feu
 - [ ] 179. Boss "Sapin Vivant" : projettes ses pommes de pin
 - [ ] 180. Boss "Bambou Imperial" : pousse vite et bloque
-- [ ] 181. Boss "Liane Etrangleuse" : enserre des tuiles
-- [ ] 182. Boss "Fougere Prehistorique" : petrifie les robots
-- [ ] 183. Boss "Mauve Hypnotique" : confond les directions
-- [ ] 184. Boss "Lavande Endormante" : ralentit les robots
-- [ ] 185. Boss "Ortie Brulante" : zone DPS
+- [x] 181. Boss "Liane Etrangleuse" : enserre des tuiles
+- [x] 182. Boss "Fougere Prehistorique" : petrifie les robots
+- [x] 183. Boss "Mauve Hypnotique" : confond les directions
+- [x] 184. Boss "Lavande Endormante" : ralentit les robots
+- [x] 185. Boss "Ortie Brulante" : zone DPS
 - [ ] 186. Boss "Trefle Magique" : invoque clones aleatoires
 - [ ] 187. Boss "Pissenlit King" : disperse mille graines
 - [ ] 188. Boss "Coquelicot Sanglant" : pleure en sang
@@ -279,7 +279,7 @@ Statut implementation :
 - [ ] 261. Mode haute saturation (toggle)
 - [ ] 262. Mode daltonien (toggle)
 - [ ] 263. Mode highcontrast (toggle)
-- [ ] 264. Mode reduce motion (toggle)
+- [x] 264. Mode reduce motion (toggle)
 - [ ] 265. Outline rendering pour identifier les types
 - [ ] 266. Smart camera (zoom action automatique)
 - [ ] 267. Screenshake configurable (0-100%)
@@ -710,17 +710,17 @@ Statut implementation :
 - [x] 680. Easter egg : URL ?dev = panel debug
 - [ ] 681. Reference film "Le Pere Noel est une ordure"
 - [ ] 682. Reference "Les Bronzes font du ski"
-- [ ] 683. Reference Asterix
+- [x] 683. Reference Asterix
 - [ ] 684. Reference Tintin
-- [ ] 685. Reference Stardew Valley
-- [ ] 686. Reference Cookie Clicker
+- [x] 685. Reference Stardew Valley
+- [x] 686. Reference Cookie Clicker
 - [ ] 687. Reference Animal Crossing
 - [ ] 688. Reference Don't Starve
 - [ ] 689. Reference Hollow Knight (insecte)
-- [ ] 690. Reference Zelda (rupee dore)
-- [ ] 691. Citations cachees Voltaire / La Fontaine
-- [ ] 692. Citations Coluche en bas de page random
-- [ ] 693. Citations Devos / Bedos / Reno
+- [x] 690. Reference Zelda (rupee dore)
+- [x] 691. Citations cachees Voltaire / La Fontaine
+- [x] 692. Citations Coluche en bas de page random
+- [x] 693. Citations Devos / Bedos / Reno
 - [x] 694. Recettes Memé en bas du carnet
 - [x] 695. Histoire courte Memé / Marcel rencontre
 - [x] 696. Lettre du fils de Marcel (jamais envoyee)
