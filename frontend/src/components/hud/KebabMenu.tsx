@@ -86,7 +86,9 @@ export function KebabMenu({ onClose }: KebabMenuProps) {
               position: 'absolute',
               top: 'calc(100% + 4px)',
               right: 0,
-              minWidth: 220,
+              minWidth: 240,
+              maxHeight: 'calc(100dvh - 80px)',
+              overflowY: 'auto',
               background: 'var(--color-paper-1)',
               border: '3px solid var(--color-wood-5)',
               boxShadow: '0 6px 0 var(--color-wood-5), 0 12px 24px rgba(92, 61, 36, 0.5)',
@@ -94,82 +96,55 @@ export function KebabMenu({ onClose }: KebabMenuProps) {
               zIndex: 1100,
             }}
           >
+            <SectionLabel>JEU</SectionLabel>
             <MenuItem
               icon={<NotebookIcon size={18} />}
               label="Carnet de Marcel"
-              onClick={() => {
-                setMarcelOpen(true);
-                setOpen(false);
-              }}
-            />
-            <MenuItem
-              icon={<HeartIcon size={18} />}
-              label="À propos"
-              onClick={() => {
-                setAboutOpen(true);
-                setOpen(false);
-              }}
-            />
-            <MenuItem
-              icon={<IconGear size={18} />}
-              label="Réglages"
-              onClick={() => {
-                setSettingsOpen(true);
-                setOpen(false);
-              }}
-            />
-            <MenuItem
-              icon={<NavCollectionIcon size={18} />}
-              label="Album de la ferme"
-              onClick={() => {
-                setPolaroidAlbumOpen(true);
-                setOpen(false);
-              }}
-            />
-            <MenuItem
-              icon={<TrophyIcon size={18} />}
-              label="Bilan"
-              onClick={() => {
-                setStatsHebdoOpen(true);
-                setOpen(false);
-              }}
-            />
-            <MenuItem
-              icon={<TrophyIcon size={18} />}
-              label="Bestiaire"
-              onClick={() => {
-                setBestiaryOpen(true);
-                setOpen(false);
-              }}
-            />
-            <MenuItem
-              icon={<TrophyIcon size={18} />}
-              label="Trophées"
-              onClick={() => {
-                setAchievementGridOpen(true);
-                setOpen(false);
-              }}
+              onClick={() => { setMarcelOpen(true); setOpen(false); }}
             />
             <MenuItem
               icon={<StarIcon size={18} />}
               label="Defi du jour"
-              onClick={() => {
-                setDailyChallengeOpen(true);
-                setOpen(false);
-              }}
+              onClick={() => { setDailyChallengeOpen(true); setOpen(false); }}
             />
             <MenuItem
-              icon={<NotebookIcon size={18} />}
-              label="Sauvegarde"
-              onClick={() => {
-                setSaveOpen(true);
-                setOpen(false);
-              }}
+              icon={<StarIcon size={18} />}
+              label="Mode de jeu"
+              onClick={() => { setModeOpen(true); setOpen(false); }}
             />
+
+            <SectionLabel>COLLECTION</SectionLabel>
+            <MenuItem
+              icon={<TrophyIcon size={18} />}
+              label="Trophées"
+              onClick={() => { setAchievementGridOpen(true); setOpen(false); }}
+            />
+            <MenuItem
+              icon={<TrophyIcon size={18} />}
+              label="Bestiaire"
+              onClick={() => { setBestiaryOpen(true); setOpen(false); }}
+            />
+            <MenuItem
+              icon={<NavCollectionIcon size={18} />}
+              label="Album de la ferme"
+              onClick={() => { setPolaroidAlbumOpen(true); setOpen(false); }}
+            />
+            <MenuItem
+              icon={<TrophyIcon size={18} />}
+              label="Bilan stats"
+              onClick={() => { setStatsHebdoOpen(true); setOpen(false); }}
+            />
+
+            <SectionLabel>COMPTE</SectionLabel>
             <MenuItem
               icon={<HeartIcon size={18} />}
               label="Profil"
               onClick={() => { setProfileOpen(true); setOpen(false); }}
+            />
+            <MenuItem
+              icon={<NotebookIcon size={18} />}
+              label="Sauvegarde"
+              onClick={() => { setSaveOpen(true); setOpen(false); }}
             />
             <MenuItem
               icon={<StarIcon size={18} />}
@@ -177,23 +152,30 @@ export function KebabMenu({ onClose }: KebabMenuProps) {
               onClick={() => { setShareOpen(true); setOpen(false); }}
             />
             <MenuItem
-              icon={<StarIcon size={18} />}
-              label="Mode de jeu"
-              onClick={() => { setModeOpen(true); setOpen(false); }}
+              icon={<IconGear size={18} />}
+              label="Réglages"
+              onClick={() => { setSettingsOpen(true); setOpen(false); }}
             />
+
+            <SectionLabel>INFO</SectionLabel>
             <MenuItem
               icon={<NotebookIcon size={18} />}
               label="Aide & FAQ"
               onClick={() => { setLegalKind('help'); setOpen(false); }}
             />
             <MenuItem
+              icon={<HeartIcon size={18} />}
+              label="À propos"
+              onClick={() => { setAboutOpen(true); setOpen(false); }}
+            />
+            <MenuItem
               icon={<NotebookIcon size={18} />}
-              label="Confidentialite"
+              label="Confidentialité"
               onClick={() => { setLegalKind('privacy'); setOpen(false); }}
             />
             <MenuItem
               icon={<NotebookIcon size={18} />}
-              label="Conditions d'utilisation"
+              label="CGU"
               onClick={() => { setLegalKind('terms'); setOpen(false); }}
             />
             <MenuItem
@@ -201,28 +183,13 @@ export function KebabMenu({ onClose }: KebabMenuProps) {
               label="Contact"
               onClick={() => { setLegalKind('contact'); setOpen(false); }}
             />
-            <MenuItem
-              icon={<StarIcon size={18} />}
-              label="Crédits"
-              onClick={() => {
-                setOpen(false);
-              }}
-            />
-            <div
-              style={{
-                height: 2,
-                background: 'var(--color-wood-3)',
-                margin: '6px 0',
-              }}
-            />
+
+            <div style={{ height: 2, background: 'var(--color-wood-3)', margin: '6px 0' }} />
             <MenuItem
               icon={<CrossIcon size={18} />}
               label="Déconnexion"
               destructive
-              onClick={() => {
-                setConfirmLogout(true);
-                setOpen(false);
-              }}
+              onClick={() => { setConfirmLogout(true); setOpen(false); }}
             />
           </div>
         )}
@@ -247,6 +214,23 @@ export function KebabMenu({ onClose }: KebabMenuProps) {
         destructive
       />
     </>
+  );
+}
+
+function SectionLabel({ children }: { children: React.ReactNode }) {
+  return (
+    <div
+      style={{
+        fontFamily: 'var(--font-button)',
+        fontSize: 9,
+        color: 'var(--color-text-muted)',
+        letterSpacing: '0.18em',
+        padding: '8px 10px 2px',
+        textTransform: 'uppercase',
+      }}
+    >
+      {children}
+    </div>
   );
 }
 
