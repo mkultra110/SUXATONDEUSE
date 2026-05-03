@@ -65,6 +65,7 @@ import { MilestoneTimeline } from '../components/hud/MilestoneTimeline.js';
 import { RecentActivity } from '../components/hud/RecentActivity.js';
 import { NextAffordableChip } from '../components/hud/NextAffordableChip.js';
 import { KawaiiHills } from '../components/hud/KawaiiHills.js';
+import { SplashScreen } from '../components/hud/SplashScreen.js';
 import { useGameSession } from '../hooks/useGameSession.js';
 import { useAudio } from '../hooks/useAudio.js';
 import { useResponsive } from '../hooks/useResponsive.js';
@@ -380,6 +381,7 @@ export function GamePage() {
       <OnboardingTutorial />
       <NextAffordableChip />
       <KawaiiHills />
+      <SplashScreen />
       {/* FarmNameDisplay retire : empietait sur la map en mobile. */}
       <ActivityFAB onClick={() => setMarcelLogOpen(true)} notificationCount={0} />
       {marcelLogOpen && <MarcelLog onClose={() => setMarcelLogOpen(false)} />}

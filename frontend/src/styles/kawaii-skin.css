@@ -445,6 +445,11 @@ body[data-sky-period='night'] .farm-scene::before {
   box-shadow: 0 0 0 var(--k-ink);
 }
 
+/* ============ SPLASH FADE-OUT ============ */
+@keyframes splash-fade-out {
+  to { opacity: 0; visibility: hidden; }
+}
+
 /* ============ TOPBAR : ajoute glow gold subtil sous ============ */
 header[class*='items-center']::after {
   content: '';

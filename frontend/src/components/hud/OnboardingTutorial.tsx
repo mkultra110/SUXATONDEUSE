@@ -5,6 +5,7 @@
 import { useEffect, useState } from 'react';
 import { useGameStore } from '../../stores/gameStore.js';
 import { CrossIcon, CoinIcon, NavShopIcon, SeedIcon } from '../icons/PixelIcon.js';
+import { KawaiiGranny } from './KawaiiSprites.js';
 
 const STORAGE_KEY = 'suxa-onboarded';
 
@@ -114,7 +115,9 @@ export function OnboardingTutorial() {
         >
           <CrossIcon size={16} />
         </button>
-        <div style={{ fontSize: 64, marginBottom: 8 }}>{step.emoji}</div>
+        <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 8 }}>
+          {stepIdx === 0 ? <KawaiiGranny size={70} frame={Date.now() / 16} /> : <span style={{ fontSize: 64 }}>{step.emoji}</span>}
+        </div>
         <h2
           id="onboarding-title"
           style={{
