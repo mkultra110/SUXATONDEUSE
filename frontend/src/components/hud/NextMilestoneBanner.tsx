@@ -17,36 +17,21 @@ export function NextMilestoneBanner() {
   const levelsToNext = next.minLevel - level;
 
   return (
-    <div
-      style={{
-        background: 'var(--color-paper-1)',
-        borderBottom: `2px solid ${rank.color}`,
-        padding: '4px 12px',
-        display: 'flex',
-        alignItems: 'center',
-        gap: 8,
-        fontSize: 11,
-        fontFamily: 'var(--font-button)',
-        color: 'var(--color-text-muted)',
-        textTransform: 'uppercase',
-        letterSpacing: '0.08em',
-        flexShrink: 0,
-        boxShadow: 'inset 0 -1px 0 var(--color-wood-3)',
-      }}
-    >
-      <span>Prochain</span>
-      <span style={{ color: next.color, fontWeight: 700 }}>{next.title}</span>
-      <span style={{ color: 'var(--color-text-muted)' }}>· {levelsToNext} lv</span>
+    <div className="kawaii-goal-ticker">
+      <span className="goal-label">PROCHAIN OBJECTIF</span>
+      <span style={{ color: next.color, fontWeight: 700, fontFamily: 'var(--font-title)' }}>
+        {next.title}
+      </span>
+      <span>· {levelsToNext} lv restant{levelsToNext > 1 ? 's' : ''}</span>
       <span className="flex-1" />
-      <span style={{ color: 'var(--color-accent-gold)' }} className="numeric">
+      <span className="numeric" style={{ color: 'var(--k-gold, #FFD921)' }}>
         {Math.round(ratio * 100)}%
       </span>
       <div
         style={{
           flex: '0 0 60px',
           height: 6,
-          background: 'var(--color-wood-3)',
-          border: '1px solid var(--color-wood-5)',
+          background: 'rgba(255, 255, 255, 0.15)',
           borderRadius: 3,
           overflow: 'hidden',
         }}
@@ -60,8 +45,8 @@ export function NextMilestoneBanner() {
           }}
         />
       </div>
-      <span style={{ color: 'var(--color-text-muted)', fontSize: 9 }}>
-        {formatBig(totalCash)} pieces
+      <span style={{ fontSize: 11, opacity: 0.7 }}>
+        {formatBig(totalCash)}
       </span>
     </div>
   );

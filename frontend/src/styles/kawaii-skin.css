@@ -1,0 +1,240 @@
+/* ===================================================================
+   KAWAII SKIN — Refonte visuelle 2026 (Claude Design handoff)
+   Style Animal Crossing : sky gradient day/night, hills, frame bois epais,
+   pills 8-bit colorees, goal ticker. Override les couleurs/components.
+   =================================================================== */
+
+:root {
+  /* Palette kawaii (verifiee en peer review) */
+  --k-sky-day-top: #7DD3F0;
+  --k-sky-day-bottom: #C5EBFB;
+  --k-sky-dawn-top: #FF8B6E;
+  --k-sky-dawn-bottom: #FFE4B5;
+  --k-sky-dusk-top: #FF6B47;
+  --k-sky-dusk-bottom: #FFCB94;
+  --k-sky-sunset-top: #5E3A8C;
+  --k-sky-sunset-bottom: #FF6B9D;
+  --k-sky-night-top: #1A1F4A;
+  --k-sky-night-bottom: #3D2A5C;
+
+  --k-grass-bg: #4F8E2F;
+  --k-grass-light: #6BBA45;
+  --k-grass-mid: #4FA858;
+  --k-grass-dark: #3D8E47;
+
+  --k-wood-frame: #3D2818;
+  --k-wood-frame-shadow: #2A1818;
+  --k-wood-warm: #6B3F1F;
+  --k-cream: #FFF8DC;
+  --k-cream-warm: #F4D6A8;
+
+  --k-gold-light: #FFE066;
+  --k-gold: #FFD921;
+  --k-gold-dark: #B89510;
+  --k-gold-glow: rgba(255, 217, 33, 0.6);
+
+  --k-pink: #FF6B9D;
+  --k-pink-light: #FFC2DD;
+  --k-cyan: #5EC4FF;
+  --k-cyan-light: #B4E3FF;
+  --k-orange: #FF8A3D;
+  --k-orange-light: #FFCB94;
+  --k-green-bright: #5BD984;
+  --k-green-bright-dark: #1F8246;
+  --k-red: #B52121;
+  --k-red-bright: #E63946;
+  --k-purple: #A06CD5;
+
+  --k-ink: #1A1A2E;
+  --k-ink-soft: #2D2D4E;
+  --k-ink-deeper: #0F0F1F;
+
+  --k-shadow-8bit: 3px 3px 0 var(--k-ink);
+  --k-shadow-8bit-lg: 4px 4px 0 var(--k-ink);
+  --k-shadow-8bit-xl: 6px 6px 0 var(--k-ink);
+}
+
+/* ============ BACKGROUND : SKY GRADIENT DAY/NIGHT ============ */
+body[data-sky-period='dawn'] { background: linear-gradient(180deg, var(--k-sky-dawn-top) 0%, var(--k-sky-dawn-bottom) 60%, var(--k-cream-warm) 100%); }
+body[data-sky-period='day'] { background: linear-gradient(180deg, var(--k-sky-day-top) 0%, var(--k-sky-day-bottom) 60%, var(--k-cream-warm) 100%); }
+body[data-sky-period='dusk'] { background: linear-gradient(180deg, var(--k-sky-dusk-top) 0%, var(--k-sky-dusk-bottom) 60%, var(--k-cream-warm) 100%); }
+body[data-sky-period='night'] { background: linear-gradient(180deg, var(--k-sky-night-top) 0%, var(--k-sky-night-bottom) 60%, #2a1810 100%); }
+body { transition: background 2s ease; }
+
+/* ============ TOPBAR REFONTE : style Animal Crossing ============ */
+header[class*='items-center'] {
+  background: linear-gradient(180deg, rgba(26, 26, 46, 0.92) 0%, rgba(26, 26, 46, 0.78) 100%) !important;
+  border-bottom: 3px solid var(--k-ink) !important;
+  box-shadow: 0 4px 0 rgba(255, 217, 33, 0.4) !important;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+/* Pills HUD : style 8-bit avec gradient + box-shadow */
+.kawaii-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  background: var(--k-cream);
+  color: var(--k-ink);
+  border: 3px solid var(--k-ink);
+  box-shadow: var(--k-shadow-8bit), inset 1px 1px 0 #fff;
+  font-family: 'VT323', monospace;
+  font-size: 18px;
+  font-weight: bold;
+  line-height: 1;
+  min-height: 32px;
+  flex-shrink: 0;
+}
+.kawaii-pill--gold { background: linear-gradient(180deg, var(--k-gold-light) 0%, var(--k-gold) 100%); }
+.kawaii-pill--rate { background: linear-gradient(180deg, #A8F0BD 0%, var(--k-green-bright) 100%); color: var(--k-green-bright-dark); }
+.kawaii-pill--robots { background: linear-gradient(180deg, var(--k-cyan-light) 0%, var(--k-cyan) 100%); }
+.kawaii-pill--season { background: linear-gradient(180deg, var(--k-pink-light) 0%, var(--k-pink) 100%); color: #fff; text-shadow: 1px 1px 0 var(--k-ink); }
+.kawaii-pill--clock { background: linear-gradient(180deg, var(--k-orange-light) 0%, var(--k-orange) 100%); color: #fff; text-shadow: 1px 1px 0 var(--k-ink); font-size: 14px; }
+.kawaii-pill--combo { background: linear-gradient(180deg, var(--k-gold) 0%, var(--k-orange) 100%); color: #fff; text-shadow: 1px 1px 0 var(--k-ink); font-size: 20px; animation: kawaii-combo-pulse 0.3s ease; }
+@keyframes kawaii-combo-pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+/* ============ GOAL TICKER : bandeau noir+or ============ */
+.kawaii-goal-ticker {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  padding: 6px 14px;
+  background: linear-gradient(180deg, var(--k-ink) 0%, var(--k-ink-soft) 100%) !important;
+  border-bottom: 2px solid var(--k-gold) !important;
+  font-family: 'Patrick Hand', cursive;
+  font-size: 15px;
+  color: var(--k-cream);
+  flex-shrink: 0;
+  box-shadow: none !important;
+}
+.kawaii-goal-ticker > * { box-shadow: none !important; border: none !important; }
+.kawaii-goal-ticker .goal-label {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 8px;
+  color: var(--k-gold);
+  letter-spacing: 1px;
+  background: rgba(255, 217, 33, 0.15);
+  padding: 4px 8px;
+  border: 1px solid var(--k-gold) !important;
+}
+
+/* ============ HILLS BACKGROUND (clip-path 2 layers) ============ */
+.kawaii-hills {
+  position: fixed;
+  left: 0;
+  right: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+.kawaii-hills--back {
+  bottom: 30%;
+  height: 22%;
+  background: linear-gradient(180deg, var(--k-grass-mid) 0%, var(--k-grass-dark) 100%);
+  clip-path: polygon(0 60%, 12% 30%, 25% 50%, 40% 20%, 55% 45%, 72% 25%, 88% 50%, 100% 30%, 100% 100%, 0 100%);
+  opacity: 0.85;
+}
+.kawaii-hills--front {
+  bottom: 25%;
+  height: 16%;
+  background: linear-gradient(180deg, var(--k-grass-light) 0%, var(--k-grass-mid) 100%);
+  clip-path: polygon(0 70%, 18% 40%, 35% 60%, 52% 30%, 70% 55%, 85% 35%, 100% 50%, 100% 100%, 0 100%);
+}
+
+/* ============ FRAME BOIS EPAIS autour du jardin ============ */
+.farm-scene {
+  border: 5px solid var(--k-wood-frame) !important;
+  box-shadow:
+    0 8px 0 var(--k-wood-frame-shadow),
+    inset 2px 2px 0 rgba(255, 255, 255, 0.2),
+    inset -2px -2px 0 rgba(0, 0, 0, 0.1) !important;
+  background: var(--k-grass-bg) !important;
+  border-radius: 4px;
+}
+.farm-scene::after {
+  /* override la vignette douce */
+  background: radial-gradient(ellipse at center, transparent 70%, rgba(60, 40, 20, 0.22) 100%) !important;
+}
+
+/* ============ BOTTOM NAV : style 8-bit dark + or ============ */
+nav[role='tablist'] {
+  background: linear-gradient(180deg, var(--k-ink) 0%, var(--k-ink-deeper) 100%) !important;
+  border-top: 4px solid var(--k-gold) !important;
+}
+nav[role='tablist'] .pixel-tab {
+  font-family: 'Press Start 2P', monospace;
+  letter-spacing: 1px;
+  border-right: 2px solid var(--k-ink-deeper);
+  background: transparent !important;
+  color: #888 !important;
+}
+nav[role='tablist'] .pixel-tab.pixel-tab-active {
+  background: linear-gradient(180deg, var(--k-ink-soft) 0%, var(--k-ink) 100%) !important;
+  color: var(--k-gold) !important;
+  text-shadow: 0 0 8px rgba(255, 217, 33, 0.5);
+  position: relative;
+}
+nav[role='tablist'] .pixel-tab.pixel-tab-active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 3px;
+  background: var(--k-gold);
+}
+
+/* ============ SHOP CARDS : style 8-bit avec animation pulse affordable ============ */
+.panel-9 {
+  border: 3px solid var(--k-ink) !important;
+  box-shadow: var(--k-shadow-8bit-lg) !important;
+}
+.panel-9.shop-card-shine {
+  animation: kawaii-card-pulse 1.5s ease-in-out infinite;
+}
+@keyframes kawaii-card-pulse {
+  0%, 100% { box-shadow: var(--k-shadow-8bit-lg), 0 0 0 var(--k-gold-glow); }
+  50% { box-shadow: var(--k-shadow-8bit-lg), 0 0 16px var(--k-gold-glow); }
+}
+
+/* ============ BUY BUTTON : gold gradient 8-bit ============ */
+.pixel-btn-gold {
+  background: linear-gradient(180deg, var(--k-gold-light) 0%, var(--k-gold) 50%, var(--k-gold-dark) 100%) !important;
+  color: var(--k-ink) !important;
+  border: 3px solid var(--k-ink) !important;
+  box-shadow: var(--k-shadow-8bit) !important;
+  letter-spacing: 1px;
+}
+.pixel-btn-gold:active {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0 var(--k-ink) !important;
+}
+
+/* ============ NIGHT OVERLAY ============ */
+body[data-sky-period='night'] .farm-scene::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 30% 50%, transparent 0%, rgba(0, 0, 30, 0.45) 70%);
+  pointer-events: none;
+  mix-blend-mode: multiply;
+  z-index: 100;
+}
+
+/* ============ MOBILE ============ */
+@media (max-width: 480px) {
+  .kawaii-pill { font-size: 14px; padding: 3px 7px; min-height: 28px; }
+  .kawaii-goal-ticker { font-size: 12px; padding: 4px 10px; }
+  .kawaii-goal-ticker .goal-label { font-size: 7px; }
+}
+
+/* ============ PREFERS-REDUCED-MOTION ============ */
+@media (prefers-reduced-motion: reduce) {
+  body { transition: none; }
+  .kawaii-pill--combo, .panel-9.shop-card-shine { animation: none !important; }
+}

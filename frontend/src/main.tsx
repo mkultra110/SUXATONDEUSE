@@ -9,6 +9,7 @@ import { I18nextProvider } from 'react-i18next';
 import { i18n } from './i18n.js';
 import { App } from './App.js';
 import './styles/index.css';
+import './styles/kawaii-skin.css';
 
 const queryClient = new QueryClient({
   defaultOptions: {
