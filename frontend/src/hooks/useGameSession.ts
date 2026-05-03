@@ -89,24 +89,36 @@ export function useGameSession(): {
 
     void (async () => {
       try {
-        let loaded: SavePayload | null = null;
+        // FIX BUG : on charge SERVER + LOCAL en parallele puis on garde le
+        // PLUS RECENT/AVANCE pour eviter que le server ecrase le local
+        // (cas reload apres jeu offline non sync).
+        let serverSave: SavePayload | null = null;
+        let localSave: SavePayload | null = null;
         setPhase('server');
         try {
           const server = await apiLoadSave();
-          if (server) loaded = server.payload;
+          if (server) serverSave = server.payload;
         } catch (err) {
           // eslint-disable-next-line no-console
           console.warn('[session] apiLoadSave failed', err);
         }
-        if (!loaded) {
-          setPhase('local');
-          try {
-            loaded = await loadLocal();
-          } catch (err) {
-            // eslint-disable-next-line no-console
-            console.warn('[session] loadLocal failed', err);
-            loaded = null;
-          }
+        setPhase('local');
+        try {
+          localSave = await loadLocal();
+        } catch (err) {
+          // eslint-disable-next-line no-console
+          console.warn('[session] loadLocal failed', err);
+          localSave = null;
+        }
+        // Choisi le save le plus recent par lastTickAt (timestamp epoch ms).
+        // Egalite ou doute : on prefere le local (plus chaud / source de verite).
+        let loaded: SavePayload | null = null;
+        if (serverSave && localSave) {
+          loaded = (localSave.lastTickAt ?? 0) >= (serverSave.lastTickAt ?? 0)
+            ? localSave
+            : serverSave;
+        } else {
+          loaded = localSave ?? serverSave;
         }
         if (cancelled || resolved) return;
 

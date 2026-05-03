@@ -324,9 +324,15 @@ function assignNewTarget(robot: RobotEntity, grass: Set<string>): void {
       return;
     }
   }
-  // Fallback : reste sur place.
-  robot.targetX = sx;
-  robot.targetY = sy;
+  // FIX BUG ROBOTS STUCK : si aucun BFS ne marche (robot dans une zone
+  // isolee post-regen ou autre cas pathologique), TELEPORTE le robot
+  // sur une case libre garantie. Evite la boucle de re-essai infinie
+  // qui faisait que les robots s'arretaient definitivement.
+  const tp = pickRandomFreeTile();
+  robot.x = tp.x;
+  robot.y = tp.y;
+  robot.targetX = tp.x;
+  robot.targetY = tp.y;
   robot.path = [];
 }
 
