@@ -307,6 +307,7 @@ export function GameEffectsLayer() {
       useEffectsStore.getState().triggerShake(0.6, 400);
       useEffectsStore.getState().triggerChromatic(300);
       useToastStore.getState().push(`Nouveau rang : ${newRank} !`, 'gold', 4000);
+      useEffectsStore.getState().pushActivity(`Rang : ${newRank}`, 'rank');
     }
   }, [totalCash]);
 
@@ -315,6 +316,7 @@ export function GameEffectsLayer() {
   useEffect(() => {
     if (bossKills > lastBossKillsRef.current && lastBossKillsRef.current > 0) {
       useToastStore.getState().push(`Boss vaincu ! Total : ${bossKills}`, 'success', 3500);
+      useEffectsStore.getState().pushActivity(`Boss vaincu (#${bossKills})`, 'boss');
     }
     lastBossKillsRef.current = bossKills;
   }, [bossKills]);

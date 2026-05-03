@@ -231,10 +231,9 @@ export function ShopPanel() {
                         buyRobot(type);
                       }
                       const niceName = t(`robotNicknames.${type}`, tier.name);
-                      useToastStore.getState().push(
-                        buyableNow === 1 ? `${niceName} +1` : `${niceName} ×${buyableNow}`,
-                        'success',
-                      );
+                      const label = buyableNow === 1 ? `${niceName} +1` : `${niceName} ×${buyableNow}`;
+                      useToastStore.getState().push(label, 'success');
+                      useEffectsStore.getState().pushActivity(label, 'buy');
                     } else {
                       audio.playError();
                     }
@@ -307,10 +306,9 @@ export function ShopPanel() {
                       for (let i = 0; i < buyableNow; i++) {
                         buyUpgrade(def.key);
                       }
-                      useToastStore.getState().push(
-                        buyableNow === 1 ? `${def.name} +1 niveau` : `${def.name} +${buyableNow} niveaux`,
-                        'gold',
-                      );
+                      const upText = buyableNow === 1 ? `${def.name} +1 niveau` : `${def.name} +${buyableNow} niveaux`;
+                      useToastStore.getState().push(upText, 'gold');
+                      useEffectsStore.getState().pushActivity(upText, 'upgrade');
                     } else {
                       audio.playError();
                     }

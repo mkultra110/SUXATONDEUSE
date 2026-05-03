@@ -62,6 +62,8 @@ import { ToastStack } from '../components/hud/ToastStack.js';
 import { NextMilestoneBanner } from '../components/hud/NextMilestoneBanner.js';
 import { OnboardingTutorial } from '../components/hud/OnboardingTutorial.js';
 import { MilestoneTimeline } from '../components/hud/MilestoneTimeline.js';
+import { RecentActivity } from '../components/hud/RecentActivity.js';
+import { NextAffordableChip } from '../components/hud/NextAffordableChip.js';
 import { useGameSession } from '../hooks/useGameSession.js';
 import { useAudio } from '../hooks/useAudio.js';
 import { useResponsive } from '../hooks/useResponsive.js';
@@ -305,10 +307,10 @@ export function GamePage() {
               <span className="frame-rivet-br" />
               <AnimatedGarden />
             </div>
-            {/* Sous le jardin : MilestoneTimeline pleine largeur + citation Meme.
-                Comble la zone vide qui restait sur desktop large. */}
+            {/* Sous le jardin : MilestoneTimeline + RecentActivity. */}
             <div style={{ width: '100%', maxWidth: 880, marginTop: 12 }}>
               <MilestoneTimeline />
+              <RecentActivity />
             </div>
           </div>
           <div
@@ -375,6 +377,7 @@ export function GamePage() {
       <AmbientLayer />
       <ToastStack />
       <OnboardingTutorial />
+      <NextAffordableChip />
       {/* FarmNameDisplay retire : empietait sur la map en mobile. */}
       <ActivityFAB onClick={() => setMarcelLogOpen(true)} notificationCount={0} />
       {marcelLogOpen && <MarcelLog onClose={() => setMarcelLogOpen(false)} />}

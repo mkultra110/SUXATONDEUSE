@@ -15,6 +15,13 @@ export interface FloatingNumber {
   fontSize: number;
 }
 
+export interface ActivityEntry {
+  id: number;
+  text: string;
+  kind: 'buy' | 'upgrade' | 'boss' | 'level' | 'rank' | 'rare' | 'milestone';
+  timestamp: number;
+}
+
 export interface UndoEntry {
   id: number;
   label: string;
@@ -53,6 +60,9 @@ interface EffectsState {
   memeDialogueIds: ReadonlySet<string>;
   // Album polaroid : ids de map level deja capturee.
   polaroidLevels: ReadonlyArray<number>;
+  // Activity log : 30 derniers evenements (achats, boss, milestones).
+  activityLog: ReadonlyArray<ActivityEntry>;
+  pushActivity: (text: string, kind: ActivityEntry['kind']) => void;
   // Pinned upgrades pour scroll-into-view auto.
   pinnedUpgrades: ReadonlySet<string>;
   // Search filter shop.
@@ -103,6 +113,13 @@ export const useEffectsStore = create<EffectsState>()(
       bossKills: 0,
       memeDialogueIds: new Set<string>(),
       polaroidLevels: [],
+      activityLog: [],
+      pushActivity: (text, kind) => {
+        const id = nextId++;
+        set((s) => ({
+          activityLog: [{ id, text, kind, timestamp: Date.now() }, ...s.activityLog].slice(0, 30),
+        }));
+      },
       pinnedUpgrades: new Set<string>(),
       shopSearch: '',
       enableShake: true,
