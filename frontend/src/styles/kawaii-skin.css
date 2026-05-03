@@ -238,3 +238,222 @@ body[data-sky-period='night'] .farm-scene::before {
   body { transition: none; }
   .kawaii-pill--combo, .panel-9.shop-card-shine { animation: none !important; }
 }
+
+/* ===================================================================
+   DESIGN V2 ADDITIONS (Claude Design handoff #2 - bosses + screens)
+   Splash logo flair, modal base, offline popup, quest cards, prestige.
+   =================================================================== */
+
+/* ============ LOGO FLAIR (titre splash + branding) ============ */
+.kawaii-logo {
+  font-family: 'Press Start 2P', monospace;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  letter-spacing: 4px;
+  line-height: 1;
+  text-align: center;
+}
+.kawaii-logo--suxa {
+  font-size: clamp(36px, 9vw, 84px);
+  color: var(--k-gold);
+  text-shadow:
+    4px 4px 0 var(--k-ink),
+    8px 8px 0 var(--k-red),
+    -2px -2px 0 #fff;
+  animation: kawaii-logo-bob 2.5s ease-in-out infinite;
+}
+.kawaii-logo--tondeuse {
+  font-size: clamp(18px, 4vw, 36px);
+  color: #fff;
+  text-shadow: 3px 3px 0 var(--k-ink), 5px 5px 0 var(--k-green-bright);
+  animation: kawaii-logo-bob 2.5s ease-in-out infinite 0.3s;
+}
+@keyframes kawaii-logo-bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+/* ============ MODAL BASE 8-bit (override modaux existants) ============ */
+[role='dialog'] > div {
+  border-width: 5px !important;
+  box-shadow: 8px 8px 0 var(--k-ink) !important;
+}
+[role='dialog'] h2 {
+  font-family: 'Press Start 2P', monospace !important;
+  letter-spacing: 2px;
+  text-shadow: 3px 3px 0 var(--k-gold);
+}
+
+/* ============ OFFLINE REWARD ENRICHI ============ */
+.offline-amount-kawaii {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  background: linear-gradient(180deg, var(--k-gold-light) 0%, var(--k-gold) 100%);
+  border: 4px solid var(--k-ink);
+  box-shadow: 4px 4px 0 var(--k-ink);
+  padding: 16px 28px;
+  margin-bottom: 16px;
+}
+
+/* ============ QUEST CARDS (DailyPanel) ============ */
+.quest-row-kawaii {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #fff;
+  border: 3px solid var(--k-ink);
+  box-shadow: var(--k-shadow-8bit);
+  padding: 12px;
+}
+.quest-row-kawaii.ready {
+  background: linear-gradient(180deg, var(--k-gold-light) 0%, var(--k-gold) 100%);
+  animation: kawaii-card-pulse 1.2s ease-in-out infinite;
+}
+.quest-row-kawaii.claimed { opacity: 0.5; }
+.quest-bar-kawaii {
+  height: 8px;
+  background: var(--k-ink);
+  border: 2px solid var(--k-ink);
+  margin-bottom: 4px;
+}
+.quest-bar-kawaii-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--k-green-bright) 0%, var(--k-green-bright-dark) 100%);
+  transition: width 0.3s;
+}
+
+/* ============ UPGRADE ROWS ============ */
+.upg-row-kawaii {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #fff;
+  border: 3px solid var(--k-ink);
+  border-left-width: 8px;
+  box-shadow: var(--k-shadow-8bit);
+  padding: 12px;
+}
+.upg-row-kawaii.maxed {
+  background: linear-gradient(180deg, var(--k-gold-light) 0%, var(--k-gold) 100%);
+}
+
+/* ============ COMBO BAR (centre ecran sur taps) ============ */
+.combo-bar-kawaii {
+  position: fixed;
+  top: 30%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(180deg, var(--k-gold) 0%, var(--k-orange) 100%);
+  border: 4px solid var(--k-ink);
+  box-shadow: 4px 4px 0 var(--k-ink);
+  padding: 8px 18px;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 18px;
+  color: #fff;
+  text-shadow: 2px 2px 0 var(--k-ink);
+  letter-spacing: 2px;
+  pointer-events: none;
+  z-index: 1400;
+  animation: combo-pop 0.3s var(--ease-spring, cubic-bezier(0.34, 1.56, 0.64, 1));
+}
+
+/* ============ PRESTIGE SCREEN palette dark stellar ============ */
+.prestige-cosmic {
+  background: linear-gradient(180deg, #1A1F4A 0%, #3D2A5C 50%, #5E3A8C 100%) !important;
+  color: var(--k-cream) !important;
+}
+.prestige-cosmic h2 {
+  color: var(--k-gold) !important;
+  text-shadow: 0 0 12px var(--k-gold-glow) !important;
+}
+.trophy-kawaii {
+  color: var(--k-gold);
+  text-shadow: 0 0 10px var(--k-gold);
+  animation: kawaii-twinkle 1.5s ease-in-out infinite;
+}
+@keyframes kawaii-twinkle {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* ============ EVENTS visuels (pluie pieces, abeilles, meteorite) ============ */
+@keyframes kawaii-coin-fall {
+  0% { transform: translateY(-30px) rotate(0deg); opacity: 0; }
+  10% { opacity: 1; }
+  100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+}
+.event-coin-kawaii {
+  position: fixed;
+  font-size: 24px;
+  z-index: 1500;
+  pointer-events: auto;
+  animation: kawaii-coin-fall var(--coin-dur, 3s) linear forwards;
+  cursor: pointer;
+  filter: drop-shadow(2px 2px 0 var(--k-ink));
+}
+
+@keyframes kawaii-bee-fly {
+  0% { transform: translate(0, 0); }
+  25% { transform: translate(20px, -10px); }
+  50% { transform: translate(40px, 10px); }
+  75% { transform: translate(20px, 20px); }
+  100% { transform: translate(0, 0); }
+}
+.event-bee-kawaii {
+  position: fixed;
+  font-size: 20px;
+  z-index: 1500;
+  animation: kawaii-bee-fly 2s ease-in-out infinite;
+  pointer-events: none;
+  filter: drop-shadow(1px 1px 0 var(--k-ink));
+}
+
+@keyframes kawaii-meteor {
+  0% { transform: translate(-100vw, -100vh) rotate(-45deg); opacity: 0; }
+  20% { opacity: 1; }
+  100% { transform: translate(100vw, 100vh) rotate(-45deg); opacity: 0; }
+}
+.event-meteor-kawaii {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 80px;
+  height: 6px;
+  background: linear-gradient(90deg, transparent, #fff, var(--k-gold));
+  box-shadow: 0 0 16px var(--k-gold), 0 0 32px var(--k-orange);
+  z-index: 1500;
+  pointer-events: none;
+  animation: kawaii-meteor 1.5s linear forwards;
+}
+
+/* ============ SHOP CARD avec badge "AMÉLIORER" (style v2) ============ */
+.upgrade-mini-btn {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 8px;
+  padding: 6px 10px;
+  background: linear-gradient(180deg, var(--k-cyan-light) 0%, var(--k-cyan) 100%);
+  color: var(--k-ink);
+  border: 2px solid var(--k-ink);
+  box-shadow: 2px 2px 0 var(--k-ink);
+  letter-spacing: 1px;
+  cursor: pointer;
+}
+.upgrade-mini-btn:active {
+  transform: translate(2px, 2px);
+  box-shadow: 0 0 0 var(--k-ink);
+}
+
+/* ============ TOPBAR : ajoute glow gold subtil sous ============ */
+header[class*='items-center']::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -3px;
+  height: 3px;
+  background: linear-gradient(90deg, transparent 0%, var(--k-gold) 30%, var(--k-gold) 70%, transparent 100%);
+  pointer-events: none;
+  opacity: 0.6;
+}

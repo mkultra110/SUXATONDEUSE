@@ -62,11 +62,11 @@ export function TopBar() {
       />
 
       {/* Day pill compact - cache sur tres petit ecran (<400px) */}
-      <Pill title={`Jour ${dayNumber}`} hideOnMobile>
+      <Pill title={`Jour ${dayNumber}`} hideOnMobile variant="clock">
         <StarIcon size={12} />
         <span
           className="numeric"
-          style={{ fontSize: 14, color: 'var(--color-accent-gold)', lineHeight: 1 }}
+          style={{ fontSize: 14, lineHeight: 1 }}
         >
           {dayNumber}
         </span>
@@ -82,24 +82,24 @@ export function TopBar() {
 
       {/* Currencies (cash counter + fuel + seeds), avec format K/M/B */}
       <CashCounter />
-      <Pill title="Essence" hideOnMobile>
+      <Pill title="Essence" hideOnMobile variant="rate">
         <span className="icon-fuel-tangue" style={{ display: 'inline-flex' }}>
           <FuelIcon size={14} />
         </span>
         <AnimatedNumber
           value={Number(gems)}
           className="numeric"
-          style={{ fontSize: 13, color: 'var(--color-accent-fuel)', lineHeight: 1 }}
+          style={{ fontSize: 14, lineHeight: 1 }}
         />
       </Pill>
-      <Pill title="Graines de Printemps" hideOnMobile>
+      <Pill title="Graines de Printemps" hideOnMobile variant="robots">
         <span className="icon-seed-pulse" style={{ display: 'inline-flex' }}>
           <SeedIcon size={14} />
         </span>
         <AnimatedNumber
           value={Number(prestigePoints.toString())}
           className="numeric"
-          style={{ fontSize: 13, color: 'var(--color-accent-purple)', lineHeight: 1 }}
+          style={{ fontSize: 14, lineHeight: 1 }}
         />
       </Pill>
 
@@ -111,19 +111,22 @@ export function TopBar() {
   );
 }
 
-// Pill compacte pour currencies/info (40px de hauteur).
-function Pill({ children, title, hideOnMobile }: { children: React.ReactNode; title?: string; hideOnMobile?: boolean }) {
+// Pill compacte pour currencies/info (kawaii Animal Crossing style).
+function Pill({
+  children,
+  title,
+  hideOnMobile,
+  variant,
+}: {
+  children: React.ReactNode;
+  title?: string;
+  hideOnMobile?: boolean;
+  variant?: 'gold' | 'rate' | 'robots' | 'season' | 'clock' | 'combo';
+}) {
+  const variantClass = variant ? ` kawaii-pill--${variant}` : '';
+  const hideClass = hideOnMobile ? ' topbar-hide-mobile' : '';
   return (
-    <div
-      title={title}
-      className={`flex items-center gap-1 px-2 py-1 flex-shrink-0${hideOnMobile ? ' topbar-hide-mobile' : ''}`}
-      style={{
-        background: 'var(--color-wood-5)',
-        border: '2px solid var(--color-wood-4)',
-        boxShadow: 'inset 0 -1px 0 rgba(0,0,0,0.3)',
-        minHeight: 30,
-      }}
-    >
+    <div title={title} className={`kawaii-pill${variantClass}${hideClass}`}>
       {children}
     </div>
   );
