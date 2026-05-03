@@ -761,6 +761,29 @@
   scroll-snap-stop: always;
 }
 
+/* === Cottagecore background pattern : faint sunflowers en SVG === */
+body {
+  background-image:
+    radial-gradient(circle at 20% 30%, rgba(245, 196, 67, 0.04) 1px, transparent 2px),
+    radial-gradient(circle at 70% 60%, rgba(143, 191, 79, 0.04) 1.5px, transparent 2.5px),
+    radial-gradient(circle at 90% 10%, rgba(244, 172, 186, 0.04) 1px, transparent 2px);
+  background-size: 80px 80px, 120px 120px, 100px 100px;
+  background-attachment: fixed;
+}
+
+/* === Border-radius coherent === */
+:root {
+  --r-sm: 4px;
+  --r-md: 8px;
+  --r-lg: 14px;
+}
+
+/* === Depth transition sur panel-9 === */
+.panel-9 {
+  transition: transform 200ms var(--ease-soft, cubic-bezier(0.22, 1, 0.36, 1)),
+              box-shadow 200ms var(--ease-soft, cubic-bezier(0.22, 1, 0.36, 1));
+}
+
 /* Sticky shop sub-header (search + bulk size) === */
 .shop-sticky-header {
   position: sticky;
