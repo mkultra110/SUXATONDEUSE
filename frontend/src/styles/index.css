@@ -761,6 +761,23 @@
   scroll-snap-stop: always;
 }
 
+/* === Backdrop-filter blur sur modaux (research idee #26) === */
+[role='dialog'] {
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+/* === Vignette douce autour du jardin (focus naturel) === */
+.farm-scene::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(ellipse at center, transparent 60%, rgba(60, 40, 20, 0.18) 100%);
+  z-index: 1;
+  border-radius: inherit;
+}
+
 /* === Cottagecore background pattern : faint sunflowers en SVG === */
 body {
   background-image:
