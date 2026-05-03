@@ -321,6 +321,23 @@ export function GameEffectsLayer() {
     lastBossKillsRef.current = bossKills;
   }, [bossKills]);
 
+  // === Prestige ready toast (1x quand user peut prestiger pour la 1ere fois) ===
+  const totalCashEarned = useGameStore((s) => s.totalCashEarned);
+  const prestigeReadyShownRef = useRef(false);
+  useEffect(() => {
+    if (prestigeReadyShownRef.current) return;
+    if (totalPrestiges > 0) {
+      // Toujours suggerer si peut gagner +50% de seeds.
+      return;
+    }
+    const cashNum = Number(totalCashEarned.toString());
+    if (cashNum >= 1e9) {
+      prestigeReadyShownRef.current = true;
+      useToastStore.getState().push('Prestige disponible ! Visite l\'onglet Progrès.', 'gold', 6000);
+      useEffectsStore.getState().pushActivity('Prestige disponible', 'milestone');
+    }
+  }, [totalCashEarned, totalPrestiges]);
+
   // Cash unused mais maintient la subscription cash store.
   void cash;
 
