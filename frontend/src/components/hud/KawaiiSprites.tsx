@@ -84,7 +84,90 @@ export function KawaiiCoin({ size = 16, frame = 0 }: { size?: number; frame?: nu
   );
 }
 
-/** KawaiiGranny : sprite Memé Gisele avec robe rouge à pois + chignon blanc. */
+/** KawaiiSun : soleil souriant 32x32 avec rayons rotatifs. */
+export function KawaiiSun({ size = 60, frame = 0 }: { size?: number; frame?: number }) {
+  const r = (frame * 0.3) % 360;
+  return (
+    <svg width={size} height={size} viewBox="0 0 32 32" style={{ shapeRendering: 'crispEdges', overflow: 'visible' }} aria-hidden>
+      <g transform={`rotate(${r} 16 16)`}>
+        <rect x="15" y="2" width="2" height="3" fill="#FFD921" />
+        <rect x="15" y="27" width="2" height="3" fill="#FFD921" />
+        <rect x="2" y="15" width="3" height="2" fill="#FFD921" />
+        <rect x="27" y="15" width="3" height="2" fill="#FFD921" />
+        <rect x="6" y="6" width="2" height="2" fill="#FFD921" />
+        <rect x="24" y="6" width="2" height="2" fill="#FFD921" />
+        <rect x="6" y="24" width="2" height="2" fill="#FFD921" />
+        <rect x="24" y="24" width="2" height="2" fill="#FFD921" />
+      </g>
+      <rect x="9" y="9" width="14" height="14" fill="#FFD921" />
+      <rect x="8" y="10" width="16" height="12" fill="#FFD921" />
+      <rect x="10" y="8" width="12" height="16" fill="#FFD921" />
+      <rect x="9" y="9" width="14" height="3" fill="#FFF080" />
+      <rect x="9" y="9" width="4" height="14" fill="#FFF080" opacity={0.5} />
+      <rect x="12" y="14" width="2" height="2" fill="#1A1A2E" />
+      <rect x="18" y="14" width="2" height="2" fill="#1A1A2E" />
+      <rect x="13" y="18" width="6" height="1" fill="#1A1A2E" />
+      <rect x="11" y="16" width="2" height="1" fill="#FF6B9D" opacity={0.7} />
+      <rect x="19" y="16" width="2" height="1" fill="#FF6B9D" opacity={0.7} />
+    </svg>
+  );
+}
+
+/** KawaiiMoon : lune endormie 32x32 avec craters. */
+export function KawaiiMoon({ size = 60 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 32 32" style={{ shapeRendering: 'crispEdges' }} aria-hidden>
+      <rect x="9" y="6" width="14" height="20" fill="#FFF8DC" />
+      <rect x="7" y="9" width="18" height="14" fill="#FFF8DC" />
+      <rect x="8" y="7" width="16" height="18" fill="#FFF8DC" />
+      <rect x="10" y="7" width="6" height="2" fill="#FFFFFF" />
+      <rect x="8" y="9" width="3" height="3" fill="#FFFFFF" />
+      <rect x="12" y="13" width="3" height="1" fill="#5A4A8E" />
+      <rect x="18" y="13" width="3" height="1" fill="#5A4A8E" />
+      <rect x="14" y="17" width="4" height="1" fill="#5A4A8E" />
+      <rect x="18" y="11" width="2" height="2" fill="#E0D0A0" />
+      <rect x="11" y="20" width="3" height="2" fill="#E0D0A0" />
+    </svg>
+  );
+}
+
+/** KawaiiCloud : nuage cumulus 4-bumps. */
+export function KawaiiCloud({ size = 80 }: { size?: number }) {
+  return (
+    <svg width={size} height={size * 0.6} viewBox="0 0 64 36" style={{ shapeRendering: 'crispEdges' }} aria-hidden>
+      <ellipse cx="20" cy="22" rx="14" ry="10" fill="#FFFFFF" />
+      <ellipse cx="40" cy="20" rx="16" ry="12" fill="#FFFFFF" />
+      <ellipse cx="50" cy="24" rx="10" ry="8" fill="#FFFFFF" />
+      <ellipse cx="20" cy="20" rx="10" ry="6" fill="#FFFFFF" opacity={0.7} />
+    </svg>
+  );
+}
+
+/** KawaiiButterfly : papillon 16x16 avec flap animation. */
+export function KawaiiButterfly({ size = 16, color = '#FF6B9D', frame = 0 }: { size?: number; color?: string; frame?: number }) {
+  const flap = frame % 4 < 2;
+  return (
+    <svg width={size} height={size} viewBox="0 0 16 16" style={{ shapeRendering: 'crispEdges' }} aria-hidden>
+      <rect x="7" y="6" width="2" height="5" fill="#1A1A2E" />
+      {flap ? (
+        <>
+          <rect x="2" y="3" width="5" height="6" fill={color} />
+          <rect x="9" y="3" width="5" height="6" fill={color} />
+          <rect x="3" y="4" width="3" height="4" fill="#fff" opacity={0.4} />
+          <rect x="10" y="4" width="3" height="4" fill="#fff" opacity={0.4} />
+        </>
+      ) : (
+        <>
+          <rect x="3" y="5" width="4" height="4" fill={color} />
+          <rect x="9" y="5" width="4" height="4" fill={color} />
+        </>
+      )}
+      <rect x="6" y="4" width="1" height="1" fill="#1A1A2E" />
+      <rect x="9" y="4" width="1" height="1" fill="#1A1A2E" />
+    </svg>
+  );
+}
+
 export function KawaiiGranny({ size = 60, frame = 0 }: { size?: number; frame?: number }) {
   const bob = Math.sin(frame * 0.1) * 1;
   return (

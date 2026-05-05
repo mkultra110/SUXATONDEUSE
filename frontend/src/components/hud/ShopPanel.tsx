@@ -21,6 +21,7 @@ import { shineForCount, SHINE_COLOR, SHINE_GLOW, type RobotShine } from '../../u
 import { useEffectsStore } from '../../stores/effectsStore.js';
 import { formatEta } from '../../utils/eta.js';
 import { useToastStore } from './ToastStack.js';
+import { KawaiiRobot } from './KawaiiSprites.js';
 import {
   CoinIcon,
   NavShopIcon,
@@ -607,39 +608,35 @@ function ShopCard({ affordable, locked, badge, shine, eta, art, name, rate, cost
 }
 
 function RobotArt({ tier, shine = 'none' }: { tier: number; shine?: RobotShine }) {
-  const SCALE = 2;
-  const ROBOT_W = 24;
-  const sx = 12 * ROBOT_W; // col 12 = idle frame (row A)
-  const sy = tier * 48;
-  const [aw, ah] = ATLAS_SIZE.robots;
+  // KawaiiRobot SVG remplace l'atlas pixel art (Claude Design v2 handoff).
+  // Plus expressif, gros yeux brillants + blush rose. 8 tiers de couleurs.
   const hasShine = shine !== 'none';
+  const frameRef = Math.floor(Date.now() / 80);
   return (
     <div
       style={{
         width: 64,
         height: 64,
-        background: 'var(--color-paper-2)',
-        border: hasShine ? `2px solid ${SHINE_COLOR[shine]}` : '2px solid var(--color-wood-5)',
+        background: 'linear-gradient(180deg, #B4E3FF 0%, #5EC4FF 100%)',
+        border: hasShine ? `3px solid ${SHINE_COLOR[shine]}` : '3px solid var(--k-ink, #1A1A2E)',
         borderRadius: 4,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         boxShadow: hasShine
-          ? `inset 0 -2px 0 var(--color-wood-3), 0 2px 0 var(--color-wood-5), 0 0 12px ${SHINE_GLOW[shine]}`
-          : 'inset 0 -2px 0 var(--color-wood-3), 0 2px 0 var(--color-wood-5)',
-        overflow: 'hidden',
+          ? `3px 3px 0 var(--k-ink, #1A1A2E), 0 0 12px ${SHINE_GLOW[shine]}`
+          : '3px 3px 0 var(--k-ink, #1A1A2E)',
+        overflow: 'visible',
         position: 'relative',
       }}
     >
-      <div
+      <KawaiiRobot tier={tier} size={50} frame={frameRef} />
+      {/* Hidden atlas data preservation (au cas ou) */}
+      <span
         style={{
-          width: ROBOT_W * SCALE,
-          height: ROBOT_W * SCALE,
+          display: 'none',
           backgroundImage: `url(${ATLAS_URL.robots})`,
-          backgroundRepeat: 'no-repeat',
-          backgroundSize: `${aw * SCALE}px ${ah * SCALE}px`,
-          backgroundPosition: `-${sx * SCALE}px -${sy * SCALE}px`,
-          imageRendering: 'pixelated',
+          backgroundSize: `${ATLAS_SIZE.robots[0] * 2}px ${ATLAS_SIZE.robots[1] * 2}px`,
         }}
       />
       {hasShine && (

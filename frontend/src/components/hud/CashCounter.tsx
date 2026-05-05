@@ -4,8 +4,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { useGameStore } from '../../stores/gameStore.js';
 import { formatBig } from '../../game/engine/bigNumber.js';
-import { CoinIcon } from '../icons/PixelIcon.js';
 import { AnimatedNumber } from './AnimatedNumber.js';
+import { KawaiiCoin } from './KawaiiSprites.js';
 
 export function CashCounter() {
   const cash = useGameStore((s) => s.cash);
@@ -22,32 +22,26 @@ export function CashCounter() {
     return () => clearTimeout(t);
   }, [cash]);
 
+  const frame = Math.floor(Date.now() / 80);
   return (
     <div
-      className={`flex flex-col items-center px-2 py-1 rounded ${pop ? 'animate-currency-pop' : ''}`}
-      style={{
-        background: 'var(--color-wood-5)',
-        border: '2px solid #a87a1f',
-        boxShadow:
-          'inset 0 -2px 0 rgba(0,0,0,0.3), 0 0 8px rgba(245, 196, 67, 0.3)',
-      }}
+      className={`kawaii-pill kawaii-pill--gold flex-col ${pop ? 'animate-currency-pop' : ''}`}
+      style={{ padding: '4px 10px' }}
     >
       <div className="flex items-center gap-1.5">
-        <span className="icon-coin-spin"><CoinIcon size={16} /></span>
+        <KawaiiCoin size={18} frame={frame} />
         <AnimatedNumber
           value={Number(cash.toString())}
-          className="numeric text-sm"
-          style={{
-            color: 'var(--color-accent-gold)',
-            textShadow: '1px 1px 0 var(--color-text-title)',
-          }}
+          className="numeric"
+          style={{ fontSize: 16, lineHeight: 1, color: 'var(--k-ink, #1A1A2E)' }}
         />
       </div>
       <div
-        className="numeric leading-none mt-0.5"
+        className="numeric leading-none"
         style={{
-          color: 'var(--color-paper-3)',
-          fontSize: '10px',
+          color: 'var(--k-green-bright-dark, #1F8246)',
+          fontSize: 12,
+          marginTop: 2,
         }}
       >
         +{formatBig(cps)}/s
