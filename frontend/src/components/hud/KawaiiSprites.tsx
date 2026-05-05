@@ -203,6 +203,82 @@ export function KawaiiTree({
   );
 }
 
+/** KawaiiFlower : fleur 12x18 avec sway. */
+export function KawaiiFlower({
+  size = 16,
+  color = '#FF6B9D',
+  frame = 0,
+}: {
+  size?: number;
+  color?: string;
+  frame?: number;
+}) {
+  const sway = Math.sin(frame * 0.2) * 1;
+  return (
+    <svg
+      width={size}
+      height={size * 1.5}
+      viewBox="0 0 12 18"
+      style={{ shapeRendering: 'crispEdges' }}
+      aria-hidden
+    >
+      <rect x="5" y="10" width="2" height="8" fill="#3D6B20" />
+      <g transform={`translate(${sway} 0)`}>
+        <rect x="3" y="6" width="2" height="2" fill={color} />
+        <rect x="7" y="6" width="2" height="2" fill={color} />
+        <rect x="5" y="4" width="2" height="2" fill={color} />
+        <rect x="5" y="8" width="2" height="2" fill={color} />
+        <rect x="5" y="6" width="2" height="2" fill="#FFD921" />
+      </g>
+    </svg>
+  );
+}
+
+/** KawaiiHouse mini : maison cottagecore 64x56 avec toit rouge. */
+export function KawaiiHouse({ size = 80, lit = false }: { size?: number; lit?: boolean }) {
+  return (
+    <svg
+      width={size}
+      height={size * 0.85}
+      viewBox="0 0 64 56"
+      style={{ shapeRendering: 'crispEdges', overflow: 'visible' }}
+      aria-hidden
+    >
+      <ellipse cx="32" cy="54" rx="28" ry="2" fill="rgba(0,0,0,0.3)" />
+      {/* roof */}
+      <rect x="6" y="14" width="52" height="14" fill="#C4504A" />
+      <rect x="8" y="12" width="48" height="14" fill="#D86058" />
+      <rect x="6" y="14" width="52" height="3" fill="#E87A72" />
+      {/* chimney */}
+      <rect x="42" y="6" width="6" height="10" fill="#8B4A3F" />
+      <rect x="40" y="6" width="10" height="2" fill="#6B3530" />
+      {/* walls */}
+      <rect x="10" y="26" width="44" height="28" fill="#F4D6A8" />
+      <rect x="10" y="26" width="44" height="2" fill="#FFE8C2" />
+      <rect x="10" y="52" width="44" height="2" fill="#C4A878" />
+      {/* beams */}
+      <rect x="10" y="26" width="2" height="28" fill="#8B5A2B" />
+      <rect x="52" y="26" width="2" height="28" fill="#8B5A2B" />
+      {/* door */}
+      <rect x="26" y="38" width="12" height="16" fill="#6B3F1F" />
+      <rect x="27" y="39" width="10" height="14" fill="#8B5A2B" />
+      <rect x="35" y="46" width="2" height="2" fill="#FFD921" />
+      {/* windows */}
+      <rect x="14" y="32" width="10" height="10" fill={lit ? '#FFE082' : '#5A8FCC'} />
+      <rect x="40" y="32" width="10" height="10" fill={lit ? '#FFE082' : '#5A8FCC'} />
+      <rect x="18" y="32" width="2" height="10" fill="#3D2818" />
+      <rect x="44" y="32" width="2" height="10" fill="#3D2818" />
+      <rect x="14" y="36" width="10" height="2" fill="#3D2818" />
+      <rect x="40" y="36" width="10" height="2" fill="#3D2818" />
+      {/* flower box */}
+      <rect x="13" y="42" width="12" height="3" fill="#6B3F1F" />
+      <rect x="14" y="40" width="2" height="2" fill="#FF6B9D" />
+      <rect x="18" y="40" width="2" height="2" fill="#FFD921" />
+      <rect x="22" y="40" width="2" height="2" fill="#A06CD5" />
+    </svg>
+  );
+}
+
 /** KawaiiButterfly : papillon 16x16 avec flap animation. */
 export function KawaiiButterfly({ size = 16, color = '#FF6B9D', frame = 0 }: { size?: number; color?: string; frame?: number }) {
   const flap = frame % 4 < 2;
