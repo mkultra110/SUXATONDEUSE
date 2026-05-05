@@ -143,6 +143,66 @@ export function KawaiiCloud({ size = 80 }: { size?: number }) {
   );
 }
 
+/** KawaiiTree : arbre kawaii avec sway animation, 4 saisons. */
+export function KawaiiTree({
+  size = 80,
+  frame = 0,
+  season = 'summer',
+}: {
+  size?: number;
+  frame?: number;
+  season?: 'spring' | 'summer' | 'autumn' | 'winter';
+}) {
+  const sway = Math.sin(frame * 0.08) * 2;
+  const palettes = {
+    spring: { dark: '#4A8B2A', mid: '#6BBA45', light: '#9FE578' },
+    summer: { dark: '#2D6B1A', mid: '#4F8E2F', light: '#7BC950' },
+    autumn: { dark: '#A05010', mid: '#D26B1A', light: '#FFA040' },
+    winter: { dark: '#5A6E60', mid: '#7A8E80', light: '#A8B5A8' },
+  };
+  const p = palettes[season];
+  return (
+    <svg
+      width={size}
+      height={size * 1.4}
+      viewBox="0 0 40 56"
+      style={{ shapeRendering: 'crispEdges', overflow: 'visible' }}
+      aria-hidden
+    >
+      <ellipse cx="20" cy="54" rx="14" ry="2" fill="rgba(0,0,0,0.3)" />
+      <rect x="17" y="34" width="6" height="20" fill="#5A3A1F" />
+      <rect x="18" y="34" width="2" height="20" fill="#7A5A3F" />
+      <rect x="17" y="33" width="6" height="2" fill="#3D2818" />
+      <g transform={`translate(${sway} 0)`}>
+        <ellipse cx="20" cy="20" rx="18" ry="16" fill={p.dark} />
+        <ellipse cx="20" cy="18" rx="15" ry="13" fill={p.mid} />
+        <ellipse cx="17" cy="14" rx="9" ry="7" fill={p.light} />
+        {season === 'autumn' && (
+          <>
+            <rect x="6" y="40" width="3" height="3" fill="#FFA040" opacity={0.7} />
+            <rect x="32" y="42" width="3" height="3" fill="#D26B1A" opacity={0.7} />
+            <rect x="20" y="46" width="3" height="3" fill="#FFA040" opacity={0.5} />
+          </>
+        )}
+        {season === 'spring' && (
+          <>
+            <rect x="13" y="13" width="2" height="2" fill="#FF6B9D" />
+            <rect x="22" y="11" width="2" height="2" fill="#FFC2DD" />
+            <rect x="26" y="20" width="2" height="2" fill="#FF6B9D" />
+          </>
+        )}
+        {season === 'winter' && (
+          <>
+            <rect x="14" y="10" width="2" height="2" fill="#fff" />
+            <rect x="24" y="12" width="2" height="2" fill="#fff" />
+            <rect x="20" y="22" width="2" height="2" fill="#fff" opacity={0.8} />
+          </>
+        )}
+      </g>
+    </svg>
+  );
+}
+
 /** KawaiiButterfly : papillon 16x16 avec flap animation. */
 export function KawaiiButterfly({ size = 16, color = '#FF6B9D', frame = 0 }: { size?: number; color?: string; frame?: number }) {
   const flap = frame % 4 < 2;
