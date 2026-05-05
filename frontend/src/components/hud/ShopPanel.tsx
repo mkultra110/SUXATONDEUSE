@@ -21,9 +21,9 @@ import { shineForCount, SHINE_COLOR, SHINE_GLOW, type RobotShine } from '../../u
 import { useEffectsStore } from '../../stores/effectsStore.js';
 import { formatEta } from '../../utils/eta.js';
 import { useToastStore } from './ToastStack.js';
-import { KawaiiRobot } from './KawaiiSprites.js';
+import { KawaiiRobot, KawaiiCoin } from './KawaiiSprites.js';
 import {
-  CoinIcon,
+
   NavShopIcon,
   IconBlade,
   IconGear,
@@ -598,7 +598,7 @@ function ShopCard({ affordable, locked, badge, shine, eta, art, name, rate, cost
           <span>MAX</span>
         ) : (
           <>
-            <CoinIcon size={13} />
+            <KawaiiCoin size={16} frame={Math.floor(Date.now() / 80)} />
             <span>{formatBig(cost as never)}</span>
           </>
         )}
