@@ -465,6 +465,30 @@ body[data-sky-period='night'] .farm-scene::before {
   to { opacity: 0; visibility: hidden; }
 }
 
+/* ============ ACHIEVEMENT BANNER POLAROID DROP ============ */
+.ach-banner {
+  background: var(--k-cream, #FFF8DC) !important;
+  border: 4px solid var(--k-ink, #1A1A2E) !important;
+  box-shadow: 6px 6px 0 var(--k-ink, #1A1A2E) !important;
+  padding: 14px 20px 18px !important;
+  font-family: 'Patrick Hand', cursive !important;
+  transform: translate(-50%, 0) rotate(-2deg) !important;
+}
+.ach-banner::before {
+  /* punaise rouge en haut au centre de la polaroid */
+  content: '';
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 14px;
+  height: 14px;
+  background: radial-gradient(circle at 30% 30%, #ff8a8a 0%, var(--k-red, #B52121) 40%, #5a0e0e 100%);
+  border-radius: 50%;
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.5);
+  z-index: 1;
+}
+
 /* ============ TOPBAR : ajoute glow gold subtil sous ============ */
 header[class*='items-center']::after {
   content: '';

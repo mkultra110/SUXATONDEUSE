@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useGameStore } from '../../stores/gameStore.js';
 import { ACHIEVEMENTS } from '@robomow/shared';
 import { TrophyIcon } from '../icons/PixelIcon.js';
+import { KawaiiCoin } from './KawaiiSprites.js';
 
 interface Banner {
   id: number;
@@ -37,38 +38,55 @@ export function AchievementBanner() {
   }, [achievements]);
 
   if (banners.length === 0) return null;
+  const frame = Math.floor(Date.now() / 80);
   return (
     <>
       {banners.map((b, i) => (
         <div
           key={b.id}
           className="ach-banner"
-          style={{ top: `${80 + i * 80}px` }}
+          style={{
+            top: `calc(110px + env(safe-area-inset-top, 0px) + ${i * 90}px)`,
+            transform: `translate(-50%, 0) rotate(${i % 2 === 0 ? -2 : 2}deg)`,
+          }}
         >
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, marginBottom: 4 }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, marginBottom: 6 }}>
+            <KawaiiCoin size={22} frame={frame} />
             <TrophyIcon size={20} />
             <span
               style={{
-                fontFamily: 'var(--font-button)',
-                fontSize: 10,
-                color: 'var(--color-text-muted)',
-                letterSpacing: '0.2em',
+                fontFamily: 'Press Start 2P, monospace',
+                fontSize: 9,
+                color: 'var(--k-red, #B52121)',
+                letterSpacing: '0.16em',
                 textTransform: 'uppercase',
               }}
             >
-              Succes debloque
+              Succès débloqué !
             </span>
           </div>
           <div
             style={{
-              fontFamily: 'var(--font-title)',
-              fontSize: 16,
+              fontFamily: 'Patrick Hand, cursive',
+              fontSize: 18,
               fontWeight: 700,
-              color: 'var(--color-accent-gold)',
-              textShadow: '1px 1px 0 var(--color-wood-5)',
+              color: 'var(--k-ink, #1A1A2E)',
+              textAlign: 'center',
             }}
           >
-            {b.name}
+            « {b.name} »
+          </div>
+          <div
+            style={{
+              fontSize: 11,
+              color: 'var(--k-wood-warm, #6B3F1F)',
+              textAlign: 'center',
+              marginTop: 4,
+              fontStyle: 'italic',
+              fontFamily: 'Patrick Hand, cursive',
+            }}
+          >
+            — Mémé Gisèle est fière de toi
           </div>
         </div>
       ))}
