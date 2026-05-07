@@ -68,6 +68,7 @@ import { KawaiiButterflies } from '../components/hud/KawaiiButterflies.js';
 import { KawaiiGrannyPorch } from '../components/hud/KawaiiGrannyPorch.js';
 import { KawaiiNightStars } from '../components/hud/KawaiiNightStars.js';
 import { KawaiiFlowerCorners } from '../components/hud/KawaiiFlowerCorners.js';
+import { KawaiiLadybug } from '../components/hud/KawaiiLadybug.js';
 import { NextAffordableChip } from '../components/hud/NextAffordableChip.js';
 import { KawaiiHills } from '../components/hud/KawaiiHills.js';
 import { SplashScreen } from '../components/hud/SplashScreen.js';
@@ -394,6 +395,7 @@ export function GamePage() {
       <KawaiiGrannyPorch />
       <KawaiiNightStars />
       <KawaiiFlowerCorners />
+      <KawaiiLadybug />
       {/* FarmNameDisplay retire : empietait sur la map en mobile. */}
       <ActivityFAB onClick={() => setMarcelLogOpen(true)} notificationCount={0} />
       {marcelLogOpen && <MarcelLog onClose={() => setMarcelLogOpen(false)} />}

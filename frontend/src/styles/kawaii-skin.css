@@ -160,6 +160,21 @@ header[class*='items-center'] {
   /* override la vignette douce */
   background: radial-gradient(ellipse at center, transparent 70%, rgba(60, 40, 20, 0.22) 100%) !important;
 }
+/* Rivets cuivre pixel art dans les 4 coins du frame jardin (signature
+   Margaux du brief Claude Design : 4 clous pixel 3x3 aux angles).
+   Implementation : 4 radial-gradients en background-image (cleaner que
+   les pseudo-elements qui sont deja occupes par night overlay/vignette). */
+.farm-scene {
+  background-image:
+    radial-gradient(circle at 6px 6px, #C49B6A 0%, #8B6240 40%, #5C3D24 70%, transparent 80%),
+    radial-gradient(circle at calc(100% - 6px) 6px, #C49B6A 0%, #8B6240 40%, #5C3D24 70%, transparent 80%),
+    radial-gradient(circle at 6px calc(100% - 6px), #C49B6A 0%, #8B6240 40%, #5C3D24 70%, transparent 80%),
+    radial-gradient(circle at calc(100% - 6px) calc(100% - 6px), #C49B6A 0%, #8B6240 40%, #5C3D24 70%, transparent 80%) !important;
+  background-size: 12px 12px, 12px 12px, 12px 12px, 12px 12px;
+  background-position: top left, top right, bottom left, bottom right;
+  background-repeat: no-repeat, no-repeat, no-repeat, no-repeat;
+  background-color: var(--k-grass-bg) !important;
+}
 
 /* ============ BOTTOM NAV : style 8-bit dark + or ============ */
 nav[role='tablist'] {
