@@ -96,3 +96,81 @@
   --line-height-body: 1.6;
   --line-height-tight: 1.2;
 }
+
+/* =====================================================
+   COUCHE DESIGN SYSTEM (v2) — ajouts non destructifs.
+   Échelles manquantes (espacement, rayons, ombres, motion, z-index)
+   + alias sémantiques qui pointent vers la palette ci-dessus.
+   Préfixe --ds-* pour éviter toute collision avec l'existant.
+   ===================================================== */
+:root {
+  /* ── Échelle d'espacement (base 4 px) ── */
+  --space-0: 0;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+
+  /* ── Rayons ── */
+  --radius-sm: 2px;
+  --radius-md: 4px;
+  --radius-lg: 8px;
+  --radius-xl: 14px;
+  --radius-pill: 999px;
+
+  /* ── Bordures ── */
+  --border-thin: 1px;
+  --border-base: 2px;
+  --border-thick: 3px;
+
+  /* ── Ombres / élévations (style pixel : ombres dures décalées) ── */
+  --elev-1: 0 2px 0 0 rgba(92, 61, 36, 0.7);
+  --elev-2: 0 4px 0 0 rgba(92, 61, 36, 0.8);
+  --elev-3: 0 6px 0 0 rgba(92, 61, 36, 0.85), 0 10px 16px -8px rgba(42, 31, 23, 0.4);
+  --shadow-press: 0 1px 0 0 rgba(92, 61, 36, 0.7);
+  --ring-focus: 0 0 0 2px var(--color-paper-1), 0 0 0 4px var(--color-accent-gold);
+
+  /* ── Motion (durées + easings nommés) ── */
+  --dur-instant: 80ms;
+  --dur-fast: 120ms;
+  --dur-base: 200ms;
+  --dur-slow: 360ms;
+  --dur-celebrate: 700ms;
+  --ease-pop: cubic-bezier(0.34, 1.56, 0.64, 1); /* overshoot « juteux » */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+
+  /* ── Z-index ── */
+  --z-base: 0;
+  --z-hud: 100;
+  --z-panel: 200;
+  --z-modal: 300;
+  --z-toast: 400;
+
+  /* ── Alias sémantiques (rôles → palette) ── */
+  --ds-surface: var(--color-paper-1);
+  --ds-surface-sunken: var(--color-paper-2);
+  --ds-panel: var(--color-wood-2);
+  --ds-panel-edge: var(--color-wood-5);
+  --ds-border: var(--color-wood-4);
+  --ds-text: var(--color-text-body);
+  --ds-text-strong: var(--color-text-title);
+  --ds-text-muted: var(--color-text-muted);
+  --ds-text-invert: var(--color-text-light);
+  --ds-accent: var(--color-accent-gold);
+  --ds-accent-ink: var(--color-text-title);
+  --ds-danger: var(--color-accent-red);
+  --ds-success: var(--color-accent-fuel);
+  --ds-premium: var(--color-accent-purple);
+  --ds-info: var(--color-water-3);
+
+  /* Tiers de brillance (cartes boutique) */
+  --ds-shine-bronze: #a57144;
+  --ds-shine-silver: #b8c4d0;
+  --ds-shine-gold: #f5c443;
+  --ds-shine-diamond: #a8d8ee;
+}
