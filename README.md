@@ -32,6 +32,23 @@ Une fois démarré :
 - Backend API : <http://localhost:3000/api/health>
 - Adminer (DB) : <http://localhost:8080> (système : PostgreSQL, serveur : `postgres`, user/pass : `game`/`gamepass`, base : `robomow`)
 
+## Développement hors Docker (npm)
+
+Pour lancer les vérifications (types, lint, tests) sans la stack Docker :
+
+```bash
+npm install        # Installe + prépare automatiquement (build shared + génère le client Prisma)
+npm run setup      # (au besoin) refait manuellement la préparation : build shared + prisma generate
+npm run typecheck  # Vérifie les types des 3 workspaces
+npm run lint       # ESLint (config racine + règles React pour le frontend)
+npm run test       # Tous les tests (shared + backend + frontend)
+npm run build      # Build des 3 workspaces
+```
+
+> `npm install` déclenche un `postinstall` qui build le package `shared` (dont
+> dépendent backend et frontend via `./dist`) et génère le client Prisma. Ce
+> hook est sans effet dans les étages Docker `deps` (sources absentes).
+
 ## Commandes utiles
 
 ```bash

@@ -22,7 +22,7 @@ export class ErrorBoundary extends Component<Props, State> {
 
   override componentDidCatch(error: Error, info: ErrorInfo): void {
     // Log en console pour le debugging (visible dans devtools).
-    // eslint-disable-next-line no-console
+     
     console.error('[ErrorBoundary] caught:', error, info);
     this.props.onError?.(error, info);
   }

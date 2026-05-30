@@ -36,8 +36,8 @@ export function KawaiiButterflies() {
       setTick((v) => v + 1);
       setBfs((bs) =>
         bs.map((b) => {
-          let nx = b.x + b.vx;
-          let ny = b.y + b.vy;
+          const nx = b.x + b.vx;
+          const ny = b.y + b.vy;
           let nvx = b.vx + (Math.random() - 0.5) * 0.08;
           let nvy = b.vy + (Math.random() - 0.5) * 0.08;
           const W = typeof window === 'undefined' ? 800 : window.innerWidth;

@@ -48,14 +48,14 @@ export function useGameSession(): {
   userIdRef.current = user?.id ?? null;
 
   function forceContinue() {
-    // eslint-disable-next-line no-console
+     
     console.warn('[session] forceContinue() : utilisateur a clique sur Continuer hors-ligne');
     try {
       useGameStore.getState().hydrate(buildInitialSave());
       startGameLoop();
       if (userIdRef.current) startAutoSave({ userId: userIdRef.current });
     } catch (err) {
-      // eslint-disable-next-line no-console
+       
       console.error('[session] forceContinue failed', err);
     }
     setPhase('ready');
@@ -73,14 +73,14 @@ export function useGameSession(): {
     // avec un save initial pour ne pas bloquer le joueur sur le loading.
     const safetyTimeout = setTimeout(() => {
       if (cancelled || resolved) return;
-      // eslint-disable-next-line no-console
+       
       console.warn('[session] Loading timeout 8s atteint, fallback save initial');
       try {
         useGameStore.getState().hydrate(buildInitialSave());
         startGameLoop();
         startAutoSave({ userId: user.id });
       } catch (err) {
-        // eslint-disable-next-line no-console
+         
         console.error('[session] Fallback failed', err);
       }
       resolved = true;
@@ -99,14 +99,14 @@ export function useGameSession(): {
           const server = await apiLoadSave();
           if (server) serverSave = server.payload;
         } catch (err) {
-          // eslint-disable-next-line no-console
+           
           console.warn('[session] apiLoadSave failed', err);
         }
         setPhase('local');
         try {
           localSave = await loadLocal();
         } catch (err) {
-          // eslint-disable-next-line no-console
+           
           console.warn('[session] loadLocal failed', err);
           localSave = null;
         }
@@ -139,7 +139,7 @@ export function useGameSession(): {
               setOfflineReward({ durationSeconds: elapsed, cashEarned: earned });
             }
           } catch (err) {
-            // eslint-disable-next-line no-console
+             
             console.warn('[session] catchUpOffline failed', err);
           }
         }
@@ -151,7 +151,7 @@ export function useGameSession(): {
         setPhase('ready');
         setIsLoading(false);
       } catch (err) {
-        // eslint-disable-next-line no-console
+         
         console.error('[session] Bootstrap fatal', err);
         setErrorMessage(err instanceof Error ? err.message : String(err));
         setPhase('error');

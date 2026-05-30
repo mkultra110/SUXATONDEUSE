@@ -9,6 +9,8 @@
     "frontend"
   ],
   "scripts": {
+    "postinstall": "node scripts/postinstall.mjs",
+    "setup": "npm run build --workspace=@robomow/shared && npm run prisma:generate --workspace=@robomow/backend",
     "dev": "docker compose up",
     "dev:down": "docker compose down",
     "build": "npm run build --workspaces --if-present",
@@ -23,7 +25,8 @@
     "@typescript-eslint/parser": "^8.18.0",
     "eslint": "^9.17.0",
     "prettier": "^3.4.2",
-    "typescript": "^5.7.2"
+    "typescript": "^5.7.2",
+    "typescript-eslint": "^8.60.0"
   },
   "engines": {
     "node": ">=22.0.0",

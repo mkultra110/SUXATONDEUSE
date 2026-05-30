@@ -657,7 +657,9 @@ export function AnimatedGarden() {
       });
     }, TICK_MS);
     return () => clearInterval(interval);
-  }, [robots.length, tallGrass]);
+    // prestigeLevel influe sur la vitesse de repousse (regrowMul) : il doit
+    // figurer dans les deps sinon l'intervalle garde une valeur perimee.
+  }, [robots.length, tallGrass, prestigeLevel]);
 
   // Si nouveau robot ajoute mais sans cible/path, lui calcule un BFS.
   useEffect(() => {
