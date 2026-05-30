@@ -5,15 +5,10 @@ import { migrateSave } from '@robomow/shared';
 import { prisma } from '../config/prisma.js';
 import { AppError } from '../utils/api.js';
 import { computeHmac } from '../utils/hmac.js';
+import { toBigIntFromString } from '../utils/bigint.js';
+import { logger } from '../utils/logger.js';
 import { validateSave } from './anticheat.service.js';
 import { upsertLeaderboardScore } from './leaderboard.service.js';
-
-/** Convertit une string serialisant un BigInt en bigint (tronque decimales). */
-function toBigInt(s: string): bigint {
-  if (s.includes('e') || s.includes('E')) return BigInt(Math.trunc(Number(s)));
-  const dot = s.indexOf('.');
-  return BigInt(dot === -1 ? s : s.slice(0, dot));
-}
 
 /** Charge le save complet d'un utilisateur. Si aucun, renvoie 404. */
 export async function loadSave(userId: string): Promise<LoadSaveResponse> {
@@ -68,8 +63,8 @@ export async function persistSave(
     );
   }
 
-  const cashBigInt = toBigInt(incoming.cash);
-  const prestigeBigInt = toBigInt(incoming.prestigePoints);
+  const cashBigInt = toBigIntFromString(incoming.cash);
+  const prestigeBigInt = toBigIntFromString(incoming.prestigePoints);
 
   await prisma.gameSave.upsert({
     where: { userId },
@@ -103,8 +98,8 @@ export async function persistSave(
 
   // Met a jour les leaderboards (best-effort, ne bloque pas la save)
   try {
-    const totalEarnedBigInt = toBigInt(incoming.statistics.totalEarned);
-    const totalGrassBigInt = toBigInt(incoming.statistics.totalGrassMowed);
+    const totalEarnedBigInt = toBigIntFromString(incoming.statistics.totalEarned);
+    const totalGrassBigInt = toBigIntFromString(incoming.statistics.totalGrassMowed);
     await Promise.all([
       upsertLeaderboardScore(userId, 'TOTAL_CASH', totalEarnedBigInt),
       upsertLeaderboardScore(userId, 'TOTAL_GRASS', totalGrassBigInt),
@@ -119,8 +114,10 @@ export async function persistSave(
         BigInt(incoming.achievements.length),
       ),
     ]);
-  } catch {
-    // Les erreurs de leaderboard n'interrompent pas la save.
+  } catch (err) {
+    // Les erreurs de leaderboard n'interrompent pas la save, mais on les
+    // trace pour ne pas masquer une panne silencieuse du classement.
+    logger.warn({ err, userId }, 'Mise a jour leaderboard echouee');
   }
 
   return { saved: true, serverTime: now.toISOString() };

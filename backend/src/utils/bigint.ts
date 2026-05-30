@@ -21,6 +21,20 @@ export function bigIntToString(value: bigint): string {
   return value.toString();
 }
 
+/**
+ * Convertit une string serialisant un BigInt (potentiellement decimale ou en
+ * notation scientifique) en bigint, en tronquant toute partie fractionnaire.
+ * Utilise pour parser les montants venant du client (cash, prestige, stats).
+ */
+export function toBigIntFromString(s: string): bigint {
+  if (s.includes('e') || s.includes('E')) {
+    // Notation scientifique : on convertit via Number puis BigInt.
+    return BigInt(Math.trunc(Number(s)));
+  }
+  const dot = s.indexOf('.');
+  return BigInt(dot === -1 ? s : s.slice(0, dot));
+}
+
 /** Patch global Express response pour stringifier automatiquement les BigInt. */
 export function installBigIntJsonPatch(): void {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

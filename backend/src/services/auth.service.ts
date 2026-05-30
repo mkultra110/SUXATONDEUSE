@@ -1,7 +1,7 @@
 // Service d'authentification : encapsule toute la logique metier hors HTTP.
 
 import bcrypt from 'bcrypt';
-import type { PublicUser } from '@robomow/shared';
+import type { PublicUser, UserRole } from '@robomow/shared';
 import { prisma } from '../config/prisma.js';
 import { AppError } from '../utils/api.js';
 import { signAccessToken, signRefreshToken, verifyRefreshToken } from '../utils/jwt.js';
@@ -193,8 +193,7 @@ async function issueTokens(
   const publicUser: PublicUser = {
     id: user.id,
     username: user.username,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    role: user.role as any,
+    role: user.role as UserRole,
     createdAt: user.createdAt.toISOString(),
     emailVerified: user.emailVerified,
   };
@@ -225,8 +224,7 @@ export async function getMe(userId: string): Promise<PublicUser> {
   return {
     id: user.id,
     username: user.username,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    role: user.role as any,
+    role: user.role as UserRole,
     createdAt: user.createdAt.toISOString(),
     emailVerified: user.emailVerified,
   };

@@ -3,6 +3,7 @@
 
 import type { GameSave } from '@prisma/client';
 import type { SavePayload } from '@robomow/shared';
+import { toBigIntFromString } from '../utils/bigint.js';
 
 /** Plafond de gain par seconde (BigInt). Tres genereux pour ne pas
  *  flag les boosts legitimes. */
@@ -28,17 +29,6 @@ const SCORE_BY_SEVERITY: Record<ValidationIssue['severity'], number> = {
   high: 60,
 };
 
-/** Convertit une string serialisant un BigInt eventuellement decimal en bigint
- *  (tronque la partie decimale). */
-function toBigInt(s: string): bigint {
-  if (s.includes('e') || s.includes('E')) {
-    // Notation scientifique : on convertit via Number puis BigInt.
-    return BigInt(Math.trunc(Number(s)));
-  }
-  const dot = s.indexOf('.');
-  return BigInt(dot === -1 ? s : s.slice(0, dot));
-}
-
 /**
  * Valide la coherence d'un save reçu par rapport a celui en DB.
  * Si prev est null (premier save), on accepte largement mais on plafonne.
@@ -52,7 +42,7 @@ export function validateSave(
 
   if (!prev) {
     // Premier save : on accepte mais on flag les valeurs initiales improbables.
-    if (toBigInt(incoming.cash) > 1_000_000n) {
+    if (toBigIntFromString(incoming.cash) > 1_000_000n) {
       issues.push({
         reason: 'first_save_high_cash',
         severity: 'medium',
@@ -79,7 +69,7 @@ export function validateSave(
 
     // Detection gain impossible : on tolere 10 % au-dela du theorique.
     const elapsedSec = Math.max(0, elapsedMs / 1000);
-    const incomingCash = toBigInt(incoming.cash);
+    const incomingCash = toBigIntFromString(incoming.cash);
     const cashDelta = incomingCash - prev.cash;
     const maxPossibleGain =
       BigInt(Math.floor(elapsedSec)) * MAX_GAIN_PER_SEC;
@@ -106,7 +96,7 @@ export function validateSave(
   }
 
   // Coherence interne du payload
-  if (toBigInt(incoming.cash) < 0n) {
+  if (toBigIntFromString(incoming.cash) < 0n) {
     issues.push({ reason: 'negative_cash', severity: 'medium' });
   }
   if (incoming.gems < 0) {
