@@ -1,0 +1,1033 @@
+/* ============================================================
+   SUXA TONDEUSE — Design System « Jardin de Poche »
+   Recréation fidèle du handoff Claude Design (Design System.html).
+   IMPORTANT : tout est scopé sous .jardin (au lieu de :root) pour ne PAS
+   impacter le rendu du jeu live, qui utilise déjà .btn/.card/.panel.
+   Les 4 thèmes (jour/nuit/sakura/mars) basculent via [data-theme] sur .jardin.
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&family=Nunito:ital,wght@0,400;0,600;0,700;0,800;0,900;1,700&display=swap');
+
+/* ===== Tokens statiques + sémantique par défaut (= thème « jour ») ===== */
+.jardin {
+  /* Type */
+  --font-pixel: 'Silkscreen', 'Courier New', monospace;
+  --font-body: 'Nunito', system-ui, sans-serif;
+  --text-2xs: 10px;
+  --text-xs: 12px;
+  --text-sm: 14px;
+  --text-md: 16px;
+  --text-lg: 20px;
+  --text-xl: 25px;
+  --text-2xl: 31px;
+  --text-3xl: 39px;
+  --text-4xl: 49px;
+
+  /* Espace (8pt base) */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+
+  /* Rayons */
+  --radius-xs: 4px;
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
+  --radius-pill: 999px;
+
+  /* Motion */
+  --dur-1: 90ms;
+  --dur-2: 160ms;
+  --dur-3: 280ms;
+  --dur-4: 480ms;
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-in: cubic-bezier(0.4, 0, 1, 1);
+
+  /* Bordures */
+  --stroke: 3px;
+  --stroke-thin: 2px;
+
+  /* Sémantique — Jour (Classique) */
+  --bg: oklch(94% 0.03 120);
+  --bg-2: oklch(89% 0.045 122);
+  --surface: oklch(98% 0.012 95);
+  --surface-2: oklch(95% 0.02 100);
+  --frame: oklch(48% 0.07 60);
+  --frame-2: oklch(38% 0.06 55);
+  --pin: oklch(62% 0.21 25);
+  --ink: oklch(28% 0.05 80);
+  --ink-2: oklch(44% 0.045 80);
+  --muted: oklch(60% 0.03 90);
+  --line: oklch(80% 0.035 100);
+  --on-color: oklch(99% 0.01 95);
+  --grass: oklch(64% 0.16 142);
+  --grass-deep: oklch(52% 0.15 145);
+  --grass-soft: oklch(90% 0.07 140);
+  --sky: oklch(70% 0.13 230);
+  --sky-soft: oklch(92% 0.05 230);
+  --coin: oklch(80% 0.16 88);
+  --coin-deep: oklch(68% 0.16 75);
+  --petal: oklch(78% 0.12 350);
+  --petal-soft: oklch(93% 0.05 350);
+  --berry: oklch(58% 0.2 18);
+  --berry-soft: oklch(92% 0.06 20);
+  --leafglow: oklch(86% 0.18 130);
+  --sky-top: oklch(86% 0.09 230);
+  --sky-bottom: oklch(94% 0.06 200);
+  --ground: oklch(70% 0.13 138);
+  --ground-2: oklch(62% 0.14 140);
+  --sun: oklch(92% 0.13 95);
+  --sun-glow: oklch(95% 0.1 95 / 0.6);
+  --shadow-sm: 0 2px 0 var(--frame-2);
+  --shadow-md: 0 4px 0 var(--frame-2), 0 8px 16px oklch(40% 0.05 60 / 0.18);
+  --shadow-lg: 0 6px 0 var(--frame-2), 0 16px 28px oklch(40% 0.05 60 / 0.22);
+  --shadow-pop: 0 3px 0 var(--grass-deep);
+  --shadow-pop-coin: 0 3px 0 var(--coin-deep);
+  --shadow-inset: inset 0 3px 0 oklch(40% 0.05 60 / 0.12);
+
+  font-family: var(--font-body);
+  color: var(--ink);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+}
+.jardin *,
+.jardin *::before,
+.jardin *::after {
+  box-sizing: border-box;
+}
+
+/* ===== Thème Nuit ===== */
+.jardin[data-theme='nuit'] {
+  --bg: oklch(26% 0.05 270);
+  --bg-2: oklch(21% 0.05 272);
+  --surface: oklch(32% 0.05 268);
+  --surface-2: oklch(28% 0.05 270);
+  --frame: oklch(22% 0.04 60);
+  --frame-2: oklch(15% 0.035 60);
+  --pin: oklch(70% 0.18 30);
+  --ink: oklch(95% 0.02 90);
+  --ink-2: oklch(80% 0.03 250);
+  --muted: oklch(64% 0.04 260);
+  --line: oklch(42% 0.05 265);
+  --on-color: oklch(20% 0.04 270);
+  --grass: oklch(72% 0.16 150);
+  --grass-deep: oklch(58% 0.15 150);
+  --grass-soft: oklch(38% 0.08 200);
+  --sky: oklch(72% 0.14 250);
+  --sky-soft: oklch(38% 0.07 255);
+  --coin: oklch(84% 0.16 90);
+  --coin-deep: oklch(70% 0.16 78);
+  --petal: oklch(74% 0.13 330);
+  --petal-soft: oklch(40% 0.08 330);
+  --berry: oklch(64% 0.2 20);
+  --berry-soft: oklch(40% 0.1 20);
+  --leafglow: oklch(88% 0.2 135);
+  --sky-top: oklch(28% 0.08 280);
+  --sky-bottom: oklch(40% 0.1 250);
+  --ground: oklch(40% 0.08 160);
+  --ground-2: oklch(32% 0.07 165);
+  --sun: oklch(92% 0.06 250);
+  --sun-glow: oklch(90% 0.08 250 / 0.5);
+  --shadow-md: 0 4px 0 var(--frame-2), 0 8px 18px oklch(10% 0.05 270 / 0.5);
+  --shadow-lg: 0 6px 0 var(--frame-2), 0 16px 30px oklch(8% 0.05 270 / 0.55);
+}
+
+/* ===== Thème Sakura ===== */
+.jardin[data-theme='sakura'] {
+  --bg: oklch(95% 0.03 350);
+  --bg-2: oklch(91% 0.045 348);
+  --surface: oklch(99% 0.012 350);
+  --surface-2: oklch(96% 0.025 350);
+  --frame: oklch(56% 0.1 20);
+  --frame-2: oklch(46% 0.09 18);
+  --pin: oklch(66% 0.18 12);
+  --ink: oklch(34% 0.06 20);
+  --ink-2: oklch(50% 0.06 15);
+  --muted: oklch(66% 0.05 350);
+  --line: oklch(86% 0.04 350);
+  --on-color: oklch(99% 0.01 350);
+  --grass: oklch(70% 0.14 150);
+  --grass-deep: oklch(58% 0.13 152);
+  --grass-soft: oklch(92% 0.05 150);
+  --sky: oklch(74% 0.1 250);
+  --sky-soft: oklch(94% 0.04 250);
+  --coin: oklch(82% 0.15 88);
+  --coin-deep: oklch(70% 0.15 78);
+  --petal: oklch(80% 0.14 348);
+  --petal-soft: oklch(95% 0.05 348);
+  --berry: oklch(62% 0.19 18);
+  --berry-soft: oklch(94% 0.05 350);
+  --leafglow: oklch(88% 0.16 340);
+  --sky-top: oklch(92% 0.06 348);
+  --sky-bottom: oklch(96% 0.04 320);
+  --ground: oklch(72% 0.12 145);
+  --ground-2: oklch(64% 0.13 148);
+  --sun: oklch(94% 0.1 70);
+  --sun-glow: oklch(95% 0.1 350 / 0.6);
+}
+
+/* ===== Thème Mars ===== */
+.jardin[data-theme='mars'] {
+  --bg: oklch(40% 0.09 40);
+  --bg-2: oklch(33% 0.09 38);
+  --surface: oklch(46% 0.08 42);
+  --surface-2: oklch(40% 0.08 42);
+  --frame: oklch(28% 0.07 35);
+  --frame-2: oklch(20% 0.06 32);
+  --pin: oklch(80% 0.16 90);
+  --ink: oklch(96% 0.02 60);
+  --ink-2: oklch(84% 0.04 50);
+  --muted: oklch(70% 0.05 45);
+  --line: oklch(54% 0.07 40);
+  --on-color: oklch(24% 0.06 40);
+  --grass: oklch(70% 0.16 160);
+  --grass-deep: oklch(58% 0.15 162);
+  --grass-soft: oklch(46% 0.09 90);
+  --sky: oklch(70% 0.13 30);
+  --sky-soft: oklch(48% 0.09 35);
+  --coin: oklch(84% 0.16 92);
+  --coin-deep: oklch(72% 0.16 80);
+  --petal: oklch(76% 0.14 350);
+  --petal-soft: oklch(50% 0.09 350);
+  --berry: oklch(66% 0.2 25);
+  --berry-soft: oklch(48% 0.1 30);
+  --leafglow: oklch(86% 0.18 150);
+  --sky-top: oklch(52% 0.12 45);
+  --sky-bottom: oklch(64% 0.13 55);
+  --ground: oklch(48% 0.11 38);
+  --ground-2: oklch(40% 0.1 35);
+  --sun: oklch(90% 0.1 70);
+  --sun-glow: oklch(85% 0.12 50 / 0.5);
+}
+
+/* ============================================================
+   COMPOSANTS (vocabulaire de jeu)
+   ============================================================ */
+.jardin .btn {
+  font-family: var(--font-body);
+  font-weight: 800;
+  font-size: var(--text-md);
+  line-height: 1;
+  color: var(--on-color);
+  background: var(--grass);
+  border: var(--stroke) solid var(--frame);
+  border-radius: var(--radius-md);
+  padding: var(--space-3) var(--space-5);
+  box-shadow: var(--shadow-pop);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  transition:
+    transform var(--dur-1) var(--ease-out),
+    box-shadow var(--dur-1) var(--ease-out),
+    filter var(--dur-2) var(--ease-out);
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.jardin .btn:hover {
+  filter: brightness(1.05);
+  transform: translateY(-1px);
+}
+.jardin .btn:active {
+  transform: translateY(3px);
+  box-shadow: 0 0 0 var(--grass-deep);
+}
+.jardin .btn:focus-visible {
+  outline: var(--stroke) solid var(--sky);
+  outline-offset: 2px;
+}
+.jardin .btn--coin {
+  background: var(--coin);
+  box-shadow: var(--shadow-pop-coin);
+  color: var(--ink);
+}
+.jardin .btn--coin:active {
+  box-shadow: 0 0 0 var(--coin-deep);
+}
+.jardin .btn--sky {
+  background: var(--sky);
+  box-shadow: 0 3px 0 oklch(52% 0.12 235);
+}
+.jardin .btn--berry {
+  background: var(--berry);
+  box-shadow: 0 3px 0 oklch(46% 0.16 18);
+}
+.jardin .btn--ghost {
+  background: var(--surface);
+  color: var(--ink);
+  box-shadow: var(--shadow-sm);
+}
+.jardin .btn--lg {
+  font-size: var(--text-lg);
+  padding: var(--space-4) var(--space-6);
+  border-radius: var(--radius-lg);
+}
+.jardin .btn--sm {
+  font-size: var(--text-sm);
+  padding: var(--space-2) var(--space-3);
+}
+.jardin .btn--block {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+}
+.jardin .btn[disabled],
+.jardin .btn--disabled {
+  background: var(--surface-2);
+  color: var(--muted);
+  border-color: var(--line);
+  box-shadow: var(--shadow-sm);
+  cursor: not-allowed;
+  filter: none;
+  transform: none;
+}
+.jardin .btn__badge {
+  font-family: var(--font-pixel);
+  font-size: var(--text-2xs);
+  background: oklch(100% 0 0 / 0.25);
+  padding: 2px 5px;
+  border-radius: var(--radius-pill);
+}
+
+.jardin .card {
+  background: var(--surface);
+  border: var(--stroke) solid var(--frame);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  padding: var(--space-5);
+  position: relative;
+}
+.jardin .card--inset {
+  background: var(--surface-2);
+  box-shadow: var(--shadow-inset);
+}
+.jardin .card__title {
+  font-family: var(--font-pixel);
+  font-size: var(--text-sm);
+  color: var(--ink);
+  margin: 0 0 var(--space-3);
+  letter-spacing: 0.5px;
+}
+
+.jardin .polaroid {
+  background: var(--surface);
+  border: var(--stroke-thin) solid var(--line);
+  padding: var(--space-2) var(--space-2) var(--space-5);
+  box-shadow: var(--shadow-md);
+  position: relative;
+  border-radius: var(--radius-xs);
+}
+.jardin .polaroid__img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1;
+  image-rendering: pixelated;
+  border-radius: 2px;
+  background: var(--surface-2);
+}
+.jardin .polaroid__cap {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: var(--text-sm);
+  color: var(--ink-2);
+  text-align: center;
+  margin-top: var(--space-2);
+}
+.jardin .pin {
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, oklch(85% 0.1 25), var(--pin));
+  box-shadow: 0 3px 4px oklch(30% 0.05 30 / 0.4);
+  z-index: 2;
+}
+
+.jardin .chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-family: var(--font-pixel);
+  font-size: var(--text-xs);
+  background: var(--surface);
+  color: var(--ink);
+  border: var(--stroke-thin) solid var(--frame);
+  border-radius: var(--radius-pill);
+  padding: var(--space-2) var(--space-3);
+  box-shadow: var(--shadow-sm);
+}
+.jardin .chip__icon {
+  width: 16px;
+  height: 16px;
+  image-rendering: pixelated;
+  display: block;
+}
+.jardin .chip--coin {
+  background: var(--coin);
+  border-color: var(--coin-deep);
+}
+.jardin .chip--sky {
+  background: var(--sky-soft);
+  border-color: var(--sky);
+}
+.jardin .chip--petal {
+  background: var(--petal-soft);
+  border-color: var(--petal);
+}
+
+.jardin .tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-family: var(--font-body);
+  font-weight: 800;
+  font-size: var(--text-2xs);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 3px var(--space-2);
+  border-radius: var(--radius-pill);
+  background: var(--grass-soft);
+  color: var(--grass-deep);
+}
+.jardin .tag--new {
+  background: var(--berry-soft);
+  color: var(--berry);
+}
+.jardin .tag--rare {
+  background: var(--petal-soft);
+  color: oklch(50% 0.14 350);
+}
+.jardin .tag--locked {
+  background: var(--surface-2);
+  color: var(--muted);
+}
+
+.jardin .bar {
+  height: 18px;
+  background: var(--surface-2);
+  border: var(--stroke-thin) solid var(--frame);
+  border-radius: var(--radius-pill);
+  overflow: hidden;
+  position: relative;
+}
+.jardin .bar__fill {
+  height: 100%;
+  background: linear-gradient(var(--grass), var(--grass-deep));
+  border-radius: var(--radius-pill);
+  transition: width var(--dur-4) var(--ease-out);
+  box-shadow: inset 0 2px 0 oklch(100% 0 0 / 0.3);
+}
+.jardin .bar__fill--coin {
+  background: linear-gradient(var(--coin), var(--coin-deep));
+}
+.jardin .bar__fill--xp {
+  background: linear-gradient(var(--sky), oklch(56% 0.13 240));
+}
+.jardin .bar--xl {
+  height: 28px;
+}
+.jardin .bar__label {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-family: var(--font-pixel);
+  font-size: var(--text-2xs);
+  color: var(--on-color);
+  text-shadow: 0 1px 0 oklch(0% 0 0 / 0.25);
+}
+
+.jardin .toast {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  background: var(--surface);
+  color: var(--ink);
+  border: var(--stroke) solid var(--frame);
+  border-left: 8px solid var(--grass);
+  border-radius: var(--radius-md);
+  padding: var(--space-3) var(--space-4);
+  box-shadow: var(--shadow-lg);
+  font-family: var(--font-body);
+  font-weight: 700;
+  min-width: 220px;
+}
+.jardin .toast--coin {
+  border-left-color: var(--coin);
+}
+.jardin .toast--berry {
+  border-left-color: var(--berry);
+}
+.jardin .toast--sky {
+  border-left-color: var(--sky);
+}
+.jardin .toast__emoji {
+  font-size: var(--text-xl);
+  line-height: 1;
+}
+.jardin .toast__sub {
+  font-weight: 600;
+  font-size: var(--text-xs);
+  color: var(--ink-2);
+}
+
+.jardin .panel {
+  background: var(--bg-2);
+  border: var(--stroke) solid var(--frame);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+}
+.jardin .panel__head {
+  font-family: var(--font-pixel);
+  font-size: var(--text-md);
+  color: var(--on-color);
+  background: var(--grass);
+  padding: var(--space-4) var(--space-5);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: var(--stroke) solid var(--frame);
+}
+.jardin .panel__body {
+  padding: var(--space-5);
+}
+
+.jardin .scene {
+  position: relative;
+  overflow: hidden;
+  border: var(--stroke) solid var(--frame);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  aspect-ratio: 16/10;
+  background: linear-gradient(var(--sky-top), var(--sky-bottom));
+  image-rendering: pixelated;
+}
+.jardin .scene__sun {
+  position: absolute;
+  top: 14%;
+  right: 12%;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--sun);
+  box-shadow:
+    0 0 0 12px var(--sun-glow),
+    0 0 36px 8px var(--sun-glow);
+  animation: jardin-bob 6s var(--ease-out) infinite;
+}
+.jardin .scene__ground {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 42%;
+  background: repeating-linear-gradient(90deg, var(--ground) 0 12px, var(--ground-2) 12px 24px);
+  border-top: var(--stroke) solid oklch(40% 0.08 140 / 0.5);
+}
+.jardin .scene__sprite {
+  position: absolute;
+  image-rendering: pixelated;
+  font-size: 34px;
+  line-height: 1;
+  filter: drop-shadow(0 3px 0 oklch(0% 0 0 / 0.15));
+}
+.jardin .anim-flutter {
+  animation: jardin-flutter 4s ease-in-out infinite;
+}
+.jardin .anim-hop {
+  animation: jardin-hop 2.4s var(--ease-spring) infinite;
+}
+
+.jardin .juice-pop {
+  animation: jardin-pop-in var(--dur-3) var(--ease-spring) both;
+}
+.jardin .juice-wiggle {
+  animation: jardin-wiggle 0.5s var(--ease-out);
+}
+.jardin .floater {
+  position: absolute;
+  font-family: var(--font-pixel);
+  font-weight: 700;
+  font-size: var(--text-lg);
+  color: var(--coin-deep);
+  text-shadow: 0 2px 0 oklch(100% 0 0 / 0.6);
+  pointer-events: none;
+  animation: jardin-float-up 1s var(--ease-out) both;
+}
+.jardin .confetti {
+  position: absolute;
+  width: 9px;
+  height: 9px;
+  border-radius: 2px;
+  pointer-events: none;
+  animation: jardin-confetti-fall 0.9s var(--ease-in) both;
+}
+
+/* ============================================================
+   CHROME DE LA VITRINE
+   ============================================================ */
+.jardin.app {
+  display: grid;
+  grid-template-columns: 264px 1fr;
+  min-height: 100vh;
+}
+.jardin .side {
+  position: sticky;
+  top: 0;
+  align-self: start;
+  height: 100vh;
+  background: var(--bg-2);
+  border-right: var(--stroke) solid var(--frame);
+  padding: var(--space-5) var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  overflow-y: auto;
+}
+.jardin .brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+.jardin .brand__logo {
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  background: var(--grass);
+  border: var(--stroke) solid var(--frame);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  font-size: 22px;
+}
+.jardin .brand__name {
+  font-family: var(--font-pixel);
+  font-size: var(--text-sm);
+  line-height: 1.3;
+  color: var(--ink);
+}
+.jardin .brand__name small {
+  display: block;
+  font-size: 8px;
+  color: var(--muted);
+  margin-top: 3px;
+}
+.jardin .nav {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.jardin .nav__link {
+  font-weight: 700;
+  font-size: var(--text-sm);
+  color: var(--ink-2);
+  text-decoration: none;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  transition:
+    background var(--dur-2),
+    color var(--dur-2);
+}
+.jardin .nav__link:hover {
+  background: var(--surface);
+  color: var(--ink);
+}
+.jardin .nav__link.is-active {
+  background: var(--grass-soft);
+  color: var(--grass-deep);
+}
+.jardin .nav__dot {
+  font-size: 15px;
+  width: 18px;
+  text-align: center;
+}
+.jardin .themes {
+  margin-top: auto;
+}
+.jardin .themes__label {
+  font-family: var(--font-pixel);
+  font-size: 9px;
+  color: var(--muted);
+  margin-bottom: var(--space-3);
+  display: block;
+  letter-spacing: 0.5px;
+}
+.jardin .theme-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-2);
+}
+.jardin .theme-btn {
+  font-family: var(--font-body);
+  font-weight: 800;
+  font-size: var(--text-xs);
+  color: var(--ink);
+  cursor: pointer;
+  text-align: left;
+  background: var(--surface);
+  border: var(--stroke-thin) solid var(--line);
+  border-radius: var(--radius-sm);
+  padding: var(--space-2) var(--space-3);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  transition:
+    transform var(--dur-1) var(--ease-spring),
+    border-color var(--dur-2);
+}
+.jardin .theme-btn:hover {
+  transform: translateY(-2px);
+}
+.jardin .theme-btn.is-active {
+  border-color: var(--grass);
+  box-shadow: 0 0 0 2px var(--grass-soft);
+}
+.jardin .theme-btn__sw {
+  width: 16px;
+  height: 16px;
+  border-radius: 5px;
+  border: 1.5px solid oklch(0% 0 0 / 0.2);
+}
+.jardin .main {
+  padding: var(--space-7) var(--space-7) var(--space-8);
+  max-width: 1100px;
+}
+.jardin .section {
+  margin-bottom: var(--space-8);
+  scroll-margin-top: var(--space-5);
+}
+.jardin .section__kicker {
+  font-family: var(--font-pixel);
+  font-size: 10px;
+  color: var(--grass-deep);
+  letter-spacing: 1px;
+  margin-bottom: var(--space-2);
+}
+.jardin .section__title {
+  font-family: var(--font-pixel);
+  font-size: var(--text-2xl);
+  margin: 0 0 var(--space-3);
+  line-height: 1.15;
+  color: var(--ink);
+}
+.jardin .section__lead {
+  font-size: var(--text-lg);
+  color: var(--ink-2);
+  max-width: 60ch;
+  margin: 0 0 var(--space-6);
+  line-height: 1.5;
+  font-weight: 600;
+}
+.jardin .h3 {
+  font-family: var(--font-pixel);
+  font-size: var(--text-md);
+  margin: var(--space-7) 0 var(--space-4);
+  color: var(--ink);
+}
+.jardin .muted-note {
+  font-size: var(--text-sm);
+  color: var(--muted);
+  font-weight: 600;
+}
+.jardin .spec {
+  display: flex;
+  gap: var(--space-2);
+  font-size: var(--text-xs);
+  color: var(--ink-2);
+  font-weight: 700;
+  flex-wrap: wrap;
+}
+.jardin .spec code {
+  font-family: var(--font-pixel);
+  font-size: 10px;
+  background: var(--surface-2);
+  border: 1.5px solid var(--line);
+  border-radius: var(--radius-xs);
+  padding: 2px 6px;
+  color: var(--ink);
+}
+.jardin .grid {
+  display: grid;
+  gap: var(--space-5);
+}
+.jardin .grid--2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+.jardin .grid--3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+.jardin .grid--4 {
+  grid-template-columns: repeat(4, 1fr);
+}
+.jardin .row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+  align-items: center;
+}
+.jardin .stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+.jardin .cell {
+  background: var(--surface);
+  border: var(--stroke-thin) solid var(--line);
+  border-radius: var(--radius-md);
+  padding: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  min-height: 110px;
+  text-align: center;
+}
+.jardin .cell__label {
+  font-family: var(--font-pixel);
+  font-size: 9px;
+  color: var(--muted);
+}
+.jardin .swatches {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: var(--space-3);
+}
+.jardin .swatch {
+  border: var(--stroke-thin) solid var(--line);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: var(--surface);
+}
+.jardin .swatch__chip {
+  height: 64px;
+}
+.jardin .swatch__meta {
+  padding: var(--space-3);
+}
+.jardin .swatch__name {
+  font-weight: 800;
+  font-size: var(--text-sm);
+}
+.jardin .swatch__var {
+  font-family: var(--font-pixel);
+  font-size: 9px;
+  color: var(--muted);
+  margin-top: 3px;
+  word-break: break-all;
+}
+.jardin .type-row {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-4);
+  padding: var(--space-3) 0;
+  border-bottom: 1.5px dashed var(--line);
+}
+.jardin .type-row__tag {
+  font-family: var(--font-pixel);
+  font-size: 9px;
+  color: var(--muted);
+  width: 70px;
+  flex: none;
+}
+.jardin .phone {
+  width: 300px;
+  flex: none;
+  background: var(--frame);
+  border-radius: 30px;
+  padding: 12px;
+  box-shadow: var(--shadow-lg);
+}
+.jardin .phone__screen {
+  background: var(--bg);
+  border-radius: 20px;
+  overflow: hidden;
+  height: 540px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+.jardin .phone__notch {
+  position: absolute;
+  top: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90px;
+  height: 18px;
+  background: var(--frame);
+  border-radius: var(--radius-pill);
+  z-index: 5;
+}
+.jardin .space-demo {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+}
+.jardin .space-demo__bar {
+  background: var(--grass);
+  border-radius: var(--radius-xs);
+  width: 40px;
+}
+.jardin .space-demo__label {
+  font-family: var(--font-pixel);
+  font-size: 8px;
+  color: var(--muted);
+  text-align: center;
+  margin-top: 6px;
+}
+.jardin .demo-box {
+  width: 96px;
+  height: 96px;
+  background: var(--surface);
+  border: var(--stroke-thin) solid var(--frame);
+  display: grid;
+  place-items: center;
+  text-align: center;
+  font-family: var(--font-pixel);
+  font-size: 9px;
+  color: var(--ink-2);
+}
+
+/* ===== Keyframes (préfixés jardin- pour éviter toute collision) ===== */
+@keyframes jardin-bob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+@keyframes jardin-flutter {
+  0% {
+    transform: translate(0, 0) rotate(-4deg);
+  }
+  50% {
+    transform: translate(14px, -10px) rotate(6deg);
+  }
+  100% {
+    transform: translate(0, 0) rotate(-4deg);
+  }
+}
+@keyframes jardin-hop {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-12px);
+  }
+  60% {
+    transform: translateY(-6px);
+  }
+}
+@keyframes jardin-pop-in {
+  0% {
+    transform: scale(0.4);
+    opacity: 0;
+  }
+  70% {
+    transform: scale(1.12);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+@keyframes jardin-float-up {
+  0% {
+    transform: translateY(0) scale(0.8);
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-60px) scale(1.1);
+    opacity: 0;
+  }
+}
+@keyframes jardin-wiggle {
+  0%,
+  100% {
+    transform: rotate(0);
+  }
+  25% {
+    transform: rotate(-6deg);
+  }
+  75% {
+    transform: rotate(6deg);
+  }
+}
+@keyframes jardin-confetti-fall {
+  0% {
+    transform: translateY(-10px) rotate(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(120px) rotate(320deg);
+    opacity: 0;
+  }
+}
+
+/* ===== Responsive (vitrine) ===== */
+@media (max-width: 900px) {
+  .jardin.app {
+    grid-template-columns: 1fr;
+  }
+  .jardin .side {
+    position: static;
+    height: auto;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    border-right: 0;
+    border-bottom: var(--stroke) solid var(--frame);
+  }
+  .jardin .nav {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+  .jardin .themes {
+    margin: 0;
+  }
+  .jardin .main {
+    padding: var(--space-5);
+  }
+  .jardin .grid--2,
+  .jardin .grid--3,
+  .jardin .grid--4 {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+@media (max-width: 560px) {
+  .jardin .grid--2,
+  .jardin .grid--3,
+  .jardin .grid--4 {
+    grid-template-columns: 1fr;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .jardin *,
+  .jardin *::before,
+  .jardin *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}
