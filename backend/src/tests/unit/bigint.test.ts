@@ -1,5 +1,33 @@
 import { afterAll, describe, expect, it } from 'vitest';
-import { bigIntReplacer, installBigIntJsonPatch, parseBigInt } from '../../utils/bigint.js';
+import {
+  bigIntReplacer,
+  installBigIntJsonPatch,
+  parseBigInt,
+  toBigIntFromString,
+} from '../../utils/bigint.js';
+
+describe('toBigIntFromString', () => {
+  it('parse une string entiere', () => {
+    expect(toBigIntFromString('42')).toBe(42n);
+    expect(toBigIntFromString('123456789012345678901234567890')).toBe(
+      123456789012345678901234567890n,
+    );
+  });
+
+  it('tronque la partie decimale', () => {
+    expect(toBigIntFromString('100.99')).toBe(100n);
+    expect(toBigIntFromString('0.5')).toBe(0n);
+  });
+
+  it('gere la notation scientifique', () => {
+    expect(toBigIntFromString('1e3')).toBe(1000n);
+    expect(toBigIntFromString('1.5E2')).toBe(150n);
+  });
+
+  it('gere zero et les grands entiers sans perte', () => {
+    expect(toBigIntFromString('0')).toBe(0n);
+  });
+});
 
 describe('bigIntReplacer', () => {
   it('serialise un bigint en string', () => {
@@ -23,9 +51,7 @@ describe('parseBigInt', () => {
   });
 
   it('parse une string numerique en bigint', () => {
-    expect(parseBigInt('123456789012345678901234567890')).toBe(
-      123456789012345678901234567890n,
-    );
+    expect(parseBigInt('123456789012345678901234567890')).toBe(123456789012345678901234567890n);
   });
 
   it('throw sur une string invalide', () => {

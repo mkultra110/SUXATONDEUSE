@@ -11,12 +11,8 @@ const envSchema = z.object({
 
   // Secrets : longueurs minimales pour eviter les configs faibles en production.
   JWT_SECRET: z.string().min(32, 'JWT_SECRET doit faire au moins 32 caracteres'),
-  JWT_REFRESH_SECRET: z
-    .string()
-    .min(32, 'JWT_REFRESH_SECRET doit faire au moins 32 caracteres'),
-  SAVE_HMAC_SECRET: z
-    .string()
-    .min(64, 'SAVE_HMAC_SECRET doit faire au moins 64 caracteres'),
+  JWT_REFRESH_SECRET: z.string().min(32, 'JWT_REFRESH_SECRET doit faire au moins 32 caracteres'),
+  SAVE_HMAC_SECRET: z.string().min(64, 'SAVE_HMAC_SECRET doit faire au moins 64 caracteres'),
 
   FRONTEND_URL: z.string().url().default('http://localhost:5173'),
   LOG_LEVEL: z.enum(['trace', 'debug', 'info', 'warn', 'error', 'fatal']).default('info'),
@@ -25,12 +21,16 @@ const envSchema = z.object({
   DISCORD_BOT_API_KEY: z.string().min(16).optional(),
   // URL publique du frontend pour construire les invites (avec /play?invite=xxx).
   PUBLIC_GAME_URL: z.string().url().optional(),
+
+  // Saison de classement courante (ex: 2026-S1). Permet de basculer de saison
+  // sans redeploiement de code. Defaut conserve la saison initiale.
+  LEADERBOARD_SEASON: z.string().min(1).default('2026-S1'),
 });
 
 const parsed = envSchema.safeParse(process.env);
 
 if (!parsed.success) {
-  console.error('Variables d\'environnement invalides :');
+  console.error("Variables d'environnement invalides :");
   console.error(parsed.error.flatten().fieldErrors);
   process.exit(1);
 }

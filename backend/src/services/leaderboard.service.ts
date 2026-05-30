@@ -2,8 +2,11 @@
 
 import type { LeaderboardCategory } from '@robomow/shared';
 import { prisma } from '../config/prisma.js';
+import { env } from '../config/env.js';
 
-const SEASON = '2026-S1'; // Saison courante (PHASE 2 : statique, PHASE 3 : auto)
+// Saison courante, surchargeable via LEADERBOARD_SEASON (defaut 2026-S1) pour
+// basculer de saison sans redeploiement de code.
+const SEASON = env.LEADERBOARD_SEASON;
 
 export interface LeaderboardEntry {
   rank: number;
