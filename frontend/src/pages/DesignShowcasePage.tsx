@@ -704,6 +704,51 @@ export function DesignShowcasePage() {
               </div>
             </div>
           </div>
+
+          <h3 className="h3">CHAMPS & FORMULAIRES — le tunnel d'entrée</h3>
+          <div className="grid grid--2">
+            <form
+              className="card"
+              style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-3)' }}
+              onSubmit={(e) => e.preventDefault()}
+            >
+              <h2
+                className="card__title"
+                style={{ textAlign: 'center', fontSize: 'var(--text-md)' }}
+              >
+                CONNEXION
+              </h2>
+              <label className="field">
+                <span className="field__label">Pseudo</span>
+                <input className="input" type="text" defaultValue="meme_gisele" />
+              </label>
+              <label className="field">
+                <span className="field__label">Mot de passe</span>
+                <input className="input" type="password" defaultValue="tournesol" />
+              </label>
+              <button type="submit" className="btn btn--block">
+                Entrer dans la ferme
+              </button>
+              <button type="button" className="link">
+                Pas de compte ? Inscris-toi
+              </button>
+            </form>
+            <div
+              className="card card--inset"
+              style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-3)' }}
+            >
+              <span className="muted-note">États du champ :</span>
+              <label className="field">
+                <span className="field__label">Normal</span>
+                <input className="input" type="text" placeholder="placeholder…" />
+              </label>
+              <label className="field">
+                <span className="field__label">Rempli</span>
+                <input className="input" type="text" defaultValue="Marcel" />
+              </label>
+              <p className="form-error">⚠️ Ce pseudo est déjà pris.</p>
+            </div>
+          </div>
         </Section>
 
         <Section

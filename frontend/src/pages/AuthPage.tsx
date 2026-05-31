@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import '../design/jardin/jardin.css';
 import { LoginForm } from '../components/auth/LoginForm.js';
 import { RegisterForm } from '../components/auth/RegisterForm.js';
 import { RobotLogo } from '../components/icons/PixelIcon.js';
@@ -18,47 +19,58 @@ export function AuthPage() {
 
   return (
     <div
-      className="flex flex-col items-center justify-center gap-4 px-4 py-6"
+      className="jardin"
+      data-theme="jour"
       style={{
         minHeight: '100dvh',
-        background:
-          'linear-gradient(180deg, var(--color-sky-morning) 0%, var(--color-sky-noon) 40%, var(--color-grass-2) 70%, var(--color-grass-4) 100%)',
-        paddingTop: 'calc(env(safe-area-inset-top, 0px) + 24px)',
-        paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 24px)',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: 'var(--space-5)',
+        padding: 'var(--space-4)',
+        paddingTop: 'calc(env(safe-area-inset-top, 0px) + var(--space-5))',
+        paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + var(--space-5))',
+        background: 'linear-gradient(var(--sky-top), var(--sky-bottom))',
       }}
     >
-      <header className="text-center flex flex-col items-center gap-2">
+      <header
+        style={{
+          textAlign: 'center',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          gap: 'var(--space-2)',
+        }}
+      >
         <RobotLogo size={56} />
         <h1
-          className="leading-none"
           style={{
-            fontFamily: 'var(--font-title)',
-            fontSize: 'clamp(28px, 8vw, 40px)',
-            color: 'var(--color-text-title)',
-            textShadow: '2px 2px 0 var(--color-paper-1), 4px 4px 0 var(--color-wood-3)',
-            letterSpacing: '0.02em',
+            fontFamily: 'var(--font-pixel)',
+            fontSize: 'clamp(24px, 7vw, 39px)',
+            color: 'var(--ink)',
+            lineHeight: 1.1,
+            margin: 0,
           }}
         >
           La Ferme des Tournesols
         </h1>
         <p
-          className="meme"
           style={{
-            fontSize: 'clamp(13px, 3.5vw, 16px)',
-            color: 'var(--color-text-title)',
-            letterSpacing: '0.02em',
-            fontStyle: 'italic',
+            fontFamily: 'var(--font-pixel)',
+            fontSize: 'var(--text-2xs)',
+            color: 'var(--grass-deep)',
+            letterSpacing: '0.5px',
             margin: 0,
           }}
         >
-          Fondée en 1962 par Mémé Gisèle
+          FONDÉE EN 1962 PAR MÉMÉ GISÈLE
         </p>
         <p
-          className="meme"
           style={{
-            fontSize: 'clamp(12px, 3vw, 14px)',
-            color: 'var(--color-text-body)',
-            margin: '8px 0 0',
+            fontWeight: 600,
+            color: 'var(--ink-2)',
+            margin: 'var(--space-2) 0 0',
             maxWidth: 320,
           }}
         >

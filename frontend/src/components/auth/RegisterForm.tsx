@@ -40,10 +40,22 @@ export function RegisterForm({ onSwitch, onSuccess }: Props) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex w-full max-w-sm flex-col gap-3 panel p-6">
-      <h2 className="text-2xl font-bold text-center mb-2">{t('auth.register.title')}</h2>
-      <label className="flex flex-col gap-1 text-sm font-semibold">
-        {t('auth.register.username')}
+    <form
+      onSubmit={handleSubmit}
+      className="card"
+      style={{
+        width: '100%',
+        maxWidth: 360,
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 'var(--space-3)',
+      }}
+    >
+      <h2 className="card__title" style={{ textAlign: 'center', fontSize: 'var(--text-md)' }}>
+        {t('auth.register.title')}
+      </h2>
+      <label className="field">
+        <span className="field__label">{t('auth.register.username')}</span>
         <input
           className="input"
           type="text"
@@ -55,8 +67,8 @@ export function RegisterForm({ onSwitch, onSuccess }: Props) {
           required
         />
       </label>
-      <label className="flex flex-col gap-1 text-sm font-semibold">
-        {t('auth.register.password')}
+      <label className="field">
+        <span className="field__label">{t('auth.register.password')}</span>
         <input
           className="input"
           type="password"
@@ -67,8 +79,8 @@ export function RegisterForm({ onSwitch, onSuccess }: Props) {
           required
         />
       </label>
-      <label className="flex flex-col gap-1 text-sm font-semibold">
-        {t('auth.register.confirmPassword')}
+      <label className="field">
+        <span className="field__label">{t('auth.register.confirmPassword')}</span>
         <input
           className="input"
           type="password"
@@ -79,15 +91,11 @@ export function RegisterForm({ onSwitch, onSuccess }: Props) {
           required
         />
       </label>
-      {error && <p className="text-accent-danger text-sm">{error}</p>}
-      <button type="submit" className="btn btn-primary" disabled={submitting}>
+      {error && <p className="form-error">{error}</p>}
+      <button type="submit" className="btn btn--block" disabled={submitting}>
         {submitting ? t('common.loading') : t('auth.register.submit')}
       </button>
-      <button
-        type="button"
-        onClick={onSwitch}
-        className="text-sm underline text-ink-dark hover:text-ink-base"
-      >
+      <button type="button" onClick={onSwitch} className="link">
         {t('auth.register.switchToLogin')}
       </button>
     </form>

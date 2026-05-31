@@ -36,10 +36,22 @@ export function LoginForm({ onSwitch, onSuccess }: Props) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex w-full max-w-sm flex-col gap-3 panel p-6">
-      <h2 className="text-2xl font-bold text-center mb-2">{t('auth.login.title')}</h2>
-      <label className="flex flex-col gap-1 text-sm font-semibold">
-        {t('auth.login.username')}
+    <form
+      onSubmit={handleSubmit}
+      className="card"
+      style={{
+        width: '100%',
+        maxWidth: 360,
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 'var(--space-3)',
+      }}
+    >
+      <h2 className="card__title" style={{ textAlign: 'center', fontSize: 'var(--text-md)' }}>
+        {t('auth.login.title')}
+      </h2>
+      <label className="field">
+        <span className="field__label">{t('auth.login.username')}</span>
         <input
           className="input"
           type="text"
@@ -49,8 +61,8 @@ export function LoginForm({ onSwitch, onSuccess }: Props) {
           required
         />
       </label>
-      <label className="flex flex-col gap-1 text-sm font-semibold">
-        {t('auth.login.password')}
+      <label className="field">
+        <span className="field__label">{t('auth.login.password')}</span>
         <input
           className="input"
           type="password"
@@ -60,15 +72,11 @@ export function LoginForm({ onSwitch, onSuccess }: Props) {
           required
         />
       </label>
-      {error && <p className="text-accent-danger text-sm">{error}</p>}
-      <button type="submit" className="btn btn-primary" disabled={submitting}>
+      {error && <p className="form-error">{error}</p>}
+      <button type="submit" className="btn btn--block" disabled={submitting}>
         {submitting ? t('common.loading') : t('auth.login.submit')}
       </button>
-      <button
-        type="button"
-        onClick={onSwitch}
-        className="text-sm underline text-ink-dark hover:text-ink-base"
-      >
+      <button type="button" onClick={onSwitch} className="link">
         {t('auth.login.switchToRegister')}
       </button>
     </form>
